@@ -6,7 +6,7 @@
 		<artifactId>astrotaverna</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>astrotaverna-activity-ui</artifactId>
+	<artifactId>astrotaverna-voservices</artifactId>
 	<name>Astro Taverna activity UI bindings</name>
 
 	<dependencies>
@@ -18,6 +18,11 @@
 		<dependency>
 			<groupId>net.sf.taverna.t2.ui-api</groupId>
 			<artifactId>activity-palette-api</artifactId>
+			<version>${t2.ui.api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.taverna.t2.ui-api</groupId>
+			<artifactId>perspective-core</artifactId>
 			<version>${t2.ui.api.version}</version>
 		</dependency>
 		<dependency>
