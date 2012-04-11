@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>uk.org.taverna.astro</groupId>
+		<artifactId>astrotaverna</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>astrotaverna-plugin</artifactId>
+	<packaging>taverna-plugin</packaging>
+	<name>Astro Taverna plugin</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>net.sf.taverna.t2.maven.plugins</groupId>
+				<artifactId>maven-taverna-plugin</artifactId>
+				<version>0.1.1</version>
+				<extensions>true</extensions>
+				<configuration>
+					<provider>uk.org.taverna.astro</provider>
+					<tavernaVersion>${t2.workbench.version}</tavernaVersion>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>astrotaverna-activity</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>astrotaverna-activity-ui</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>
