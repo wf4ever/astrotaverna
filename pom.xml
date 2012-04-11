@@ -134,7 +134,7 @@
 	</distributionManagement>
 
   <modules>
-    <module>astrotaverna-activity</module>
+    
     <module>astrotaverna-activity-ui</module>
     <module>astrotaverna-plugin</module>
   </modules>
