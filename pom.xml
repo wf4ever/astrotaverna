@@ -135,7 +135,7 @@
 
   <modules>
     
-    <module>astrotaverna-activity-ui</module>
+    <module>astrotaverna-voservices</module>
     <module>astrotaverna-plugin</module>
   </modules>
 </project>
