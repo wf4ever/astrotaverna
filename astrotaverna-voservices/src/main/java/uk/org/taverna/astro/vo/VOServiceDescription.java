@@ -30,7 +30,7 @@ public class VOServiceDescription extends ServiceDescription<RESTActivityConfigu
 
 	@Override
 	public String getName() {
-		return "dummyService";
+		return "VO service";
 	}
 
 	@Override
