@@ -9,7 +9,7 @@ import net.sf.taverna.t2.workbench.ui.zaria.PerspectiveSPI;
 
 public class VOServicesPerspective extends AbstractPerspective implements PerspectiveSPI  {
 
-	private static final String VO_32X16_PNG = "vo-32x16.png";
+	private static final String VO_32X16_PNG = "NGC_4414_16x16.png";
 	public static ImageIcon voIcon = new ImageIcon(VOServicesPerspective.class.getResource(VO_32X16_PNG));
 	
 	@Override
