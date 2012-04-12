@@ -6,7 +6,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,13 +22,13 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.workbench.file.FileManager;
+import net.sf.taverna.t2.workbench.ui.impl.Workbench;
+import net.sf.taverna.t2.workbench.ui.workflowview.WorkflowView;
 import net.sf.taverna.t2.workbench.ui.zaria.UIComponentSPI;
-import net.sf.taverna.t2.workflowmodel.Dataflow;
-import net.sf.taverna.t2.workflowmodel.Edit;
 import net.sf.taverna.t2.workflowmodel.Edits;
 import net.sf.taverna.t2.workflowmodel.EditsRegistry;
-import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
 public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
@@ -44,12 +43,10 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Dataflow df = fileManager.getCurrentDataflow();
-			List<Edit<?>> editList = new ArrayList<Edit<?>>();	
-			// TODO: Make RESTActivity
-			Activity<Object> restActivity = null;
-			Object restConfig = null;
-			editList.add(edits.getConfigureActivityEdit(restActivity, restConfig));			
+			// TODO: Make the real service
+			VOServiceDescription restServiceDescription = new VOServiceDescription();
+			WorkflowView.importServiceDescription(restServiceDescription , false);
+			Workbench.getInstance().getPerspectives().setWorkflowPerspective();
 		}
 
 	}
@@ -157,6 +154,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		resultsTableModel.addColumn("Identifier");
 		resultsTableModel.addColumn("Publisher");
 
+		// FIXME: Dummy data
 		for (int i = 1; i < 6; i++) {
 			resultsTableModel.addRow(new String[] { "AMIGA" + i,
 					"Amiga test #" + i, "Interesting stars", "/dev/null",
