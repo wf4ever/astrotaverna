@@ -26,5 +26,11 @@ public class VOServicesPerspective extends AbstractPerspective implements Perspe
 	protected InputStream getLayoutResourceStream() {
 		return getClass().getResourceAsStream("voservices-perspective.xml");
 	}
+	
+	@Override
+	public int positionHint() {
+		// Just before BioCatalogue perspective
+		return 38;
+	}
 
 }
