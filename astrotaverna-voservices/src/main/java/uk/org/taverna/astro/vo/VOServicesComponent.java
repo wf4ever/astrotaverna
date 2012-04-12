@@ -142,6 +142,13 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	protected Component makeResultsDetails() {		
 		JPanel jPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		jPanel.add(new JLabel("<html><body><h3>Details for service X</h3>" +
+				"<dl><dt>Provider</dt> <dd>The factory</dd>" +
+				"  <dt>Documentation</dt> <dd>http://example.com/</dd>" +
+				"</dl>"), gbc);
+		
+		
 		jPanel.add(new JButton(new AddToWorkflow()), gbc);
 		return jPanel;
 	}
