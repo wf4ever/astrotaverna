@@ -1,0 +1,124 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>astrotaverna</artifactId>
+		<groupId>uk.org.taverna.astro</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>astrotaverna-vo-repository</artifactId>
+	<properties>
+		<cxf.version>2.5.2</cxf.version>
+	</properties>
+
+	<build>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-codegen-plugin</artifactId>
+				<version>${cxf.version}</version>
+				<executions>
+					<execution>
+						<id>generate-sources</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<sourceRoot>${project.build.directory}/generated/cxf</sourceRoot>
+							<wsdlOptions>
+								<wsdlOption>
+									<wsdl>http://www.ivoa.net/wsdl/RegistrySearch/v1.0</wsdl>
+									<extraargs>
+										<extraarg>-client</extraarg>
+										<extraarg>-catalog</extraarg>
+										<extraarg>${basedir}/src/main/resources/META-INF/jax-ws-catalog.xml</extraarg>
+									</extraargs>
+								</wsdlOption>
+							</wsdlOptions>
+
+						</configuration>
+						<goals>
+							<goal>wsdl2java</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.cxf
+										</groupId>
+										<artifactId>
+											cxf-codegen-plugin
+										</artifactId>
+										<versionRange>
+											[2.5.2,)
+										</versionRange>
+										<goals>
+											<goal>wsdl2java</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.apache.cxf</groupId>
+							<artifactId>cxf-rt-frontend-jaxws</artifactId>
+							<version>${cxf.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>org.apache.cxf</groupId>
+							<artifactId>cxf-rt-transports-http</artifactId>
+							<version>${cxf.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>org.apache.cxf</groupId>
+							<artifactId>cxf-rt-bindings-soap</artifactId>
+							<version>${cxf.version}</version>
+						</dependency>
+
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-bindings-soap</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+
+	</dependencies>
+
+</project>
