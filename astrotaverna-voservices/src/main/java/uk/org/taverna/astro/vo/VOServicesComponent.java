@@ -94,7 +94,8 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	}
 
 	private static final long serialVersionUID = 1L;
-	private JComboBox<URI> registry;
+	@SuppressWarnings("rawtypes")
+	private JComboBox registry;
 	private JTextField keywords;
 	private DefaultTableModel resultsTableModel;
 	private JLabel status;
@@ -177,6 +178,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	}
 	
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected Component makeSearchBox() {
 		JPanel searchBox = new JPanel(new GridBagLayout());
 		GridBagConstraints gbcLeft = new GridBagConstraints();
@@ -190,7 +192,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		gbcMiddle.weightx = 0.1;
 
 		URI[] registries = getRegistries().toArray(new URI[0]);
-		registry = new JComboBox<URI>(registries);
+		registry = new JComboBox(registries);
 		registry.setEditable(true);
 
 		add(registry, gbcMiddle);
