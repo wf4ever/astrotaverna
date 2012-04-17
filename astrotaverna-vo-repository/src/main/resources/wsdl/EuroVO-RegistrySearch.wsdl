@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="searchableRegistry" targetNamespace="http://esavo.esa.int/wsdl/searchableRegistry.wsdl" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ris="http://www.ivoa.net/wsdl/RegistrySearch/v1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://esavo.esa.int/wsdl/searchableRegistry.wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+          <xs:import namespace="http://www.ivoa.net/wsdl/RegistrySearch/v1.0" schemaLocation="http://esavo.esa.int/wsdl/RegistrySearch-v1.0.wsdl"/>
+
+
+         <service name="RegistrySearchService">
+
+		  <port binding="ris:RegistrySearchSOAP" name="RegistrySearchPortSOAP">
+
+			   <soap:address location="http://registry.euro-vo.org:8080/registry2/services/RegistrySearch"/>
+
+		  </port>
+
+	 </service>
+
+</definitions>

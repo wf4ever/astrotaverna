@@ -2,5 +2,8 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="public">
 	<system systemId="http://www.ivoa.net/xml/ADQL/v1.0" uri="../xsd/ADQL/v1.0.xsd" />
 	<system systemId="http://www.ivoa.net/xml/STC/STCcoords/v1.10" uri="../xsd/STCcoords/v1.10.xsd" />
- 	<system systemId="http://www.ivoa.net/xml/STC/STCregion/v1.10" uri="../xsd/STCregion/v1.10.xsd" 
+ 	<system systemId="http://www.ivoa.net/xml/STC/STCregion/v1.10" uri="../xsd/STCregion/v1.10.xsd" />
+ 	<system systemId="http://www.ivoa.net/xml/VOResource/v1.0" uri="../xsd/VOResource/v1.0.xsd"/>
+ 	<system systemId="http://www.ivoa.net/xml/RegistryInterface/v1.0" uri="../xsd/RegistryInterface/v1.0.xsd"/>
+ 	
 </catalog> 
