@@ -25,6 +25,8 @@ public class VORepository {
 
 	private URI endpoint;
 
+	private RegistrySearchPortType port;
+
 	public VORepository(URI endpoint) {
 		setEndpoint(endpoint);
 	}
@@ -41,7 +43,11 @@ public class VORepository {
 		if (endpoint == null) {
 			endpoint = DEFAULT_ENDPOINT;
 		}
-		this.endpoint = endpoint;
+		synchronized(this) {
+			this.endpoint = endpoint;
+			// Force getPort() to re-evaluate
+			this.port = null;
+		}
 	}
 
 	public Status getStatus() {
@@ -67,6 +73,12 @@ public class VORepository {
 	}
 
 	protected RegistrySearchPortType getPort() {
+		synchronized(this) {
+			if (this.port != null) {
+				System.out.println("Cached port");
+				return this.port;
+			}
+		}		
 		URL wsdlUri = getClass().getResource("/wsdl/dummySearch.wsdl");
 		RegistrySearchService service = new RegistrySearchService(wsdlUri);
 		RegistrySearchPortType port = service.getRegistrySearchPortSOAP();
@@ -76,7 +88,15 @@ public class VORepository {
 		BindingProvider bp = (BindingProvider) port;
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
 				getEndpoint().toASCIIString());
+
+		synchronized(this) {
+			this.port = port;
+		}
 		return port;
+	}
+
+	public String keywordSearch(String string) {
+		return string;
 	}
 
 }
