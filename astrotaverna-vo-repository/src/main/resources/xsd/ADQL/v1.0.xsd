@@ -305,7 +305,7 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:fromTableType">
 				<xs:attribute name="Name" type="xs:string" use="required"/>
-				<xs:attribute name="Alias" type="xs:string" use="alias"/>
+				<xs:attribute name="Alias" type="xs:string" use="optional"/>
 				<xs:attribute name="xpathName" type="xs:string"/>
 			</xs:extension>
 		</xs:complexContent>

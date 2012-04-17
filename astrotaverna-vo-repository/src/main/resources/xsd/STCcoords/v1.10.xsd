@@ -968,8 +968,8 @@ Initial revision
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:restriction base="crd:coordsType">
-				<xs:sequence>
-					<xs:element ref="crd:PixelCoordinate" maxOccurs="unbounded"/>
+				<xs:sequence maxOccurs="unbounded">
+					<xs:element ref="crd:PixelCoordinate" />
 				</xs:sequence>
 			</xs:restriction>
 		</xs:complexContent>
