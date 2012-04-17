@@ -2,11 +2,14 @@ package uk.org.taverna.astro.vorepo;
 
 import java.net.URI;
 import java.net.URL;
+import java.util.List;
 
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
 
 import net.ivoa.wsdl.registrysearch.v1.ResolveResponse;
+import net.ivoa.xml.registryinterface.v1.VOResources;
+import net.ivoa.xml.voresource.v1.Resource;
 import uk.org.taverna.astro.wsdl.registrysearch.ErrorResp;
 import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchPortType;
 import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchService;
@@ -75,7 +78,6 @@ public class VORepository {
 	protected RegistrySearchPortType getPort() {
 		synchronized(this) {
 			if (this.port != null) {
-				System.out.println("Cached port");
 				return this.port;
 			}
 		}		
@@ -95,8 +97,9 @@ public class VORepository {
 		return port;
 	}
 
-	public String keywordSearch(String string) {
-		return string;
+	public List<Resource> keywordSearch(String keywords) throws ErrorResp {
+		VOResources voResources = getPort().keywordSearch(keywords, true, null, null, null);		
+		return voResources.getResource();
 	}
 
 }

@@ -1,12 +1,16 @@
 package uk.org.taverna.astro.vorepo;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.xml.ws.BindingProvider;
+
+import net.ivoa.xml.registryinterface.v1.VOResources;
+import net.ivoa.xml.voresource.v1.Resource;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -18,7 +22,12 @@ public class TestVORepository {
 	@Test
 	public void keywordSearch() throws Exception {
 		VORepository repo = new VORepository();
-		String resources = repo.keywordSearch("amiga");
+		List<Resource> resources = repo.keywordSearch("amiga");
+		assertFalse(resources.isEmpty());
+		Resource someResource = resources.get(0);
+		System.out.println(someResource.getIdentifier());
+		System.out.println(someResource);
+
 	}
 
 	@Test
@@ -59,16 +68,17 @@ public class TestVORepository {
 	@Test
 	public void endPointChanged() {
 		VORepository voRepository = new VORepository();
-		RegistrySearchPortType port = voRepository.getPort();
+		RegistrySearchPortType firstPort = voRepository.getPort();
 		assertEquals(
 				"http://registry.euro-vo.org/services/RegistrySearch",
-				((BindingProvider) port).getRequestContext().get(
+				((BindingProvider) firstPort).getRequestContext().get(
 						BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
 		voRepository.setEndpoint(URI.create("http://example.com/404"));
-		assertNotSame(port, voRepository.getPort());
+		RegistrySearchPortType secondPort = voRepository.getPort();
+		assertNotSame(firstPort, secondPort);
 		assertEquals(
 				"http://example.com/404",
-				((BindingProvider) port).getRequestContext().get(
+				((BindingProvider) secondPort).getRequestContext().get(
 						BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
 
 	}
