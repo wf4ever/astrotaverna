@@ -26,7 +26,10 @@
 							<!-- default: <sourceRoot>${project.build.directory}/generated-sources/cxf/</sourceRoot> -->
 							<wsdlOptions>
 								<wsdlOption>
-									<wsdl>http://www.ivoa.net/wsdl/RegistrySearch/v1.0</wsdl>
+									<!-- Switch to not generate RegistryInterface.java 
+									 <wsdl>http://www.ivoa.net/wsdl/RegistrySearch/v1.0</wsdl>
+									 -->
+									<wsdl>http://nvo.caltech.edu:8080/carnivore/services?wsdl</wsdl>
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-catalog</extraarg>
@@ -42,7 +45,10 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
+				<!-- So that Eclipse m2e (with the buildhelper m2e connector) can find 
+					the generated sources -->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<version>1.7</version>
@@ -65,8 +71,7 @@
 
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
+				<!-- So that cxf codegen is done by m2e -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -76,15 +81,9 @@
 							<pluginExecutions>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>
-											org.apache.cxf
-										</groupId>
-										<artifactId>
-											cxf-codegen-plugin
-										</artifactId>
-										<versionRange>
-											[${cxf.version},)
-										</versionRange>
+										<groupId>org.apache.cxf</groupId>
+										<artifactId>cxf-codegen-plugin</artifactId>
+										<versionRange>[${cxf.version},)</versionRange>
 										<goals>
 											<goal>wsdl2java</goal>
 										</goals>
@@ -98,23 +97,6 @@
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
-					<dependencies>
-						<dependency>
-							<groupId>org.apache.cxf</groupId>
-							<artifactId>cxf-rt-frontend-jaxws</artifactId>
-							<version>${cxf.version}</version>
-						</dependency>
-						<dependency>
-							<groupId>org.apache.cxf</groupId>
-							<artifactId>cxf-rt-transports-http</artifactId>
-							<version>${cxf.version}</version>
-						</dependency>
-						<dependency>
-							<groupId>org.apache.cxf</groupId>
-							<artifactId>cxf-rt-bindings-soap</artifactId>
-							<version>${cxf.version}</version>
-						</dependency>
-					</dependencies>
 				</plugin>
 			</plugins>
 		</pluginManagement>
