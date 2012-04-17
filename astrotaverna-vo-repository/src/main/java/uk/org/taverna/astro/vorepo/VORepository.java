@@ -13,10 +13,8 @@ import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchService;
 
 public class VORepository {
 
-	private static final String REGISTRY_SEARCH_SERVICE = "RegistrySearchService";
-
 	public enum Status {
-		OK, ERROR, CONNECTION_ERROR, UNKNOWN,
+		OK, ERROR, CONNECTION_ERROR, UNKNOWN;
 	}
 
 	public static final URI DEFAULT_ENDPOINT = URI
@@ -50,16 +48,20 @@ public class VORepository {
 		RegistrySearchPortType port = getPort();
 		ResolveResponse id;
 		try {
-				id = port.getIdentity(""); 
- 		} catch (WebServiceException e) {
+			id = port.getIdentity("");
+		} catch (WebServiceException e) {
 			return Status.CONNECTION_ERROR;
 		} catch (ErrorResp e) {
 			return Status.ERROR;
 		}
-		if (id.getResource().getStatus().equalsIgnoreCase("active")) {
-			return Status.OK;
-		} else {
-			return Status.UNKNOWN;
+		try {
+			if (id.getResource().getStatus().equalsIgnoreCase("active")) {
+				return Status.OK;
+			} else {
+				return Status.UNKNOWN;
+			}
+		} catch (NullPointerException ex) {
+			return Status.ERROR;
 		}
 
 	}
