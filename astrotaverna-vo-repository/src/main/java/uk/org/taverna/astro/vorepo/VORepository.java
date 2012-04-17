@@ -1,15 +1,20 @@
 package uk.org.taverna.astro.vorepo;
 
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 
 import javax.xml.ws.BindingProvider;
 
-import net.ivoa.wsdl.registryinterface.v1_0.RegistryInterface;
+import net.ivoa.wsdl.registrysearch.v1.GetResource;
 import net.ivoa.wsdl.registrysearch.v1.KeywordSearch;
 import net.ivoa.wsdl.registrysearch.v1.SearchResponse;
-import net.ivoa.wsdl.registrysearch.v1_0.ErrorResp;
-import net.ivoa.wsdl.registrysearch.v1_0.RegistrySearchPortType;
+import net.ivoa.xml.registryinterface.v1.VOResources;
+import uk.org.taverna.astro.wsdl.registrysearch.ErrorResp;
+import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchPortType;
+import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchService;
+
 
 public class VORepository {
 
@@ -48,42 +53,24 @@ public class VORepository {
 
 	public Status getStatus() throws MalformedURLException, ErrorResp {
 		RegistrySearchPortType port = getPort();
-		
-		KeywordSearch keywordSearch = new KeywordSearch();
-		keywordSearch.setKeywords("amiga");
-		SearchResponse resp = port.keywordSearch(keywordSearch);
+		VOResources resp = port.keywordSearch("amiga", true, BigInteger.valueOf(0), BigInteger.valueOf(100), true);
 		System.out.println(resp);
+		System.out.println(resp.getResource());
+		
 		return Status.OK;
 	}
 
 	protected RegistrySearchPortType getPort() throws MalformedURLException,
-			ErrorResp {
-		RegistryInterface service = new net.ivoa.wsdl.registryinterface.v1_0.RegistryInterface();
-		RegistrySearchPortType registrySearchPort = service
-				.getRegistrySearchPort();
+			ErrorResp {		
+		URL wsdlUri = getClass().getResource("/wsdl/dummySearch.wsdl");
+		RegistrySearchService service = new RegistrySearchService(wsdlUri);
+		RegistrySearchPortType port = service.getRegistrySearchPortSOAP();		
 		// Change binding hack as of
 		// http://stackoverflow.com/questions/5158537/jaxws-how-to-change-the-endpoint-address
 		// https://github.com/aviramsegal/snippets/blob/master/websphere/JaxWSCustomEndpoint.java
-		BindingProvider bp = (BindingProvider) registrySearchPort;
+		BindingProvider bp = (BindingProvider) port;
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
 				getEndpoint().toASCIIString());
-		return registrySearchPort;
-
-		// FIXME: Avoid evil ?wsdl hack
-
-		/*
-		 * RegistryInterface service = new RegistryInterface(getEndpoint()
-		 * .resolve(getEndpoint().getPath() + "?wsdl").toURL());
-		 * 
-		 * 
-		 * for (QName portName : new
-		 * IterableIterator<QName>(service.getPorts())) { Object port =
-		 * service.getPort(portName, RegistrySearchPortType.class); if (port
-		 * instanceof RegistrySearchPortType) { return (RegistrySearchPortType)
-		 * port; } } throw new
-		 * IllegalStateException("Could not find any RegistrySearchPortType port"
-		 * );
-		 */
-
+		return port;
 	}
 }
