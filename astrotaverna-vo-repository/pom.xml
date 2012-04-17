@@ -27,9 +27,9 @@
 							<wsdlOptions>
 								<wsdlOption>
 									<!-- Switch to not generate RegistryInterface.java 
-									 <wsdl>http://www.ivoa.net/wsdl/RegistrySearch/v1.0</wsdl>
-									 -->
 									<wsdl>http://nvo.caltech.edu:8080/carnivore/services?wsdl</wsdl>
+									 -->
+									 <wsdl>http://www.ivoa.net/wsdl/RegistrySearch/v1.0</wsdl>
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-catalog</extraarg>

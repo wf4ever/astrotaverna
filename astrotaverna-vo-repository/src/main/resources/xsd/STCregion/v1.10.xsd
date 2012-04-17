@@ -63,7 +63,7 @@ date: 2002/07/11 08:58:25;  author: arots;  state: Exp;
 Initial revision
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:reg="http://www.ivoa.net/xml/STC/STCregion/v1.10" xmlns:crd="http://www.ivoa.net/xml/STC/STCcoords/v1.10" targetNamespace="http://www.ivoa.net/xml/STC/STCregion/v1.10" elementFormDefault="qualified">
-	<xs:import namespace="http://www.ivoa.net/xml/STC/STCcoords/v1.10" schemaLocation="../STCCoords/v1.10.xsd"/>
+	<xs:import namespace="http://www.ivoa.net/xml/STC/STCcoords/v1.10"/>
 	<!--Coords and CoordSystem are needed from STC (coords.xsd)-->
 	<!--Shape definitions; Circle, Polygon, and Sector are derived from Shape; Ellipse is derived from Circle; Polygon includes also Vertex and SmallCircle-->
 	<xs:annotation>
@@ -143,19 +143,12 @@ Initial revision
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-		<xs:simpleType name="soup">
-		<xs:annotation>
-			<xs:documentation>Basic unit type</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string"/>
-	</xs:simpleType>
 	<!-- smallCircleType is used in vertices to indicate that the polygon side associated with the vertex is to be a small circle rather than the default great circle -->
 	<xs:complexType name="smallCircleType">
 		<xs:annotation>
 			<xs:documentation>smallCircleType indicates in polygons that side is along small circle; with optional pole</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="pos_angle_unit" type="crd:angleUnitType" default="deg"/>
 			<xs:element name="Pole" type="crd:double2Type" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>

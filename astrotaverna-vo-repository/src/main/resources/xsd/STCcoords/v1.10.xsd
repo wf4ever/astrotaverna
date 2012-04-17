@@ -962,20 +962,18 @@ Initial revision
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	 <!-- 
 	<xs:complexType name="pixelCoordsType">
 		<xs:annotation>
 			<xs:documentation>The pixel coordinates type</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="crd:coordsType">
+			<xs:restriction base="crd:coordsType">
 				<xs:sequence>
 					<xs:element ref="crd:PixelCoordinate" maxOccurs="unbounded"/>
 				</xs:sequence>
-			</xs:extension>
+			</xs:restriction>
 		</xs:complexContent>
 	</xs:complexType>
-	  -->
 	<xs:element name="Coords" type="crd:coordsType">
 		<xs:annotation>
 			<xs:documentation>Head element of Coords group (not abstract)</xs:documentation>
@@ -986,11 +984,9 @@ Initial revision
 			<xs:documentation>The coordinate element consists either of a coordinate file or a sequence of time element, spatial coordinate element, velocity element, and redshift element; the spatial and velocity elements may be scalar or vector; it needs to refer to a coordinate system</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!-- 
 	<xs:element name="PixelCoords" type="crd:pixelCoordsType" substitutionGroup="crd:Coords">
 		<xs:annotation>
 			<xs:documentation>Contains pixel coordinates</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	 -->
 </xs:schema>
