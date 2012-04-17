@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -20,20 +22,18 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
-
-import uk.org.taverna.astro.vorepo.VORepository;
-import uk.org.taverna.astro.wsdl.registrysearch.ErrorResp;
 
 import net.ivoa.xml.voresource.v1.Resource;
 import net.ivoa.xml.voresource.v1.Service;
-import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.ui.impl.Workbench;
 import net.sf.taverna.t2.workbench.ui.workflowview.WorkflowView;
 import net.sf.taverna.t2.workbench.ui.zaria.UIComponentSPI;
 import net.sf.taverna.t2.workflowmodel.Edits;
 import net.sf.taverna.t2.workflowmodel.EditsRegistry;
+import uk.org.taverna.astro.vorepo.VORepository;
 
 public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	private VORepository repo = new VORepository();
@@ -59,49 +59,83 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 	public class ConeSearch extends AbstractAction {
 
+		private SearchTask searchTask;
+
+		private final class SearchTask extends
+				SwingWorker<List<Resource>, String> {
+			private String search;
+
+			public SearchTask(String search) {
+				this.search = search;
+			}
+
+			@Override
+			protected List<Resource> doInBackground() throws Exception {
+				return repo.keywordSearch(search);
+			}
+
+			@Override
+			protected void done() {
+				List<Resource> resources;
+				try {
+					resources = get();
+				} catch (CancellationException ex) {
+					status.setText("<html><body><font color='#dd2222'>"
+							+ "Cancelled search"
+							+ "</font><body></html>");
+					return;
+				} catch (InterruptedException ex) {
+					status.setText("<html><body><font color='#dd2222'>"
+							+ "Search interrupted: "
+							+ ex.getLocalizedMessage()
+							+ "</font><body></html>");
+					return;
+				} catch (ExecutionException ex) {
+					status.setText("<html><body><font color='#dd2222'>"
+							+ "Search failed: " + ex.getLocalizedMessage()
+							+ "</font><body></html>");
+					return;
+				}
+				status.setText(resources.size() + " results for: " + search);
+				for (Resource r : resources) {
+					String shortName = r.getShortName();
+					String title = r.getTitle();
+					String subjects = "";
+					String identifier = r.getIdentifier();
+					String publisher = "";
+					if (r instanceof Service) {
+						Service service = (Service) r;
+						System.out.println(service);
+					}
+					resultsTableModel.addRow(new String[] { shortName,
+							title, subjects, identifier, publisher });
+				}
+				if (searchTask == this) {
+					searchTask = null;
+				}
+			}
+		}
+
 		public ConeSearch() {
 			super("Cone Search");
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+ 
+			if (searchTask != null) { 
+				searchTask.cancel(true);
+			}
 			String search = keywords.getText();
 			status.setText("Searching: " + search);
+			
+			searchTask = new SearchTask(search);
 			int rows = resultsTableModel.getRowCount();
 			while (rows > 0) {
 				resultsTableModel.removeRow(--rows);
 			}
-			List<Resource> resources;
-			try {
-				resources = repo.keywordSearch(search);
-			} catch (ErrorResp ex) {
-				status.setText("<html><body><font color='#dd2222'>"
-						+ "Search failed: " + ex.getLocalizedMessage()
-						+ "</font><body></html>");
-				return;
-			} catch (RuntimeException ex) {
-				status.setText("<html><body><font color='#dd2222'>"
-						+ "Error: " + ex.getLocalizedMessage()
-						+ "</font><body></html>");
-				return;
-			}
-			status.setText(resources.size() + " results for: " + search);
-			for (Resource r : resources) {
-				String shortName = r.getShortName();
-				String title = r.getTitle();
-				String subjects = "";
-				String identifier = r.getIdentifier();
-				String publisher = "";
-				if (r instanceof Service) {
-					Service service = (Service) r;
-					System.out.println(service);
-				}
-				
-				
-				resultsTableModel.addRow(new String[]{shortName, title, subjects, identifier, publisher});
-			}
+			searchTask.execute();
 		}
-
 	}
 
 	public class SIASearch extends AbstractAction {
@@ -235,6 +269,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 		add(new JLabel("Keywords:"), gbcLeft);
 		keywords = new JTextField(40);
+		keywords.setAction(coneSearch);
 		add(keywords, gbcMiddle);
 
 		gbcRight.gridx = 1;
@@ -251,10 +286,12 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		return searchBox;
 
 	}
-
+	ConeSearch coneSearch = new ConeSearch();
+	
 	protected JPanel makeSearchButtons() {
 		JPanel searchButtons = new JPanel(new FlowLayout());
-		searchButtons.add(new JButton(new ConeSearch()));
+	
+		searchButtons.add(new JButton(coneSearch));
 		searchButtons.add(new JButton(new SIASearch()));
 		searchButtons.add(new JButton(new SSASearch()));
 		return searchButtons;
