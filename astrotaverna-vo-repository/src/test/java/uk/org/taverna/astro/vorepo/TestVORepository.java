@@ -22,12 +22,11 @@ public class TestVORepository {
 	@Test
 	public void keywordSearch() throws Exception {
 		VORepository repo = new VORepository();
-		List<Resource> resources = repo.keywordSearch("amiga");
+		List<Resource> resources = repo.keywordSearch("ivo://svo.amiga.iaa.es/amiga");
 		assertFalse(resources.isEmpty());
 		Resource someResource = resources.get(0);
-		System.out.println(someResource.getIdentifier());
-		System.out.println(someResource);
-
+		assertTrue(someResource.getIdentifier().startsWith("ivo://"));
+		
 	}
 
 	@Test
