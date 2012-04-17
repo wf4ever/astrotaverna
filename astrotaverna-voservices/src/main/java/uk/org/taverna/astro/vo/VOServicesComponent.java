@@ -22,6 +22,11 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import uk.org.taverna.astro.vorepo.VORepository;
+import uk.org.taverna.astro.wsdl.registrysearch.ErrorResp;
+
+import net.ivoa.xml.voresource.v1.Resource;
+import net.ivoa.xml.voresource.v1.Service;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.ui.impl.Workbench;
@@ -31,21 +36,22 @@ import net.sf.taverna.t2.workflowmodel.Edits;
 import net.sf.taverna.t2.workflowmodel.EditsRegistry;
 
 public class VOServicesComponent extends JPanel implements UIComponentSPI {
-
-	private Edits edits = EditsRegistry.getEdits();	
+	private VORepository repo = new VORepository();
+	private Edits edits = EditsRegistry.getEdits();
 	private FileManager fileManager = FileManager.getInstance();
-	
+
 	public class AddToWorkflow extends AbstractAction {
 
 		public AddToWorkflow() {
 			super("Add to workflow");
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO: Make the real service
 			VOServiceDescription restServiceDescription = new VOServiceDescription();
-			WorkflowView.importServiceDescription(restServiceDescription , false);
+			WorkflowView
+					.importServiceDescription(restServiceDescription, false);
 			Workbench.getInstance().getPerspectives().setWorkflowPerspective();
 		}
 
@@ -59,10 +65,41 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			invalidate();
-			initialize();
-			validate();
-			repaint();
+			String search = keywords.getText();
+			status.setText("Searching: " + search);
+			int rows = resultsTableModel.getRowCount();
+			while (rows > 0) {
+				resultsTableModel.removeRow(--rows);
+			}
+			List<Resource> resources;
+			try {
+				resources = repo.keywordSearch(search);
+			} catch (ErrorResp ex) {
+				status.setText("<html><body><font color='#dd2222'>"
+						+ "Search failed: " + ex.getLocalizedMessage()
+						+ "</font><body></html>");
+				return;
+			} catch (RuntimeException ex) {
+				status.setText("<html><body><font color='#dd2222'>"
+						+ "Error: " + ex.getLocalizedMessage()
+						+ "</font><body></html>");
+				return;
+			}
+			status.setText(resources.size() + " results for: " + search);
+			for (Resource r : resources) {
+				String shortName = r.getShortName();
+				String title = r.getTitle();
+				String subjects = "";
+				String identifier = r.getIdentifier();
+				String publisher = "";
+				if (r instanceof Service) {
+					Service service = (Service) r;
+					System.out.println(service);
+				}
+				
+				
+				resultsTableModel.addRow(new String[]{shortName, title, subjects, identifier, publisher});
+			}
 		}
 
 	}
@@ -127,8 +164,6 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		status = new JLabel("Searched for: fred");
 		resultsPanel.add(status, gbc);
 
-		
-		
 		JSplitPane results = new JSplitPane();
 		results.setLeftComponent(makeResultsTable());
 		results.setRightComponent(makeResultsDetails());
@@ -136,20 +171,19 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		gbc.weighty = 1.0;
 		gbc.fill = GridBagConstraints.BOTH;
 		resultsPanel.add(results, gbc);
-		
+
 		return resultsPanel;
 	}
 
-	protected Component makeResultsDetails() {		
+	protected Component makeResultsDetails() {
 		JPanel jPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
-		jPanel.add(new JLabel("<html><body><h3>Details for service X</h3>" +
-				"<dl><dt>Provider</dt> <dd>The factory</dd>" +
-				"  <dt>Documentation</dt> <dd>http://example.com/</dd>" +
-				"</dl>"), gbc);
-		
-		
+		jPanel.add(new JLabel("<html><body><h3>Details for service X</h3>"
+				+ "<dl><dt>Provider</dt> <dd>The factory</dd>"
+				+ "  <dt>Documentation</dt> <dd>http://example.com/</dd>"
+				+ "</dl>"), gbc);
+
 		jPanel.add(new JButton(new AddToWorkflow()), gbc);
 		return jPanel;
 	}
@@ -170,13 +204,15 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		}
 
 		JTable resultsTable = new JTable(resultsTableModel);
-//		resultsTable.setAutoCreateColumnsFromModel(true);
+		// resultsTable.setAutoCreateColumnsFromModel(true);
 		resultsTable.setAutoCreateRowSorter(true);
-		//		resultsTable.createDefaultColumnsFromModel();
-		resultsTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		return new JScrollPane(resultsTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		// resultsTable.createDefaultColumnsFromModel();
+		resultsTable.getSelectionModel().setSelectionMode(
+				ListSelectionModel.SINGLE_SELECTION);
+		return new JScrollPane(resultsTable,
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	}
-	
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected Component makeSearchBox() {
