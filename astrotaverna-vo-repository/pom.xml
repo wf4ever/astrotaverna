@@ -15,36 +15,35 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-codegen-plugin</artifactId>
-				<version>${cxf.version}</version>
+				<groupId>org.jvnet.jax-ws-commons</groupId>
+				<artifactId>jaxws-maven-plugin</artifactId>
+				<version>2.2</version>
 				<executions>
 					<execution>
 						<id>generate-sources</id>
 						<phase>generate-sources</phase>
-						<configuration>
-							<!-- default: <sourceRoot>${project.build.directory}/generated-sources/cxf/</sourceRoot> -->
-							<wsdlOptions>
-								<wsdlOption>
-									<!-- Switch to not generate RegistryInterface.java 
-									<wsdl>http://nvo.caltech.edu:8080/carnivore/services?wsdl</wsdl>
-									 -->
-									 <wsdl>http://www.ivoa.net/wsdl/RegistrySearch/v1.0</wsdl>
-									<extraargs>
-										<extraarg>-client</extraarg>
-										<extraarg>-catalog</extraarg>
-										<extraarg>${basedir}/src/main/resources/META-INF/jax-ws-catalog.xml</extraarg>
-									</extraargs>
-								</wsdlOption>
-							</wsdlOptions>
-
-						</configuration>
 						<goals>
-							<goal>wsdl2java</goal>
+							<goal>wsimport</goal>
 						</goals>
+						<configuration>
+							<wsdlDirectory>${basedir}/src/main/resources/wsdl/</wsdlDirectory>
+							<wsdlFiles>
+								<wsdlFile>dummySearch.wsdl</wsdlFile>
+							</wsdlFiles>
+							<catalog>${basedir}/src/main/resources/META-INF/jax-ws-catalog.xml</catalog>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- <plugin> <groupId>org.apache.cxf</groupId> <artifactId>cxf-codegen-plugin</artifactId> 
+				<version>${cxf.version}</version> <executions> <execution> <id>generate-sources</id> 
+				<phase>generate-sources</phase> <configuration> <!- - default: <sourceRoot>${project.build.directory}/generated-sources/cxf/</sourceRoot> 
+				- -> <wsdlOptions> <wsdlOption> <!- - Switch to not generate RegistryInterface.java 
+				<wsdl>http://nvo.caltech.edu:8080/carnivore/services?wsdl</wsdl> - -> <wsdl>http://www.ivoa.net/wsdl/RegistrySearch/v1.0</wsdl> 
+				<extraargs> <extraarg>-client</extraarg> <extraarg>-catalog</extraarg> <extraarg>${basedir}/src/main/resources/META-INF/jax-ws-catalog.xml</extraarg> 
+				</extraargs> </wsdlOption> </wsdlOptions> </configuration> <goals> <goal>wsdl2java</goal> 
+				</goals> </execution> </executions> <dependencies> </dependencies> </plugin> -->
 
 			<plugin>
 				<!-- So that Eclipse m2e (with the buildhelper m2e connector) can find 
@@ -61,7 +60,7 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>${project.build.directory}/generated-sources/cxf/</source>
+								<source>${project.build.directory}/generated-sources/wsimport/</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -81,11 +80,19 @@
 							<pluginExecutions>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>org.apache.cxf</groupId>
-										<artifactId>cxf-codegen-plugin</artifactId>
-										<versionRange>[${cxf.version},)</versionRange>
-										<goals>
+
+										<groupId>org.jvnet.jax-ws-commons</groupId>
+										<artifactId>jaxws-maven-plugin</artifactId>
+										<versionRange>[2.2,)</versionRange>
+										<!-- <groupId>org.apache.cxf</groupId> <artifactId>cxf-codegen-plugin</artifactId> 
+											<versionRange>[${cxf.version},)</versionRange> 
+																					<goals>
 											<goal>wsdl2java</goal>
+										</goals>
+											
+											-->
+										<goals>
+											<goal>wsimport</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
@@ -103,22 +110,17 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-frontend-jaxws</artifactId>
-			<version>${cxf.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-transports-http</artifactId>
-			<version>${cxf.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-bindings-soap</artifactId>
-			<version>${cxf.version}</version>
-		</dependency>
+		<!-- <dependency> <groupId>org.apache.cxf</groupId> <artifactId>cxf-rt-frontend-jaxws</artifactId> 
+			<version>${cxf.version}</version> </dependency> <dependency> <groupId>org.apache.cxf</groupId> 
+			<artifactId>cxf-rt-transports-http</artifactId> <version>${cxf.version}</version> 
+			</dependency> <dependency> <groupId>org.apache.cxf</groupId> <artifactId>cxf-rt-bindings-soap</artifactId> 
+			<version>${cxf.version}</version> </dependency> -->
 
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>2.2.6</version>
+		</dependency>
 	</dependencies>
 
 </project>

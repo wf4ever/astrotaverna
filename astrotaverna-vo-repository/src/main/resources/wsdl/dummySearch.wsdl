@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="searchableRegistry" targetNamespace="http://example.com/wsdl/dummySearch"
+	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ris="http://www.ivoa.net/wsdl/RegistrySearch/v1.0"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://example.com/wsdl/dummySearch"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	
+	<!-- Adapted from http://registry.euro-vo.org/services/RegistrySearch?wsdl -->
+	
+	<import location="./RegistrySearch-v1.0.wsdl" namespace="http://www.ivoa.net/wsdl/RegistrySearch/v1.0"></import>
+	<service name="RegistrySearchService">
+		<port binding="ris:RegistrySearchSOAP" name="RegistrySearchPortSOAP">
+			<!-- To be overriden with different endpoint -->
+			<soap:address location="http://example.com/RegistrySearch" />
+		</port>
+	</service>
+</definitions>
+
+
