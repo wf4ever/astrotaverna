@@ -8,9 +8,7 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>astrotaverna-vo-repository</artifactId>
-	<properties>
-		<cxf.version>2.5.2</cxf.version>
-	</properties>
+	
 
 	<build>
 		<plugins>
@@ -26,6 +24,7 @@
 							<goal>wsimport</goal>
 						</goals>
 						<configuration>
+							<target>2.1</target>
 							<wsdlDirectory>${basedir}/src/main/resources/wsdl/</wsdlDirectory>
 							<wsdlFiles>
 								<wsdlFile>dummySearch.wsdl</wsdlFile>
@@ -35,15 +34,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<!-- <plugin> <groupId>org.apache.cxf</groupId> <artifactId>cxf-codegen-plugin</artifactId> 
-				<version>${cxf.version}</version> <executions> <execution> <id>generate-sources</id> 
-				<phase>generate-sources</phase> <configuration> <!- - default: <sourceRoot>${project.build.directory}/generated-sources/cxf/</sourceRoot> 
-				- -> <wsdlOptions> <wsdlOption> <!- - Switch to not generate RegistryInterface.java 
-				<wsdl>http://nvo.caltech.edu:8080/carnivore/services?wsdl</wsdl> - -> <wsdl>http://www.ivoa.net/wsdl/RegistrySearch/v1.0</wsdl> 
-				<extraargs> <extraarg>-client</extraarg> <extraarg>-catalog</extraarg> <extraarg>${basedir}/src/main/resources/META-INF/jax-ws-catalog.xml</extraarg> 
-				</extraargs> </wsdlOption> </wsdlOptions> </configuration> <goals> <goal>wsdl2java</goal> 
-				</goals> </execution> </executions> <dependencies> </dependencies> </plugin> -->
 
 			<plugin>
 				<!-- So that Eclipse m2e (with the buildhelper m2e connector) can find 
@@ -83,14 +73,7 @@
 
 										<groupId>org.jvnet.jax-ws-commons</groupId>
 										<artifactId>jaxws-maven-plugin</artifactId>
-										<versionRange>[2.2,)</versionRange>
-										<!-- <groupId>org.apache.cxf</groupId> <artifactId>cxf-codegen-plugin</artifactId> 
-											<versionRange>[${cxf.version},)</versionRange> 
-																					<goals>
-											<goal>wsdl2java</goal>
-										</goals>
-											
-											-->
+										<versionRange>[2.2,)</versionRange>									
 										<goals>
 											<goal>wsimport</goal>
 										</goals>
@@ -110,12 +93,6 @@
 	</build>
 
 	<dependencies>
-		<!-- <dependency> <groupId>org.apache.cxf</groupId> <artifactId>cxf-rt-frontend-jaxws</artifactId> 
-			<version>${cxf.version}</version> </dependency> <dependency> <groupId>org.apache.cxf</groupId> 
-			<artifactId>cxf-rt-transports-http</artifactId> <version>${cxf.version}</version> 
-			</dependency> <dependency> <groupId>org.apache.cxf</groupId> <artifactId>cxf-rt-bindings-soap</artifactId> 
-			<version>${cxf.version}</version> </dependency> -->
-
 		<dependency>
 			<groupId>com.sun.xml.ws</groupId>
 			<artifactId>jaxws-rt</artifactId>

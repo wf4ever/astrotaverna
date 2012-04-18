@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
+import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
 
@@ -19,6 +20,10 @@ public class VORepository {
 	public enum Status {
 		OK, ERROR, CONNECTION_ERROR, UNKNOWN;
 	}
+
+	private final static QName REGISTRYSEARCHSERVICE_QNAME = new QName(
+			"http://taverna.org.uk/astro/wsdl/RegistrySearch",
+			"RegistrySearchService");
 
 	public static final URI DEFAULT_ENDPOINT = URI
 			.create("http://registry.euro-vo.org/services/RegistrySearch");
@@ -46,7 +51,7 @@ public class VORepository {
 		if (endpoint == null) {
 			endpoint = DEFAULT_ENDPOINT;
 		}
-		synchronized(this) {
+		synchronized (this) {
 			this.endpoint = endpoint;
 			// Force getPort() to re-evaluate
 			this.port = null;
@@ -76,13 +81,15 @@ public class VORepository {
 	}
 
 	protected RegistrySearchPortType getPort() {
-		synchronized(this) {
+		synchronized (this) {
 			if (this.port != null) {
 				return this.port;
 			}
-		}		
+		}
 		URL wsdlUri = getClass().getResource("/wsdl/dummySearch.wsdl");
-		RegistrySearchService service = new RegistrySearchService(wsdlUri);
+
+		RegistrySearchService service = new RegistrySearchService(wsdlUri,
+				REGISTRYSEARCHSERVICE_QNAME);
 		RegistrySearchPortType port = service.getRegistrySearchPortSOAP();
 		// Change binding hack as of
 		// http://stackoverflow.com/questions/5158537/jaxws-how-to-change-the-endpoint-address
@@ -91,14 +98,15 @@ public class VORepository {
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
 				getEndpoint().toASCIIString());
 
-		synchronized(this) {
+		synchronized (this) {
 			this.port = port;
 		}
 		return port;
 	}
 
 	public List<Resource> keywordSearch(String keywords) throws ErrorResp {
-		VOResources voResources = getPort().keywordSearch(keywords, true, null, null, null);		
+		VOResources voResources = getPort().keywordSearch(keywords, true, null,
+				null, null);
 		return voResources.getResource();
 	}
 
