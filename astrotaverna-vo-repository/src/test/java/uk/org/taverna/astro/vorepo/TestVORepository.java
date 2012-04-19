@@ -11,6 +11,7 @@ import javax.xml.ws.BindingProvider;
 
 import net.ivoa.xml.registryinterface.v1.VOResources;
 import net.ivoa.xml.voresource.v1.Resource;
+import net.ivoa.xml.voresource.v1.Service;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -29,6 +30,18 @@ public class TestVORepository {
 		
 	}
 
+	@Test
+	public void serviceSearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Resource> resources = repo.serviceSearch("amiga");
+		System.out.println(resources);
+		Resource resource = resources.get(0);
+		System.out.println(resource.getClass().getAnnotations());
+		Service s = (Service) resource;
+		System.out.println(s.getCapability());
+		assertFalse(resources.isEmpty());		
+	}
+	
 	@Test
 	public void defaultRepo() throws Exception {
 		VORepository repo = new VORepository();

@@ -9,7 +9,19 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
 
 import net.ivoa.wsdl.registrysearch.v1.ResolveResponse;
+import net.ivoa.wsdl.registrysearch.v1.XQuerySearch;
+import net.ivoa.xml.adql.v1.AtomType;
+import net.ivoa.xml.adql.v1.ColumnReferenceType;
+import net.ivoa.xml.adql.v1.LikePredType;
+import net.ivoa.xml.adql.v1.LiteralType;
+import net.ivoa.xml.adql.v1.RegionSearchType;
+import net.ivoa.xml.adql.v1.ScalarExpressionType;
+import net.ivoa.xml.adql.v1.SearchType;
+import net.ivoa.xml.adql.v1.StringType;
+import net.ivoa.xml.adql.v1.WhereType;
 import net.ivoa.xml.registryinterface.v1.VOResources;
+import net.ivoa.xml.stc.stcregion.v1.CircleType;
+import net.ivoa.xml.stc.stcregion.v1.RegionType;
 import net.ivoa.xml.voresource.v1.Resource;
 import uk.org.taverna.astro.wsdl.registrysearch.ErrorResp;
 import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchPortType;
@@ -106,8 +118,25 @@ public class VORepository {
 
 	public List<Resource> keywordSearch(String keywords) throws ErrorResp {
 		VOResources voResources = getPort().keywordSearch(keywords, true, null,
-				null, null);
+				null, null);		
 		return voResources.getResource();
+	}
+
+	public List<Resource> serviceSearch(String string) throws ErrorResp {		
+		WhereType where = new WhereType();
+		LikePredType likePredType = new LikePredType();
+		ColumnReferenceType arg = new ColumnReferenceType();
+		arg.setName("type");
+		arg.setTable("");
+		arg.setXpathName("capability/@xsi:type");
+		likePredType.setArg(arg);
+		AtomType pattern = new AtomType();
+		StringType value = new StringType();
+		value.setValue("%Search");		
+		pattern.setLiteral(value);
+		likePredType.setPattern(pattern);
+		where.setCondition(likePredType);
+		return getPort().search(where, null, null, false).getResource();
 	}
 
 }
