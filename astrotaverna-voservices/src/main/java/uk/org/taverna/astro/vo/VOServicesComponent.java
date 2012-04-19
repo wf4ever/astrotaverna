@@ -62,7 +62,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		private SearchTask searchTask;
 
 		private final class SearchTask extends
-				SwingWorker<List<Resource>, String> {
+				SwingWorker<List<Service>, String> {
 			private String search;
 
 			public SearchTask(String search) {
@@ -70,13 +70,13 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 			}
 
 			@Override
-			protected List<Resource> doInBackground() throws Exception {
-				return repo.keywordSearch(search);
+			protected List<Service> doInBackground() throws Exception {
+				return repo.resourceSearch(net.ivoa.xml.conesearch.v1.ConeSearch.class, search.split(" "));
 			}
 
 			@Override
 			protected void done() {
-				List<Resource> resources;
+				List<Service> resources;
 				try {
 					resources = get();
 				} catch (CancellationException ex) {
@@ -97,16 +97,12 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 					return;
 				}
 				status.setText(resources.size() + " results for: " + search);
-				for (Resource r : resources) {
+				for (Service r : resources) {
 					String shortName = r.getShortName();
 					String title = r.getTitle();
-					String subjects = "";
+					String subjects = r.getContent().getSubject().toString();
 					String identifier = r.getIdentifier();
-					String publisher = "";
-					if (r instanceof Service) {
-						Service service = (Service) r;
-						System.out.println(service);
-					}
+					String publisher = r.getCuration().getPublisher().getValue();					
 					resultsTableModel.addRow(new String[] { shortName,
 							title, subjects, identifier, publisher });
 				}
