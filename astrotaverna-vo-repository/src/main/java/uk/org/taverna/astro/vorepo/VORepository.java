@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
@@ -124,29 +125,29 @@ public class VORepository {
 	public List<Service> resourceSearch(Class<? extends Capability> capabilityType, String... keywords) throws ErrorResp {		
 		WhereType where = new WhereType();
 		
-		IntersectionSearchType or = new IntersectionSearchType();
-		where.setCondition(or);
+		IntersectionSearchType and = new IntersectionSearchType();
+		where.setCondition(and);
 
-		LikePredType xsiType = new LikePredType();
-		ColumnReferenceType xsiTypeArg = new ColumnReferenceType();
-		xsiTypeArg.setName("type");
-		xsiTypeArg.setTable("");
-		xsiTypeArg.setXpathName("capability/@xsi:type");
-		xsiType.setArg(xsiTypeArg);
-		AtomType xsiTypePattern = new AtomType();
-		StringType xsiTypeValue = new StringType();
-		XmlType xmlType = capabilityType.getAnnotation(javax.xml.bind.annotation.XmlType.class);
-		//  TODO: namespaced xsi:type lookup without using % trick?
-		xsiTypeValue.setValue("%" + xmlType.name());		
-		xsiTypePattern.setLiteral(xsiTypeValue);
-		xsiType.setPattern(xsiTypePattern);
-		or.getCondition().add(xsiType);
-		or.getCondition().add(xsiType);
 		
+		XmlType xmlType = capabilityType.getAnnotation(javax.xml.bind.annotation.XmlType.class);
+		String xsiTypeValueLiteral = "%" + xmlType.name();
+		//  TODO: namespaced xsi:type lookup without using % trick?
+		
+		and.getCondition().add(makeLikeCondition("capability/@xsi:type", xsiTypeValueLiteral));
+		for (String kw : keywords) {
+			and.getCondition().add(makeLikeCondition("content/description", "%" + kw + "%"));
+		}
+		if (and.getCondition().size() == 1) {
+			// Drop the or
+			where.setCondition(and.getCondition().get(0));
+		}
+		
+		
+		// Perform search
+		List<Resource> resources = getPort().search(where, null, null, false).getResource();
 
 		// Just double-checking the capabilities as xsi:type check above is fragile
 		// Bonus: Convert to List<Service>
-		List<Resource> resources = getPort().search(where, null, null, false).getResource();
 		List<Service> services =  new ArrayList<Service>();
 		for (Resource res : resources) {
 			if (! (res instanceof Resource)) {
@@ -161,6 +162,22 @@ public class VORepository {
 			}
 		}
 		return services;
+	}
+
+	private LikePredType makeLikeCondition(String xpath,
+			String literal) {
+		LikePredType like = new LikePredType();
+		ColumnReferenceType typeArg = new ColumnReferenceType();
+		typeArg.setName("arg-" + UUID.randomUUID().toString());
+		typeArg.setTable("");		
+		typeArg.setXpathName(xpath);
+		like.setArg(typeArg);
+		AtomType pattern = new AtomType();
+		StringType value = new StringType();
+		value.setValue(literal);		
+		pattern.setLiteral(value);
+		like.setPattern(pattern);		
+		return like;
 	}
 
 }

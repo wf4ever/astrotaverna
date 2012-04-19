@@ -52,8 +52,7 @@ public class TestVORepository {
 			if (c instanceof ConeSearch) {
 				ConeSearch coneSearch = (ConeSearch) c;
 				foundCapability = true;
-				System.out.println(coneSearch.getInterface().get(0).getAccessURL().get(0).getValue());
-				
+				//System.out.println(coneSearch.getInterface().get(0).getAccessURL().get(0).getValue());				
 			}
 		}
 		assertTrue("Could not find any ConeSearch", foundCapability);
