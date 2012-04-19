@@ -1,15 +1,18 @@
 package uk.org.taverna.astro.vorepo;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 import java.util.List;
 
 import javax.xml.ws.BindingProvider;
 
-import net.ivoa.xml.registryinterface.v1.VOResources;
+import net.ivoa.xml.conesearch.v1.ConeSearch;
+import net.ivoa.xml.voresource.v1.Capability;
 import net.ivoa.xml.voresource.v1.Resource;
 import net.ivoa.xml.voresource.v1.Service;
 
@@ -18,30 +21,44 @@ import org.junit.Test;
 
 import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchPortType;
 
+/*
+ To debug SOAP messages, set system properties:
+
+ -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true
+ -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=true
+ */
 public class TestVORepository {
 
 	@Test
 	public void keywordSearch() throws Exception {
 		VORepository repo = new VORepository();
-		List<Resource> resources = repo.keywordSearch("ivo://svo.amiga.iaa.es/amiga");
+		List<Resource> resources = repo
+				.keywordSearch("ivo://svo.amiga.iaa.es/amiga");
 		assertFalse(resources.isEmpty());
 		Resource someResource = resources.get(0);
 		assertTrue(someResource.getIdentifier().startsWith("ivo://"));
-		
+
 	}
 
 	@Test
-	public void serviceSearch() throws Exception {
+	public void coneSearch() throws Exception {
 		VORepository repo = new VORepository();
-		List<Resource> resources = repo.serviceSearch("amiga");
-		System.out.println(resources);
-		Resource resource = resources.get(0);
-		System.out.println(resource.getClass().getAnnotations());
-		Service s = (Service) resource;
-		System.out.println(s.getCapability());
-		assertFalse(resources.isEmpty());		
+		List<Service> resources = repo.resourceSearch(
+				ConeSearch.class, "amiga");
+		assertFalse(resources.isEmpty());	
+		Service s = resources.get(0);
+		boolean foundCapability = false;
+		for (Capability c: s.getCapability()) {
+			if (c instanceof ConeSearch) {
+				ConeSearch coneSearch = (ConeSearch) c;
+				foundCapability = true;
+				System.out.println(coneSearch.getInterface().get(0).getAccessURL().get(0).getValue());
+				
+			}
+		}
+		assertTrue("Could not find any ConeSearch", foundCapability);
 	}
-	
+
 	@Test
 	public void defaultRepo() throws Exception {
 		VORepository repo = new VORepository();

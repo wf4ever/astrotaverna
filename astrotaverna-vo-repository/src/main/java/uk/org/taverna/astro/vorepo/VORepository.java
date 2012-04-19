@@ -2,27 +2,25 @@ package uk.org.taverna.astro.vorepo;
 
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
 
 import net.ivoa.wsdl.registrysearch.v1.ResolveResponse;
-import net.ivoa.wsdl.registrysearch.v1.XQuerySearch;
 import net.ivoa.xml.adql.v1.AtomType;
 import net.ivoa.xml.adql.v1.ColumnReferenceType;
+import net.ivoa.xml.adql.v1.IntersectionSearchType;
 import net.ivoa.xml.adql.v1.LikePredType;
-import net.ivoa.xml.adql.v1.LiteralType;
-import net.ivoa.xml.adql.v1.RegionSearchType;
-import net.ivoa.xml.adql.v1.ScalarExpressionType;
-import net.ivoa.xml.adql.v1.SearchType;
 import net.ivoa.xml.adql.v1.StringType;
 import net.ivoa.xml.adql.v1.WhereType;
 import net.ivoa.xml.registryinterface.v1.VOResources;
-import net.ivoa.xml.stc.stcregion.v1.CircleType;
-import net.ivoa.xml.stc.stcregion.v1.RegionType;
+import net.ivoa.xml.voresource.v1.Capability;
 import net.ivoa.xml.voresource.v1.Resource;
+import net.ivoa.xml.voresource.v1.Service;
 import uk.org.taverna.astro.wsdl.registrysearch.ErrorResp;
 import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchPortType;
 import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchService;
@@ -122,21 +120,47 @@ public class VORepository {
 		return voResources.getResource();
 	}
 
-	public List<Resource> serviceSearch(String string) throws ErrorResp {		
+	@SuppressWarnings("unchecked")
+	public List<Service> resourceSearch(Class<? extends Capability> capabilityType, String... keywords) throws ErrorResp {		
 		WhereType where = new WhereType();
-		LikePredType likePredType = new LikePredType();
-		ColumnReferenceType arg = new ColumnReferenceType();
-		arg.setName("type");
-		arg.setTable("");
-		arg.setXpathName("capability/@xsi:type");
-		likePredType.setArg(arg);
-		AtomType pattern = new AtomType();
-		StringType value = new StringType();
-		value.setValue("%Search");		
-		pattern.setLiteral(value);
-		likePredType.setPattern(pattern);
-		where.setCondition(likePredType);
-		return getPort().search(where, null, null, false).getResource();
+		
+		IntersectionSearchType or = new IntersectionSearchType();
+		where.setCondition(or);
+
+		LikePredType xsiType = new LikePredType();
+		ColumnReferenceType xsiTypeArg = new ColumnReferenceType();
+		xsiTypeArg.setName("type");
+		xsiTypeArg.setTable("");
+		xsiTypeArg.setXpathName("capability/@xsi:type");
+		xsiType.setArg(xsiTypeArg);
+		AtomType xsiTypePattern = new AtomType();
+		StringType xsiTypeValue = new StringType();
+		XmlType xmlType = capabilityType.getAnnotation(javax.xml.bind.annotation.XmlType.class);
+		//  TODO: namespaced xsi:type lookup without using % trick?
+		xsiTypeValue.setValue("%" + xmlType.name());		
+		xsiTypePattern.setLiteral(xsiTypeValue);
+		xsiType.setPattern(xsiTypePattern);
+		or.getCondition().add(xsiType);
+		or.getCondition().add(xsiType);
+		
+
+		// Just double-checking the capabilities as xsi:type check above is fragile
+		// Bonus: Convert to List<Service>
+		List<Resource> resources = getPort().search(where, null, null, false).getResource();
+		List<Service> services =  new ArrayList<Service>();
+		for (Resource res : resources) {
+			if (! (res instanceof Resource)) {
+				continue;
+			}
+			Service ser = (Service) res;
+			for (Capability c : ser.getCapability()) {
+				if (capabilityType.isInstance(c)) {
+					services.add(ser);
+					break;
+				}
+			}
+		}
+		return services;
 	}
 
 }
