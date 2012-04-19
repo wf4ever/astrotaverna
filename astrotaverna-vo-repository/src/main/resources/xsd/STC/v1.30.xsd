@@ -133,7 +133,7 @@ Revision 1.1  2003/04/28 16:25:34  arots
 Initial revision
 -->
 <xs:schema xmlns="http://www.ivoa.net/xml/STC/stc-v1.30.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink" targetNamespace="http://www.ivoa.net/xml/STC/stc-v1.30.xsd" elementFormDefault="qualified">
-  <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="../xlink/xlink.xsd"/>
+  <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="../Xlink/xlink.xsd"/>
   <!-- CoordSystem -->
   <!-- Reference frames -->
   <xs:complexType name="coordFrameType">

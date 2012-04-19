@@ -8,16 +8,36 @@
 	<!-- Dummy search WSDL - as there is no wsdl:service in http://www.ivoa.net/wsdl/RegistrySearch/v1.0. 
 		Adapted from http://registry.euro-vo.org/services/RegistrySearch?wsdl -->
 	<import location="./RegistrySearch-v1.0.wsdl" namespace="http://taverna.org.uk/astro/vorepo/wsdl"></import>
-	
+
 	<types>
-		<xs:import namespace="http://www.ivoa.net/xml/VODataService/v1.0" schemaLocation="http://www.ivoa.net/xml/VODataService/v1.0" />
+		<xs:schema>
+			<!-- Import additional schemas for cone services, etc. -->
+
+			<xs:import namespace="http://www.ivoa.net/xml/ADQL/v1.0"
+				schemaLocation="http://www.ivoa.net/xml/ADQL/v1.0" />
+			<xs:import namespace="http://www.ivoa.net/xml/ConeSearch/v1.0"
+				schemaLocation="http://www.ivoa.net/xml/ConeSearch/v1.0" />
+			<xs:import namespace="http://www.ivoa.net/xml/RegistryInterface/v1.0"
+				schemaLocation="http://www.ivoa.net/xml/RegistryInterface/v1.0" />
+			<xs:import namespace="http://www.ivoa.net/xml/SIA/v1.0"
+				schemaLocation="http://www.ivoa.net/xml/SIA/v1.0" />
+			<xs:import namespace="http://www.ivoa.net/xml/SLAP/v0.1"
+				schemaLocation="http://www.ivoa.net/xml/SLAP/v0.1" />
+			<xs:import namespace="http://www.ivoa.net/xml/SSA/v0.4"
+				schemaLocation="http://www.ivoa.net/xml/SSA/v0.4" />			
+			<xs:import namespace="http://www.ivoa.net/xml/STC/STCcoords/v1.10"
+				schemaLocation="http://www.ivoa.net/xml/STC/STCcoords/v1.10" />
+			<xs:import namespace="http://www.ivoa.net/xml/STC/STCregion/v1.10"
+				schemaLocation="http://www.ivoa.net/xml/STC/STCregion/v1.10" />
+			<xs:import namespace="http://www.ivoa.net/xml/VODataService/v1.0"
+				schemaLocation="http://www.ivoa.net/xml/VODataService/v1.0" />
+			<xs:import namespace="http://www.ivoa.net/xml/VOResource/v1.0"
+				schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0" />
+			<xs:import namespace="http://www.ivoa.net/xml/VOStandard/v0.1"
+				schemaLocation="http://www.ivoa.net/xml/VOStandard/v0.1" />			
+		</xs:schema>
 	</types>
 
-   
-   <message name="Fred">
-      <part name="Fred"  element="vds:DataService"/>
-   </message>  
-	
 	<service name="RegistrySearchService">
 		<port binding="ris:RegistrySearchSOAP" name="RegistrySearchPortSOAP">
 			<!-- To be overridden with different endpoint -->

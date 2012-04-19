@@ -63,7 +63,7 @@ date: 2002/07/11 08:58:25;  author: arots;  state: Exp;
 Initial revision
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:reg="http://www.ivoa.net/xml/STC/STCregion/v1.10" xmlns:crd="http://www.ivoa.net/xml/STC/STCcoords/v1.10" targetNamespace="http://www.ivoa.net/xml/STC/STCregion/v1.10" elementFormDefault="qualified">
-	<xs:import namespace="http://www.ivoa.net/xml/STC/STCcoords/v1.10" schemaLocation="../STCcoords/v1.10.xsd"/>
+	<xs:import namespace="http://www.ivoa.net/xml/STC/STCcoords/v1.10" schemaLocation="http://www.ivoa.net/xml/STC/STCcoords/v1.10"/>
 	<!--Coords and CoordSystem are needed from STC (coords.xsd)-->
 	<!--Shape definitions; Circle, Polygon, and Sector are derived from Shape; Ellipse is derived from Circle; Polygon includes also Vertex and SmallCircle-->
 	<xs:annotation>
