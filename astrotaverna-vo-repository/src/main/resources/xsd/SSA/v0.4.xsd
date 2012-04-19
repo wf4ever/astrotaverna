@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
            xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0"
            xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.0"
-           xmlns:ssa="http://www.ivoa.net/xml/SSA/v0.3"
+           xmlns:ssa="http://www.ivoa.net/xml/SSA/v0.4"
            xmlns:vm="http://www.ivoa.net/xml/VOMetadata/v0.1"
            targetNamespace="http://www.ivoa.net/xml/SSA/v0.4"
            elementFormDefault="unqualified" attributeFormDefault="unqualified"
