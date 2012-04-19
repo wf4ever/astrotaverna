@@ -6,11 +6,12 @@
  	<system systemId="http://www.ivoa.net/xml/SIA/v1.0" uri="../xsd/SIA/v1.0.xsd"/>
  	<system systemId="http://www.ivoa.net/xml/SLAP/v0.1" uri="../xsd/SLAP/v0.1.xsd"/>
  	<system systemId="http://www.ivoa.net/xml/SSA/v0.4" uri="../xsd/SSA/v0.4.xsd"/>
- 	<system systemId="http://www.ivoa.net/xml/STC/stc-v1.30.xsd" uri="../STC/v1.30.xsd" />
+ 	<system systemId="http://www.ivoa.net/xml/STC/stc-v1.30.xsd" uri="../STC/v1.30.xsd" /> 	                 
 	<system systemId="http://www.ivoa.net/xml/STC/STCcoords/v1.10" uri="../xsd/STCcoords/v1.10.xsd" />
  	<system systemId="http://www.ivoa.net/xml/STC/STCregion/v1.10" uri="../xsd/STCregion/v1.10.xsd" />
  	<system systemId="http://www.ivoa.net/xml/VODataService/v1.0" uri="../xsd/VODataService/v1.0.xsd"/>
  	<system systemId="http://www.ivoa.net/xml/VOResource/v1.0" uri="../xsd/VOResource/v1.0.xsd"/>
  	<system systemId="http://www.ivoa.net/xml/VOStandard/v0.1" uri="../xsd/VOStandard/v0.1.xsd"/>
- 	<system systemId="http://www.w3.org/1999/xlink" uri="../xlink/xlink.xsd" /> 	 	
+ 	<system systemId="http://www.w3.org/1999/xlink" uri="../xlink/xlink.xsd" /> 	 
+ 	<system systemId="http://www.ivoa.net/xml/Xlink/xlink.xsd" uri="../xlink/xlink.xsd" />	
 </catalog> 
