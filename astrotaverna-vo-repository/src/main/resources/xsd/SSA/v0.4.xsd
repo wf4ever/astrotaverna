@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0"
+           xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.0"
+           xmlns:ssa="http://www.ivoa.net/xml/SSA/v0.3"
+           xmlns:vm="http://www.ivoa.net/xml/VOMetadata/v0.1"
+           targetNamespace="http://www.ivoa.net/xml/SSA/v0.4"
+           elementFormDefault="unqualified" attributeFormDefault="unqualified"
+           version="0.4wd">
+
+   <!-- 
+     - Differences from 0.3wd:
+     -   o  In maxSearchRadius, noted that this differs from SIZE which
+            specifies the diameter of the search region.
+	 o  In maxRecords, noted that if not specified there is no
+	    predefined hard limit on the size of a query response.
+	 o  In defaultMaxRecords, noted that if not specified the default
+	    maxRecords is undefined (but there might nonetheless be one).
+	 o  In maxAperture added mention that the units are diameter in
+	    decimal degrees, as for the APERTURE parameter (also fixed
+	    a typo: "special extraction" -> "spectral extraction".
+	 o  In maxAperture changed default value (indicating no builtin
+	    limit) from 180 to 360 degrees since APERTURE is a diameter
+	    not a radius.
+	 o  Uncommented supportedFrame and modified the definition so
+	    that this can be used to specify an allowable frame value to
+	    be input via the POS parameter.  The type was changed from
+	    anyURI to string.  Added examples of typical values.  Added
+	    note that the default if nothing is specified "ICRS".
+	 o  In maxFileSize changed the units from bytes to kilobytes
+	    for consistency with SSA.
+	 o  In the description of complance level changed "TOME" to "TIME".
+	    Noted that a compliant service may also return native data.
+	 o  In creationType, changed enumeration "specialExtraction" to
+	    "spectralExtraction".
+	 o  In the description of POS in test query, changed "the size of
+	    the search radius" to "the diameter of the search region
+	    specified in decimal degrees".
+	 o  In the test query generalized the description of POS from
+	    "a position in the sky to search" to "search position" as
+	    SSA is not limited to sky coordinate frames.
+	 o  In the specification of protoSpectralAccess, added a new
+	    element "dataModel" to define the data model of the native
+	    data returned by the proto service.
+	 o  In the specification of protoSpectralAccess deleted
+	    defaultMaxRecords and maxAperture since proto spectral services
+	    do not support SSA features such as MAXRECORDS and spectral
+	    extraction with APERTURE (maxRecords is still defined).
+	    Also deleted supportedFrame and "supports" as ICRS can be
+	    assumed for proto services, and there are no standard optional
+	    service capabilities.  Overall these changes simplify the
+	    description of proto services somewhat to match current practice.
+	 o  In the specification of protoSpectralAccess changed the
+	    maxFileSize units to kilobytes for consistency.
+	 o  Many small edits throughout in the description comments.
+     -->
+
+   <!-- 
+     - Differences from 0.2wd:
+     -   o  dropped complianceLevel element from ProtoSpectralAccess
+     -   o  improved documentation for complianceLevel
+     - Differences from 0.1wd:
+     -   o  added ProtoSpectralAccess for pre-v1.0 services
+     - Differences from wd2:
+     -   o  Elements supportedFrame and supports are commented out
+     -   o  testQuery is simplified, added <queryDataCmd>
+     -->
+
+   <xs:annotation>
+      <xs:appinfo>
+        <vm:schemaName>SSA</vm:schemaName>
+        <vm:schemaPrefix>xs</vm:schemaPrefix>
+        <vm:targetPrefix>ssa</vm:targetPrefix>
+      </xs:appinfo>
+      <xs:documentation>
+        XML Schema used to describe the capabilities of a service instance
+        conforming to the Simple Spectral Access (SSA) protocol.
+      </xs:documentation>
+   </xs:annotation>
+
+   <xs:import namespace="http://www.ivoa.net/xml/VOResource/v1.0"
+              schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0"/>
+   <xs:import namespace="http://www.ivoa.net/xml/VODataService/v1.0"
+              schemaLocation="http://www.ivoa.net/xml/VODataService/v1.0"/>
+
+   <!-- Set the Capability standardID to indicate the SSA protocol. -->
+   <xs:complexType name="SSACapRestriction" abstract="true">
+      <xs:annotation>
+         <xs:documentation>
+            An abstract capability that fixes the standardID to the
+            IVOA ID for the SSA standard.
+         </xs:documentation>
+         <xs:documentation>
+            See vr:Capability for documentation on inherited children.
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:complexContent>
+         <xs:restriction base="vr:Capability">
+            <xs:sequence>
+               <xs:element name="validationLevel" type="vr:Validation"
+                           minOccurs="0" maxOccurs="unbounded"/>
+               <xs:element name="description" type="xs:token" 
+                           minOccurs="0"/>
+               <xs:element name="interface" type="vr:Interface" 
+                           minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="standardID" type="vr:IdentifierURI"
+                          use="required" fixed="ivo://ivoa.net/std/SSA"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <!-- SSA Capabilities -->
+   <xs:complexType name="SimpleSpectralAccess">
+      <xs:annotation>
+         <xs:documentation>
+            The capabilities of an SSA service implementation.  
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:complexContent>
+         <xs:extension base="ssa:SSACapRestriction">
+            <xs:sequence>
+
+               <xs:element name="complianceLevel" type="ssa:ComplianceLevel">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The category indicating the level to which this
+                        service instance complies with the SSA standard.  
+                     </xs:documentation>
+                     <xs:documentation>
+                        Allowed values are "query", "minimal", and "full".
+                        See definitions of allowed values for details.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="dataSource" type="ssa:DataSource"
+                           minOccurs="1" maxOccurs="unbounded">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The category specifying where the data accessed by
+			the service originally came from. 
+                     </xs:documentation>
+                     <xs:documentation>
+                        Allowed values are "survey", "pointed", "custom",
+                        "theory", "artificial"
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="creationType" type="ssa:CreationType"
+                           minOccurs="1" maxOccurs="unbounded">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The category that describes the process used by the
+			service to produce the dataset.  
+                     </xs:documentation>
+                     <xs:documentation>
+                        Typically this describes only the processing 
+                        performed by the data service, but it could 
+                        describe some additional earlier processing as
+			well, e.g., if data returned by the service is
+			partially precomputed from the source data.
+                     </xs:documentation>
+                     <xs:documentation>
+                        Allowed values are "archival", "cutout", "filtered",
+                        "mosaic", "projection", "spectralExtraction", 
+                        "catalogExtraction"
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="maxSearchRadius" type="xs:double">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The largest search radius, in degrees, that will be
+                        accepted by the service without returning an error 
+                        condition.  Note that this is not the same as SIZE,
+			which specifies the diameter of the search region.
+                     </xs:documentation>
+                     <xs:documentation>
+                        Use 180.0 if there is no restriction.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="maxRecords" type="xs:int">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The hard limit on the largest number of records that 
+                        the query operation will return in a single response.
+                     </xs:documentation>
+                     <xs:documentation>
+                        If not specified there is no predefined hard limit on
+			the number of records in a query response.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="defaultMaxRecords" type="xs:int">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The largest number of records that the service will
+                        return when the MAXREC parameter not specified in
+                        the query input.
+                     </xs:documentation>
+                     <xs:documentation>
+                        If not specified the default maximum number of
+			records in a query response is undefined.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="maxAperture" type="xs:double"
+                           minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The largest aperture diameter, in degrees, that can
+			be supported upon request via the APERTURE input
+			parameter by a service that supports the special
+			extraction creation method.  
+                     </xs:documentation>
+                     <xs:documentation>
+                        A value of 360 (the default) means there is no 
+                        fixed limit.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="supportedFrame" type="xs:string"
+                           maxOccurs="unbounded" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+			The name of a spatial coordinate frame supported
+			by the service, as supported by the service for
+			optional input via the POS parameter.
+                     </xs:documentation>
+                     <xs:documentation>
+		        The allowed values are the names of the spatial
+			coordinate frames defined by STC, e.g., "ICRS",
+			"GALACTIC_I", "GALACTIC_II", "GALACTIC" (a synonym
+			for GALACTIC_II), and so forth.  If not specified
+			"ICRS" is assumed.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+<!--
+  -  The "supports" values (optional service capabilities) have not yet
+  -  been defined.
+  -
+               <xs:element name="supports" type="xs:string" 
+                           maxOccurs="unbounded" minOccurs="0">
+
+                  <xs:annotation>
+                     <xs:documentation>
+                        Lists optional features that the service supports.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+  -->
+
+               <xs:element name="maxFileSize" type="xs:int"
+                           maxOccurs="1" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The estimated maximum output dataset file size in
+			kilobytes.
+                     </xs:documentation>
+                     <xs:documentation>
+                        The value is only an estimate, e.g., the client needs
+			to know whether a dataset returned by the service
+			might be 500 KB or 500 MB.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="testQuery" type="ssa:Query"
+                           minOccurs="0" maxOccurs="1">
+                  <xs:annotation>
+                     <xs:documentation>
+                        A set of queryData parameters that is expected to
+			produce at least one matched record which can be
+                        used to test the service.
+                     </xs:documentation>
+                     <xs:documentation>
+		        The value should include all parameters required
+			for the test query but should exclude the baseURL
+			and the REQUEST parameter.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:simpleType name="ComplianceLevel">
+      <xs:annotation>
+         <xs:documentation>
+            The allowed values for indicating the level at which a service
+	    instance complies with the SSA standard.  
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="query">
+            <xs:annotation>
+               <xs:documentation>
+                  The service supports all of the capabilities and features
+                  of the SSA protocol identified as "must" in the 
+                  specification, except that it does not support returning 
+                  data in at least one SSA-compliant format (only data in
+		  some native project format is returned).
+               </xs:documentation>
+               <xs:documentation>
+                  This level represents the lowest level of compliance.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="minimal">
+            <xs:annotation>
+               <xs:documentation>
+                  The service supports all of the capabilities and features
+                  of the SSA protocol identified as "must" in the 
+                  specification.
+               </xs:documentation>
+               <xs:documentation>
+                  In brief, this includes:
+                    * implementing the GET interface,
+                    * support the parameters POS, SIZE, BAND, TIME, and FORMAT
+                    * includes all mandatory metadata fields in query response
+                    * supports data retrieval in at least one SSA-compliant
+			 format (native data may also be returned)
+                    * supports the "FORMAT=METADATA" metadata query.
+               </xs:documentation>
+               <xs:documentation>
+                  This level represents the middle level of compliance.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="full">
+            <xs:annotation>
+               <xs:documentation>
+                  The service supports, at a minimum, all of the capabilities
+		  and features of the SSA protocol identified as "must" or
+		  "should" in the specification.
+               </xs:documentation>
+               <xs:documentation>
+                  This level represents the highest level of compliance.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+      </xs:restriction>
+   </xs:simpleType>
+
+   <xs:simpleType name="DataSource">
+      <xs:annotation>
+         <xs:documentation>
+           The defined categories that specify where the spectral data 
+           originally came from, i.e., the type of data collections to
+	   which the service provides access.
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="survey">
+            <xs:annotation>
+               <xs:documentation>
+                  A survey dataset, which typically covers some region of 
+                  observational parameter space in a uniform fashion, with 
+		  typically with complete coverage within the region of
+		  parameter space observed.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="pointed">
+            <xs:annotation>
+               <xs:documentation>
+                  A pointed observation of a particular astronomical object 
+                  or field. 
+               </xs:documentation>
+               <xs:documentation>
+                  Typically, these are instrumental observations taken as 
+                  part of some PI observing program. The data quality and 
+                  characteristics may be variable, but the observations of 
+                  a particular object or field may be more extensive than 
+                  for a survey.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="custom">
+            <xs:annotation>
+               <xs:documentation>
+                  Data which has been custom processed, e.g., as part of 
+                  a specific research project.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="theory">
+            <xs:annotation>
+               <xs:documentation>
+                  Theory data, or any data generated from a theoretical 
+                  model, for example a synthetic spectrum.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="artificial">
+            <xs:annotation>
+               <xs:documentation>
+                  Artificial or simulated data. 
+               </xs:documentation>
+               <xs:documentation>
+                  This is similar to theory data but need not be based on 
+                  a physical model, and is often used for testing purposes.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+      </xs:restriction>
+   </xs:simpleType>
+
+   <xs:simpleType name="CreationType">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="archival">
+            <xs:annotation>
+               <xs:documentation>
+		  The entire archival or project dataset (e.g., file)
+		  is returned.	Transformations such as metadata
+		  or data model mediation or format conversions
+		  may take place, but the _content_ of the dataset is
+		  not substantially modified (e.g., all the data is
+		  returned and the sample values are not modified).
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="cutout">
+            <xs:annotation>
+               <xs:documentation>
+                  The dataset is subsetted in some region of parameter 
+                  space to produce a subset dataset. Sample values are not 
+                  modified, e.g., cutouts could be recombined to reconstitute 
+                  the original dataset.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="filtered">
+            <xs:annotation>
+               <xs:documentation>
+                  The data is filtered in some fashion to exclude portions 
+                  of the dataset, e.g., passing only data in selected regions 
+                  along a measurement axis, or processing the data in a way 
+                  which recomputes the sample values, e.g., via
+                  interpolation or flux transformation. 
+               </xs:documentation>
+               <xs:documentation>
+                  Filtering is often combined with other forms of processing,
+		  e.g., projection.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="mosaic">
+            <xs:annotation>
+               <xs:documentation>
+                  Data from multiple non- or partially-overlapping datasets 
+                  are combined to produce a new dataset.  Mosaic data may
+		  or may not employ filtering, i.e., computation of new
+		  data samples.  If filtering is not involved data samples
+		  are assumed to be produced by "cutting out" regions of the
+		  mosaiced datasets.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="projection">
+            <xs:annotation>
+               <xs:documentation>
+                  Data is geometrically warped or dimensionally reduced by
+                  projecting along the axis of a multidimensional dataset.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="spectralExtraction">
+            <xs:annotation>
+               <xs:documentation>
+                  Extraction of a spectrum from another dataset, e.g.,
+                  extraction of a spectrum from a spectral data cube 
+                  through a simulated aperture.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="catalogExtraction">
+            <xs:annotation>
+               <xs:documentation>
+                  Extraction of a catalog of some form from another dataset,
+                  e.g., extraction of a source catalog from an image, or
+                  extraction of a line list catalog from a spectrum
+		  (generally not valid for a SSA service).
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+      </xs:restriction>
+   </xs:simpleType>
+
+   <xs:complexType name="Query">
+      <xs:annotation>
+         <xs:documentation>
+            A query to be sent to the service, e.g., a test query.
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:sequence>
+         <xs:element name="pos" type="ssa:PosParam" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                   The center position of the search region specified in
+                   decimal degrees.  
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+
+         <xs:element name="size" type="xs:double" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  The diameter of the search region specified in decimal
+		  degrees.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+
+         <xs:element name="queryDataCmd" type="xs:string" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                   Fully specified queryData test query formatted as an URL
+		   argument list in the syntax specified by the SSA standard.
+                   The list must exclude the REQUEST argument which is 
+                   assumed to be set to "queryData".  VERSION may be
+		   included if the test query applies to a specific version
+		   of the service protocol.
+               </xs:documentation>
+               <xs:documentation>
+		   If queryDataCmd is used to form a query, the default
+		   values of POS and SIZE specified above are not
+		   used; if the test query requires POS and SIZE these
+		   should be included directly in queryDataCmd (hence
+		   non-positional test queries can be supported).
+               </xs:documentation>
+               <xs:documentation>
+                   This value must be a string in the form of name=value
+                   pairs delimited with ampersands (&amp;).  A query may
+		   then be formed by appending to the baseURL the request
+		   argument, "REQUEST=queryData&amp;", followed by the
+		   contents of this element.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name="PosParam">
+      <xs:annotation>
+         <xs:documentation>
+            The central coordinate of the spatial region to be searched.
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:sequence>
+         <xs:element name="long" type="xs:double" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  The longitude (e.g. Right Ascension) of the center of the
+                  search position specified in decimal degrees.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+
+         <xs:element name="lat" type="xs:double" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  The latitude (e.g. Declination) of the center of the
+                  search position specified in decimal degrees.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+
+         <xs:element name="refframe" type="xs:token" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  The spatial coordinate system reference frame indicating
+                  the spatial coordinate frame for the given position.
+		  If not provided, "ICRS" is assumed.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!--
+     -  A separate service type for pre-v1.0 compliant spectral services.  
+     --> 
+   <xs:complexType name="ProtoSpectralAccess">
+      <xs:annotation>
+         <xs:documentation>
+            The capabilities of an proto-SSA service implementation.
+            Clients may assume a particular interface for this type of
+            service based on historical convention; however, no
+            guarantees are made that the service is compliant with any 
+            IVOA standard.  
+         </xs:documentation>
+         <xs:documentation>
+            This capability is for spectral access services developed
+            prior to the completion of the SSA standard and, therefore,
+	    are not compliant with that standard.
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:complexContent>
+         <xs:extension base="ssa:SSACapRestriction">
+            <xs:sequence>
+               <xs:element name="dataSource" type="ssa:DataSource"
+                           minOccurs="1" maxOccurs="unbounded">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The category specifying where the data originally 
+                        came from. 
+                     </xs:documentation>
+                     <xs:documentation>
+                        Allowed values are "survey", "pointed", "custom",
+                        "theory", "artificial"
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="creationType" type="ssa:CreationType"
+                           minOccurs="1" maxOccurs="unbounded">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The category that describes the process used to 
+                        produce the dataset.  
+                     </xs:documentation>
+                     <xs:documentation>
+                        Typically this describes only the processing 
+                        performed by the data service, but it could 
+                        describe some additional earlier processing as 
+                        well, e.g., if data is partially precomputed. 
+                     </xs:documentation>
+                     <xs:documentation>
+                        Allowed values are "archival", "cutout", "filtered",
+                        "mosaic", "projection", "spectralExtraction", 
+                        "catalogExtraction"
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="dataModel" type="xs:string"
+                           minOccurs="1" maxOccurs="unbounded">
+                  <xs:annotation>
+                     <xs:documentation>
+		         The name and optionally version of the data model
+			 to which data returned by the service conforms
+			 (protoSpectralAccess services return native project
+			 data).
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="maxSearchRadius" type="xs:double">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The largest search radius, in degrees, that will be
+                        accepted by the service without returning an error 
+                        condition.
+                     </xs:documentation>
+                     <xs:documentation>
+                        Use 180.0 if there is no restriction.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="maxRecords" type="xs:int">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The hard limit on the largest number of records that 
+                        the query operation will return in a single response.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="maxFileSize" type="xs:int"
+                           maxOccurs="1" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The estimated maximum dataset (file) size in kilobytes.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="testQuery" type="ssa:Query"
+                           minOccurs="0" maxOccurs="1">
+                  <xs:annotation>
+                     <xs:documentation>
+                        A set of query parameters that is expected to
+                        produce at least one matched record which can be
+                        used to test the service.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+</xs:schema>

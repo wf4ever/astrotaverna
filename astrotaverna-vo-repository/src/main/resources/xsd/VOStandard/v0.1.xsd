@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.ivoa.net/xml/VOStandard/v0.1" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0" 
+           xmlns:vt="http://www.ivoa.net/xml/VOStandard/v0.1" 
+           xmlns:vm="http://www.ivoa.net/xml/VOMetadata/v0.1"
+           elementFormDefault="unqualified" attributeFormDefault="unqualified"
+           version="0.1r2">
+
+   <xs:annotation>
+      <xs:appinfo>
+        <vm:schemaName>VODataService</vm:schemaName>
+        <vm:schemaPrefix>xs</vm:schemaPrefix>
+        <vm:targetPrefix>vt</vm:targetPrefix>
+      </xs:appinfo>
+      <xs:documentation>
+        An extension to the core resource metadata (VOResource) for 
+        describing data collections and services.
+      </xs:documentation>
+   </xs:annotation>
+
+   <xs:import namespace="http://www.ivoa.net/xml/VOResource/v1.0"
+              schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0"/>
+
+   <xs:complexType name="Standard">
+      <xs:annotation>
+         <xs:documentation>
+           a reference to a standard specification.
+         </xs:documentation>
+         <xs:documentation>
+           This typically refers to an IVOA standard but is not
+           limited to such.  
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:complexContent>
+         <xs:extension base="vr:Resource">
+            <xs:sequence>
+ 
+              <xs:element name="endorsedVersion" type="vt:EndorsedVersion" 
+                          maxOccurs="unbounded">
+                <xs:annotation>
+                   <xs:documentation>
+                     a version of the standard that is recommended for use.
+                   </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:complexType name="EndorsedVersion">
+      <xs:simpleContent>
+         <xs:extension base="xs:token">
+           <xs:attribute name="status" default="n/a">
+             <xs:annotation>
+               <xs:documentation>
+                 the IVOA status level of this verison of the standard.
+               </xs:documentation>
+             </xs:annotation>
+
+             <xs:simpleType>
+                <xs:restriction base="xs:string">
+                   <xs:enumeration value="rec">
+                      <xs:annotation>
+                         <xs:documentation>
+                            an IVOA Recommendation
+                         </xs:documentation>
+                      </xs:annotation>
+                   </xs:enumeration>
+                   <xs:enumeration value="prop">
+                      <xs:annotation>
+                         <xs:documentation>
+                            an IVOA Proposed Recommendation
+                         </xs:documentation>
+                      </xs:annotation>
+                   </xs:enumeration>
+                   <xs:enumeration value="wd">
+                      <xs:annotation>
+                         <xs:documentation>
+                            an IVOA Working Draft
+                         </xs:documentation>
+                      </xs:annotation>
+                   </xs:enumeration>
+                   <xs:enumeration value="n/a">
+                      <xs:annotation>
+                         <xs:documentation>
+                            not an IVOA standard or protostandard at
+                            this time. 
+                         </xs:documentation>
+                      </xs:annotation>
+                   </xs:enumeration>
+                </xs:restriction>
+             </xs:simpleType>
+           </xs:attribute>
+         </xs:extension>
+      </xs:simpleContent>
+   </xs:complexType>
+
+   <xs:complexType name="ServiceStandard">
+      <xs:annotation>
+         <xs:documentation>
+           a reference to a standard service specification.
+         </xs:documentation>
+         <xs:documentation>
+           This typically refers to an IVOA standard but is not
+           limited to such.  
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:complexContent>
+         <xs:extension base="vt:Standard">
+            <xs:sequence>
+               <xs:element name="interface" type="vr:Interface"
+                           minOccurs="0" maxOccurs="unbounded">
+                  <xs:annotation>
+                    <xs:documentation>
+                      a generic description of one of the interfaces defined 
+                      by this service standard.  
+                    </xs:documentation>
+                    <xs:documentation>
+                      This element can provide details about the interface 
+                      that apply to all implementations.  Each interface 
+                      element should specify a role with a value starting 
+                      with "std:" or, if there is only one standard interface,
+                      is equal to "std".  
+                    </xs:documentation>
+                    <xs:documentation>
+                      Applications that, for example, wish to build a GUI
+                      to the service on-the-fly would first access this generic 
+                      description.  Site-specific variations, such
+                      as supported optional arguments or site specific 
+                      arguments, would be given in the actual implemented 
+                      service description and overrides any common information 
+                      found in this generic description.  This generic interface
+                      description can be matched with the site-specific one 
+                      using the role attribute.  
+                    </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+</xs:schema>

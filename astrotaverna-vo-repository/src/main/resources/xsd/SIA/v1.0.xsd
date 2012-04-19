@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0"
+           xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.0"
+           xmlns:sia="http://www.ivoa.net/xml/SIA/v1.0"
+           xmlns:vm="http://www.ivoa.net/xml/VOMetadata/v0.1"
+           targetNamespace="http://www.ivoa.net/xml/SIA/v1.0"
+           elementFormDefault="unqualified" attributeFormDefault="unqualified"
+           version="1.0wd">
+
+   <xs:annotation>
+      <xs:appinfo>
+        <vm:schemaName>SIA</vm:schemaName>
+        <vm:schemaPrefix>xs</vm:schemaPrefix>
+        <vm:targetPrefix>sia</vm:targetPrefix>
+      </xs:appinfo>
+      <xs:documentation>
+        Implementation of an XML Schema describing a Simple Image
+        Access Service.   Based on "The Simple Image Access Specification"
+        by Doug Tody et al.
+      </xs:documentation>
+   </xs:annotation>
+
+   <xs:import namespace="http://www.ivoa.net/xml/VOResource/v1.0"
+              schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0"/>
+   <xs:import namespace="http://www.ivoa.net/xml/VODataService/v1.0"
+              schemaLocation="http://www.ivoa.net/xml/VODataService/v1.0"/>
+
+   <xs:complexType name="SIACapRestriction" abstract="true">
+      <xs:annotation>
+         <xs:documentation>
+            an abstract capability that fixes the standardID to the
+            IVOA ID for the ConeSearch standard.
+         </xs:documentation>
+         <xs:documentation>
+            See vr:Capability for documentation on inherited children.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:restriction base="vr:Capability">
+            <xs:sequence>
+               <xs:element name="validationLevel" type="vr:Validation"
+                           minOccurs="0" maxOccurs="unbounded"/>
+               <xs:element name="description" type="xs:token" 
+                           minOccurs="0"/>
+               <xs:element name="interface" type="vr:Interface" 
+                           minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="standardID" type="vr:IdentifierURI"
+                          use="required" fixed="ivo://ivoa.net/std/SIA"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:complexType name="SimpleImageAccess">
+      <xs:annotation>
+         <xs:documentation>
+            The capabilities of an SIA implementation.  
+         </xs:documentation>
+         <xs:documentation>
+            Editor's Notes: 
+               *  This is a prototype definition to
+                  illustrate how to extend the schema to a specific 
+                  standard interface.
+               *  Staging information is not included yet.   
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:complexContent>
+         <xs:extension base="sia:SIACapRestriction">
+            <xs:sequence>
+               <xs:element name="imageServiceType" type="sia:ImageServiceType">
+                  <xs:annotation>
+                     <xs:documentation>
+                   The class of image service: Cutout, Mosaic, Atlas, Pointed
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="maxQueryRegionSize" type="sia:SkySize">
+                  <xs:annotation>
+                     <xs:documentation>
+                         The maximum image query region size, expressed in 
+                         decimal degrees. A value of 360 degrees indicates that 
+                         there is no limit and the entire data collection 
+                         (entire sky) can be queried. 
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="maxImageExtent" type="sia:SkySize">
+                  <xs:annotation>
+                     <xs:documentation>
+                         The maximum image query region size, expressed in 
+                         decimal degrees. A value of 360 degrees indicates 
+                         that there is no limit and the entire data collection 
+                         (entire sky) can be requested.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="maxImageSize" type="sia:ImageSize">
+                  <xs:annotation>
+                     <xs:documentation>
+                         The largest image (in terms of pixels) that can be 
+                         requested. 
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="maxFileSize" type="xs:int">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The maximum image file size in bytes.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="maxRecords" type="xs:int">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The largest number of records that the Image Query web
+                        method will return. 
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+               <xs:element name="testQuery" type="sia:Query" 
+                           minOccurs="0" maxOccurs="1">
+                  <xs:annotation>
+                     <xs:documentation>
+                        a set of query parameters that is expected
+                        to produce at least one matched record which
+                        can be used to test the service.  
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:complexType name="SkySize">
+      <xs:sequence>
+         <xs:element name="long" type="xs:float">
+           <xs:annotation>
+              <xs:documentation>
+                 The maximum size in the longitude (R.A.) direction 
+              </xs:documentation>
+           </xs:annotation>
+         </xs:element>
+         <xs:element name="lat" type="xs:float">
+           <xs:annotation>
+              <xs:documentation>
+                 The maximum size in the latitdude (Dec.) direction 
+              </xs:documentation>
+           </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name="SkyPos">
+      <xs:sequence>
+         <xs:element name="long" type="xs:double">
+           <xs:annotation>
+              <xs:documentation>
+                 The sky position in the longitude (R.A.) direction 
+              </xs:documentation>
+           </xs:annotation>
+         </xs:element>
+         <xs:element name="lat" type="xs:double">
+           <xs:annotation>
+              <xs:documentation>
+                 The sky position in the latitdude (Dec.) direction 
+              </xs:documentation>
+           </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name="ImageSize">
+      <xs:sequence>
+         <xs:element name="long" type="xs:int">
+           <xs:annotation>
+              <xs:documentation>
+                 The image size in the longitude (R.A.) direction in pixels
+              </xs:documentation>
+           </xs:annotation>
+         </xs:element>
+         <xs:element name="lat" type="xs:int">
+           <xs:annotation>
+              <xs:documentation>
+                 The image size in the latitdude (Dec.) direction in pixels
+              </xs:documentation>
+           </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+
+   <xs:simpleType name="ImageServiceType">
+      <xs:annotation>
+         <xs:documentation>
+       The class of image service: Cutout, Mosaic, Atlas, Pointed
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:restriction base="xs:string">
+
+         <xs:enumeration value="Cutout">
+            <xs:annotation>
+               <xs:documentation>
+         This is a service which extracts or "cuts out" rectangular
+         regions of some larger image, returning an image of the
+         requested size to the client. Such images are usually drawn
+         from a database or a collection of survey images that cover
+         some large portion of the sky. To be considered a cutout
+         service, the returned image should closely approximate (or at
+         least not exceed) the size of the requested region; however,
+         a cutout service will not normally resample (rescale or
+         reproject) the pixel data. A cutout service may mosaic image
+         segments to cover a large region but is still considered a
+         cutout service if it does not resample the data.  Image
+         cutout services are fast and avoid image degredation due to
+         resampling.  
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="Mosaic">
+            <xs:annotation>
+               <xs:documentation>
+                  This service is similar to the image cutout service
+                  but adds the capability to compute an image of the
+                  size, scale, and projection specified by the
+                  client. Mosaic services include services which
+                  resample and reproject existing image data, as well
+                  as services which generate pixels from some more
+                  fundamental dataset, e.g., a high energy event list
+                  or a radio astronomy measurement set. Image mosaics
+                  can be expensive to generate for large regions but
+                  they make it easier for the client to overlay image
+                  data from different sources. Image mosaicing
+                  services which resample already pixelated data will
+                  degrade the data slightly, unlike the simpler cutout
+                  service which returns the data unchanged.  
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="Atlas">
+            <xs:annotation>
+               <xs:documentation>
+                  This category of service provides access to
+                  pre-computed images that make up a survey of some
+                  large portion of the sky. The service, however, is
+                  not capable of dynamically cutting out requested
+                  regions, and the size of atlas images is
+                  predetermined by the survey. Atlas images may range
+                  in size from small cutouts of extended objects to
+                  large calibrated survey data frames. 
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+         <xs:enumeration value="Pointed">
+            <xs:annotation>
+               <xs:documentation>
+                  This category of service provides access to
+                  collections of images of many small, "pointed"
+                  regions of the sky. "Pointed" images normally focus
+                  on specific sources in the sky as opposed to being
+                  part of a sky survey. This type of service usually
+                  applies to instrumental archives from observatories
+                  with guest observer programs (e.g., the HST archive)
+                  and other general purpose image archives (e.g., the
+                  ADIL). If a service provides access to both survey
+                  and pointed images, then it should be considered a
+                  Pointed Image Archive for the purposes of this
+                  specification; if a differentiation between the
+                  types of data is desired the pointed and survey data
+                  collections should be registered as separate image
+                  services.  
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+
+      </xs:restriction>
+   </xs:simpleType>
+
+   <xs:complexType name="Query">
+      <xs:annotation>
+         <xs:documentation>
+            A query to be sent to the service
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:sequence>
+         <xs:element name="pos" type="sia:SkyPos" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                   the right ascension of the search cone's center in
+                   decimal degrees.  
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+
+         <xs:element name="size" type="sia:SkySize" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                   the declination of the search cone's center in
+                   decimal degrees.  
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+
+         <xs:element name="verb" type="xs:positiveInteger" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                   the verbosity level to use where 0 means the bare
+                   minimum set of columns and 3 means the full set of 
+                   available columns.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+
+         <xs:element name="extras" type="xs:string" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                   any extra (particularly non-standard) parameters that must 
+                   be provided (apart from what is part of base URL given by 
+                   the accessURL element).
+               </xs:documentation>
+               <xs:documentation>
+                   this value should be in the form of name=value
+                   pairs delimited with apersands (&amp;).  
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+
+      </xs:sequence>
+
+   </xs:complexType>
+
+</xs:schema>
