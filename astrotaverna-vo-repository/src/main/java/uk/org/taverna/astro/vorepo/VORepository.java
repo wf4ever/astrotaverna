@@ -164,6 +164,10 @@ public class VORepository {
 		List<SearchType> and = new ArrayList<SearchType>();
 
 		and.add(makeLikeCondition(CAPABILITY_XSI_TYPE, xsiTypeValueLiteral));
+		
+		// This does not work for some reason		
+//		and.add(makeLikeCondition("capability/interface/@xsi:type", "%HTTP%"));		
+		
 		for (String kw : keywords) {
 			List<SearchType> or = new ArrayList<SearchType>();
 			for (String xpath : KEYWORD_XPATHS) {
