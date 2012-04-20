@@ -39,7 +39,32 @@ public class TestVORepository {
 		assertTrue(someResource.getIdentifier().startsWith("ivo://"));
 
 	}
+	
+	@Test
+	public void multipleConeSearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Service> resources = repo.resourceSearch(
+				ConeSearch.class, "amiga", "J/A+A/462/507");
+		assertEquals(1, resources.size());
+	}
 
+	@Test
+	public void multipleEmptyConeSearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Service> resources = repo.resourceSearch(
+				ConeSearch.class, "J/A+A/462/507", "ThisCertainlyShouldNotMatchRight192891");
+		assertTrue(resources.isEmpty());
+	}
+
+
+	@Test
+	public void emptyConeSearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Service> resources = repo.resourceSearch(
+				ConeSearch.class, "ThisCertainlyShouldNotMatchRight192891");
+		assertTrue(resources.isEmpty());
+	}
+	
 	@Test
 	public void coneSearch() throws Exception {
 		VORepository repo = new VORepository();

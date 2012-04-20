@@ -1,0 +1,267 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+	<S:Body>
+		<ns5:Search xmlns:ns2="http://www.w3.org/1999/xlink"
+			xmlns:ns3="http://www.ivoa.net/xml/STC/stc-v1.30.xsd" xmlns:ns4="http://www.ivoa.net/xml/STC/STCcoords/v1.10"
+			xmlns:ns5="http://www.ivoa.net/wsdl/RegistrySearch/v1.0" xmlns:ns6="http://www.ivoa.net/xml/RegistryInterface/v1.0"
+			xmlns:ns7="http://www.ivoa.net/xml/ADQL/v1.0" xmlns:ns8="http://www.ivoa.net/xml/STC/STCregion/v1.10">
+			<ns5:Where>
+				<ns7:Condition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:type="ns7:closedSearchType">
+					<ns7:Condition xsi:type="ns7:intersectionSearchType">
+						<ns7:Condition xsi:type="ns7:likePredType">
+							<ns7:Arg xsi:type="ns7:columnReferenceType" xpathName="capability/@xsi:type"
+								Name="arg-585384df-4d8f-40b8-9a5d-fc81aff8c7f6" Table="" />
+							<ns7:Pattern>
+								<ns7:Literal xsi:type="ns7:stringType" Value="%ConeSearch" />
+							</ns7:Pattern>
+						</ns7:Condition>
+						<ns7:Condition xsi:type="ns7:closedSearchType">
+							<ns7:Condition xsi:type="ns7:intersectionSearchType">
+								<ns7:Condition xsi:type="ns7:closedSearchType">
+									<ns7:Condition xsi:type="ns7:unionSearchType">
+										<ns7:Condition xsi:type="ns7:likePredType">
+											<ns7:Arg xsi:type="ns7:columnReferenceType"
+												xpathName="title" Name="arg-a4c5d2b4-e14b-4da1-b023-10fb24493a9d"
+												Table="" />
+											<ns7:Pattern>
+												<ns7:Literal xsi:type="ns7:stringType" Value="%amiga%" />
+											</ns7:Pattern>
+										</ns7:Condition>
+										<ns7:Condition xsi:type="ns7:closedSearchType">
+											<ns7:Condition xsi:type="ns7:unionSearchType">
+												<ns7:Condition xsi:type="ns7:likePredType">
+													<ns7:Arg xsi:type="ns7:columnReferenceType"
+														xpathName="shortName" Name="arg-7260fe26-4c48-429c-996b-3ffa2de5d35c"
+														Table="" />
+													<ns7:Pattern>
+														<ns7:Literal xsi:type="ns7:stringType" Value="%amiga%" />
+													</ns7:Pattern>
+												</ns7:Condition>
+												<ns7:Condition xsi:type="ns7:closedSearchType">
+													<ns7:Condition xsi:type="ns7:unionSearchType">
+														<ns7:Condition xsi:type="ns7:likePredType">
+															<ns7:Arg xsi:type="ns7:columnReferenceType"
+																xpathName="identifier" Name="arg-e37dc3c2-2df6-44c1-9c27-ee9c4af9da1c"
+																Table="" />
+															<ns7:Pattern>
+																<ns7:Literal xsi:type="ns7:stringType"
+																	Value="%amiga%" />
+															</ns7:Pattern>
+														</ns7:Condition>
+														<ns7:Condition xsi:type="ns7:closedSearchType">
+															<ns7:Condition xsi:type="ns7:unionSearchType">
+																<ns7:Condition xsi:type="ns7:likePredType">
+																	<ns7:Arg xsi:type="ns7:columnReferenceType"
+																		xpathName="content/subject" Name="arg-7bd3b145-a2f8-4e40-8947-fdfd3b4e5082"
+																		Table="" />
+																	<ns7:Pattern>
+																		<ns7:Literal xsi:type="ns7:stringType"
+																			Value="%amiga%" />
+																	</ns7:Pattern>
+																</ns7:Condition>
+																<ns7:Condition xsi:type="ns7:closedSearchType">
+																	<ns7:Condition xsi:type="ns7:unionSearchType">
+																		<ns7:Condition xsi:type="ns7:likePredType">
+																			<ns7:Arg xsi:type="ns7:columnReferenceType"
+																				xpathName="content/description" Name="arg-971b1624-c3a8-41d0-a28b-2151cdd69e21"
+																				Table="" />
+																			<ns7:Pattern>
+																				<ns7:Literal xsi:type="ns7:stringType"
+																					Value="%amiga%" />
+																			</ns7:Pattern>
+																		</ns7:Condition>
+																		<ns7:Condition xsi:type="ns7:closedSearchType">
+																			<ns7:Condition xsi:type="ns7:likePredType">
+																				<ns7:Arg xsi:type="ns7:columnReferenceType"
+																					xpathName="content/type"
+																					Name="arg-dcb4654d-d256-42d0-914e-fc1a8f5f8976"
+																					Table="" />
+																				<ns7:Pattern>
+																					<ns7:Literal xsi:type="ns7:stringType"
+																						Value="%amiga%" />
+																				</ns7:Pattern>
+																			</ns7:Condition>
+																		</ns7:Condition>
+																	</ns7:Condition>
+																</ns7:Condition>
+															</ns7:Condition>
+														</ns7:Condition>
+													</ns7:Condition>
+												</ns7:Condition>
+											</ns7:Condition>
+										</ns7:Condition>
+									</ns7:Condition>
+								</ns7:Condition>
+								<ns7:Condition xsi:type="ns7:closedSearchType">
+									<ns7:Condition xsi:type="ns7:intersectionSearchType">
+										<ns7:Condition xsi:type="ns7:closedSearchType">
+											<ns7:Condition xsi:type="ns7:unionSearchType">
+												<ns7:Condition xsi:type="ns7:likePredType">
+													<ns7:Arg xsi:type="ns7:columnReferenceType"
+														xpathName="title" Name="arg-a233a713-5e29-4eb3-a558-ba00aeefaaf2"
+														Table="" />
+													<ns7:Pattern>
+														<ns7:Literal xsi:type="ns7:stringType" Value="%J/A+A/462/507%" />
+													</ns7:Pattern>
+												</ns7:Condition>
+												<ns7:Condition xsi:type="ns7:closedSearchType">
+													<ns7:Condition xsi:type="ns7:unionSearchType">
+														<ns7:Condition xsi:type="ns7:likePredType">
+															<ns7:Arg xsi:type="ns7:columnReferenceType"
+																xpathName="shortName" Name="arg-c8ae6407-36ab-411e-94d4-b59f8e6d63ff"
+																Table="" />
+															<ns7:Pattern>
+																<ns7:Literal xsi:type="ns7:stringType"
+																	Value="%J/A+A/462/507%" />
+															</ns7:Pattern>
+														</ns7:Condition>
+														<ns7:Condition xsi:type="ns7:closedSearchType">
+															<ns7:Condition xsi:type="ns7:unionSearchType">
+																<ns7:Condition xsi:type="ns7:likePredType">
+																	<ns7:Arg xsi:type="ns7:columnReferenceType"
+																		xpathName="identifier" Name="arg-5fd77fa2-c309-4b67-8ec4-1848dd730212"
+																		Table="" />
+																	<ns7:Pattern>
+																		<ns7:Literal xsi:type="ns7:stringType"
+																			Value="%J/A+A/462/507%" />
+																	</ns7:Pattern>
+																</ns7:Condition>
+																<ns7:Condition xsi:type="ns7:closedSearchType">
+																	<ns7:Condition xsi:type="ns7:unionSearchType">
+																		<ns7:Condition xsi:type="ns7:likePredType">
+																			<ns7:Arg xsi:type="ns7:columnReferenceType"
+																				xpathName="content/subject" Name="arg-4e026313-944d-4cd0-8b86-27a0502c9d70"
+																				Table="" />
+																			<ns7:Pattern>
+																				<ns7:Literal xsi:type="ns7:stringType"
+																					Value="%J/A+A/462/507%" />
+																			</ns7:Pattern>
+																		</ns7:Condition>
+																		<ns7:Condition xsi:type="ns7:closedSearchType">
+																			<ns7:Condition xsi:type="ns7:unionSearchType">
+																				<ns7:Condition xsi:type="ns7:likePredType">
+																					<ns7:Arg xsi:type="ns7:columnReferenceType"
+																						xpathName="content/description"
+																						Name="arg-04e0b668-1c6f-4e4d-b210-28936aab32ed"
+																						Table="" />
+																					<ns7:Pattern>
+																						<ns7:Literal xsi:type="ns7:stringType"
+																							Value="%J/A+A/462/507%" />
+																					</ns7:Pattern>
+																				</ns7:Condition>
+																				<ns7:Condition xsi:type="ns7:closedSearchType">
+																					<ns7:Condition xsi:type="ns7:likePredType">
+																						<ns7:Arg xsi:type="ns7:columnReferenceType"
+																							xpathName="content/type"
+																							Name="arg-e94f5477-3010-4ef4-b0ca-23b9d6f356a7"
+																							Table="" />
+																						<ns7:Pattern>
+																							<ns7:Literal xsi:type="ns7:stringType"
+																								Value="%J/A+A/462/507%" />
+																						</ns7:Pattern>
+																					</ns7:Condition>
+																				</ns7:Condition>
+																			</ns7:Condition>
+																		</ns7:Condition>
+																	</ns7:Condition>
+																</ns7:Condition>
+															</ns7:Condition>
+														</ns7:Condition>
+													</ns7:Condition>
+												</ns7:Condition>
+											</ns7:Condition>
+										</ns7:Condition>
+										<ns7:Condition xsi:type="ns7:closedSearchType">
+											<ns7:Condition xsi:type="ns7:closedSearchType">
+												<ns7:Condition xsi:type="ns7:unionSearchType">
+													<ns7:Condition xsi:type="ns7:likePredType">
+														<ns7:Arg xsi:type="ns7:columnReferenceType"
+															xpathName="title" Name="arg-7e712fcb-2d23-4336-89b3-fedcce889e0a"
+															Table="" />
+														<ns7:Pattern>
+															<ns7:Literal xsi:type="ns7:stringType"
+																Value="%ivo://svo.amiga.iaa.es/amiga%" />
+														</ns7:Pattern>
+													</ns7:Condition>
+													<ns7:Condition xsi:type="ns7:closedSearchType">
+														<ns7:Condition xsi:type="ns7:unionSearchType">
+															<ns7:Condition xsi:type="ns7:likePredType">
+																<ns7:Arg xsi:type="ns7:columnReferenceType"
+																	xpathName="shortName" Name="arg-1672f1ef-0609-4927-8b33-c9305cc0945f"
+																	Table="" />
+																<ns7:Pattern>
+																	<ns7:Literal xsi:type="ns7:stringType"
+																		Value="%ivo://svo.amiga.iaa.es/amiga%" />
+																</ns7:Pattern>
+															</ns7:Condition>
+															<ns7:Condition xsi:type="ns7:closedSearchType">
+																<ns7:Condition xsi:type="ns7:unionSearchType">
+																	<ns7:Condition xsi:type="ns7:likePredType">
+																		<ns7:Arg xsi:type="ns7:columnReferenceType"
+																			xpathName="identifier" Name="arg-931b5ae2-17ee-4011-8bfa-35a13e078569"
+																			Table="" />
+																		<ns7:Pattern>
+																			<ns7:Literal xsi:type="ns7:stringType"
+																				Value="%ivo://svo.amiga.iaa.es/amiga%" />
+																		</ns7:Pattern>
+																	</ns7:Condition>
+																	<ns7:Condition xsi:type="ns7:closedSearchType">
+																		<ns7:Condition xsi:type="ns7:unionSearchType">
+																			<ns7:Condition xsi:type="ns7:likePredType">
+																				<ns7:Arg xsi:type="ns7:columnReferenceType"
+																					xpathName="content/subject"
+																					Name="arg-c7cfacb7-a455-43c1-8e77-a779bb37444c"
+																					Table="" />
+																				<ns7:Pattern>
+																					<ns7:Literal xsi:type="ns7:stringType"
+																						Value="%ivo://svo.amiga.iaa.es/amiga%" />
+																				</ns7:Pattern>
+																			</ns7:Condition>
+																			<ns7:Condition xsi:type="ns7:closedSearchType">
+																				<ns7:Condition xsi:type="ns7:unionSearchType">
+																					<ns7:Condition xsi:type="ns7:likePredType">
+																						<ns7:Arg xsi:type="ns7:columnReferenceType"
+																							xpathName="content/description"
+																							Name="arg-7669e7b0-bd8f-4c44-bf0c-7da5fc138f22"
+																							Table="" />
+																						<ns7:Pattern>
+																							<ns7:Literal xsi:type="ns7:stringType"
+																								Value="%ivo://svo.amiga.iaa.es/amiga%" />
+																						</ns7:Pattern>
+																					</ns7:Condition>
+																					<ns7:Condition xsi:type="ns7:closedSearchType">
+																						<ns7:Condition xsi:type="ns7:likePredType">
+																							<ns7:Arg xsi:type="ns7:columnReferenceType"
+																								xpathName="content/type"
+																								Name="arg-7069be67-52cc-441e-b2f8-9f3cc7f2e1f4"
+																								Table="" />
+																							<ns7:Pattern>
+																								<ns7:Literal xsi:type="ns7:stringType"
+																									Value="%ivo://svo.amiga.iaa.es/amiga%" />
+																							</ns7:Pattern>
+																						</ns7:Condition>
+																					</ns7:Condition>
+																				</ns7:Condition>
+																			</ns7:Condition>
+																		</ns7:Condition>
+																	</ns7:Condition>
+																</ns7:Condition>
+															</ns7:Condition>
+														</ns7:Condition>
+													</ns7:Condition>
+												</ns7:Condition>
+											</ns7:Condition>
+										</ns7:Condition>
+									</ns7:Condition>
+								</ns7:Condition>
+							</ns7:Condition>
+						</ns7:Condition>
+					</ns7:Condition>
+				</ns7:Condition>
+			</ns5:Where>
+			<identifiersOnly>false</identifiersOnly>
+		</ns5:Search>
+	</S:Body>
+</S:Envelope>
+--------------------

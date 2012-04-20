@@ -12,13 +12,13 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
 
-import org.apache.log4j.Logger;
-
 import net.ivoa.wsdl.registrysearch.v1.ResolveResponse;
 import net.ivoa.xml.adql.v1.AtomType;
+import net.ivoa.xml.adql.v1.ClosedSearchType;
 import net.ivoa.xml.adql.v1.ColumnReferenceType;
 import net.ivoa.xml.adql.v1.IntersectionSearchType;
 import net.ivoa.xml.adql.v1.LikePredType;
+import net.ivoa.xml.adql.v1.SearchType;
 import net.ivoa.xml.adql.v1.StringType;
 import net.ivoa.xml.adql.v1.UnionSearchType;
 import net.ivoa.xml.adql.v1.WhereType;
@@ -26,21 +26,32 @@ import net.ivoa.xml.registryinterface.v1.VOResources;
 import net.ivoa.xml.voresource.v1.Capability;
 import net.ivoa.xml.voresource.v1.Resource;
 import net.ivoa.xml.voresource.v1.Service;
+
+import org.apache.commons.beanutils.PropertyUtilsBean;
+import org.apache.log4j.Logger;
+
 import uk.org.taverna.astro.wsdl.registrysearch.ErrorResp;
 import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchPortType;
 import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchService;
 
 public class VORepository {
+	private static final String DUMMY_SEARCH_WSDL = "/wsdl/dummySearch.wsdl";
+
+	private static final String CAPABILITY_XSI_TYPE = "capability/@xsi:type";
+
 	private static Logger logger = Logger.getLogger(VORepository.class);
-	
+
+	private static PropertyUtilsBean propertyUtils = new PropertyUtilsBean();
+
 	public enum Status {
 		OK, ERROR, CONNECTION_ERROR, UNKNOWN;
 	}
-	
-	protected List<String> keywordXpaths = Arrays.asList("title", "shortName",
-			"identifier", "curation/publisher",
-			"curation/creator/name", "curation/contributor",
-			"content/subject", "content/description");
+
+	// We'll do similar fields as Topcat - see
+	// http://www.ivoa.net/internal/IVOA/InterOpMay2010Reg/reg.pdf
+	protected List<String> KEYWORD_XPATHS = Arrays.asList("title", "shortName",
+			"identifier", "content/subject", "content/description",
+			"content/type");
 
 	protected final static QName REGISTRYSEARCHSERVICE_QNAME = new QName(
 			"http://taverna.org.uk/astro/wsdl/RegistrySearch",
@@ -96,11 +107,13 @@ public class VORepository {
 			if (status.equalsIgnoreCase("active")) {
 				return Status.OK;
 			} else {
-				logger.info("Unknown status: " + status+ " from " + getEndpoint());
+				logger.info("Unknown status: " + status + " from "
+						+ getEndpoint());
 				return Status.UNKNOWN;
 			}
 		} catch (NullPointerException ex) {
-			logger.error("Could not find resource status from " + getEndpoint(), ex);
+			logger.error(
+					"Could not find resource status from " + getEndpoint(), ex);
 			return Status.ERROR;
 		}
 
@@ -112,7 +125,7 @@ public class VORepository {
 				return this.port;
 			}
 		}
-		URL wsdlUri = getClass().getResource("/wsdl/dummySearch.wsdl");
+		URL wsdlUri = getClass().getResource(DUMMY_SEARCH_WSDL);
 
 		RegistrySearchService service = new RegistrySearchService(wsdlUri,
 				REGISTRYSEARCHSERVICE_QNAME);
@@ -136,36 +149,35 @@ public class VORepository {
 		return voResources.getResource();
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Service> resourceSearch(
 			Class<? extends Capability> capabilityType, String... keywords)
 			throws ErrorResp {
 		WhereType where = new WhereType();
 
-		IntersectionSearchType and = new IntersectionSearchType();
-		where.setCondition(and);
-
 		XmlType xmlType = capabilityType
 				.getAnnotation(javax.xml.bind.annotation.XmlType.class);
 		String xsiTypeValueLiteral = "%" + xmlType.name();
 		// TODO: namespaced xsi:type lookup without using % trick?
+		// Use capability/@standardID == "ivo://ivoa.net/std/ConeSearch" etc
+		// instead?
 
-		and.getCondition().add(
-				makeLikeCondition("capability/@xsi:type", xsiTypeValueLiteral));
+		List<SearchType> and = new ArrayList<SearchType>();
+
+		and.add(makeLikeCondition(CAPABILITY_XSI_TYPE, xsiTypeValueLiteral));
 		for (String kw : keywords) {
-			UnionSearchType or = new UnionSearchType();
-			and.getCondition().add(or);
-			for (String xpath : keywordXpaths) {
-				or.getCondition().add(makeLikeCondition(xpath, "%" + kw + "%"));
+			List<SearchType> or = new ArrayList<SearchType>();
+			for (String xpath : KEYWORD_XPATHS) {
+				// NOTE: If keywordXpaths.size() == 1 - don't use the
+				// intermediary or
+				or.add(makeLikeCondition(xpath, "%" + kw + "%"));
 			}
-
+			and.add(makeConditionSearchType(UnionSearchType.class, or));
 		}
-		if (and.getCondition().size() == 1) {
-			// Drop the or
-			where.setCondition(and.getCondition().get(0));
-		}
+		where.setCondition(makeConditionSearchType(
+				IntersectionSearchType.class, and));
 
-		logger.debug("Searching for " + capabilityType.getSimpleName() + ": " + keywords);
+		logger.debug("Searching for " + capabilityType.getSimpleName() + ": "
+				+ keywords);
 		// Perform search
 		List<Resource> resources = getPort().search(where, null, null, false)
 				.getResource();
@@ -187,14 +199,42 @@ public class VORepository {
 					break;
 				}
 			}
-			logger.debug("Capability " + capabilityType.getSimpleName() + " not found in " + res);
+			logger.debug("Capability " + capabilityType.getSimpleName()
+					+ " not found in " + res);
 		}
 		return services;
+	}
+
+	protected SearchType makeConditionSearchType(
+			Class<? extends SearchType> searchType, List<SearchType> conditions) {
+		ClosedSearchType closed = new ClosedSearchType();
+		if (conditions.isEmpty()) {
+			throw new IllegalArgumentException(
+					"Can't query empty list of conditions");
+		}
+		if (conditions.size() == 1) {
+			closed.setCondition(conditions.get(0));
+		} else {
+			SearchType search;
+			try {
+				search = searchType.newInstance();
+				@SuppressWarnings("unchecked")
+				List<SearchType> list = (List<SearchType>) propertyUtils.getProperty(search, "condition");
+				list.add(conditions.get(0));
+				list.add(makeConditionSearchType(searchType,
+						conditions.subList(1, conditions.size())));
+			} catch (ReflectiveOperationException e) {
+				throw new IllegalArgumentException("Can't make " + searchType, e);
+			}
+			closed.setCondition(search);
+		}
+		return closed;
 	}
 
 	private LikePredType makeLikeCondition(String xpath, String literal) {
 		LikePredType like = new LikePredType();
 		ColumnReferenceType typeArg = new ColumnReferenceType();
+		// TODO: Is this temp name really needed?
 		typeArg.setName("arg-" + UUID.randomUUID().toString());
 		typeArg.setTable("");
 		typeArg.setXpathName(xpath);
