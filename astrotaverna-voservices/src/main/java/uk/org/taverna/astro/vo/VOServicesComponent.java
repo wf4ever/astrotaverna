@@ -175,7 +175,8 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 			cancelSearchTask();
 			String search = keywords.getText();
-			status.setText(String.format("%s: %s", searchType.getSimpleName(), search));
+			status.setText(String.format("%s: %s", searchType.getSimpleName(),
+					search));
 
 			searchTask = new SearchTask(searchType, search);
 			int rows = resultsTableModel.getRowCount();
@@ -233,11 +234,12 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 		add(makeSearchBox(), gbc);
 		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
+		gbc.weighty = 0.0;
 		gbc.gridx = 1;
 		gbc.fill = GridBagConstraints.BOTH;
-		add(new JPanel(), gbc);
+		add(new JPanel(), gbc);//filler
 
+		gbc.weighty = 1.0;
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
@@ -251,7 +253,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		gbc.gridx = 0;
 		gbc.weightx = 1.0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		status = new JLabel("Searched for: fred");
+		status = new JLabel("");
 		resultsPanel.add(status, gbc);
 
 		results = new JSplitPane();
@@ -278,7 +280,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		resultsTableModel.addColumn("Identifier");
 		resultsTableModel.addColumn("Publisher");
 
-		JTable resultsTable = new JTable(resultsTableModel);
+		resultsTable = new JTable(resultsTableModel);
 		// resultsTable.setAutoCreateColumnsFromModel(true);
 		resultsTable.setAutoCreateRowSorter(true);
 		// resultsTable.createDefaultColumnsFromModel();
@@ -291,9 +293,17 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 				new ListSelectionListener() {
 					@Override
 					public void valueChanged(ListSelectionEvent e) {
-
+						if (e.getValueIsAdjusting()) {
+							return;
+						}
+						int selection = resultsTable.getSelectionModel()
+								.getMinSelectionIndex();
+						if (selection < 0) {
+							updateDetails(null);
+							return;
+						}
 						updateDetails((Service) resultsTableModel.getValueAt(
-								e.getFirstIndex(), RESOURCE_COLUMN));
+								selection, RESOURCE_COLUMN));
 					}
 				});
 
@@ -304,7 +314,10 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 	protected void updateDetails(Service service) {
 		resultsDetails.removeAll();
-
+		if (service == null) {
+			results.validate();
+			return;
+		}
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -329,7 +342,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 		gbc.weighty = 0.1;
 		JPanel filler = new JPanel();
-		//resultsDetails.add(filler, gbc); // filler
+		// resultsDetails.add(filler, gbc); // filler
 		results.validate();
 
 	}
@@ -380,6 +393,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 	private JPanel resultsDetails;
 	private JSplitPane results;
+	private JTable resultsTable;
 
 	protected JPanel makeSearchButtons() {
 		JPanel searchButtons = new JPanel(new FlowLayout());
