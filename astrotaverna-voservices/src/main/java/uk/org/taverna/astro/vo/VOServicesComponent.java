@@ -15,6 +15,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -28,6 +29,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import net.ivoa.xml.conesearch.v1.ConeSearch;
+import net.ivoa.xml.sia.v1.SimpleImageAccess;
+import net.ivoa.xml.ssa.v0.SimpleSpectralAccess;
 import net.ivoa.xml.vodataservice.v1.ParamHTTP;
 import net.ivoa.xml.voresource.v1.AccessURL;
 import net.ivoa.xml.voresource.v1.Capability;
@@ -64,19 +67,22 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			VOServiceDescription restServiceDescription = new VOServiceDescription();
-			
-			for (Capability c : service.getCapability() ) {
-				if (! (c instanceof ConeSearch)) {
+
+			for (Capability c : service.getCapability()) {
+				if (!(searchType.isInstance(c))) {
 					continue;
 				}
-				ConeSearch cs = (ConeSearch) c;
-				for (Interface i : cs.getInterface()) {
+				for (Interface i : c.getInterface()) {
 					if (i instanceof ParamHTTP) {
 						ParamHTTP http = (ParamHTTP) i;
 						AccessURL accessURL = http.getAccessURL().get(0);
-						restServiceDescription.setAccessURL(accessURL.getValue());
-						restServiceDescription.setIdentifier(URI.create(service.getIdentifier()));
-						restServiceDescription.setName(service.getTitle());
+						restServiceDescription.setAccessURL(accessURL
+								.getValue().trim());
+						restServiceDescription.setIdentifier(URI.create(service
+								.getIdentifier().trim()));
+						restServiceDescription.setName(service.getShortName());
+						restServiceDescription.setSearchType(searchType
+								.getSimpleName());
 						break;
 					}
 					if (i instanceof WebService) {
@@ -86,10 +92,10 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 			}
 			if (restServiceDescription.getAccessURL() == null) {
 				// TODO: Show error
-				
+
 				return;
 			}
-			
+
 			WorkflowView
 					.importServiceDescription(restServiceDescription, false);
 			Workbench.getInstance().getPerspectives().setWorkflowPerspective();
@@ -98,19 +104,20 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	}
 
 	private SearchTask searchTask;
+	public Class<? extends Capability> searchType;
 
 	private final class SearchTask extends SwingWorker<List<Service>, String> {
 		private String search;
+		private final Class<? extends Capability> searchType;
 
-		public SearchTask(String search) {
+		public SearchTask(Class<? extends Capability> searchType, String search) {
+			this.searchType = searchType;
 			this.search = search;
 		}
 
 		@Override
 		protected List<Service> doInBackground() throws Exception {
-			return repo.resourceSearch(
-					ConeSearch.class,
-					search.split(" "));
+			return repo.resourceSearch(searchType, search.split(" "));
 		}
 
 		@Override
@@ -136,7 +143,9 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 						+ "</font><body></html>");
 				return;
 			}
-			status.setText(resources.size() + " results for: " + search);
+			status.setText(String.format("%d results for %s: %s",
+					resources.size(), searchType.getSimpleName(), search));
+			VOServicesComponent.this.searchType = searchType;
 			for (Service r : resources) {
 				String shortName = r.getShortName();
 				String title = r.getTitle();
@@ -144,20 +153,21 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 				String identifier = r.getIdentifier();
 				String publisher = r.getCuration().getPublisher().getValue();
 				resultsTableModel.addRow(new Object[] { r, shortName, title,
-						subjects, identifier, publisher});
+						subjects, identifier, publisher });
 			}
-			
+
 			if (searchTask == this) {
 				searchTask = null;
 			}
 		}
-
 	}
 
-	public class ConeSearchAction extends AbstractAction {
+	public class SearchAction extends AbstractAction {
 
-		public ConeSearchAction() {
-			super("Cone Search");
+		protected Class<? extends Capability> searchType;
+
+		public SearchAction(String label) {
+			super(label);
 		}
 
 		@Override
@@ -165,9 +175,9 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 			cancelSearchTask();
 			String search = keywords.getText();
-			status.setText("Searching: " + search);
+			status.setText(String.format("%s: %s", searchType.getSimpleName(), search));
 
-			searchTask = new SearchTask(search);
+			searchTask = new SearchTask(searchType, search);
 			int rows = resultsTableModel.getRowCount();
 			while (rows > 0) {
 				resultsTableModel.removeRow(--rows);
@@ -178,29 +188,27 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		}
 	}
 
-	public class SIASearchAction extends AbstractAction {
+	public class ConeSearchAction extends SearchAction {
 
-		public SIASearchAction() {
-			super("SIA Search");
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-
+		public ConeSearchAction() {
+			super("Cone Search");
+			this.searchType = ConeSearch.class;
 		}
 	}
 
-	public class SSASearchAction extends AbstractAction {
+	public class SIASearchAction extends SearchAction {
+
+		public SIASearchAction() {
+			super("SIA Search");
+			this.searchType = SimpleImageAccess.class;
+		}
+	}
+
+	public class SSASearchAction extends SearchAction {
 
 		public SSASearchAction() {
 			super("SSA Search");
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-
+			this.searchType = SimpleSpectralAccess.class;
 		}
 	}
 
@@ -222,21 +230,19 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		
+
 		add(makeSearchBox(), gbc);
 		gbc.weightx = 1.0;
 		gbc.weighty = 1.0;
 		gbc.gridx = 1;
 		gbc.fill = GridBagConstraints.BOTH;
 		add(new JPanel(), gbc);
-		
+
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
 		add(makeResults(), gbc);
-		
-		
-		
+
 	}
 
 	protected Component makeResults() {
@@ -254,7 +260,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		gbc.weightx = 1.0;
 		gbc.weighty = 1.0;
 		gbc.fill = GridBagConstraints.BOTH;
-		resultsPanel.add(results, gbc);		
+		resultsPanel.add(results, gbc);
 		return resultsPanel;
 	}
 
@@ -271,14 +277,13 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		resultsTableModel.addColumn("Subjects");
 		resultsTableModel.addColumn("Identifier");
 		resultsTableModel.addColumn("Publisher");
-		
 
-		JTable resultsTable = new JTable(resultsTableModel);		
+		JTable resultsTable = new JTable(resultsTableModel);
 		// resultsTable.setAutoCreateColumnsFromModel(true);
 		resultsTable.setAutoCreateRowSorter(true);
 		// resultsTable.createDefaultColumnsFromModel();
 		resultsTable.removeColumn(resultsTable.getColumn("Service"));
-		
+
 		resultsTable.getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 
@@ -292,20 +297,20 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 					}
 				});
 
-		
 		return new JScrollPane(resultsTable,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	}
 
-	protected void updateDetails(Service service) {		
+	protected void updateDetails(Service service) {
 		resultsDetails.removeAll();
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.fill = GridBagConstraints.BOTH;
-		gbc.weightx = 1.0;		
-		
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
+
 		String message = String.format("<html><body><h3>%s: %s</h3>"
 				+ "<p>%s</p>" + "<dl><dt>Publisher</dt> <dd>%s</dd>"
 				+ "  <dt>Documentation</dt> <dd><a href='%s'>%s</a></dd>"
@@ -313,18 +318,20 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 				.getContent().getDescription(), service.getCuration()
 				.getPublisher().getValue(), service.getContent()
 				.getReferenceURL(), service.getContent().getReferenceURL());
-		resultsDetails.add(new JLabel(message), gbc);
+		JEditorPane htmlPane = new JEditorPane("text/html", message);
+		htmlPane.setEditable(false);
+		resultsDetails.add(new JScrollPane(htmlPane), gbc);
 		gbc.weightx = 0.0;
 		gbc.weighty = 0.0;
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(new JButton(new AddToWorkflow(service)), gbc);
 		resultsDetails.add(buttonPanel, gbc);
-		
-		gbc.weighty = 1.0;
+
+		gbc.weighty = 0.1;
 		JPanel filler = new JPanel();
-		resultsDetails.add(filler, gbc); // filler
+		//resultsDetails.add(filler, gbc); // filler
 		results.validate();
-		
+
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -334,7 +341,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		GridBagConstraints gbcMiddle = new GridBagConstraints();
 		GridBagConstraints gbcRight = new GridBagConstraints();
 		gbcLeft.gridx = 0;
-		gbcLeft.anchor = GridBagConstraints.LINE_END;				
+		gbcLeft.anchor = GridBagConstraints.LINE_END;
 		searchBox.add(new JLabel("Registry:"), gbcLeft);
 		gbcMiddle.anchor = GridBagConstraints.WEST;
 		gbcMiddle.fill = GridBagConstraints.HORIZONTAL;
@@ -361,13 +368,16 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		filler.gridx = 3;
 		filler.weightx = 1.0;
 		filler.fill = GridBagConstraints.HORIZONTAL;
-//		searchBox.add(new JPanel(), filler);
+		// searchBox.add(new JPanel(), filler);
 
 		return searchBox;
 
 	}
 
 	ConeSearchAction coneSearch = new ConeSearchAction();
+	SIASearchAction siaSearchAction = new SIASearchAction();
+	SSASearchAction ssaSearchAction = new SSASearchAction();
+
 	private JPanel resultsDetails;
 	private JSplitPane results;
 
@@ -375,15 +385,13 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		JPanel searchButtons = new JPanel(new FlowLayout());
 
 		searchButtons.add(new JButton(coneSearch));
-		searchButtons.add(new JButton(new SIASearchAction()));
-		searchButtons.add(new JButton(new SSASearchAction()));
+		searchButtons.add(new JButton(siaSearchAction));
+		searchButtons.add(new JButton(ssaSearchAction));
 		return searchButtons;
 	}
 
 	protected List<URI> getRegistries() {
-		return Arrays.asList(URI.create("http://example.com/"),
-				URI.create("http://example.org/service/registry"),
-				URI.create("http://example.org/service/registry/asdfasdfsafd"));
+		return Arrays.asList(VORepository.DEFAULT_ENDPOINT);
 	}
 
 	@Override
@@ -406,6 +414,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 			searchTask.cancel(true);
 			searchTask = null;
 		}
+		searchType = null;
 	}
 
 }
