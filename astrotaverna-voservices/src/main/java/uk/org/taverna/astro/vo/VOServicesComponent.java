@@ -41,7 +41,7 @@ import net.sf.taverna.t2.workflowmodel.EditsRegistry;
 import uk.org.taverna.astro.vorepo.VORepository;
 
 public class VOServicesComponent extends JPanel implements UIComponentSPI {
-	private static final int RESOURCE_COLUMN = 5;
+	private static final int RESOURCE_COLUMN = 0;
 	private static Logger logger = Logger.getLogger(VOServicesComponent.class);
 	private VORepository repo = new VORepository();
 	private Edits edits = EditsRegistry.getEdits();
@@ -113,9 +113,10 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 				String subjects = r.getContent().getSubject().toString();
 				String identifier = r.getIdentifier();
 				String publisher = r.getCuration().getPublisher().getValue();
-				resultsTableModel.addRow(new Object[] { shortName, title,
-						subjects, identifier, publisher, r });
+				resultsTableModel.addRow(new Object[] { r, shortName, title,
+						subjects, identifier, publisher});
 			}
+			
 			if (searchTask == this) {
 				searchTask = null;
 			}
@@ -234,18 +235,20 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 	protected Component makeResultsTable() {
 		resultsTableModel = new DefaultTableModel();
+		resultsTableModel.addColumn("Service");
 		resultsTableModel.addColumn("Short name");
 		resultsTableModel.addColumn("Title");
 		resultsTableModel.addColumn("Subjects");
 		resultsTableModel.addColumn("Identifier");
 		resultsTableModel.addColumn("Publisher");
-		resultsTableModel.addColumn("Service");
 		
 
-		JTable resultsTable = new JTable(resultsTableModel);
+		JTable resultsTable = new JTable(resultsTableModel);		
 		// resultsTable.setAutoCreateColumnsFromModel(true);
 		resultsTable.setAutoCreateRowSorter(true);
 		// resultsTable.createDefaultColumnsFromModel();
+		resultsTable.removeColumn(resultsTable.getColumn("Service"));
+		
 		resultsTable.getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 
@@ -259,15 +262,14 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 					}
 				});
 
+		
 		return new JScrollPane(resultsTable,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	}
 
 	protected void updateDetails(Service service) {		
-		results.invalidate();
 		resultsDetails.removeAll();
-		results.validate();
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -275,7 +277,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		gbc.weightx = 1.0;		
 		
 		String message = String.format("<html><body><h3>%s: %s</h3>"
-				+ "<p>%s</p>" + "<dl><dt>Provider</dt> <dd>%s</dd>"
+				+ "<p>%s</p>" + "<dl><dt>Publisher</dt> <dd>%s</dd>"
 				+ "  <dt>Documentation</dt> <dd><a href='%s'>%s</a></dd>"
 				+ "</dl>", service.getShortName(), service.getTitle(), service
 				.getContent().getDescription(), service.getCuration()
@@ -291,7 +293,6 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		gbc.weighty = 1.0;
 		JPanel filler = new JPanel();
 		resultsDetails.add(filler, gbc); // filler
-		resultsDetails.invalidate();
 		results.validate();
 		
 	}
