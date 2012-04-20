@@ -25,6 +25,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.log4j.Logger;
+
 import net.ivoa.xml.voresource.v1.Resource;
 import net.ivoa.xml.voresource.v1.Service;
 import net.sf.taverna.t2.workbench.file.FileManager;
@@ -36,6 +38,7 @@ import net.sf.taverna.t2.workflowmodel.EditsRegistry;
 import uk.org.taverna.astro.vorepo.VORepository;
 
 public class VOServicesComponent extends JPanel implements UIComponentSPI {
+	private static Logger logger = Logger.getLogger(VOServicesComponent.class);
 	private VORepository repo = new VORepository();
 	private Edits edits = EditsRegistry.getEdits();
 	private FileManager fileManager = FileManager.getInstance();
@@ -57,60 +60,63 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 	}
 
-	public class ConeSearch extends AbstractAction {
+	private SearchTask searchTask;
 
-		private SearchTask searchTask;
+	private final class SearchTask extends SwingWorker<List<Service>, String> {
+		private String search;
 
-		private final class SearchTask extends
-				SwingWorker<List<Service>, String> {
-			private String search;
+		public SearchTask(String search) {
+			this.search = search;
+		}
 
-			public SearchTask(String search) {
-				this.search = search;
+		@Override
+		protected List<Service> doInBackground() throws Exception {
+			return repo.resourceSearch(
+					net.ivoa.xml.conesearch.v1.ConeSearch.class,
+					search.split(" "));
+		}
+
+		@Override
+		protected void done() {
+			List<Service> resources;
+			try {
+				resources = get();
+			} catch (CancellationException ex) {
+				logger.info("Cancelled search", ex);
+				status.setText("<html><body><font color='#dd2222'>"
+						+ "Cancelled search" + "</font><body></html>");
+				return;
+			} catch (InterruptedException ex) {
+				logger.warn("Interrupted search", ex);
+				status.setText("<html><body><font color='#dd2222'>"
+						+ "Search interrupted: " + ex.getLocalizedMessage()
+						+ "</font><body></html>");
+				return;
+			} catch (ExecutionException ex) {
+				logger.warn("Failed search", ex);
+				status.setText("<html><body><font color='#dd2222'>"
+						+ "Search failed: " + ex.getLocalizedMessage()
+						+ "</font><body></html>");
+				return;
 			}
-
-			@Override
-			protected List<Service> doInBackground() throws Exception {
-				return repo.resourceSearch(net.ivoa.xml.conesearch.v1.ConeSearch.class, search.split(" "));
+			status.setText(resources.size() + " results for: " + search);
+			for (Service r : resources) {
+				String shortName = r.getShortName();
+				String title = r.getTitle();
+				String subjects = r.getContent().getSubject().toString();
+				String identifier = r.getIdentifier();
+				String publisher = r.getCuration().getPublisher().getValue();
+				resultsTableModel.addRow(new String[] { shortName, title,
+						subjects, identifier, publisher });
 			}
-
-			@Override
-			protected void done() {
-				List<Service> resources;
-				try {
-					resources = get();
-				} catch (CancellationException ex) {
-					status.setText("<html><body><font color='#dd2222'>"
-							+ "Cancelled search"
-							+ "</font><body></html>");
-					return;
-				} catch (InterruptedException ex) {
-					status.setText("<html><body><font color='#dd2222'>"
-							+ "Search interrupted: "
-							+ ex.getLocalizedMessage()
-							+ "</font><body></html>");
-					return;
-				} catch (ExecutionException ex) {
-					status.setText("<html><body><font color='#dd2222'>"
-							+ "Search failed: " + ex.getLocalizedMessage()
-							+ "</font><body></html>");
-					return;
-				}
-				status.setText(resources.size() + " results for: " + search);
-				for (Service r : resources) {
-					String shortName = r.getShortName();
-					String title = r.getTitle();
-					String subjects = r.getContent().getSubject().toString();
-					String identifier = r.getIdentifier();
-					String publisher = r.getCuration().getPublisher().getValue();					
-					resultsTableModel.addRow(new String[] { shortName,
-							title, subjects, identifier, publisher });
-				}
-				if (searchTask == this) {
-					searchTask = null;
-				}
+			if (searchTask == this) {
+				searchTask = null;
 			}
 		}
+
+	}
+
+	public class ConeSearch extends AbstractAction {
 
 		public ConeSearch() {
 			super("Cone Search");
@@ -118,13 +124,11 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
- 
-			if (searchTask != null) { 
-				searchTask.cancel(true);
-			}
+
+			cancelSearchTask();
 			String search = keywords.getText();
 			status.setText("Searching: " + search);
-			
+
 			searchTask = new SearchTask(search);
 			int rows = resultsTableModel.getRowCount();
 			while (rows > 0) {
@@ -226,13 +230,6 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		resultsTableModel.addColumn("Identifier");
 		resultsTableModel.addColumn("Publisher");
 
-		// FIXME: Dummy data
-		for (int i = 1; i < 6; i++) {
-			resultsTableModel.addRow(new String[] { "AMIGA" + i,
-					"Amiga test #" + i, "Interesting stars", "/dev/null",
-					"Technical support" });
-		}
-
 		JTable resultsTable = new JTable(resultsTableModel);
 		// resultsTable.setAutoCreateColumnsFromModel(true);
 		resultsTable.setAutoCreateRowSorter(true);
@@ -282,11 +279,12 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		return searchBox;
 
 	}
+
 	ConeSearch coneSearch = new ConeSearch();
-	
+
 	protected JPanel makeSearchButtons() {
 		JPanel searchButtons = new JPanel(new FlowLayout());
-	
+
 		searchButtons.add(new JButton(coneSearch));
 		searchButtons.add(new JButton(new SIASearch()));
 		searchButtons.add(new JButton(new SSASearch()));
@@ -306,13 +304,19 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 	@Override
 	public void onDisplay() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onDispose() {
-		// TODO Auto-generated method stub
+		cancelSearchTask();
+	}
+
+	private void cancelSearchTask() {
+		if (searchTask != null) {
+			searchTask.cancel(true);
+			searchTask = null;
+		}
 	}
 
 }
