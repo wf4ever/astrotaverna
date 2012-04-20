@@ -290,7 +290,6 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		
 		gbc.weighty = 1.0;
 		JPanel filler = new JPanel();
-		//filler.setBackground(Color.red);
 		resultsDetails.add(filler, gbc); // filler
 		resultsDetails.invalidate();
 		results.validate();
