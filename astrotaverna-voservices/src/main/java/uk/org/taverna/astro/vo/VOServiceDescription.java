@@ -1,5 +1,6 @@
 package uk.org.taverna.astro.vo;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +12,11 @@ import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 
 public class VOServiceDescription extends ServiceDescription<RESTActivityConfigurationBean> {
 
+	private String accessURL;
+	private String name;
+	private URI identifier;
+	
+	
 	@Override
 	public Class<RESTActivity> getActivityClass() {
 		return RESTActivity.class;
@@ -18,9 +24,24 @@ public class VOServiceDescription extends ServiceDescription<RESTActivityConfigu
 
 	@Override
 	public RESTActivityConfigurationBean getActivityConfiguration() {
-		RESTActivityConfigurationBean configurationBean = new RESTActivityConfigurationBean();
-		configurationBean.setUrlSignature("http://www.example.com/{fred}/{soup}.xml");
+		RESTActivityConfigurationBean configurationBean = RESTActivityConfigurationBean.getDefaultInstance();
+		configurationBean.setUrlSignature(transformAccessURL());		
 		return configurationBean;
+	}
+
+	public String transformAccessURL() {
+		String urlSig = getAccessURL();
+		if (! urlSig.contains("?")) {
+			urlSig += "?";
+		} else if (! urlSig.endsWith("&")) {
+			urlSig += "&";
+		}
+		// TODO: Work out parameters from service type
+		return urlSig + "ra={ra}&dec={dec}&sr={sr}";
+	}
+
+	public String getAccessURL() {
+		return accessURL;
 	}
 
 	@Override
@@ -30,17 +51,34 @@ public class VOServiceDescription extends ServiceDescription<RESTActivityConfigu
 
 	@Override
 	public String getName() {
-		return "VO service";
+		return name;
 	}
 
 	@Override
 	public List<String> getPath() {
-		return Arrays.asList("VO services", "Registry X");
+		return Arrays.asList("VO services", getName());
 	}
 
 	@Override
 	protected List<? extends Object> getIdentifyingData() {
-		return Arrays.asList("VO services", "Registry X");
+		return Arrays.asList(getIdentifier());
 	}
+
+	public void setAccessURL(String accessURL) {
+		this.accessURL = accessURL;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public URI getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(URI identifier) {
+		this.identifier = identifier;
+	}
+
 
 }

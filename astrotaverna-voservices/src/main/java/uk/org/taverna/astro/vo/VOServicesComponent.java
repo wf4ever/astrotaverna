@@ -1,6 +1,5 @@
 package uk.org.taverna.astro.vo;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -13,7 +12,6 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -29,15 +27,22 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.log4j.Logger;
-
+import net.ivoa.xml.conesearch.v1.ConeSearch;
+import net.ivoa.xml.vodataservice.v1.ParamHTTP;
+import net.ivoa.xml.voresource.v1.AccessURL;
+import net.ivoa.xml.voresource.v1.Capability;
+import net.ivoa.xml.voresource.v1.Interface;
 import net.ivoa.xml.voresource.v1.Service;
+import net.ivoa.xml.voresource.v1.WebService;
 import net.sf.taverna.t2.workbench.file.FileManager;
 import net.sf.taverna.t2.workbench.ui.impl.Workbench;
 import net.sf.taverna.t2.workbench.ui.workflowview.WorkflowView;
 import net.sf.taverna.t2.workbench.ui.zaria.UIComponentSPI;
 import net.sf.taverna.t2.workflowmodel.Edits;
 import net.sf.taverna.t2.workflowmodel.EditsRegistry;
+
+import org.apache.log4j.Logger;
+
 import uk.org.taverna.astro.vorepo.VORepository;
 
 public class VOServicesComponent extends JPanel implements UIComponentSPI {
@@ -58,8 +63,33 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO: Make the real service
 			VOServiceDescription restServiceDescription = new VOServiceDescription();
+			
+			for (Capability c : service.getCapability() ) {
+				if (! (c instanceof ConeSearch)) {
+					continue;
+				}
+				ConeSearch cs = (ConeSearch) c;
+				for (Interface i : cs.getInterface()) {
+					if (i instanceof ParamHTTP) {
+						ParamHTTP http = (ParamHTTP) i;
+						AccessURL accessURL = http.getAccessURL().get(0);
+						restServiceDescription.setAccessURL(accessURL.getValue());
+						restServiceDescription.setIdentifier(URI.create(service.getIdentifier()));
+						restServiceDescription.setName(service.getTitle());
+						break;
+					}
+					if (i instanceof WebService) {
+						// TODO: Potentially loads to check here
+					}
+				}
+			}
+			if (restServiceDescription.getAccessURL() == null) {
+				// TODO: Show error
+				
+				return;
+			}
+			
 			WorkflowView
 					.importServiceDescription(restServiceDescription, false);
 			Workbench.getInstance().getPerspectives().setWorkflowPerspective();
@@ -79,7 +109,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		@Override
 		protected List<Service> doInBackground() throws Exception {
 			return repo.resourceSearch(
-					net.ivoa.xml.conesearch.v1.ConeSearch.class,
+					ConeSearch.class,
 					search.split(" "));
 		}
 
@@ -124,9 +154,9 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 	}
 
-	public class ConeSearch extends AbstractAction {
+	public class ConeSearchAction extends AbstractAction {
 
-		public ConeSearch() {
+		public ConeSearchAction() {
 			super("Cone Search");
 		}
 
@@ -148,9 +178,9 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		}
 	}
 
-	public class SIASearch extends AbstractAction {
+	public class SIASearchAction extends AbstractAction {
 
-		public SIASearch() {
+		public SIASearchAction() {
 			super("SIA Search");
 		}
 
@@ -161,9 +191,9 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		}
 	}
 
-	public class SSASearch extends AbstractAction {
+	public class SSASearchAction extends AbstractAction {
 
-		public SSASearch() {
+		public SSASearchAction() {
 			super("SSA Search");
 		}
 
@@ -337,7 +367,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 	}
 
-	ConeSearch coneSearch = new ConeSearch();
+	ConeSearchAction coneSearch = new ConeSearchAction();
 	private JPanel resultsDetails;
 	private JSplitPane results;
 
@@ -345,8 +375,8 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		JPanel searchButtons = new JPanel(new FlowLayout());
 
 		searchButtons.add(new JButton(coneSearch));
-		searchButtons.add(new JButton(new SIASearch()));
-		searchButtons.add(new JButton(new SSASearch()));
+		searchButtons.add(new JButton(new SIASearchAction()));
+		searchButtons.add(new JButton(new SSASearchAction()));
 		return searchButtons;
 	}
 
