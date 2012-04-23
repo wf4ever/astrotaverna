@@ -210,6 +210,7 @@ public class VORepository {
 		return services;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected SearchType makeConditionSearchType(
 			Class<? extends SearchType> searchType, List<SearchType> conditions) {
 		ClosedSearchType closed = new ClosedSearchType();
@@ -221,18 +222,18 @@ public class VORepository {
 			closed.setCondition(conditions.get(0));
 		} else {
 			SearchType search;
+			List<SearchType> list;
 			try {
 				search = searchType.newInstance();
-				@SuppressWarnings("unchecked")
-				List<SearchType> list = (List<SearchType>) propertyUtils
+				list = (List<SearchType>) propertyUtils
 						.getProperty(search, "condition");
-				list.add(conditions.get(0));
-				list.add(makeConditionSearchType(searchType,
-						conditions.subList(1, conditions.size())));
-			} catch (ReflectiveOperationException e) {
+			} catch (Exception e) {
 				throw new IllegalArgumentException("Can't make " + searchType,
 						e);
 			}
+			list.add(conditions.get(0));
+			list.add(makeConditionSearchType(searchType,
+					conditions.subList(1, conditions.size())));
 			closed.setCondition(search);
 		}
 		return closed;
