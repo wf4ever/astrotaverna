@@ -1,7 +1,6 @@
 package uk.org.taverna.astro.vo;
 
 import java.awt.Desktop;
-import java.awt.Rectangle;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -22,25 +21,6 @@ import org.apache.log4j.Logger;
  * 
  */
 public class HTMLPane extends JEditorPane {
-	private static final long serialVersionUID = 5655697117597352598L;
-	private static Logger logger = Logger.getLogger(HTMLPane.class);
-
-	public HTMLPane(URL url) throws IOException {
-		super(url);
-		initialize();
-	}
-
-	public HTMLPane(String text) {
-		super("text/html", text);
-		initialize();
-	}
-
-
-	protected void initialize() {
-		setEditable(false);
-		addHyperlinkListener(new OpenInBrowserHyperlinkListener());		
-	}
-	
 	public class OpenInBrowserHyperlinkListener implements HyperlinkListener {
 
 		@Override
@@ -60,4 +40,38 @@ public class HTMLPane extends JEditorPane {
 		}
 	}
 
+	private static final String EMPTY = "<html><body></body></html>";
+	private static Logger logger = Logger.getLogger(HTMLPane.class);
+
+	private static final long serialVersionUID = 5655697117597352598L;
+
+	public HTMLPane() {
+		super("text/html", EMPTY);
+		initialize();
+	}
+
+	public HTMLPane(String text) {
+		super("text/html", text);
+		initialize();
+	}
+
+	public HTMLPane(URL url) throws IOException {
+		super(url);
+		initialize();
+	}
+
+	protected void initialize() {
+		setEditable(false);
+		addHyperlinkListener(new OpenInBrowserHyperlinkListener());
+	}
+
+	public void reset() {
+		setText(EMPTY);
+	}
+
+	@Override
+	public void setText(String t) {
+		super.setText(t);
+		setCaretPosition(0);
+	}
 }
