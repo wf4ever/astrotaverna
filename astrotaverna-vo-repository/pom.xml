@@ -110,4 +110,5 @@
 		</dependency>
 	</dependencies>
 
+	<name>Astro Taverna VO repository</name>
 </project>
