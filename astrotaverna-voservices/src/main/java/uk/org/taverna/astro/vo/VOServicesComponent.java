@@ -12,7 +12,6 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -37,7 +36,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(VOServicesComponent.class);
+	static Logger logger = Logger.getLogger(VOServicesComponent.class);
 
 	private static final int RESOURCE_COLUMN = 0;
 
@@ -167,8 +166,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		if (row < 0) {
 			return null;
 		}
-		return ((Service) resultsTableModel.getValueAt(row,
-				RESOURCE_COLUMN));
+		return ((Service) resultsTableModel.getValueAt(row, RESOURCE_COLUMN));
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -228,8 +226,8 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		if (selectedService == getTableSelection()) {
 			// Already there - perhaps selection was done in table?
 			return;
-		}		
-		for (int row=-1; row < resultsTableModel.getRowCount(); row++) {		
+		}
+		for (int row = -1; row < resultsTableModel.getRowCount(); row++) {
 			if (getServiceAtRow(row) == selectedService) {
 				resultsTable.getSelectionModel().setSelectionInterval(row, row);
 				break;
@@ -257,8 +255,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 				.getContent().getDescription(), service.getCuration()
 				.getPublisher().getValue(), service.getContent()
 				.getReferenceURL(), service.getContent().getReferenceURL());
-		JEditorPane htmlPane = new JEditorPane("text/html", message);
-		htmlPane.setEditable(false);
+		HTMLPane htmlPane = new HTMLPane(message);		
 		resultsDetails.add(new JScrollPane(htmlPane), gbc);
 		gbc.weightx = 0.0;
 		gbc.weighty = 0.0;
