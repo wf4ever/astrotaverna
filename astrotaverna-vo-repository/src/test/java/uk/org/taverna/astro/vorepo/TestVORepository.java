@@ -34,12 +34,12 @@ public class TestVORepository {
 	@Test
 	public void coneSearch() throws Exception {
 		VORepository repo = new VORepository();
-		List<Service> resources = repo.resourceSearch(
-				ConeSearch.class, "amiga");
-		assertFalse(resources.isEmpty());	
+		List<Service> resources = repo
+				.resourceSearch(ConeSearch.class, "amiga");
+		assertFalse(resources.isEmpty());
 		Service s = resources.get(0);
 		boolean foundCapability = false;
-		for (Capability c: s.getCapability()) {
+		for (Capability c : s.getCapability()) {
 			if (c instanceof ConeSearch) {
 				ConeSearch coneSearch = (ConeSearch) c;
 				foundCapability = true;
@@ -47,12 +47,11 @@ public class TestVORepository {
 		}
 		assertTrue("Could not find any ConeSearch", foundCapability);
 	}
-	
+
 	@Test
 	public void defaultConeSearch() throws Exception {
 		VORepository repo = new VORepository();
-		List<Service> resources = repo.resourceSearch(
-				ConeSearch.class);
+		List<Service> resources = repo.resourceSearch(ConeSearch.class);
 		assertTrue(resources.size() > 20);
 	}
 
@@ -66,29 +65,25 @@ public class TestVORepository {
 	@Test
 	public void defaultSIASearch() throws Exception {
 		VORepository repo = new VORepository();
-		List<Service> resources = repo.resourceSearch(
-				SimpleImageAccess.class);
+		List<Service> resources = repo.resourceSearch(SimpleImageAccess.class);
 		assertTrue(resources.size() > 20);
 	}
 
-
-	
 	@Test
 	public void defaultSPASearch() throws Exception {
 		VORepository repo = new VORepository();
-		List<Service> resources = repo.resourceSearch(
-				SimpleSpectralAccess.class);
+		List<Service> resources = repo
+				.resourceSearch(SimpleSpectralAccess.class);
 		assertTrue(resources.size() > 20);
 	}
 
 	@Test
 	public void emptyConeSearch() throws Exception {
 		VORepository repo = new VORepository();
-		List<Service> resources = repo.resourceSearch(
-				ConeSearch.class, "ThisCertainlyShouldNotMatchRight192891");
+		List<Service> resources = repo.resourceSearch(ConeSearch.class,
+				"ThisCertainlyShouldNotMatchRight192891");
 		assertTrue(resources.isEmpty());
 	}
-
 
 	@Test
 	public void endPointChanged() {
@@ -107,7 +102,7 @@ public class TestVORepository {
 						BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
 
 	}
-	
+
 	@Test
 	public void keywordSearch() throws Exception {
 		VORepository repo = new VORepository();
@@ -122,16 +117,16 @@ public class TestVORepository {
 	@Test
 	public void multipleConeSearch() throws Exception {
 		VORepository repo = new VORepository();
-		List<Service> resources = repo.resourceSearch(
-				ConeSearch.class, "amiga", "J/A+A/462/507");
+		List<Service> resources = repo.resourceSearch(ConeSearch.class,
+				"amiga", "J/A+A/462/507");
 		assertEquals(1, resources.size());
 	}
 
 	@Test
 	public void multipleEmptyConeSearch() throws Exception {
 		VORepository repo = new VORepository();
-		List<Service> resources = repo.resourceSearch(
-				ConeSearch.class, "J/A+A/462/507", "ThisCertainlyShouldNotMatchRight192891");
+		List<Service> resources = repo.resourceSearch(ConeSearch.class,
+				"J/A+A/462/507", "ThisCertainlyShouldNotMatchRight192891");
 		assertTrue(resources.isEmpty());
 	}
 
