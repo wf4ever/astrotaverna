@@ -18,6 +18,7 @@ public class VOServicesModel {
 	private Class<? extends Capability> searchType = ConeSearch.class;
 	private List<Service> services;
 	private VOServicesComponent view;
+	private Service selectedService;
 
 	public void clearServices() {
 		setServices(Collections.<Service> emptyList());
@@ -89,11 +90,20 @@ public class VOServicesModel {
 	public void setServices(List<Service> services) {
 		getView().clearResults();
 		this.services = services;
-		getView().updateServices();
+		getView().updateServices();		
 	}
 
 	public void setView(VOServicesComponent view) {
 		this.view = view;
+	}
+
+	public void setSelectedService(Service selectedService) {
+		this.selectedService = selectedService;
+		getView().updateSelection();
+	}
+
+	public Service getSelectedService() {
+		return selectedService;
 	}
 
 }

@@ -61,7 +61,6 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 	public VOServicesComponent() {
 		initialize();
-
 	}
 
 	@Override
@@ -71,7 +70,6 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 
 	@Override
 	public void onDisplay() {
-
 	}
 
 	@Override
@@ -150,20 +148,27 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 						if (e.getValueIsAdjusting()) {
 							return;
 						}
-						int selection = resultsTable.getSelectionModel()
-								.getMinSelectionIndex();
-						if (selection < 0) {
-							updateDetails(null);
-							return;
-						}
-						updateDetails((Service) resultsTableModel.getValueAt(
-								selection, RESOURCE_COLUMN));
+						Service tableSelection = getTableSelection();
+						getController().selectService(tableSelection);
 					}
 				});
 
 		return new JScrollPane(resultsTable,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	}
+
+	protected Service getTableSelection() {
+		return getServiceAtRow(resultsTable.getSelectionModel()
+				.getMinSelectionIndex());
+	}
+
+	protected Service getServiceAtRow(int row) {
+		if (row < 0) {
+			return null;
+		}
+		return ((Service) resultsTableModel.getValueAt(row,
+				RESOURCE_COLUMN));
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -203,7 +208,6 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		// searchBox.add(new JPanel(), filler);
 
 		return searchBox;
-
 	}
 
 	protected JPanel makeSearchButtons() {
@@ -215,8 +219,27 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		return searchButtons;
 	}
 
-	protected void updateDetails(Service service) {
+	public void updateSelection() {
+		updateDetails();
+		setTableSelection(getModel().getSelectedService());
+	}
+
+	protected void setTableSelection(Service selectedService) {
+		if (selectedService == getTableSelection()) {
+			// Already there - perhaps selection was done in table?
+			return;
+		}		
+		for (int row=-1; row < resultsTableModel.getRowCount(); row++) {		
+			if (getServiceAtRow(row) == selectedService) {
+				resultsTable.getSelectionModel().setSelectionInterval(row, row);
+				break;
+			}
+		}
+	}
+
+	protected void updateDetails() {
 		resultsDetails.removeAll();
+		Service service = getModel().getSelectedService();
 		if (service == null) {
 			results.validate();
 			return;

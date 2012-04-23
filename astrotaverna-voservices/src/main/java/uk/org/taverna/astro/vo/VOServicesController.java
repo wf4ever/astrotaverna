@@ -156,4 +156,8 @@ public class VOServicesController {
 		this.view = view;
 	}
 
+	public void selectService(Service service) {
+		getModel().setSelectedService(service);
+	}
+
 }
