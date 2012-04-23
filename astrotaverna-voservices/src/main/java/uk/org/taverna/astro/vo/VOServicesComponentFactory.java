@@ -9,7 +9,7 @@ public class VOServicesComponentFactory implements UIComponentFactorySPI {
 
 	@Override
 	public UIComponentSPI getComponent() {
-		return new VOServicesComponent();
+		return new VOServicesView();
 	}
 
 	@Override

@@ -70,7 +70,7 @@ public class VOServicesController {
 
 	private VOServicesModel model;
 
-	private VOServicesComponent view;
+	private VOServicesView view;
 
 	public VOServicesController() {
 	}
@@ -126,9 +126,9 @@ public class VOServicesController {
 		return model;
 	}
 
-	public VOServicesComponent getView() {
+	public VOServicesView getView() {
 		if (view == null) {
-			view = new VOServicesComponent();
+			view = new VOServicesView();
 			view.setController(this);
 			view.setModel(getModel());
 		}
@@ -148,7 +148,7 @@ public class VOServicesController {
 		this.model = model;
 	}
 
-	public void setView(VOServicesComponent view) {
+	public void setView(VOServicesView view) {
 		this.view = view;
 	}
 

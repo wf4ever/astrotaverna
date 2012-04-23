@@ -17,7 +17,7 @@ public class VOServicesModel {
 	private String search;
 	private Class<? extends Capability> searchType = ConeSearch.class;
 	private List<Service> services;
-	private VOServicesComponent view;
+	private VOServicesView view;
 	private Service selectedService;
 
 	public void clearServices() {
@@ -56,9 +56,9 @@ public class VOServicesModel {
 		return services;
 	}
 
-	public VOServicesComponent getView() {
+	public VOServicesView getView() {
 		if (view == null) {
-			view = new VOServicesComponent();
+			view = new VOServicesView();
 			view.setModel(this);
 			view.setController(getController());
 		}
@@ -93,7 +93,7 @@ public class VOServicesModel {
 		getView().updateServices();		
 	}
 
-	public void setView(VOServicesComponent view) {
+	public void setView(VOServicesView view) {
 		this.view = view;
 	}
 

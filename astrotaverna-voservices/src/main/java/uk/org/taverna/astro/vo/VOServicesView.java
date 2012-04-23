@@ -32,11 +32,11 @@ import net.sf.taverna.t2.workbench.ui.zaria.UIComponentSPI;
 
 import org.apache.log4j.Logger;
 
-public class VOServicesComponent extends JPanel implements UIComponentSPI {
+public class VOServicesView extends JPanel implements UIComponentSPI {
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
-	static Logger logger = Logger.getLogger(VOServicesComponent.class);
+	static Logger logger = Logger.getLogger(VOServicesView.class);
 
 	private static final int RESOURCE_COLUMN = 0;
 
@@ -58,7 +58,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	private SIASearchAction siaSearchAction = new SIASearchAction();
 	private SSASearchAction ssaSearchAction = new SSASearchAction();
 
-	public VOServicesComponent() {
+	public VOServicesView() {
 		initialize();
 	}
 
