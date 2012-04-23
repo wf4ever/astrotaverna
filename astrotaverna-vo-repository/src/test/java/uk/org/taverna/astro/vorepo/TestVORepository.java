@@ -32,68 +32,6 @@ import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchPortType;
 public class TestVORepository {
 
 	@Test
-	public void keywordSearch() throws Exception {
-		VORepository repo = new VORepository();
-		List<Resource> resources = repo
-				.keywordSearch("ivo://svo.amiga.iaa.es/amiga");
-		assertFalse(resources.isEmpty());
-		Resource someResource = resources.get(0);
-		assertTrue(someResource.getIdentifier().startsWith("ivo://"));
-
-	}
-	
-	@Test
-	public void defaultConeSearch() throws Exception {
-		VORepository repo = new VORepository();
-		List<Service> resources = repo.resourceSearch(
-				ConeSearch.class);
-		assertTrue(resources.size() > 20);
-	}
-
-	@Test
-	public void defaultSIASearch() throws Exception {
-		VORepository repo = new VORepository();
-		List<Service> resources = repo.resourceSearch(
-				SimpleImageAccess.class);
-		assertTrue(resources.size() > 20);
-	}
-
-	@Test
-	public void defaultSPASearch() throws Exception {
-		VORepository repo = new VORepository();
-		List<Service> resources = repo.resourceSearch(
-				SimpleSpectralAccess.class);
-		assertTrue(resources.size() > 20);
-	}
-
-
-	
-	@Test
-	public void multipleConeSearch() throws Exception {
-		VORepository repo = new VORepository();
-		List<Service> resources = repo.resourceSearch(
-				ConeSearch.class, "amiga", "J/A+A/462/507");
-		assertEquals(1, resources.size());
-	}
-
-	@Test
-	public void multipleEmptyConeSearch() throws Exception {
-		VORepository repo = new VORepository();
-		List<Service> resources = repo.resourceSearch(
-				ConeSearch.class, "J/A+A/462/507", "ThisCertainlyShouldNotMatchRight192891");
-		assertTrue(resources.isEmpty());
-	}
-
-
-	@Test
-	public void emptyConeSearch() throws Exception {
-		VORepository repo = new VORepository();
-		List<Service> resources = repo.resourceSearch(
-				ConeSearch.class, "ThisCertainlyShouldNotMatchRight192891");
-		assertTrue(resources.isEmpty());
-	}
-	
-	@Test
 	public void coneSearch() throws Exception {
 		VORepository repo = new VORepository();
 		List<Service> resources = repo.resourceSearch(
@@ -109,6 +47,14 @@ public class TestVORepository {
 		}
 		assertTrue("Could not find any ConeSearch", foundCapability);
 	}
+	
+	@Test
+	public void defaultConeSearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Service> resources = repo.resourceSearch(
+				ConeSearch.class);
+		assertTrue(resources.size() > 20);
+	}
 
 	@Test
 	public void defaultRepo() throws Exception {
@@ -118,32 +64,31 @@ public class TestVORepository {
 	}
 
 	@Test
-	public void status() throws Exception {
-		assertEquals(VORepository.Status.OK, new VORepository().getStatus());
+	public void defaultSIASearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Service> resources = repo.resourceSearch(
+				SimpleImageAccess.class);
+		assertTrue(resources.size() > 20);
+	}
+
+
+	
+	@Test
+	public void defaultSPASearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Service> resources = repo.resourceSearch(
+				SimpleSpectralAccess.class);
+		assertTrue(resources.size() > 20);
 	}
 
 	@Test
-	public void portCached() throws Exception {
-		VORepository voRepository = new VORepository();
-		RegistrySearchPortType port = voRepository.getPort();
-		assertSame(port, voRepository.getPort());
+	public void emptyConeSearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Service> resources = repo.resourceSearch(
+				ConeSearch.class, "ThisCertainlyShouldNotMatchRight192891");
+		assertTrue(resources.isEmpty());
 	}
 
-	@Test
-	public void statusWrongEndpoint() throws Exception {
-		assertEquals(
-				VORepository.Status.CONNECTION_ERROR,
-				new VORepository(
-						URI.create("http://registry.euro-vo.org/services/RegistryHarvest"))
-						.getStatus());
-	}
-
-	@Test
-	public void status404() throws Exception {
-		assertEquals(VORepository.Status.CONNECTION_ERROR,
-				new VORepository(URI.create("http://example.com/404"))
-						.getStatus());
-	}
 
 	@Test
 	public void endPointChanged() {
@@ -162,6 +107,40 @@ public class TestVORepository {
 						BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
 
 	}
+	
+	@Test
+	public void keywordSearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Resource> resources = repo
+				.keywordSearch("ivo://svo.amiga.iaa.es/amiga");
+		assertFalse(resources.isEmpty());
+		Resource someResource = resources.get(0);
+		assertTrue(someResource.getIdentifier().startsWith("ivo://"));
+
+	}
+
+	@Test
+	public void multipleConeSearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Service> resources = repo.resourceSearch(
+				ConeSearch.class, "amiga", "J/A+A/462/507");
+		assertEquals(1, resources.size());
+	}
+
+	@Test
+	public void multipleEmptyConeSearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Service> resources = repo.resourceSearch(
+				ConeSearch.class, "J/A+A/462/507", "ThisCertainlyShouldNotMatchRight192891");
+		assertTrue(resources.isEmpty());
+	}
+
+	@Test
+	public void portCached() throws Exception {
+		VORepository voRepository = new VORepository();
+		RegistrySearchPortType port = voRepository.getPort();
+		assertSame(port, voRepository.getPort());
+	}
 
 	@Test
 	public void portUncached() throws Exception {
@@ -171,12 +150,33 @@ public class TestVORepository {
 		assertNotSame(port, voRepository.getPort());
 	}
 
+	@Test
+	public void status() throws Exception {
+		assertEquals(VORepository.Status.OK, new VORepository().getStatus());
+	}
+
+	@Test
+	public void status404() throws Exception {
+		assertEquals(VORepository.Status.CONNECTION_ERROR,
+				new VORepository(URI.create("http://example.com/404"))
+						.getStatus());
+	}
+
 	// Ignored as this adds 21s
 	@Ignore
 	@Test
 	public void statusTimeout() throws Exception {
 		assertEquals(VORepository.Status.CONNECTION_ERROR,
 				new VORepository(URI.create("http://example.com:12345/"))
+						.getStatus());
+	}
+
+	@Test
+	public void statusWrongEndpoint() throws Exception {
+		assertEquals(
+				VORepository.Status.CONNECTION_ERROR,
+				new VORepository(
+						URI.create("http://registry.euro-vo.org/services/RegistryHarvest"))
 						.getStatus());
 	}
 
