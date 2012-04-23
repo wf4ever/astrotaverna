@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import net.ivoa.xml.conesearch.v1.ConeSearch;
 import net.ivoa.xml.voresource.v1.Capability;
@@ -22,7 +23,6 @@ public class VOServicesModel {
 	private VOServicesView view;
 	private Service selectedService;
 	
-	
 	public void clearServices() {
 		setServices(EMPTY_SERVICES);
 	}
@@ -40,7 +40,7 @@ public class VOServicesModel {
 		return searchType;
 	}
 
-	public List<URI> getRegistries() {
+	public List<URI> getEndpoints() {		
 		return Arrays.asList(VORepository.DEFAULT_ENDPOINT);
 	}
 
@@ -110,4 +110,11 @@ public class VOServicesModel {
 		return selectedService;
 	}
 
+	public URI getEndpoint() {
+		return getRepository().getEndpoint();
+	}
+
+	public void setEndpoint(URI endpoint) {
+		getRepository().setEndpoint(endpoint);		
+	}
 }

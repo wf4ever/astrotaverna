@@ -5,7 +5,10 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CancellationException;
 
 import javax.swing.AbstractAction;
@@ -32,7 +35,17 @@ import net.sf.taverna.t2.workbench.ui.zaria.UIComponentSPI;
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.astro.vorepo.VORepository.Status;
+
 public class VOServicesView extends JPanel implements UIComponentSPI {
+	public class RegistryChange implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JComboBox combo = (JComboBox) e.getSource();
+			getController().changeEndpoint((String) combo.getSelectedItem());
+		}
+	}
+
 	public class AddToWorkflow extends AbstractAction {
 		private static final long serialVersionUID = 1L;
 
@@ -190,6 +203,7 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
 		add(makeResults(), gbc);
+		getController().checkEndpoint();
 		updateDetails();
 		updateServices();
 	}
@@ -288,9 +302,10 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 		gbcMiddle.gridx = 1;
 		gbcMiddle.weightx = 0.1;
 
-		URI[] registries = getModel().getRegistries().toArray(new URI[0]);
+		String[] registries = getEndpoints();
 		registry = new JComboBox(registries);
 		registry.setEditable(true);
+		registry.addActionListener(new RegistryChange());
 
 		searchBox.add(registry, gbcMiddle);
 
@@ -313,6 +328,14 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 		return searchBox;
 	}
 
+	protected String[] getEndpoints() {
+		List<String> endpoints = new ArrayList<String>();
+		for (URI registry : getModel().getEndpoints()) {
+			endpoints.add(registry.toString());
+		}
+		return endpoints.toArray(new String[endpoints.size()]);
+	}
+
 	protected JPanel makeSearchButtons() {
 		JPanel searchButtons = new JPanel(new FlowLayout());
 
@@ -328,7 +351,7 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 
 	@Override
 	public void onDispose() {
-		getController().cancelSearchTaskIfNeeded();
+		getController().cancelTaskIfNeeded();
 	}
 
 	public void setController(VOServicesController controller) {
@@ -357,9 +380,13 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 				+ "Cancelled search" + "</font><body></html>");
 	}
 
+	public void statusWarn(String msg) {
+		status.setText("<html><body><font color='#dd2222'>" + msg
+				+ "</font><body></html>");
+	}
+
 	public void statusFailed(Exception ex) {
-		status.setText("<html><body><font color='#dd2222'>" + "Search failed: "
-				+ ex.getLocalizedMessage() + "</font><body></html>");
+		statusWarn("Search failed: " + ex.getLocalizedMessage());
 	}
 
 	public void statusFoundResults(int size) {
@@ -370,14 +397,12 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 	}
 
 	public void statusInterrupted(InterruptedException ex) {
-		status.setText("<html><body><font color='#dd2222'>"
-				+ "Search interrupted: " + ex.getLocalizedMessage()
-				+ "</font><body></html>");
+		statusWarn("Search interrupted: " + ex.getLocalizedMessage());
 	}
 
 	public void statusSearching(Class<? extends Capability> searchType,
 			String search) {
-		status.setText(String.format("%s: %s", searchType.getSimpleName(),
+		status.setText(String.format("<html><body>Searching for %s: <b>%s</b> ...</body></html>", searchType.getSimpleName(),
 				search));
 	}
 
@@ -416,6 +441,34 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 			resultsTableModel.addRow(new Object[] { s, shortName, title,
 					subjects, identifier, publisher });
 		}
+	}
+
+	public void statusInvalidEndpoint(Exception e) {
+		statusWarn("Invalid registry: " + e.getLocalizedMessage());
+	}
+
+	public void statusEndpointOK() {
+		status.setText("Endpoint: OK");
+	}
+
+	public void statusEndpointStatus(Status endpointStatus) {
+		statusWarn("Endpoint: " + endpointStatus);
+	}
+
+	public void updateEndpoint() {
+		URI endpoint = getModel().getEndpoint();
+		String endpointStr = endpoint.toASCIIString();
+		// Check if it's already there..
+		for (String item : new ModelIterator<String>(registry.getModel())) {
+			if (item.equals(endpointStr)) {
+				return;
+			}
+		}
+		registry.addItem(endpointStr);
+	}
+
+	public void statusEndpointChecking() {
+		status.setText("Checking endpoint...");
 	}
 
 }

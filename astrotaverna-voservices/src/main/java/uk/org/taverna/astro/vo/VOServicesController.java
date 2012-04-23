@@ -1,6 +1,7 @@
 package uk.org.taverna.astro.vo;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -18,9 +19,62 @@ import net.sf.taverna.t2.workbench.ui.workflowview.WorkflowView;
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.astro.vorepo.VORepository.Status;
+
 public class VOServicesController {
 
 	private static Logger logger = Logger.getLogger(VOServicesController.class);
+
+	public class CheckStatus extends SwingWorker<Status, String> {
+		private final URI oldEndpoint;
+
+		public CheckStatus(URI oldEndpoint) {
+			this.oldEndpoint = oldEndpoint;
+		}
+
+		@Override
+		protected Status doInBackground() throws Exception {
+			return getModel().getRepository().getStatus();
+		}
+
+		@Override
+		protected void done() {
+			try {
+				Status status;
+				try {
+					status = get();
+				} catch (CancellationException e) {
+					return;
+				} catch (InterruptedException e) {
+					getView().statusEndpointStatus(Status.ERROR);
+					return;
+				} catch (ExecutionException e) {
+					getView().statusEndpointStatus(Status.ERROR);
+					revert();
+					return;
+				}
+				if (status != Status.OK) {
+					getView().statusEndpointStatus(status);
+					revert();
+				}
+				
+				getView().statusEndpointOK();
+				// TODO: Store in preferences?
+				// getModel().addEndpoint(endpoint);
+			} finally {
+				if (currentTask == this) {
+					currentTask = null;
+				}
+			}
+		}
+
+		private void revert() {
+			if (oldEndpoint != null) {
+				changeEndpoint(oldEndpoint);
+			}
+		}
+
+	}
 
 	public class SearchTask extends SwingWorker<List<Service>, String> {
 		private String search;
@@ -38,34 +92,37 @@ public class VOServicesController {
 
 		@Override
 		protected void done() {
-			List<Service> resources;
 			try {
-				resources = get();
-			} catch (CancellationException ex) {
-				logger.info("Cancelled search", ex);
-				getView().statusCancelled(ex);
-				return;
-			} catch (InterruptedException ex) {
-				logger.warn("Interrupted search", ex);
-				getView().statusInterrupted(ex);
-				return;
-			} catch (ExecutionException ex) {
-				logger.warn("Failed search", ex);
-				getView().statusFailed(ex);
-				return;
-			}
-			getModel().setSearch(search);
-			getModel().setCurrentSearchType(searchType);
-			getView().statusFoundResults(resources.size());
-			getModel().setServices(resources);
-			if (currentSearchTask == this) {
-				currentSearchTask = null;
+				List<Service> resources;
+				try {
+					resources = get();
+				} catch (CancellationException ex) {
+					logger.info("Cancelled search", ex);
+					getView().statusCancelled(ex);
+					return;
+				} catch (InterruptedException ex) {
+					logger.warn("Interrupted search", ex);
+					getView().statusInterrupted(ex);
+					return;
+				} catch (ExecutionException ex) {
+					logger.warn("Failed search", ex);
+					getView().statusFailed(ex);
+					return;
+				}
+				getModel().setSearch(search);
+				getModel().setCurrentSearchType(searchType);
+				getView().statusFoundResults(resources.size());
+				getModel().setServices(resources);
+			} finally {
+				if (currentTask == this) {
+					currentTask = null;
+				}
 			}
 		}
 	}
 
 	// Current state
-	private SearchTask currentSearchTask;
+	private SwingWorker<?, ?> currentTask;
 
 	private VOServicesModel model;
 
@@ -110,10 +167,10 @@ public class VOServicesController {
 
 	}
 
-	protected void cancelSearchTaskIfNeeded() {
-		if (currentSearchTask != null) {
-			currentSearchTask.cancel(true);
-			currentSearchTask = null;
+	protected void cancelTaskIfNeeded() {
+		if (currentTask != null) {
+			currentTask.cancel(true);
+			currentTask = null;
 		}
 	}
 
@@ -134,12 +191,12 @@ public class VOServicesController {
 	}
 
 	public void search(Class<? extends Capability> searchType, String search) {
-		cancelSearchTaskIfNeeded();
+		cancelTaskIfNeeded();
 		getView().statusSearching(searchType, search);
-		currentSearchTask = new SearchTask(searchType, search);
+		currentTask = new SearchTask(searchType, search);
 		getModel().setSelectedService(null);
 		getModel().clearServices();
-		currentSearchTask.execute();
+		currentTask.execute();
 	}
 
 	public void setModel(VOServicesModel model) {
@@ -154,4 +211,32 @@ public class VOServicesController {
 		getModel().setSelectedService(service);
 	}
 
+	public void changeEndpoint(String uri) {
+		URI oldEndpoint = getModel().getEndpoint();
+		URI endpoint;
+		try {
+			endpoint = new URI(uri);
+		} catch (URISyntaxException e) {
+			getView().statusInvalidEndpoint(e);
+			changeEndpoint(oldEndpoint);
+			return;
+		}
+		changeEndpoint(endpoint);
+		checkEndpoint(oldEndpoint);
+	}
+
+	protected void checkEndpoint(URI revertToEndpoint) {
+		cancelTaskIfNeeded();
+		getView().statusEndpointChecking();
+		currentTask = new CheckStatus(revertToEndpoint);
+		currentTask.execute();
+	}
+
+	protected void changeEndpoint(URI endpoint) {
+		getModel().setEndpoint(endpoint);
+	}
+
+	public void checkEndpoint() {
+		checkEndpoint(null);
+	}
 }
