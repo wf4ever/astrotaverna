@@ -12,6 +12,8 @@ import java.util.List;
 import javax.xml.ws.BindingProvider;
 
 import net.ivoa.xml.conesearch.v1.ConeSearch;
+import net.ivoa.xml.sia.v1.SimpleImageAccess;
+import net.ivoa.xml.ssa.v0.SimpleSpectralAccess;
 import net.ivoa.xml.voresource.v1.Capability;
 import net.ivoa.xml.voresource.v1.Resource;
 import net.ivoa.xml.voresource.v1.Service;
@@ -39,6 +41,32 @@ public class TestVORepository {
 		assertTrue(someResource.getIdentifier().startsWith("ivo://"));
 
 	}
+	
+	@Test
+	public void defaultConeSearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Service> resources = repo.resourceSearch(
+				ConeSearch.class);
+		assertTrue(resources.size() > 20);
+	}
+
+	@Test
+	public void defaultSIASearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Service> resources = repo.resourceSearch(
+				SimpleImageAccess.class);
+		assertTrue(resources.size() > 20);
+	}
+
+	@Test
+	public void defaultSPASearch() throws Exception {
+		VORepository repo = new VORepository();
+		List<Service> resources = repo.resourceSearch(
+				SimpleSpectralAccess.class);
+		assertTrue(resources.size() > 20);
+	}
+
+
 	
 	@Test
 	public void multipleConeSearch() throws Exception {
