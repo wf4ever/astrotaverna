@@ -1,87 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<soapenv:Body>
-		<ns1:SearchResponse xmlns:ns1="http://www.ivoa.net/wsdl/RegistrySearch/v1.0">
-			<ri:VOResources from="1" more="true" numberReturned="100"
-				xmlns:cs="http://www.ivoa.net/xml/ConeSearch/v1.0" xmlns:osn="http://www.ivoa.net/xml/OpenSkyNode/v0.2"
-				xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0" xmlns:sia="http://www.ivoa.net/xml/SIA/v1.0"
-				xmlns:sla="http://www.ivoa.net/xml/SLA/v0.2" xmlns:ssa="http://www.ivoa.net/xml/SSA/v0.4"
-				xmlns:tsa="http://www.ivoa.net/xml/TSA/v0.2" xmlns:vg="http://www.ivoa.net/xml/VORegistry/v1.0"
-				xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0" xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.0"
-				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-				xsi:schemaLocation="http://www.ivoa.net/xml/RegistryInterface/v1.0 http://www.ivoa.net/xml/RegistryInterface/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VORegistry/v1.0 http://www.ivoa.net/xml/VORegistry/v1.0 http://www.ivoa.net/xml/VODataService/v1.0 http://www.ivoa.net/xml/VODataService/v1.0 http://www.ivoa.net/xml/SIA/v1.0 http://www.ivoa.net/xml/SIA/v1.0 http://www.ivoa.net/xml/ConeSearch/v1.0 http://www.ivoa.net/xml/ConeSearch/v1.0 http://www.ivoa.net/xml/OpenSkyNode/v0.2 http://www.ivoa.net/xml/OpenSkyNode/v0.2 http://www.ivoa.net/xml/SSA/v0.4 http://www.ivoa.net/xml/SSA/v0.4 http://www.ivoa.net/xml/SLA/v0.2 http://esavo.esa.int/xml/SLA-v0.2.xsd http://www.ivoa.net/xml/TSA/v0.2 http://esavo.esa.int/xml/TSA-v0.2.xsd">
+<?xml version="1.0" encoding="utf-8"?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><ns1:SearchResponse xmlns:ns1="http://www.ivoa.net/wsdl/RegistrySearch/v1.0"><ri:VOResources from="1" more="true" numberReturned="100" xmlns:cs="http://www.ivoa.net/xml/ConeSearch/v1.0" xmlns:osn="http://www.ivoa.net/xml/OpenSkyNode/v0.2" xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0" xmlns:sia="http://www.ivoa.net/xml/SIA/v1.0" xmlns:sla="http://www.ivoa.net/xml/SLA/v0.2" xmlns:ssa="http://www.ivoa.net/xml/SSA/v0.4" xmlns:tsa="http://www.ivoa.net/xml/TSA/v0.2" xmlns:vg="http://www.ivoa.net/xml/VORegistry/v1.0" xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0" xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ivoa.net/xml/RegistryInterface/v1.0 http://www.ivoa.net/xml/RegistryInterface/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VORegistry/v1.0 http://www.ivoa.net/xml/VORegistry/v1.0 http://www.ivoa.net/xml/VODataService/v1.0 http://www.ivoa.net/xml/VODataService/v1.0 http://www.ivoa.net/xml/SIA/v1.0 http://www.ivoa.net/xml/SIA/v1.0 http://www.ivoa.net/xml/ConeSearch/v1.0 http://www.ivoa.net/xml/ConeSearch/v1.0 http://www.ivoa.net/xml/OpenSkyNode/v0.2 http://www.ivoa.net/xml/OpenSkyNode/v0.2 http://www.ivoa.net/xml/SSA/v0.4 http://www.ivoa.net/xml/SSA/v0.4 http://www.ivoa.net/xml/SLA/v0.2 http://esavo.esa.int/xml/SLA-v0.2.xsd http://www.ivoa.net/xml/TSA/v0.2 http://esavo.esa.int/xml/TSA-v0.2.xsd">
 
-<ri:Resource created="2009-02-15T12:00:00" status="active"
-	updated="2009-09-15T12:00:00" xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0"
-	xmlns:vg="http://www.ivoa.net/xml/VORegistry/v1.0" xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.ivoa.net/xml/RegistryInterface/v1.0 http://www.ivoa.net/xml/RegistryInterface/v1.0                                  http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0                                  http://www.ivoa.net/xml/VORegistry/v1.0 http://www.ivoa.net/xml/VORegistry/v1.0"
-	xsi:type="vg:Registry">
-                    <title>EURO-VO Full Harvestable Registry</title>
-                    <shortName>EURO-VO Registry</shortName>
-                    <identifier>ivo://esavo/registry</identifier>
-                    <curation>
-                            <publisher>European Space Agency</publisher>
-                            <creator>
-                                    <name>European Space Agency</name>
-                                    <logo>http://esavo.esac.esa.int/img/logo.gif</logo>
-                                </creator>
-                            <contributor>ESAC ESAVO</contributor>
-                            <contact>
-                                    <name>European Space Agency</name>
-                                    <email>esavo.registry@sciops.esa.int</email>
-                                </contact>
-                        </curation>
-                    <content>
-                            <subject>Registry</subject>
-                            <description>EURO-VO Full Harvestable Registry</description>
-                            <referenceURL>http://registry.euro-vo.org/</referenceURL>
-                            <type>Registry</type>
-                            <contentLevel>General</contentLevel>
-                        </content>
-                    <rights>public</rights>
-                    <capability standardID="ivo://ivoa.net/std/Registry" xsi:type="vg:Harvest">
-                            <interface role="std" version="1.0" xsi:type="vg:OAIHTTP">
-                                    <accessURL use="base">http://registry.euro-vo.org/oai.jsp</accessURL>
-                                </interface>
-                            <interface role="std" version="1.0" xsi:type="vg:OAISOAP">
-                                    <accessURL use="full">http://registry.euro-vo.org/services/RegistryHarvest</accessURL>
-                                </interface>
-                            <maxRecords>100</maxRecords>
-                        </capability>
-                    <capability standardID="ivo://ivoa.net/std/Registry" xsi:type="vg:Search">
-                            <interface role="gui" version="1.0" xsi:type="vr:WebBrowser">
-                                    <accessURL use="full">http://registry.euro-vo.org/search.jsp</accessURL>
-                                </interface>
-                            <interface role="std" version="1.0" xsi:type="vr:WebService">
-                                    <accessURL use="full">http://registry.euro-vo.org/services/RegistrySearch</accessURL>
-                                </interface>
-                            <maxRecords>100</maxRecords>
-                            <extensionSearchSupport>core</extensionSearchSupport>
-                        </capability>
-                    <full>true</full>
-                    <managedAuthority>esavo</managedAuthority>
-                    <managedAuthority>vo.sim</managedAuthority>
-                    <managedAuthority>xcatdb</managedAuthority>
-                    <managedAuthority>stecf</managedAuthority>
-                    <managedAuthority>eso.org</managedAuthority>
-                    <managedAuthority>svo.ifca</managedAuthority>
-                    <managedAuthority>fondue</managedAuthority>
-                    <managedAuthority>graal</managedAuthority>
-                    <managedAuthority>Leden</managedAuthority>
-                    <managedAuthority>svo.cab</managedAuthority>
-                </ri:Resource>
-
-<ri:Resource created="2008-10-22T00:00:00" status="active"
-	updated="2009-02-15T12:00:00" xmlns:cs="http://www.ivoa.net/xml/ConeSearch/v1.0"
-	xmlns:osn="http://www.ivoa.net/xml/OpenSkyNode/v0.2" xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0"
-	xmlns:sia="http://www.ivoa.net/xml/SIA/v1.0" xmlns:sla="http://www.ivoa.net/xml/SLA/v0.2"
-	xmlns:ssa="http://www.ivoa.net/xml/SSA/v0.4" xmlns:tsa="http://www.ivoa.net/xml/TSA/v0.2"
-	xmlns:vg="http://www.ivoa.net/xml/VORegistry/v1.0" xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0"
-	xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.ivoa.net/xml/RegistryInterface/v1.0 http://www.ivoa.net/xml/RegistryInterface/v1.0                                     http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0                                     http://www.ivoa.net/xml/VORegistry/v1.0 http://www.ivoa.net/xml/VORegistry/v1.0                                     http://www.ivoa.net/xml/VODataService/v1.0 http://www.ivoa.net/xml/VODataService/v1.0                                     http://www.ivoa.net/xml/SIA/v1.0 http://www.ivoa.net/xml/SIA/v1.0                                     http://www.ivoa.net/xml/ConeSearch/v1.0 http://www.ivoa.net/xml/ConeSearch/v1.0                                     http://www.ivoa.net/xml/OpenSkyNode/v0.2 http://www.ivoa.net/xml/OpenSkyNode/v0.2                                     http://www.ivoa.net/xml/SSA/v0.4 http://www.ivoa.net/xml/SSA/v0.4                                     http://www.ivoa.net/xml/SLA/v0.2 http://esavo.esa.int/xml/SLA-v0.2.xsd                                     http://www.ivoa.net/xml/TSA/v0.2 http://esavo.esa.int/xml/TSA-v0.2.xsd"
-	xsi:type="vs:CatalogService">
+<ri:Resource created="2008-10-22T00:00:00" status="active" updated="2009-02-15T12:00:00" xmlns:cs="http://www.ivoa.net/xml/ConeSearch/v1.0" xmlns:osn="http://www.ivoa.net/xml/OpenSkyNode/v0.2" xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0" xmlns:sia="http://www.ivoa.net/xml/SIA/v1.0" xmlns:sla="http://www.ivoa.net/xml/SLA/v0.2" xmlns:ssa="http://www.ivoa.net/xml/SSA/v0.4" xmlns:tsa="http://www.ivoa.net/xml/TSA/v0.2" xmlns:vg="http://www.ivoa.net/xml/VORegistry/v1.0" xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0" xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ivoa.net/xml/RegistryInterface/v1.0 http://www.ivoa.net/xml/RegistryInterface/v1.0                                     http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0                                     http://www.ivoa.net/xml/VORegistry/v1.0 http://www.ivoa.net/xml/VORegistry/v1.0                                     http://www.ivoa.net/xml/VODataService/v1.0 http://www.ivoa.net/xml/VODataService/v1.0                                     http://www.ivoa.net/xml/SIA/v1.0 http://www.ivoa.net/xml/SIA/v1.0                                     http://www.ivoa.net/xml/ConeSearch/v1.0 http://www.ivoa.net/xml/ConeSearch/v1.0                                     http://www.ivoa.net/xml/OpenSkyNode/v0.2 http://www.ivoa.net/xml/OpenSkyNode/v0.2                                     http://www.ivoa.net/xml/SSA/v0.4 http://www.ivoa.net/xml/SSA/v0.4                                     http://www.ivoa.net/xml/SLA/v0.2 http://esavo.esa.int/xml/SLA-v0.2.xsd                                     http://www.ivoa.net/xml/TSA/v0.2 http://esavo.esa.int/xml/TSA-v0.2.xsd" xsi:type="vs:CatalogService">
         <title>San Pedro Martir Open Cluster Survey</title>
         <shortName>SPMOCS</shortName>
         <identifier>ivo://vo.sim/Clusters</identifier>
@@ -119,13 +38,7 @@
         </capability>
     </ri:Resource>
 
-<ri:Resource created="2008-12-24T00:00:00" status="active"
-	updated="2008-12-24T00:00:00" xmlns:cs="http://www.ivoa.net/xml/ConeSearch/v1.0"
-	xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0" xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0"
-	xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.0" xmlns:xlink="http://www.w3.org/1999/xlink"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0  http://www.ivoa.net/xml/VODataService/v1.0 http://www.ivoa.net/xml/VODataService/v1.0  http://www.ivoa.net/xml/ConeSearch/v1.0 http://www.ivoa.net/xml/ConeSearch/v1.0 "
-	xsi:type="vs:CatalogService">
+<ri:Resource created="2008-12-24T00:00:00" status="active" updated="2008-12-24T00:00:00" xmlns:cs="http://www.ivoa.net/xml/ConeSearch/v1.0" xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0" xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0" xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0  http://www.ivoa.net/xml/VODataService/v1.0 http://www.ivoa.net/xml/VODataService/v1.0  http://www.ivoa.net/xml/ConeSearch/v1.0 http://www.ivoa.net/xml/ConeSearch/v1.0 " xsi:type="vs:CatalogService">
       <title>HEAO 1 A-1 X-Ray Source Catalog</title>
       <shortName>A1</shortName>
    
@@ -353,7 +266,7 @@ and a catalog of sources in further detail.
 
                 <stc:AstroCoordArea coord_system_id="_a1point_UTC-ICRS-TOPO">
                       <stc:AllSky/>
-                </stc:AstroCoordArea
+                </stc:AstroCoordArea>
          </stc:STCResourceProfile>
 
           <waveband>X-ray</waveband>
@@ -11543,6 +11456,134 @@ mission.  Further documentation is available through the HEASARC.
                 </stc:AstroCoords>
 
                 <stc:AstroCoordArea coord_system_id="_euvebsl_UTC-ICRS-TOPO">
+                      <stc:AllSky/>
+                </stc:AstroCoordArea>
+         </stc:STCResourceProfile>
+
+          <waveband>EUV</waveband>
+       </coverage>
+</ri:Resource>
+
+<ri:Resource created="2008-12-24T00:00:00" status="active" updated="2008-12-24T00:00:00" xmlns:cs="http://www.ivoa.net/xml/ConeSearch/v1.0" xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0" xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0" xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0  http://www.ivoa.net/xml/VODataService/v1.0 http://www.ivoa.net/xml/VODataService/v1.0  http://www.ivoa.net/xml/ConeSearch/v1.0 http://www.ivoa.net/xml/ConeSearch/v1.0 " xsi:type="vs:CatalogService">
+      <title>EUVE Second Source Catalog</title>
+      <shortName>EUVE/2</shortName>
+   
+      <identifier>ivo://nasa.heasarc/euvecat2</identifier>
+       
+      <curation>
+      <publisher ivo-id="ivo://nasa.heasarc/ASD">NASA/GSFC HEASARC</publisher>
+          <creator>
+            <name>Bowyer et al.</name>
+          </creator>
+          <contributor>
+          </contributor>
+          <date>2008-12-24</date> 
+          <contact>
+             <name>Michael Preciado</name>
+             <email>Michael.E.Preciado@nasa.gov</email>
+          </contact>
+       </curation> 
+       <content>
+      <subject>Survey Source</subject>
+     <description>
+
+This is the 2nd Catalog of EUV objects detected by the Extreme Ultraviolet
+Explorer (EUVE) and published by Bowyer et al. in 1996 (ApJS, 102, 129).
+The data include (i) all-sky survey detections from the initial 6-months
+scanner survey phase, (ii) additional scanner detections made later during
+specially programmed observations designed to fill in low-exposure sky areas
+of the initial survey, (iii) sources detected with deep-survey telescope
+observations along the ecliptic plane, (iv) objects detected by the scanner
+telescopes during targeted spectroscopy observations, and (v) other
+observations. Plausible optical, X-ray, radio, and/or UV identifications are
+available for about 65% of the EUV sources.
+
+
+The EUVE all-sky survey detections (indicated by detect_mode
+= EASS in this catalog) comprise 514 detected EUV-emitting objects,
+the deep-survey detections (indicated by detect_mode = DS in this catalog)
+comprise 35 detected objects, and the sources detected during other phases
+of the mission (indicated by detect_mode = OTHER in this database) comprise
+188 detected objects. Notice that 3 deep survey objects were also detected in
+the all-sky survey. Most of the sources detected in the other phases
+principally comprise those detected in deep exposures with the scanner
+telescopes as part of the Right Angle Program through December 24, 1994, or
+in long exposures with the deep survey instrument.  Because these latter
+objects were observed with a variety of instruments and exposure strategies,
+the flux limits and detection thresholds vary over a wide range, and the
+Bowyer et al. reference should be consulted for more details.
+
+
+Some of the EUV sources have alternative cross-identifications at other
+wavelengths suggested for them. Notice that, in such cases, we have
+followed the original catalog and listed separate entries for each
+alternate identification. For example, the EUV-emitting object EUVE J1147+202
+is listed twice, once with the suggested ID of DQ Leo, and a second time
+with the suggested ID of BD +21 2357. Thus, there are 801 entries in this
+database corresponding to 737 unique EUV sources.
+
+
+    </description>
+            <source format="">1996ApJS..102..129B</source>
+      <referenceURL>http://heasarc.gsfc.nasa.gov/W3Browse/euve/euvecat2.html</referenceURL>
+          <type>Catalog</type>             
+          <contentLevel>Research</contentLevel>
+          <relationship>
+             <relationshipType>service-for</relationshipType>
+             <relatedResource ivo-id="ivo://nasa.heasarc/eud">NASA/GSFC Exploration of the Universe Division</relatedResource>
+          </relationship>
+       </content>
+      <capability standardID="ivo://ivoa.net/std/ConeSearch" xsi:type="cs:ConeSearch">
+             <interface role="std" xsi:type="vs:ParamHTTP">
+                <accessURL use="base">
+        http://heasarc.gsfc.nasa.gov/cgi-bin/vo/cone/coneGet.pl?table=euvecat2&amp;
+          </accessURL>
+                <queryType>GET</queryType>
+                <resultType>text/xml</resultType>
+             </interface>
+       
+          <maxSR>180</maxSR>
+          <maxRecords>99999</maxRecords>
+          <verbosity>true</verbosity>
+             <testQuery>
+                <ra>266.262499999999989</ra>
+<dec>-88.3166999999999973</dec>
+                <sr>1</sr>
+            </testQuery>
+
+       </capability>
+	<capability>
+	   <interface xsi:type="vs:ParamHTTP">
+               <accessURL use="base">
+                  http://heasarc.gsfc.nasa.gov/cgi-bin/W3Browse/getvotable.pl?name=euvecat2
+               </accessURL>
+               <queryType>GET</queryType>
+               <resultType>text/xml</resultType>
+           </interface>
+        </capability>
+        <capability>
+           <interface xsi:type="vr:WebBrowser">
+              <accessURL use="full">
+	          http://heasarc.gsfc.nasa.gov/cgi-bin/W3Browse/w3query.pl?tablehead=name=heasarc_euvecat2&amp;Action=More+Options&amp;Action=Parameter+Search&amp;ConeAdd=1
+	      </accessURL>
+           </interface>
+        </capability>
+
+      <coverage>
+          <stc:STCResourceProfile xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd">
+
+                <stc:AstroCoordSystem id="_euvecat2_UTC-ICRS-TOPO" xlink:href="ivo://STClib/CoordSys#UTC-ICRS-TOPO" xlink:type="simple"/>
+
+                <stc:AstroCoords coord_system_id="_euvecat2_UTC-ICRS-TOPO">
+                      <stc:Position1D>
+
+                            
+                            <stc:Size pos_unit="deg">1</stc:Size>
+
+                      </stc:Position1D>
+                </stc:AstroCoords>
+
+                <stc:AstroCoordArea coord_system_id="_euvecat2_UTC-ICRS-TOPO">
                       <stc:AllSky/>
                 </stc:AstroCoordArea>
          </stc:STCResourceProfile>
