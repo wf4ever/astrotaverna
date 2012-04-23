@@ -7,7 +7,6 @@ import net.sf.taverna.t2.workbench.ui.zaria.UIComponentSPI;
 
 public class VOServicesComponentFactory implements UIComponentFactorySPI {
 
-	
 	@Override
 	public UIComponentSPI getComponent() {
 		return new VOServicesComponent();

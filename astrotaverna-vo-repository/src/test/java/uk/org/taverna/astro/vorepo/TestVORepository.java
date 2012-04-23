@@ -41,7 +41,7 @@ public class TestVORepository {
 		boolean foundCapability = false;
 		for (Capability c : s.getCapability()) {
 			if (c instanceof ConeSearch) {
-//				ConeSearch coneSearch = (ConeSearch) c;
+				// ConeSearch coneSearch = (ConeSearch) c;
 				foundCapability = true;
 			}
 		}

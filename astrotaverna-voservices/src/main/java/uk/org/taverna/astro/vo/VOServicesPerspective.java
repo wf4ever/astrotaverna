@@ -7,11 +7,13 @@ import javax.swing.ImageIcon;
 import net.sf.taverna.t2.ui.perspectives.AbstractPerspective;
 import net.sf.taverna.t2.workbench.ui.zaria.PerspectiveSPI;
 
-public class VOServicesPerspective extends AbstractPerspective implements PerspectiveSPI  {
+public class VOServicesPerspective extends AbstractPerspective implements
+		PerspectiveSPI {
 
 	private static final String VO_32X16_PNG = "NGC_4414_16x16.png";
-	public static ImageIcon voIcon = new ImageIcon(VOServicesPerspective.class.getResource(VO_32X16_PNG));
-	
+	public static ImageIcon voIcon = new ImageIcon(
+			VOServicesPerspective.class.getResource(VO_32X16_PNG));
+
 	@Override
 	public String getText() {
 		return "VO services";
@@ -26,7 +28,7 @@ public class VOServicesPerspective extends AbstractPerspective implements Perspe
 	protected InputStream getLayoutResourceStream() {
 		return getClass().getResourceAsStream("voservices-perspective.xml");
 	}
-	
+
 	@Override
 	public int positionHint() {
 		// Just before BioCatalogue perspective

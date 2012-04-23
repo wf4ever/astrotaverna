@@ -46,7 +46,7 @@ import org.apache.log4j.Logger;
 import uk.org.taverna.astro.vorepo.VORepository;
 
 public class VOServicesComponent extends JPanel implements UIComponentSPI {
-	
+
 	private static Logger logger = Logger.getLogger(VOServicesComponent.class);
 
 	private static final long serialVersionUID = 1L;
@@ -55,7 +55,6 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	// Services
 	private VORepository repo = new VORepository();
 
-	
 	// SWing stuff
 	private JLabel status;
 	private JTextField keywords;
@@ -84,13 +83,14 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	public ImageIcon getIcon() {
 		return VOServicesPerspective.voIcon;
 	}
+
 	public List<URI> getRegistries() {
 		return Arrays.asList(VORepository.DEFAULT_ENDPOINT);
 	}
 
 	@Override
 	public void onDisplay() {
-	
+
 	}
 
 	@Override
@@ -118,7 +118,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		gbc.weighty = 0.0;
 		gbc.gridx = 1;
 		gbc.fill = GridBagConstraints.BOTH;
-		add(new JPanel(), gbc);//filler
+		add(new JPanel(), gbc);// filler
 
 		gbc.weighty = 1.0;
 		gbc.gridx = 0;
@@ -127,6 +127,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		add(makeResults(), gbc);
 
 	}
+
 	protected Component makeResults() {
 		JPanel resultsPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -145,6 +146,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		resultsPanel.add(results, gbc);
 		return resultsPanel;
 	}
+
 	protected Component makeResultsDetails() {
 		resultsDetails = new JPanel(new GridBagLayout());
 		return resultsDetails;
@@ -269,28 +271,28 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		resultsDetails.add(buttonPanel, gbc);
 
 		gbc.weighty = 0.1;
-//		JPanel filler = new JPanel();
-//		resultsDetails.add(filler, gbc); // filler
+		// JPanel filler = new JPanel();
+		// resultsDetails.add(filler, gbc); // filler
 		results.validate();
 	}
 
 	public class AddToWorkflow extends AbstractAction {
-	
+
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 		private final Service service;
-	
+
 		public AddToWorkflow(Service service) {
 			super(String.format("Add %s to workflow", service.getShortName()));
 			this.service = service;
 		}
-	
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			VOServiceDescription restServiceDescription = new VOServiceDescription();
-	
+
 			for (Capability c : service.getCapability()) {
 				if (!(currentSearchType.isInstance(c))) {
 					continue;
@@ -315,18 +317,19 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 			}
 			if (restServiceDescription.getAccessURL() == null) {
 				// TODO: Show error
-	
+
 				return;
 			}
-	
+
 			WorkflowView
 					.importServiceDescription(restServiceDescription, false);
 			Workbench.getInstance().getPerspectives().setWorkflowPerspective();
 		}
-	
+
 	}
+
 	public class ConeSearchAction extends SearchAction {
-	
+
 		/**
 		 * 
 		 */
@@ -337,26 +340,27 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 			this.searchType = ConeSearch.class;
 		}
 	}
+
 	public class SearchAction extends AbstractAction {
-	
+
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 		protected Class<? extends Capability> searchType;
-	
+
 		public SearchAction(String label) {
 			super(label);
 		}
-	
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
-	
+
 			cancelSearchTask();
 			String search = keywords.getText();
 			status.setText(String.format("%s: %s", searchType.getSimpleName(),
 					search));
-	
+
 			currentSearchTask = new SearchTask(searchType, search);
 			int rows = resultsTableModel.getRowCount();
 			while (rows > 0) {
@@ -367,20 +371,21 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 			currentSearchTask.execute();
 		}
 	}
+
 	public class SearchTask extends SwingWorker<List<Service>, String> {
 		private String search;
 		private final Class<? extends Capability> searchType;
-	
+
 		public SearchTask(Class<? extends Capability> searchType, String search) {
 			this.searchType = searchType;
 			this.search = search;
 		}
-	
+
 		@Override
 		protected List<Service> doInBackground() throws Exception {
 			return repo.resourceSearch(searchType, search.split(" "));
 		}
-	
+
 		@Override
 		protected void done() {
 			List<Service> resources;
@@ -416,14 +421,15 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 				resultsTableModel.addRow(new Object[] { r, shortName, title,
 						subjects, identifier, publisher });
 			}
-	
+
 			if (currentSearchTask == this) {
 				currentSearchTask = null;
 			}
 		}
 	}
+
 	public class SIASearchAction extends SearchAction {
-	
+
 		/**
 		 * 
 		 */
@@ -434,8 +440,9 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 			this.searchType = SimpleImageAccess.class;
 		}
 	}
+
 	public class SSASearchAction extends SearchAction {
-	
+
 		/**
 		 * 
 		 */

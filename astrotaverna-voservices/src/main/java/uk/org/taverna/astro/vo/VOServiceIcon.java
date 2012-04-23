@@ -12,7 +12,8 @@ public class VOServiceIcon implements ActivityIconSPI {
 	public int canProvideIconScore(Activity<?> activity) {
 		if (activity instanceof RESTActivity) {
 			RESTActivity restActivity = (RESTActivity) activity;
-			if (isAstro(restActivity));
+			if (isAstro(restActivity))
+				;
 			return ActivityIconSPI.DEFAULT_ICON + 100;
 		}
 		return ActivityIconSPI.NO_ICON;

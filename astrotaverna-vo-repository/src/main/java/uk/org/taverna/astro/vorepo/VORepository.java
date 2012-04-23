@@ -164,10 +164,11 @@ public class VORepository {
 		List<SearchType> and = new ArrayList<SearchType>();
 
 		and.add(makeLikeCondition(CAPABILITY_XSI_TYPE, xsiTypeValueLiteral));
-		
-		// This does not work for some reason		
-//		and.add(makeLikeCondition("capability/interface/@xsi:type", "%HTTP%"));		
-		
+
+		// This does not work for some reason
+		// and.add(makeLikeCondition("capability/interface/@xsi:type",
+		// "%HTTP%"));
+
 		for (String kw : keywords) {
 			List<SearchType> or = new ArrayList<SearchType>();
 			for (String xpath : KEYWORD_XPATHS) {
@@ -223,12 +224,14 @@ public class VORepository {
 			try {
 				search = searchType.newInstance();
 				@SuppressWarnings("unchecked")
-				List<SearchType> list = (List<SearchType>) propertyUtils.getProperty(search, "condition");
+				List<SearchType> list = (List<SearchType>) propertyUtils
+						.getProperty(search, "condition");
 				list.add(conditions.get(0));
 				list.add(makeConditionSearchType(searchType,
 						conditions.subList(1, conditions.size())));
 			} catch (ReflectiveOperationException e) {
-				throw new IllegalArgumentException("Can't make " + searchType, e);
+				throw new IllegalArgumentException("Can't make " + searchType,
+						e);
 			}
 			closed.setCondition(search);
 		}

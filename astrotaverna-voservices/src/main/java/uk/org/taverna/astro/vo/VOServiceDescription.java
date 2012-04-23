@@ -13,15 +13,15 @@ import net.sf.taverna.t2.workflowmodel.utils.Tools;
 
 import org.apache.log4j.Logger;
 
-public class VOServiceDescription extends ServiceDescription<RESTActivityConfigurationBean> {
+public class VOServiceDescription extends
+		ServiceDescription<RESTActivityConfigurationBean> {
 	private static Logger logger = Logger.getLogger(VOServiceDescription.class);
-	
+
 	private String accessURL;
 	private String name;
 	private URI identifier;
 	private String searchType;
-	
-	
+
 	public String getSearchType() {
 		return searchType;
 	}
@@ -33,30 +33,32 @@ public class VOServiceDescription extends ServiceDescription<RESTActivityConfigu
 
 	@Override
 	public RESTActivityConfigurationBean getActivityConfiguration() {
-		RESTActivityConfigurationBean configurationBean = RESTActivityConfigurationBean.getDefaultInstance();
-		configurationBean.setUrlSignature(transformAccessURL());		
+		RESTActivityConfigurationBean configurationBean = RESTActivityConfigurationBean
+				.getDefaultInstance();
+		configurationBean.setUrlSignature(transformAccessURL());
 		return configurationBean;
 	}
 
 	public String transformAccessURL() {
 		String urlSig = getAccessURL();
-		if (! urlSig.contains("?")) {
+		if (!urlSig.contains("?")) {
 			urlSig += "?";
-		} else if (! urlSig.endsWith("&")) {
+		} else if (!urlSig.endsWith("&")) {
 			urlSig += "&";
 		}
 		// TODO: Work out parameters from service type
-		
+
 		if ("ConeSearch".equals(getSearchType())) {
 			return urlSig + "ra={ra}&dec={dec}&sr={sr}";
-		} else if("SimpleSpectralAccess".equals(getSearchType())) {
+		} else if ("SimpleSpectralAccess".equals(getSearchType())) {
 			// TODO parameters for SSA
 			return urlSig;
-		} else if("SimpleImageAccess".equals(getSearchType())) {
+		} else if ("SimpleImageAccess".equals(getSearchType())) {
 			// TODO parameters for SIA
-			return urlSig; 
+			return urlSig;
 		} else {
-			logger.warn("Unknown search type " + getSearchType() + " in " + getIdentifier());
+			logger.warn("Unknown search type " + getSearchType() + " in "
+					+ getIdentifier());
 			return urlSig;
 		}
 	}
@@ -102,8 +104,7 @@ public class VOServiceDescription extends ServiceDescription<RESTActivityConfigu
 	}
 
 	public void setSearchType(String searchType) {
-		this.searchType = searchType;	
+		this.searchType = searchType;
 	}
-
 
 }
