@@ -402,8 +402,9 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 
 	public void statusSearching(Class<? extends Capability> searchType,
 			String search) {
-		status.setText(String.format("<html><body>Searching for %s: <b>%s</b> ...</body></html>", searchType.getSimpleName(),
-				search));
+		status.setText(String.format(
+				"<html><body>Searching for %s: <b>%s</b> ...</body></html>",
+				searchType.getSimpleName(), search));
 	}
 
 	protected void updateDetails() {
@@ -444,27 +445,31 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 	}
 
 	public void statusInvalidEndpoint(Exception e) {
-		statusWarn("Invalid registry: " + e.getLocalizedMessage());
+		statusWarn(String.format("Invalid registry %s %s", getModel()
+				.getEndpoint(), e.getLocalizedMessage()));
 	}
 
 	public void statusEndpointOK() {
-		status.setText("Endpoint: OK");
+		status.setText("Endpoint OK");
 	}
 
 	public void statusEndpointStatus(Status endpointStatus) {
-		statusWarn("Endpoint: " + endpointStatus);
+		statusWarn(String.format("Endpoint %s: %s", getModel().getEndpoint(),
+				endpointStatus));
 	}
 
 	public void updateEndpoint() {
 		URI endpoint = getModel().getEndpoint();
-		String endpointStr = endpoint.toASCIIString();
+		String endpointStr = endpoint.toString();
 		// Check if it's already there..
 		for (String item : new ModelIterator<String>(registry.getModel())) {
 			if (item.equals(endpointStr)) {
+				registry.setSelectedItem(item);
 				return;
 			}
 		}
 		registry.addItem(endpointStr);
+		registry.setSelectedItem(endpointStr);
 	}
 
 	public void statusEndpointChecking() {

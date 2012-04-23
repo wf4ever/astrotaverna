@@ -25,7 +25,7 @@ public class ModelIterator<T> implements Iterator<T>, Iterable<T> {
 
 	@Override
 	public boolean hasNext() {
-		return position > model.getSize();
+		return position < model.getSize();
 	}
 
 	@SuppressWarnings("unchecked")

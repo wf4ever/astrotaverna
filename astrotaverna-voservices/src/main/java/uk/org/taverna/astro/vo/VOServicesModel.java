@@ -13,7 +13,8 @@ import uk.org.taverna.astro.vorepo.VORepository;
 import uk.org.taverna.astro.wsdl.registrysearch.ErrorResp;
 
 public class VOServicesModel {
-	private static List<Service> EMPTY_SERVICES = Collections.<Service> emptyList();
+	private static List<Service> EMPTY_SERVICES = Collections
+			.<Service> emptyList();
 
 	private VOServicesController controller;
 	private VORepository repository;
@@ -22,7 +23,7 @@ public class VOServicesModel {
 	private List<Service> services = EMPTY_SERVICES;
 	private VOServicesView view;
 	private Service selectedService;
-	
+
 	public void clearServices() {
 		setServices(EMPTY_SERVICES);
 	}
@@ -40,8 +41,10 @@ public class VOServicesModel {
 		return searchType;
 	}
 
-	public List<URI> getEndpoints() {		
-		return Arrays.asList(VORepository.DEFAULT_ENDPOINT);
+	public List<URI> getEndpoints() {
+		return Arrays
+				.asList(VORepository.DEFAULT_ENDPOINT,
+						URI.create("http://nvo.stsci.edu/vor10/ristandardservice.asmx"));
 	}
 
 	public VORepository getRepository() {
@@ -94,7 +97,7 @@ public class VOServicesModel {
 	public void setServices(List<Service> services) {
 		getView().clearResults();
 		this.services = services;
-		getView().updateServices();		
+		getView().updateServices();
 	}
 
 	public void setView(VOServicesView view) {
@@ -115,6 +118,6 @@ public class VOServicesModel {
 	}
 
 	public void setEndpoint(URI endpoint) {
-		getRepository().setEndpoint(endpoint);		
+		getRepository().setEndpoint(endpoint);
 	}
 }

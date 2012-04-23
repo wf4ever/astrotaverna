@@ -56,6 +56,7 @@ public class VOServicesController {
 				if (status != Status.OK) {
 					getView().statusEndpointStatus(status);
 					revert();
+					return;
 				}
 				
 				getView().statusEndpointOK();
@@ -234,6 +235,7 @@ public class VOServicesController {
 
 	protected void changeEndpoint(URI endpoint) {
 		getModel().setEndpoint(endpoint);
+		getView().updateEndpoint();
 	}
 
 	public void checkEndpoint() {
