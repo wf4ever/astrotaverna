@@ -46,10 +46,10 @@ import org.apache.log4j.Logger;
 import uk.org.taverna.astro.vorepo.VORepository;
 
 public class VOServicesComponent extends JPanel implements UIComponentSPI {
+	private static final long serialVersionUID = 1L;
 
 	private static Logger logger = Logger.getLogger(VOServicesComponent.class);
 
-	private static final long serialVersionUID = 1L;
 	private static final int RESOURCE_COLUMN = 0;
 
 	// Services
@@ -277,10 +277,6 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	}
 
 	public class AddToWorkflow extends AbstractAction {
-
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 		private final Service service;
 
@@ -329,10 +325,6 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	}
 
 	public class ConeSearchAction extends SearchAction {
-
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 
 		public ConeSearchAction() {
@@ -342,10 +334,6 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	}
 
 	public class SearchAction extends AbstractAction {
-
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 		protected Class<? extends Capability> searchType;
 
@@ -429,10 +417,6 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	}
 
 	public class SIASearchAction extends SearchAction {
-
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 
 		public SIASearchAction() {
@@ -442,10 +426,6 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	}
 
 	public class SSASearchAction extends SearchAction {
-
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 
 		public SSASearchAction() {
