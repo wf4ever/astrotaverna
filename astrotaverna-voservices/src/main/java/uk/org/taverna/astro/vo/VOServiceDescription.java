@@ -36,6 +36,7 @@ public class VOServiceDescription extends
 		RESTActivityConfigurationBean configurationBean = RESTActivityConfigurationBean
 				.getDefaultInstance();
 		configurationBean.setUrlSignature(transformAccessURL());
+		configurationBean.setAcceptsHeaderValue("application/x-votable+xml, text/xml;content=x-votable, application/xml;q=0.5, text/xml;q=0.6");
 		return configurationBean;
 	}
 
@@ -46,16 +47,20 @@ public class VOServiceDescription extends
 		} else if (!urlSig.endsWith("&")) {
 			urlSig += "&";
 		}
-		// TODO: Work out parameters from service type
-
+		// Note: Only mandatory parameters (except REQUEST) 
+		// are included here
 		if ("ConeSearch".equals(getSearchType())) {
-			return urlSig + "ra={ra}&dec={dec}&sr={sr}";
+			// http://www.ivoa.net/Documents/latest/ConeSearch.html
+			return urlSig + "RA={RA}&DEC={DEC}&SR={SR}";
 		} else if ("SimpleSpectralAccess".equals(getSearchType())) {
-			// TODO parameters for SSA
-			return urlSig;
+			// http://www.ivoa.net/Documents/SSA/20120210/index.html
+			return urlSig + "POS={POS}&SIZE={SIZE}&TIME={TIME}&BAND={BAND}";
 		} else if ("SimpleImageAccess".equals(getSearchType())) {
-			// TODO parameters for SIA
-			return urlSig;
+			// http://www.ivoa.net/Documents/SIA/20091116/
+			return urlSig + "POS={POS}&SIZE={SIZE}";
+		} else if ("SimpleLineAccess".equals(getSearchType())) {
+			// http://www.ivoa.net/Documents/SLAP/20101209/index.html
+			return urlSig + "WAVELENGTH={WAVELENGTH}";
 		} else {
 			logger.warn("Unknown search type " + getSearchType() + " in "
 					+ getIdentifier());
