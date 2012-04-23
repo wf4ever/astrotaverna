@@ -12,16 +12,19 @@ import uk.org.taverna.astro.vorepo.VORepository;
 import uk.org.taverna.astro.wsdl.registrysearch.ErrorResp;
 
 public class VOServicesModel {
+	private static List<Service> EMPTY_SERVICES = Collections.<Service> emptyList();
+
 	private VOServicesController controller;
 	private VORepository repository;
 	private String search;
 	private Class<? extends Capability> searchType = ConeSearch.class;
-	private List<Service> services;
+	private List<Service> services = EMPTY_SERVICES;
 	private VOServicesView view;
 	private Service selectedService;
-
+	
+	
 	public void clearServices() {
-		setServices(Collections.<Service> emptyList());
+		setServices(EMPTY_SERVICES);
 	}
 
 	public VOServicesController getController() {
@@ -85,6 +88,7 @@ public class VOServicesModel {
 
 	public void setSearch(String search) {
 		this.search = search;
+		getView().setSearch(search);
 	}
 
 	public void setServices(List<Service> services) {

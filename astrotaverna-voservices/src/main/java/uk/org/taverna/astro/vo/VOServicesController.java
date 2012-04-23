@@ -6,7 +6,6 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingWorker;
-import javax.xml.namespace.QName;
 
 import net.ivoa.xml.vodataservice.v1.ParamHTTP;
 import net.ivoa.xml.voresource.v1.AccessURL;
@@ -75,10 +74,9 @@ public class VOServicesController {
 	public VOServicesController() {
 	}
 
-	public void addToWorkflow(Service service) {
-
+	public void addToWorkflow() {
+		Service service = getModel().getSelectedService();
 		VOServiceDescription restServiceDescription = new VOServiceDescription();
-
 		for (Capability c : service.getCapability()) {
 			if (!(getModel().getCurrentSearchType().isInstance(c))) {
 				continue;

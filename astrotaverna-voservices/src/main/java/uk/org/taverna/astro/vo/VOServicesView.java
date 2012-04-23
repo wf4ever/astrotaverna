@@ -35,16 +35,14 @@ import org.apache.log4j.Logger;
 public class VOServicesView extends JPanel implements UIComponentSPI {
 	public class AddToWorkflow extends AbstractAction {
 		private static final long serialVersionUID = 1L;
-		private final Service service;
 
-		public AddToWorkflow(Service service) {
-			super(String.format("Add %s to workflow", service.getShortName()));
-			this.service = service;
+		public AddToWorkflow() {
+			super("Add to workflow");
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			getController().addToWorkflow(service);
+			getController().addToWorkflow();
 		}
 	}
 
@@ -81,6 +79,7 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 			this.searchType = SimpleImageAccess.class;
 		}
 	}
+
 	public class SSASearchAction extends SearchAction {
 		private static final long serialVersionUID = 1L;
 
@@ -113,9 +112,19 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 
 	// SWing stuff
 	private JLabel status;
+	private HTMLPane htmlPane;
+	private AddToWorkflow addToWorkflow;
 
 	public VOServicesView() {
 		initialize();
+	}
+
+	public void setSearch(String search) {
+		keywords.setText(search);
+	}
+
+	public String getSearch() {
+		return keywords.getText();
 	}
 
 	public void clearResults() {
@@ -123,8 +132,8 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 		while (rows > 0) {
 			resultsTableModel.removeRow(--rows);
 		}
-		resultsDetails.removeAll();
-		results.validate();
+
+		// results.validate();
 	}
 
 	public VOServicesController getController() {
@@ -181,7 +190,8 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
 		add(makeResults(), gbc);
-
+		updateDetails();
+		updateServices();
 	}
 
 	protected Component makeResults() {
@@ -205,6 +215,28 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 
 	protected Component makeResultsDetails() {
 		resultsDetails = new JPanel(new GridBagLayout());
+		resultsDetails.removeAll();
+
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
+		htmlPane = new HTMLPane();
+		resultsDetails.add(new JScrollPane(htmlPane,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), gbc);
+
+		gbc.weightx = 0.0;
+		gbc.weighty = 0.0;
+		JPanel buttonPanel = new JPanel();
+		addToWorkflow = new AddToWorkflow();
+		buttonPanel.add(new JButton(addToWorkflow), gbc);
+		resultsDetails.add(buttonPanel, gbc);
+
+		// gbc.weighty = 0.1;
+		// JPanel filler = new JPanel();
+		// resultsDetails.add(filler, gbc); // filler
 		return resultsDetails;
 	}
 
@@ -350,17 +382,12 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 	}
 
 	protected void updateDetails() {
-		resultsDetails.removeAll();
 		Service service = getModel().getSelectedService();
 		if (service == null) {
-			results.validate();
+			htmlPane.reset();
+			addToWorkflow.setEnabled(false);
 			return;
 		}
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
 
 		String message = String.format("<html><body><h3>%s: %s</h3>"
 				+ "<p>%s</p>" + "<dl><dt>Publisher</dt> <dd>%s</dd>"
@@ -369,18 +396,9 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 				.getContent().getDescription(), service.getCuration()
 				.getPublisher().getValue(), service.getContent()
 				.getReferenceURL(), service.getContent().getReferenceURL());
-		HTMLPane htmlPane = new HTMLPane(message);		
-		resultsDetails.add(new JScrollPane(htmlPane), gbc);
-		gbc.weightx = 0.0;
-		gbc.weighty = 0.0;
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(new JButton(new AddToWorkflow(service)), gbc);
-		resultsDetails.add(buttonPanel, gbc);
+		htmlPane.setText(message);
+		addToWorkflow.setEnabled(true);
 
-		gbc.weighty = 0.1;
-		// JPanel filler = new JPanel();
-		// resultsDetails.add(filler, gbc); // filler
-		results.validate();
 	}
 
 	public void updateSelection() {
