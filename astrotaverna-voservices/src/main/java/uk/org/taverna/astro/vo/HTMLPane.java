@@ -1,6 +1,7 @@
 package uk.org.taverna.astro.vo;
 
 import java.awt.Desktop;
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -37,7 +38,7 @@ public class HTMLPane extends JEditorPane {
 
 	protected void initialize() {
 		setEditable(false);
-		addHyperlinkListener(new OpenInBrowserHyperlinkListener());
+		addHyperlinkListener(new OpenInBrowserHyperlinkListener());		
 	}
 	
 	public class OpenInBrowserHyperlinkListener implements HyperlinkListener {
