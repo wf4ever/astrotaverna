@@ -36,6 +36,7 @@ import org.apache.log4j.Logger;
 public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(VOServicesComponent.class);
 
 	private static final int RESOURCE_COLUMN = 0;
@@ -252,7 +253,7 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 		if (model == null) {
 			model = new VOServicesModel();
 			model.setView(this);
-			model.setController(getController());		
+			model.setController(getController());
 		}
 		return model;
 	}
@@ -364,9 +365,10 @@ public class VOServicesComponent extends JPanel implements UIComponentSPI {
 	}
 
 	public void statusFoundResults(int size) {
-		status.setText(String.format("%d results for %s: %s", size, getModel()
-				.getCurrentSearchType().getSimpleName(), getModel()
-				.getSearch()));
+		status.setText(String
+				.format("%d results for %s: %s", size, getModel()
+						.getCurrentSearchType().getSimpleName(), getModel()
+						.getSearch()));
 	}
 
 	public void updateServices() {
