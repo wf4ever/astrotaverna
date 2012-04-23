@@ -21,6 +21,8 @@ import org.apache.log4j.Logger;
 
 public class VOServicesController {
 
+	private static Logger logger = Logger.getLogger(VOServicesController.class);
+
 	public class SearchTask extends SwingWorker<List<Service>, String> {
 		private String search;
 		private final Class<? extends Capability> searchType;
@@ -63,13 +65,6 @@ public class VOServicesController {
 		}
 	}
 
-	private static Logger logger = Logger.getLogger(VOServicesController.class);
-	protected final static QName REGISTRYSEARCHSERVICE_QNAME = new QName(
-			"http://taverna.org.uk/astro/wsdl/RegistrySearch",
-			"RegistrySearchService");
-
-	public static final URI WSDL = URI
-			.create("http://www.ivoa.net/wsdl/RegistrySearch/v1.0");
 	// Current state
 	private SearchTask currentSearchTask;
 
@@ -144,6 +139,7 @@ public class VOServicesController {
 		cancelSearchTaskIfNeeded();
 		getView().statusSearching(searchType, search);
 		currentSearchTask = new SearchTask(searchType, search);
+		getModel().setSelectedService(null);
 		getModel().clearServices();
 		currentSearchTask.execute();
 	}
