@@ -88,17 +88,17 @@ public class AddToWorkflowDialog extends JDialog {
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 	}
-	
+
 	@Override
 	public void show() {
-		if (! initialized) {
+		if (!initialized) {
 			// Delayed initialization
 			initialize();
 			initialized = true;
 		}
 		super.show();
 	}
-	
+
 	public Map<String, String> getParameters() {
 		HashMap<String, String> parameters = new HashMap<String, String>();
 		for (Entry<String, JTextField> s : fields.entrySet()) {
@@ -158,8 +158,16 @@ public class AddToWorkflowDialog extends JDialog {
 				+ "</body></html>", service.getShortName())), gbcBoth);
 		add(new JPanel(), gbcBoth);
 
-		for (String param : getModel().parametersForSearchType().keySet()) {
-			JLabel label = new JLabel(param);
+		for (Entry<String, Boolean> entry : getModel()
+				.parametersForSearchType().entrySet()) {
+			String param = entry.getKey();
+			JLabel label = new JLabel();
+			if ((entry.getValue())) {
+				// required in bold
+				label.setText(String.format("<html><body><b>%s</b></body></html>", param));
+			} else {
+				label.setText(String.format("<html><body>%s</body></html>", param));
+			}
 			add(label, gbcLeft);
 			JTextField textField = new JTextField(10);
 			add(textField, gbcRight);
@@ -178,7 +186,7 @@ public class AddToWorkflowDialog extends JDialog {
 		gbcRight.fill = GridBagConstraints.HORIZONTAL;
 		add(new JPanel(), gbcFiller);
 
-		setMinimumSize(new Dimension(450, 300));
+		setMinimumSize(new Dimension(450, 500));
 	}
 
 	public void setController(VOServicesController controller) {

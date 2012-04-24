@@ -38,7 +38,7 @@ public class VOServiceDescription extends
 				.getDefaultInstance();
 		configurationBean.setUrlSignature(getUrlSignature());
 		configurationBean
-				.setAcceptsHeaderValue("application/x-votable+xml, text/xml;content=x-votable, application/xml;q=0.5, text/xml;q=0.6");
+				.setAcceptsHeaderValue("application/x-votable+xml, text/xml;content=x-votable, text/xml;votable;q=0.7,  application/xml;q=0.5, text/xml;q=0.6");
 		return configurationBean;
 	}
 
