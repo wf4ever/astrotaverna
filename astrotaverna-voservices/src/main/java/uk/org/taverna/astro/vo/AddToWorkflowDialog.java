@@ -28,7 +28,7 @@ import net.sf.taverna.t2.workbench.ui.impl.Workbench;
 
 public class AddToWorkflowDialog extends JDialog {
 	public class SetInputPort extends AbstractAction implements Action {
-
+		private static final long serialVersionUID = 1L;
 		private final JTextField textField;
 
 		public SetInputPort(JTextField textField) {
@@ -108,6 +108,7 @@ public class AddToWorkflowDialog extends JDialog {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void show() {
 		if (!initialized) {
