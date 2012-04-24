@@ -17,6 +17,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
@@ -131,6 +132,29 @@ public class AddToWorkflowDialog extends JDialog {
 		setTitle("Add VO service to workflow");
 		setLayout(new GridBagLayout());
 
+		GridBagConstraints gbcOuter = new GridBagConstraints();
+		gbcOuter.gridx = 0;
+		gbcOuter.weightx = 0.2;
+		gbcOuter.weighty = 0.0;
+		gbcOuter.fill = GridBagConstraints.HORIZONTAL;
+		gbcOuter.anchor = GridBagConstraints.CENTER;
+
+		String message = String
+				.format("<html><body><h3>Add %s to workflow</h3>"
+						+ "<p>You may specify constant parameters here, or provide them in the workflow.</p>"
+						+ "<p><p>Note: Only <b>required</b> parameters will appear as input ports "
+						+ "in the workflow if no value is provided. The service might not support all optional parameters."
+						+ "</body></html>", service.getShortName());
+		add(new JLabel(message), gbcOuter);
+		add(new JPanel(), gbcOuter);
+
+		JPanel paramPanel = new JPanel(new GridBagLayout());
+		gbcOuter.fill = GridBagConstraints.BOTH;
+		gbcOuter.weighty = 1.0;
+		add(new JScrollPane(paramPanel), gbcOuter);
+		gbcOuter.weighty = 0.0;
+		gbcOuter.fill = GridBagConstraints.HORIZONTAL;
+
 		GridBagConstraints gbcLeft = new GridBagConstraints();
 		gbcLeft.gridx = 0;
 		gbcLeft.weightx = 0.2;
@@ -142,35 +166,21 @@ public class AddToWorkflowDialog extends JDialog {
 		gbcRight.fill = GridBagConstraints.HORIZONTAL;
 		gbcRight.anchor = GridBagConstraints.LINE_START;
 
-		GridBagConstraints gbcBoth = new GridBagConstraints();
-		gbcBoth.gridx = 0;
-		gbcBoth.gridwidth = 2;
-		gbcBoth.weightx = 0.2;
-		gbcBoth.weighty = 0.0;
-		gbcBoth.fill = GridBagConstraints.HORIZONTAL;
-		gbcBoth.anchor = GridBagConstraints.CENTER;
-
-		add(new JLabel(String.format("<html><body>"
-				+ "<h3>Add %s to workflow</h3>"
-				+ "<p>You may specify constant parameters here, or leave the "
-				+ "parameter field blank to supply the field by connecting "
-				+ "the corresponding input port the workflow.</p>"
-				+ "</body></html>", service.getShortName())), gbcBoth);
-		add(new JPanel(), gbcBoth);
-
 		for (Entry<String, Boolean> entry : getModel()
 				.parametersForSearchType().entrySet()) {
 			String param = entry.getKey();
 			JLabel label = new JLabel();
 			if ((entry.getValue())) {
 				// required in bold
-				label.setText(String.format("<html><body><b>%s</b></body></html>", param));
+				label.setText(String.format(
+						"<html><body><b>%s</b></body></html>", param));
 			} else {
-				label.setText(String.format("<html><body>%s</body></html>", param));
+				label.setText(String.format("<html><body>%s</body></html>",
+						param));
 			}
-			add(label, gbcLeft);
+			paramPanel.add(label, gbcLeft);
 			JTextField textField = new JTextField(10);
-			add(textField, gbcRight);
+			paramPanel.add(textField, gbcRight);
 			label.setLabelFor(textField);
 			fields.put(param, textField);
 		}
@@ -178,13 +188,13 @@ public class AddToWorkflowDialog extends JDialog {
 		JPanel buttonPanel = new JPanel(new FlowLayout());
 		buttonPanel.add(new JButton(addAction));
 		buttonPanel.add(new JButton(cancelAction));
-		add(buttonPanel, gbcBoth);
+		add(buttonPanel, gbcOuter);
 
-		GridBagConstraints gbcFiller = new GridBagConstraints();
-		gbcRight.gridx = 2;
-		gbcRight.weightx = 1.0;
-		gbcRight.fill = GridBagConstraints.HORIZONTAL;
-		add(new JPanel(), gbcFiller);
+		// GridBagConstraints gbcFiller = new GridBagConstraints();
+		// gbcFiller.gridx = 2;
+		// gbcFiller.weightx = 1.0;
+		// gbcFiller.fill = GridBagConstraints.HORIZONTAL;
+		// add(new JPanel(), gbcFiller);
 
 		setMinimumSize(new Dimension(450, 500));
 	}
