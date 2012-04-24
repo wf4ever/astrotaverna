@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.prefs.Preferences;
 
 import net.ivoa.xml.conesearch.v1.ConeSearch;
 import net.ivoa.xml.voresource.v1.Capability;
