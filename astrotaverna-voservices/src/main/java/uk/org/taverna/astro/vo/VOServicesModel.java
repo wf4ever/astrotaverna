@@ -3,9 +3,14 @@ package uk.org.taverna.astro.vo;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.ivoa.xml.conesearch.v1.ConeSearch;
+import net.ivoa.xml.sia.v1.SimpleImageAccess;
+import net.ivoa.xml.slap.v0.SimpleLineAccess;
+import net.ivoa.xml.ssa.v0.SimpleSpectralAccess;
 import net.ivoa.xml.voresource.v1.Capability;
 import net.ivoa.xml.voresource.v1.Service;
 import uk.org.taverna.astro.vorepo.VORepository;
@@ -118,5 +123,33 @@ public class VOServicesModel {
 
 	public void setEndpoint(URI endpoint) {
 		getRepository().setEndpoint(endpoint);
+	}
+
+	public Map<String, Boolean> parametersForSearchType() {
+
+		Map<String, Boolean> parameters = new LinkedHashMap<String, Boolean>();
+		if (searchType == ConeSearch.class) {
+			// http://www.ivoa.net/Documents/latest/ConeSearch.html
+			parameters.put("RA", true);
+			parameters.put("DEC", true);
+			parameters.put("SR", true);
+		} else if (searchType == SimpleSpectralAccess.class) {
+			// http://www.ivoa.net/Documents/SSA/20120210/index.html
+			parameters.put("POS", true);
+			parameters.put("SIZE", true);
+			parameters.put("TIME", false);
+			parameters.put("BAND", false);
+		} else if (searchType == SimpleImageAccess.class) {
+			// http://www.ivoa.net/Documents/SIA/20091116/
+			parameters.put("POS", true);
+			parameters.put("SIZE", true);
+		} else if (searchType == SimpleLineAccess.class) {
+			// http://www.ivoa.net/Documents/SLAP/20101209/index.html
+			parameters.put("WAVELENGTH", true);
+		} else {
+			return parameters;
+		}
+
+		return parameters;
 	}
 }

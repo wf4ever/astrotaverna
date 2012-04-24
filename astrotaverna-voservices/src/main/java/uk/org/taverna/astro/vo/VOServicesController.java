@@ -3,6 +3,8 @@ package uk.org.taverna.astro.vo;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -15,6 +17,7 @@ import net.ivoa.xml.voresource.v1.Capability;
 import net.ivoa.xml.voresource.v1.Interface;
 import net.ivoa.xml.voresource.v1.Service;
 import net.ivoa.xml.voresource.v1.WebService;
+import net.sf.taverna.t2.activities.rest.URISignatureHandler;
 import net.sf.taverna.t2.workbench.ui.impl.Workbench;
 import net.sf.taverna.t2.workbench.ui.workflowview.WorkflowView;
 
@@ -135,22 +138,24 @@ public class VOServicesController {
 
 	public void addToWorkflow() {
 		Service service = getModel().getSelectedService();
-		VOServiceDescription restServiceDescription = new VOServiceDescription();
+		VOServiceDescription serviceDescription = new VOServiceDescription();
 		for (Capability c : service.getCapability()) {
 			if (!(getModel().getCurrentSearchType().isInstance(c))) {
 				continue;
 			}
 			for (Interface i : c.getInterface()) {
 				if (i instanceof ParamHTTP) {
+					serviceDescription.setIdentifier(URI.create(service
+							.getIdentifier().trim()));
+					serviceDescription.setName(service.getShortName());
+					serviceDescription.setSearchType(getModel()
+							.getCurrentSearchType().getSimpleName());
+
 					ParamHTTP http = (ParamHTTP) i;
 					AccessURL accessURL = http.getAccessURL().get(0);
-					restServiceDescription.setAccessURL(accessURL.getValue()
-							.trim());
-					restServiceDescription.setIdentifier(URI.create(service
-							.getIdentifier().trim()));
-					restServiceDescription.setName(service.getShortName());
-					restServiceDescription.setSearchType(getModel()
-							.getCurrentSearchType().getSimpleName());
+					serviceDescription
+							.setAccessURL(accessURL.getValue().trim());
+					updateAccessUrl(serviceDescription);
 					break;
 				}
 				if (i instanceof WebService) {
@@ -158,7 +163,7 @@ public class VOServicesController {
 				}
 			}
 		}
-		if (restServiceDescription.getAccessURL() == null) {
+		if (serviceDescription.getUrlSignature() == null) {
 			String message = "No REST (ParamHTTP) interface found for service "
 					+ service.getShortName();
 			logger.warn(message);
@@ -168,19 +173,50 @@ public class VOServicesController {
 		}
 
 		AddToWorkflowDialog addDialog = new AddToWorkflowDialog(
-				restServiceDescription, service);
+				serviceDescription, service);
 		addDialog.setController(this);
 		addDialog.setModel(getModel());
 		addDialog.setLocationRelativeTo(getView());
 		addDialog.setVisible(true);
-		
 
 	}
 
 	public void addToWorkflow(VOServiceDescription serviceDescription) {
+		updateAccessUrl(serviceDescription);
+
 		WorkflowView.importServiceDescription(serviceDescription, false);
 		Workbench.getInstance().getPerspectives().setWorkflowPerspective();
 		// TODO: Make and connect string constants
+	}
+
+	protected void updateAccessUrl(VOServiceDescription serviceDescription) {
+		String urlSignature = serviceDescription.getAccessURL();
+		if (!urlSignature.contains("?")) {
+			urlSignature += "?";
+		} else if (!urlSignature.endsWith("&")) {
+			urlSignature += "&";
+		}
+		Map<String, String> values = serviceDescription.getParameterValues();
+		Map<String, Boolean> parameters = getModel().parametersForSearchType();
+		for (Entry<String, Boolean> parameterIsRequired : parameters.entrySet()) {
+			String param = parameterIsRequired.getKey();
+			if (values.containsKey(param)) {
+				String value = escapeURIParameter(values.get(param));
+				// TODO: Do parameters as string constants instead
+				urlSignature += String.format("%s=%s&", param, value);
+			} else if (parameterIsRequired.getValue()) {
+				urlSignature += String.format("%s={%s}&", param, param);
+			}
+		}
+		// Trim trailing &
+		if (urlSignature.endsWith("&")) {
+			urlSignature = urlSignature.substring(0, urlSignature.length() - 1);
+		}
+		serviceDescription.setUrlSignature(urlSignature);
+	}
+
+	public static String escapeURIParameter(String string) {
+		return URISignatureHandler.urlEncodeQuery(string);
 	}
 
 	protected void cancelTaskIfNeeded() {
@@ -256,4 +292,5 @@ public class VOServicesController {
 	public void setView(VOServicesView view) {
 		this.view = view;
 	}
+
 }

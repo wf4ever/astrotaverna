@@ -7,6 +7,9 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -30,7 +33,8 @@ public class AddToWorkflowDialog extends JDialog {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO: Pass parameters
+			Map<String, String> parameters = getParameters();
+			restServiceDescription.setParameters(parameters);
 			getController().addToWorkflow(restServiceDescription);
 			dispose();
 		}
@@ -63,12 +67,16 @@ public class AddToWorkflowDialog extends JDialog {
 	protected AddAction addAction = new AddAction();
 	protected CancelAction cancelAction = new CancelAction();
 
+	protected Map<String, JTextField> fields = new HashMap<String, JTextField>();
+
+	private boolean initialized = false;
+
 	public AddToWorkflowDialog(VOServiceDescription restServiceDescription,
 			Service service) {
 		super(Workbench.getInstance());
 		this.restServiceDescription = restServiceDescription;
 		this.service = service;
-		
+
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getRootPane().registerKeyboardAction(new ActionListener() {
 			// http://stackoverflow.com/questions/642925/swing-how-do-i-close-a-dialog-when-the-esc-key-is-pressed
@@ -78,8 +86,29 @@ public class AddToWorkflowDialog extends JDialog {
 			}
 		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
-		
-		initialize();
+
+	}
+	
+	@Override
+	public void show() {
+		if (! initialized) {
+			// Delayed initialization
+			initialize();
+			initialized = true;
+		}
+		super.show();
+	}
+	
+	public Map<String, String> getParameters() {
+		HashMap<String, String> parameters = new HashMap<String, String>();
+		for (Entry<String, JTextField> s : fields.entrySet()) {
+			String param = s.getKey();
+			JTextField field = s.getValue();
+			if (!field.getText().isEmpty()) {
+				parameters.put(param, field.getText());
+			}
+		}
+		return parameters;
 	}
 
 	public VOServicesController getController() {
@@ -101,7 +130,7 @@ public class AddToWorkflowDialog extends JDialog {
 	protected void initialize() {
 		setTitle("Add VO service to workflow");
 		setLayout(new GridBagLayout());
-	
+
 		GridBagConstraints gbcLeft = new GridBagConstraints();
 		gbcLeft.gridx = 0;
 		gbcLeft.weightx = 0.2;
@@ -129,25 +158,26 @@ public class AddToWorkflowDialog extends JDialog {
 				+ "</body></html>", service.getShortName())), gbcBoth);
 		add(new JPanel(), gbcBoth);
 
-		// TODO: Work out the real parameters
-		add(new JLabel("POS"), gbcLeft);
-		add(new JTextField(10), gbcRight);
-
-		add(new JLabel("SIZE"), gbcLeft);
-		add(new JTextField(10), gbcRight);
+		for (String param : getModel().parametersForSearchType().keySet()) {
+			JLabel label = new JLabel(param);
+			add(label, gbcLeft);
+			JTextField textField = new JTextField(10);
+			add(textField, gbcRight);
+			label.setLabelFor(textField);
+			fields.put(param, textField);
+		}
 
 		JPanel buttonPanel = new JPanel(new FlowLayout());
 		buttonPanel.add(new JButton(addAction));
 		buttonPanel.add(new JButton(cancelAction));
 		add(buttonPanel, gbcBoth);
-	
 
 		GridBagConstraints gbcFiller = new GridBagConstraints();
 		gbcRight.gridx = 2;
 		gbcRight.weightx = 1.0;
 		gbcRight.fill = GridBagConstraints.HORIZONTAL;
 		add(new JPanel(), gbcFiller);
-		
+
 		setMinimumSize(new Dimension(450, 300));
 	}
 
