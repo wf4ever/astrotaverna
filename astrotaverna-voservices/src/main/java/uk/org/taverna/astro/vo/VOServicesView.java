@@ -36,6 +36,7 @@ import net.sf.taverna.t2.workbench.ui.zaria.UIComponentSPI;
 
 import org.apache.log4j.Logger;
 
+import uk.org.taverna.astro.vo.utils.ModelIterator;
 import uk.org.taverna.astro.vorepo.VORepository.Status;
 
 public class VOServicesView extends JPanel implements UIComponentSPI {

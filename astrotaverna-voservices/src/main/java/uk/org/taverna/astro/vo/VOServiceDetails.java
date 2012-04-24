@@ -2,6 +2,8 @@ package uk.org.taverna.astro.vo;
 
 import java.text.SimpleDateFormat;
 
+import uk.org.taverna.astro.vo.utils.HTMLPane;
+
 import net.ivoa.xml.conesearch.v1.ConeSearch;
 import net.ivoa.xml.conesearch.v1.Query;
 import net.ivoa.xml.sia.v1.ImageSize;
