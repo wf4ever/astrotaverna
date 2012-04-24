@@ -24,8 +24,6 @@ import uk.org.taverna.astro.vorepo.VORepository.Status;
 
 public class VOServicesController {
 
-	private static Logger logger = Logger.getLogger(VOServicesController.class);
-
 	public class CheckStatus extends SwingWorker<Status, String> {
 		private final URI oldEndpoint;
 
@@ -123,6 +121,8 @@ public class VOServicesController {
 		}
 	}
 
+	private static Logger logger = Logger.getLogger(VOServicesController.class);
+
 	// Current state
 	private SwingWorker<?, ?> currentTask;
 
@@ -190,6 +190,36 @@ public class VOServicesController {
 		}
 	}
 
+	public void changeEndpoint(String uri) {
+		URI oldEndpoint = getModel().getEndpoint();
+		URI endpoint;
+		try {
+			endpoint = new URI(uri);
+		} catch (URISyntaxException e) {
+			getView().statusInvalidEndpoint(e);
+			changeEndpoint(oldEndpoint);
+			return;
+		}
+		changeEndpoint(endpoint);
+		checkEndpoint(oldEndpoint);
+	}
+
+	protected void changeEndpoint(URI endpoint) {
+		getModel().setEndpoint(endpoint);
+		getView().updateEndpoint();
+	}
+
+	public void checkEndpoint() {
+		checkEndpoint(null);
+	}
+
+	protected void checkEndpoint(URI revertToEndpoint) {
+		cancelTaskIfNeeded();
+		getView().statusEndpointChecking();
+		currentTask = new CheckStatus(revertToEndpoint);
+		currentTask.execute();
+	}
+
 	public VOServicesModel getModel() {
 		if (model == null) {
 			model = new VOServicesModel();
@@ -215,45 +245,15 @@ public class VOServicesController {
 		currentTask.execute();
 	}
 
+	public void selectService(Service service) {
+		getModel().setSelectedService(service);
+	}
+
 	public void setModel(VOServicesModel model) {
 		this.model = model;
 	}
 
 	public void setView(VOServicesView view) {
 		this.view = view;
-	}
-
-	public void selectService(Service service) {
-		getModel().setSelectedService(service);
-	}
-
-	public void changeEndpoint(String uri) {
-		URI oldEndpoint = getModel().getEndpoint();
-		URI endpoint;
-		try {
-			endpoint = new URI(uri);
-		} catch (URISyntaxException e) {
-			getView().statusInvalidEndpoint(e);
-			changeEndpoint(oldEndpoint);
-			return;
-		}
-		changeEndpoint(endpoint);
-		checkEndpoint(oldEndpoint);
-	}
-
-	protected void checkEndpoint(URI revertToEndpoint) {
-		cancelTaskIfNeeded();
-		getView().statusEndpointChecking();
-		currentTask = new CheckStatus(revertToEndpoint);
-		currentTask.execute();
-	}
-
-	protected void changeEndpoint(URI endpoint) {
-		getModel().setEndpoint(endpoint);
-		getView().updateEndpoint();
-	}
-
-	public void checkEndpoint() {
-		checkEndpoint(null);
 	}
 }
