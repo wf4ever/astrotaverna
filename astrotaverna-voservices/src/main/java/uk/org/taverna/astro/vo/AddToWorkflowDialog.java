@@ -12,7 +12,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -25,6 +27,22 @@ import net.ivoa.xml.voresource.v1.Service;
 import net.sf.taverna.t2.workbench.ui.impl.Workbench;
 
 public class AddToWorkflowDialog extends JDialog {
+	public class SetInputPort extends AbstractAction implements Action {
+
+		private final JTextField textField;
+
+		public SetInputPort(JTextField textField) {
+			super("Input port");
+			this.textField = textField;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JCheckBox box = (JCheckBox) e.getSource();
+			this.textField.setEnabled(!box.isSelected());
+		}
+	}
+
 	public class AddAction extends AbstractAction {
 		private static final long serialVersionUID = 1L;
 
@@ -105,7 +123,7 @@ public class AddToWorkflowDialog extends JDialog {
 		for (Entry<String, JTextField> s : fields.entrySet()) {
 			String param = s.getKey();
 			JTextField field = s.getValue();
-			if (!field.getText().isEmpty()) {
+			if (!field.getText().isEmpty() || !field.isEnabled()) {
 				parameters.put(param, field.getText());
 			}
 		}
@@ -141,8 +159,8 @@ public class AddToWorkflowDialog extends JDialog {
 
 		String message = String
 				.format("<html><body><h3>Add %s to workflow</h3>"
-						+ "<p>You may specify constant parameters here, or provide them in the workflow.</p>"
-						+ "<p><p>Note: Only <b>required</b> parameters will appear as input ports "
+						+ "<p>You may specify constant parameters here, or tick the <em>Input port</em> box to provide them in the workflow.</p>"
+						+ "<p><p>Note: <b>Required</b> parameters will always appear as input ports "
 						+ "in the workflow if no value is provided. The service might not support all optional parameters."
 						+ "</body></html>", service.getShortName());
 		add(new JLabel(message), gbcOuter);
@@ -166,9 +184,15 @@ public class AddToWorkflowDialog extends JDialog {
 		gbcRight.fill = GridBagConstraints.HORIZONTAL;
 		gbcRight.anchor = GridBagConstraints.LINE_START;
 
+		GridBagConstraints gbcSuperRight = new GridBagConstraints();
+		gbcSuperRight.gridx = 2;
+		gbcSuperRight.weightx = 0.2;
+		gbcSuperRight.anchor = GridBagConstraints.LINE_START;
+
 		for (Entry<String, Boolean> entry : getModel()
 				.parametersForSearchType().entrySet()) {
 			String param = entry.getKey();
+
 			JLabel label = new JLabel();
 			if ((entry.getValue())) {
 				// required in bold
@@ -183,6 +207,16 @@ public class AddToWorkflowDialog extends JDialog {
 			paramPanel.add(textField, gbcRight);
 			label.setLabelFor(textField);
 			fields.put(param, textField);
+
+			JCheckBox inputPort = new JCheckBox();
+			if (entry.getValue()) {
+				inputPort.setSelected(true);
+				inputPort.setEnabled(false);
+			} else {
+				inputPort.setAction(new SetInputPort(textField));
+			}
+
+			paramPanel.add(inputPort, gbcSuperRight);
 		}
 
 		JPanel buttonPanel = new JPanel(new FlowLayout());

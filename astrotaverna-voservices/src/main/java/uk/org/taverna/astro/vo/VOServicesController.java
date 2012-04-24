@@ -200,11 +200,12 @@ public class VOServicesController {
 		Map<String, Boolean> parameters = getModel().parametersForSearchType();
 		for (Entry<String, Boolean> parameterIsRequired : parameters.entrySet()) {
 			String param = parameterIsRequired.getKey();
-			if (values.containsKey(param)) {
-				String value = escapeURIParameter(values.get(param));
+			String value = values.get(param);
+			if (value != null && ! value.isEmpty()) {
 				// TODO: Do parameters as string constants instead
-				urlSignature += String.format("%s=%s&", param, value);
-			} else if (parameterIsRequired.getValue()) {
+				urlSignature += String.format("%s=%s&", param, escapeURIParameter(value));
+			} else if (parameterIsRequired.getValue() || value != null) {
+				// non-null but empty means include as parameter
 				urlSignature += String.format("%s={%s}&", param, param);
 			}
 		}
