@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import net.ivoa.xml.vodataservice.v1.ParamHTTP;
@@ -58,7 +59,7 @@ public class VOServicesController {
 					revert();
 					return;
 				}
-				
+
 				getView().statusEndpointOK();
 				// TODO: Store in preferences?
 				// getModel().addEndpoint(endpoint);
@@ -158,14 +159,28 @@ public class VOServicesController {
 			}
 		}
 		if (restServiceDescription.getAccessURL() == null) {
-			// TODO: Show error
-
+			String message = "No REST (ParamHTTP) interface found for service "
+					+ service.getShortName();
+			logger.warn(message);
+			JOptionPane.showMessageDialog(getView(), message,
+					"Could not add to workflow", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
-		WorkflowView.importServiceDescription(restServiceDescription, false);
-		Workbench.getInstance().getPerspectives().setWorkflowPerspective();
+		AddToWorkflowDialog addDialog = new AddToWorkflowDialog(
+				restServiceDescription, service);
+		addDialog.setController(this);
+		addDialog.setModel(getModel());
+		addDialog.setLocationRelativeTo(getView());
+		addDialog.setVisible(true);
+		
 
+	}
+
+	public void addToWorkflow(VOServiceDescription serviceDescription) {
+		WorkflowView.importServiceDescription(serviceDescription, false);
+		Workbench.getInstance().getPerspectives().setWorkflowPerspective();
+		// TODO: Make and connect string constants
 	}
 
 	protected void cancelTaskIfNeeded() {

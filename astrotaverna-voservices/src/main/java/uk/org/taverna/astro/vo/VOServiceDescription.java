@@ -40,6 +40,7 @@ public class VOServiceDescription extends
 		return configurationBean;
 	}
 
+	// TODO: Move to controller?
 	public String transformAccessURL() {
 		String urlSig = getAccessURL();
 		if (!urlSig.contains("?")) {
