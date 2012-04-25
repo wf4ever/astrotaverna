@@ -7,14 +7,9 @@
 <description/>
 <enabled>true</enabled>
 <repositories>
-<repository>http://www.mygrid.org.uk/maven/repository</repository>
 <repository>http://wf4ever.github.com/astrotaverna/repository</repository>
-<repository>http://repo.maven.apache.org/maven2</repository>
-<repository>http://www.mygrid.org.uk/maven/snapshot-repository</repository>
+<repository>http://www.mygrid.org.uk/maven/repository</repository>
 <repository>http://uk.maven.org/maven2</repository>
-<repository>http://download.java.net/maven/2</repository>
-<repository>http://www.mygrid.org.uk/maven/biomoby/biomoby.org/m2repo</repository>
-<repository>http://openprovenance.org/java/maven-releases</repository>
 </repositories>
 <profile>
 <dependency>
