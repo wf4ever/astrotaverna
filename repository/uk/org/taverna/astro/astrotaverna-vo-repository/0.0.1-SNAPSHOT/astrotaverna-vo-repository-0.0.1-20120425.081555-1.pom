@@ -97,6 +97,7 @@
 			<groupId>com.sun.xml.ws</groupId>
 			<artifactId>jaxws-rt</artifactId>
 			<version>2.1.7</version>
+                        <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
