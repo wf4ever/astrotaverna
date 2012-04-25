@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>uk.org.taverna.astro</groupId>
+  <artifactId>astrotaverna</artifactId>
+  <versioning>
+    <versions>
+      <version>0.0.1-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20120425081505</lastUpdated>
+  </versioning>
+</metadata>
