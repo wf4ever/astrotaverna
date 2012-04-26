@@ -4,7 +4,7 @@
 
 	<groupId>uk.org.taverna.astro</groupId>
 	<artifactId>astrotaverna</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1</version>
 	<packaging>pom</packaging>
 	<name>Astro Taverna</name>
 
@@ -87,7 +87,7 @@
 	<repositories>
 		<repository>
 			<!-- The myGrid repository for Taverna dependencies -->
-			<releases/>
+			<releases />
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -97,8 +97,8 @@
 		</repository>
 		<repository>
 			<!-- The repository that your snapshot jars are deployed to -->
-			<releases/>
-			<snapshots/>
+			<releases />
+			<snapshots />
 			<id>astrotaverna</id>
 			<name>AstroTaverna repository</name>
 			<url>http://wf4ever.github.com/astrotaverna/</url>
