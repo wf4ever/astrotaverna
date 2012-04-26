@@ -132,6 +132,8 @@
     <module>astrotaverna-voservices</module>
     <module>astrotaverna-plugin</module>
     <module>astrotaverna-vo-repository</module>
+    <module>coordinatestool-activity</module>
+    <module>coordinatestool-activity-ui</module>
   </modules>
   <scm>
   	<url>https://github.com/wf4ever/astrotaverna</url>
