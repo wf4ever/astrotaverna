@@ -24,7 +24,7 @@ public class CoordinatesServiceIcon implements ActivityIconSPI {
 	
 	public static Icon getIcon() {
 		if (icon == null) {
-			icon = new ImageIcon(CoordinatesServiceIcon.class.getResource("/exampleIcon.png"));
+			icon = new ImageIcon(CoordinatesServiceIcon.class.getResource("/NGC_4414_16x16.png"));
 		}
 		return icon;
 	}
