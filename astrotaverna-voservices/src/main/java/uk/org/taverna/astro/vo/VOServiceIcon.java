@@ -1,12 +1,17 @@
 package uk.org.taverna.astro.vo;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import net.sf.taverna.t2.activities.rest.RESTActivity;
 import net.sf.taverna.t2.workbench.activityicons.ActivityIconSPI;
 import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
 public class VOServiceIcon implements ActivityIconSPI {
+
+	private static final String VO_32X16_PNG = "NGC_4414_16x16.png";
+	public static ImageIcon voIcon = new ImageIcon(
+			VOServicesPerspective.class.getResource(VO_32X16_PNG));
 
 	@Override
 	public int canProvideIconScore(Activity<?> activity) {
@@ -25,8 +30,8 @@ public class VOServiceIcon implements ActivityIconSPI {
 	}
 
 	@Override
-	public Icon getIcon(Activity<?> arg0) {
-		return VOServicesPerspective.voIcon;
+	public Icon getIcon(Activity<?> activity) {
+		return voIcon;
 	}
 
 }

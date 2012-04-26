@@ -171,7 +171,7 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 
 	@Override
 	public ImageIcon getIcon() {
-		return VOServicesPerspective.voIcon;
+		return VOServiceIcon.voIcon;
 	}
 
 	public VOServicesModel getModel() {

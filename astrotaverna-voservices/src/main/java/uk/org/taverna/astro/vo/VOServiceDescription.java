@@ -44,7 +44,7 @@ public class VOServiceDescription extends
 
 	@Override
 	public Icon getIcon() {
-		return VOServicesPerspective.voIcon;
+		return VOServiceIcon.voIcon;
 	}
 
 	public URI getIdentifier() {

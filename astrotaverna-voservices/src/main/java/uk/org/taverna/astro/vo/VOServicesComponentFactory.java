@@ -14,7 +14,7 @@ public class VOServicesComponentFactory implements UIComponentFactorySPI {
 
 	@Override
 	public ImageIcon getIcon() {
-		return VOServicesPerspective.voIcon;
+		return VOServiceIcon.voIcon;
 	}
 
 	@Override
