@@ -13,12 +13,12 @@ import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescriptionProvider;
 
 //public class coordinatesServiceProvider implements ServiceDescriptionProvider {
-public class coordinatesServiceProvider extends 
-AbstractConfigurableServiceProvider<coordinatesServiceProviderConfig> implements 
-ConfigurableServiceProvider<coordinatesServiceProviderConfig> {
+public class CoordinatesServiceProvider extends 
+AbstractConfigurableServiceProvider<CoordinatesServiceProviderConfig> implements 
+ConfigurableServiceProvider<CoordinatesServiceProviderConfig> {
 	
-	public coordinatesServiceProvider() {
-		super(new coordinatesServiceProviderConfig());
+	public CoordinatesServiceProvider() {
+		super(new CoordinatesServiceProviderConfig());
 	}
 
 	private static final URI providerId = URI
@@ -38,7 +38,7 @@ ConfigurableServiceProvider<coordinatesServiceProviderConfig> {
 		// FIXME: Implement the actual service search/lookup instead
 		// of dummy for-loop
 		//for (int i = 1; i <= 5; i++) {
-			coordinatesServiceDesc service = new coordinatesServiceDesc();
+			CoordinatesServiceDesc service = new CoordinatesServiceDesc();
 			// Populate the service description bean
 			service.setExampleString("Equatorials2Galactic");
 			//service.setExampleUri(URI.create("http://localhost:8192/service"));
@@ -71,7 +71,7 @@ ConfigurableServiceProvider<coordinatesServiceProviderConfig> {
 	 * Icon for service provider
 	 */
 	public Icon getIcon() {
-		return coordinatesServiceIcon.getIcon();
+		return CoordinatesServiceIcon.getIcon();
 	}
 
 	/**

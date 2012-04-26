@@ -7,7 +7,7 @@ import java.net.URI;
  * coordinates activity configuration bean.
  * 
  */
-public class coordinatesActivityConfigurationBean implements Serializable {
+public class CoordinatesActivityConfigurationBean implements Serializable {
 
 	/*
 	 * TODO: Remove this comment.

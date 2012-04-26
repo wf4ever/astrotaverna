@@ -18,15 +18,15 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityInputPort;
 import org.junit.Before;
 import org.junit.Test;
 
-public class coordinatesActivityTest {
+public class CoordinatesActivityTest {
 
-	private coordinatesActivityConfigurationBean configBean;
+	private CoordinatesActivityConfigurationBean configBean;
 
-	private coordinatesActivity activity = new coordinatesActivity();
+	private CoordinatesActivity activity = new CoordinatesActivity();
 
 	@Before
 	public void makeConfigBean() throws Exception {
-		configBean = new coordinatesActivityConfigurationBean();
+		configBean = new CoordinatesActivityConfigurationBean();
 		configBean.setExampleString("something");
 		configBean
 				.setExampleUri(URI.create("http://localhost:8080/myEndPoint"));
@@ -34,7 +34,7 @@ public class coordinatesActivityTest {
 
 	@Test(expected = ActivityConfigurationException.class)
 	public void invalidConfiguration() throws ActivityConfigurationException {
-		coordinatesActivityConfigurationBean invalidBean = new coordinatesActivityConfigurationBean();
+		CoordinatesActivityConfigurationBean invalidBean = new CoordinatesActivityConfigurationBean();
 		invalidBean.setExampleString("invalidExample");
 		// Should throw ActivityConfigurationException
 		activity.configure(invalidBean);
@@ -80,7 +80,7 @@ public class coordinatesActivityTest {
 	public void reConfiguredSpecialPorts() throws Exception {
 		activity.configure(configBean);
 
-		coordinatesActivityConfigurationBean specialBean = new coordinatesActivityConfigurationBean();
+		CoordinatesActivityConfigurationBean specialBean = new CoordinatesActivityConfigurationBean();
 		specialBean.setExampleString("specialCase");
 		specialBean.setExampleUri(URI
 				.create("http://localhost:8080/myEndPoint"));

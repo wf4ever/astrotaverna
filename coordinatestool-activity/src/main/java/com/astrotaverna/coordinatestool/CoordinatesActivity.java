@@ -13,9 +13,9 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationE
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCallback;
 
-public class coordinatesActivity extends
-		AbstractAsynchronousActivity<coordinatesActivityConfigurationBean>
-		implements AsynchronousActivity<coordinatesActivityConfigurationBean> {
+public class CoordinatesActivity extends
+		AbstractAsynchronousActivity<CoordinatesActivityConfigurationBean>
+		implements AsynchronousActivity<CoordinatesActivityConfigurationBean> {
 
 	/*
 	 * Best practice: Keep port names as constants to avoid misspelling. This
@@ -33,10 +33,10 @@ public class coordinatesActivity extends
 			private static final String L_COORD = "L_COORD";
 			private static final String B_COORD = "B_COORD";
 	
-	private coordinatesActivityConfigurationBean configBean;
+	private CoordinatesActivityConfigurationBean configBean;
 
 	@Override
-	public void configure(coordinatesActivityConfigurationBean configBean)
+	public void configure(CoordinatesActivityConfigurationBean configBean)
 			throws ActivityConfigurationException {
 
 		// Any pre-config sanity checks
@@ -138,7 +138,7 @@ public class coordinatesActivity extends
 	}
 
 	@Override
-	public coordinatesActivityConfigurationBean getConfiguration() {
+	public CoordinatesActivityConfigurationBean getConfiguration() {
 		return this.configBean;
 	}
 

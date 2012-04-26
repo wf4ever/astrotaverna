@@ -9,18 +9,18 @@ import javax.swing.Icon;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
-import com.astrotaverna.coordinatestool.coordinatesActivity;
-import com.astrotaverna.coordinatestool.coordinatesActivityConfigurationBean;
+import com.astrotaverna.coordinatestool.CoordinatesActivity;
+import com.astrotaverna.coordinatestool.CoordinatesActivityConfigurationBean;
 
-public class coordinatesServiceDesc extends ServiceDescription<coordinatesActivityConfigurationBean> {
+public class CoordinatesServiceDesc extends ServiceDescription<CoordinatesActivityConfigurationBean> {
 
 	/**
 	 * The subclass of Activity which should be instantiated when adding a service
 	 * for this description 
 	 */
 	@Override
-	public Class<? extends Activity<coordinatesActivityConfigurationBean>> getActivityClass() {
-		return coordinatesActivity.class;
+	public Class<? extends Activity<CoordinatesActivityConfigurationBean>> getActivityClass() {
+		return CoordinatesActivity.class;
 	}
 
 	/**
@@ -30,8 +30,8 @@ public class coordinatesServiceDesc extends ServiceDescription<coordinatesActivi
 	 * 
 	 */
 	@Override
-	public coordinatesActivityConfigurationBean getActivityConfiguration() {
-		coordinatesActivityConfigurationBean bean = new coordinatesActivityConfigurationBean();
+	public CoordinatesActivityConfigurationBean getActivityConfiguration() {
+		CoordinatesActivityConfigurationBean bean = new CoordinatesActivityConfigurationBean();
 		bean.setExampleString(exampleString);
 		bean.setExampleUri(exampleUri);
 		return bean;
@@ -42,7 +42,7 @@ public class coordinatesServiceDesc extends ServiceDescription<coordinatesActivi
 	 */
 	@Override
 	public Icon getIcon() {
-		return coordinatesServiceIcon.getIcon();
+		return CoordinatesServiceIcon.getIcon();
 	}
 
 	/**

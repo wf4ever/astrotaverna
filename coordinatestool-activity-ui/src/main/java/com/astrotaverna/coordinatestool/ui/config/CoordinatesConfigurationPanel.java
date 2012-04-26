@@ -9,23 +9,23 @@ import javax.swing.JTextField;
 
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ActivityConfigurationPanel;
 
-import com.astrotaverna.coordinatestool.coordinatesActivity;
-import com.astrotaverna.coordinatestool.coordinatesActivityConfigurationBean;
+import com.astrotaverna.coordinatestool.CoordinatesActivity;
+import com.astrotaverna.coordinatestool.CoordinatesActivityConfigurationBean;
 
 
 @SuppressWarnings("serial")
-public class coordinatesConfigurationPanel
+public class CoordinatesConfigurationPanel
 		extends
-		ActivityConfigurationPanel<coordinatesActivity, 
-        coordinatesActivityConfigurationBean> {
+		ActivityConfigurationPanel<CoordinatesActivity, 
+        CoordinatesActivityConfigurationBean> {
 
-	private coordinatesActivity activity;
-	private coordinatesActivityConfigurationBean configBean;
+	private CoordinatesActivity activity;
+	private CoordinatesActivityConfigurationBean configBean;
 	
 	private JTextField fieldString;
 	private JTextField fieldURI;
 
-	public coordinatesConfigurationPanel(coordinatesActivity activity) {
+	public CoordinatesConfigurationPanel(CoordinatesActivity activity) {
 		this.activity = activity;
 		initGui();
 	}
@@ -73,7 +73,7 @@ public class coordinatesConfigurationPanel
 	 * noteConfiguration() was called.
 	 */
 	@Override
-	public coordinatesActivityConfigurationBean getConfiguration() {
+	public CoordinatesActivityConfigurationBean getConfiguration() {
 		// Should already have been made by noteConfiguration()
 		return configBean;
 	}
@@ -96,7 +96,7 @@ public class coordinatesConfigurationPanel
 	 */
 	@Override
 	public void noteConfiguration() {
-		configBean = new coordinatesActivityConfigurationBean();
+		configBean = new CoordinatesActivityConfigurationBean();
 		
 		// FIXME: Update bean fields from your UI elements
 		configBean.setExampleString(fieldString.getText());

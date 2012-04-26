@@ -5,14 +5,14 @@ import javax.swing.ImageIcon;
 
 import net.sf.taverna.t2.workbench.activityicons.ActivityIconSPI;
 import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
-import com.astrotaverna.coordinatestool.coordinatesActivity;
+import com.astrotaverna.coordinatestool.CoordinatesActivity;
 
-public class coordinatesServiceIcon implements ActivityIconSPI {
+public class CoordinatesServiceIcon implements ActivityIconSPI {
 
 	private static Icon icon;
 
 	public int canProvideIconScore(Activity<?> activity) {
-		if (activity instanceof coordinatesActivity) {
+		if (activity instanceof CoordinatesActivity) {
 			return DEFAULT_ICON;
 		}
 		return NO_ICON;
@@ -24,7 +24,7 @@ public class coordinatesServiceIcon implements ActivityIconSPI {
 	
 	public static Icon getIcon() {
 		if (icon == null) {
-			icon = new ImageIcon(coordinatesServiceIcon.class.getResource("/exampleIcon.png"));
+			icon = new ImageIcon(CoordinatesServiceIcon.class.getResource("/exampleIcon.png"));
 		}
 		return icon;
 	}

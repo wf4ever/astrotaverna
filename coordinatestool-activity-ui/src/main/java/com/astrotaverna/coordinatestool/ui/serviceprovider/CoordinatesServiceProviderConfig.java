@@ -2,7 +2,7 @@ package com.astrotaverna.coordinatestool.ui.serviceprovider;
 
 import java.net.URI;
 
-public class coordinatesServiceProviderConfig {
+public class CoordinatesServiceProviderConfig {
 	private URI uri=URI.create("http://example.com");
     private int numberOfServices=6;
     public URI getUri() {

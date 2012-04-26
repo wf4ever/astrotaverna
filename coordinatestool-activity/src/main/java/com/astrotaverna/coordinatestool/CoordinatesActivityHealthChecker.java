@@ -12,15 +12,15 @@ import net.sf.taverna.t2.workflowmodel.health.HealthChecker;
  * coordinates health checker
  * 
  */
-public class coordinatesActivityHealthChecker implements
-		HealthChecker<coordinatesActivity> {
+public class CoordinatesActivityHealthChecker implements
+		HealthChecker<CoordinatesActivity> {
 
 	public boolean canVisit(Object o) {
 		// Return True if we can visit the object. We could do
 		// deeper (but not time consuming) checks here, for instance
 		// if the health checker only deals with coordinatesActivity where
 		// a certain configuration option is enabled.
-		return o instanceof coordinatesActivity;
+		return o instanceof CoordinatesActivity;
 	}
 
 	public boolean isTimeConsuming() {
@@ -31,8 +31,8 @@ public class coordinatesActivityHealthChecker implements
 		return false;
 	}
 
-	public VisitReport visit(coordinatesActivity activity, List<Object> ancestry) {
-		coordinatesActivityConfigurationBean config = activity.getConfiguration();
+	public VisitReport visit(CoordinatesActivity activity, List<Object> ancestry) {
+		CoordinatesActivityConfigurationBean config = activity.getConfiguration();
 
 		// We'll build a list of subreports
 		List<VisitReport> subReports = new ArrayList<VisitReport>();
