@@ -138,31 +138,8 @@ public class VOServicesController {
 
 	public void addToWorkflow() {
 		Service service = getModel().getSelectedService();
-		VOServiceDescription serviceDescription = new VOServiceDescription();
-		for (Capability c : service.getCapability()) {
-			if (!(getModel().getCurrentSearchType().isInstance(c))) {
-				continue;
-			}
-			for (Interface i : c.getInterface()) {
-				if (i instanceof ParamHTTP) {
-					serviceDescription.setIdentifier(URI.create(service
-							.getIdentifier().trim()));
-					serviceDescription.setName(service.getShortName());
-					serviceDescription.setSearchType(getModel()
-							.getCurrentSearchType().getSimpleName());
-
-					ParamHTTP http = (ParamHTTP) i;
-					AccessURL accessURL = http.getAccessURL().get(0);
-					serviceDescription
-							.setAccessURL(accessURL.getValue().trim());
-					updateAccessUrl(serviceDescription);
-					break;
-				}
-				if (i instanceof WebService) {
-					// TODO: Potentially loads to do here
-				}
-			}
-		}
+		VOServiceDescription serviceDescription = makeServiceDescription(
+				service, getModel().getCurrentSearchType());
 		if (serviceDescription.getUrlSignature() == null) {
 			String message = "No REST (ParamHTTP) interface found for service "
 					+ service.getShortName();
@@ -181,15 +158,44 @@ public class VOServicesController {
 
 	}
 
+	public VOServiceDescription makeServiceDescription(Service service,
+			Class<? extends Capability> searchType) {
+		VOServiceDescription serviceDescription = new VOServiceDescription();
+		for (Capability c : service.getCapability()) {			
+			if (searchType != null && !(searchType.isInstance(c))) {
+				continue;
+			}
+			for (Interface i : c.getInterface()) {
+				if (i instanceof ParamHTTP) {
+					serviceDescription.setIdentifier(URI.create(service
+							.getIdentifier().trim()));
+					serviceDescription.setName(service.getShortName());
+					serviceDescription.setSearchType(searchType.getSimpleName());
+
+					ParamHTTP http = (ParamHTTP) i;
+					AccessURL accessURL = http.getAccessURL().get(0);
+					serviceDescription
+							.setAccessURL(accessURL.getValue().trim());
+					updateAccessUrl(serviceDescription, searchType);
+					break;
+				}
+				if (i instanceof WebService) {
+					// TODO: Potentially loads to do here
+				}
+			}
+		}
+		return serviceDescription;
+	}
+
 	public void addToWorkflow(VOServiceDescription serviceDescription) {
-		updateAccessUrl(serviceDescription);
+		updateAccessUrl(serviceDescription, getModel().getCurrentSearchType());
 
 		WorkflowView.importServiceDescription(serviceDescription, false);
 		Workbench.getInstance().getPerspectives().setWorkflowPerspective();
 		// TODO: Make and connect string constants
 	}
 
-	protected void updateAccessUrl(VOServiceDescription serviceDescription) {
+	protected void updateAccessUrl(VOServiceDescription serviceDescription, Class<? extends Capability> searchType) {
 		String urlSignature = serviceDescription.getAccessURL();
 		if (!urlSignature.contains("?")) {
 			urlSignature += "?";
@@ -197,13 +203,14 @@ public class VOServicesController {
 			urlSignature += "&";
 		}
 		Map<String, String> values = serviceDescription.getParameterValues();
-		Map<String, Boolean> parameters = getModel().parametersForSearchType();
+		Map<String, Boolean> parameters = getModel().parametersForSearchType(searchType);
 		for (Entry<String, Boolean> parameterIsRequired : parameters.entrySet()) {
 			String param = parameterIsRequired.getKey();
 			String value = values.get(param);
-			if (value != null && ! value.isEmpty()) {
+			if (value != null && !value.isEmpty()) {
 				// TODO: Do parameters as string constants instead
-				urlSignature += String.format("%s=%s&", param, escapeURIParameter(value));
+				urlSignature += String.format("%s=%s&", param,
+						escapeURIParameter(value));
 			} else if (parameterIsRequired.getValue() || value != null) {
 				// non-null but empty means include as parameter
 				urlSignature += String.format("%s={%s}&", param, param);

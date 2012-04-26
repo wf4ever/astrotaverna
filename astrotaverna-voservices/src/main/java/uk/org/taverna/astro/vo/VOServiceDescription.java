@@ -67,7 +67,7 @@ public class VOServiceDescription extends
 
 	@Override
 	public List<String> getPath() {
-		return Arrays.asList("VO services", getName());
+		return Arrays.asList("VO services");
 	}
 
 	public String getSearchType() {

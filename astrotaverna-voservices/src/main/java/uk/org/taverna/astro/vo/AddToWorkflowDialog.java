@@ -190,8 +190,8 @@ public class AddToWorkflowDialog extends JDialog {
 		gbcSuperRight.weightx = 0.2;
 		gbcSuperRight.anchor = GridBagConstraints.LINE_START;
 
-		for (Entry<String, Boolean> entry : getModel()
-				.parametersForSearchType().entrySet()) {
+		for (Entry<String, Boolean> entry : getModel().parametersForSearchType(
+				null).entrySet()) {
 			String param = entry.getKey();
 
 			JLabel label = new JLabel();

@@ -23,7 +23,7 @@ public class VOServicesModel {
 	private VOServicesController controller;
 	private VORepository repository;
 	private String search;
-	private Class<? extends Capability> searchType = ConeSearch.class;
+	private Class<? extends Capability> currentSearchType = ConeSearch.class;
 	private List<Service> services = EMPTY_SERVICES;
 	private VOServicesView view;
 	private Service selectedService;
@@ -42,7 +42,7 @@ public class VOServicesModel {
 	}
 
 	public Class<? extends Capability> getCurrentSearchType() {
-		return searchType;
+		return currentSearchType;
 	}
 
 	public List<URI> getEndpoints() {
@@ -86,7 +86,7 @@ public class VOServicesModel {
 
 	public void setCurrentSearchType(
 			Class<? extends Capability> currentSearchType) {
-		this.searchType = currentSearchType;
+		this.currentSearchType = currentSearchType;
 	}
 
 	public void setRepository(VORepository repo) {
@@ -125,8 +125,12 @@ public class VOServicesModel {
 		getRepository().setEndpoint(endpoint);
 	}
 
-	public Map<String, Boolean> parametersForSearchType() {
+	public Map<String, Boolean> parametersForSearchType(Class<? extends Capability> searchType) {
 
+		if (searchType == null) {
+			searchType = getCurrentSearchType();
+		}
+		
 		Map<String, Boolean> parameters = new LinkedHashMap<String, Boolean>();
 		if (searchType == ConeSearch.class) {
 			// http://www.ivoa.net/Documents/latest/ConeSearch.html
