@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <plugins>
 <plugin>astrotaverna-plugin-0.1.xml</plugin>
+<plugin>astrotaverna-plugin-0.2.xml</plugin>
 </plugins>
