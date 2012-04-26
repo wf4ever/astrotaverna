@@ -138,4 +138,13 @@
   	<connection>scm:git:git://github.com/wf4ever/astrotaverna.git</connection>
   	<developerConnection>scm:git:git@github.com:wf4ever/astrotaverna.git</developerConnection>
   </scm>
+  <issueManagement>
+  	<system>github</system>
+  	<url>https://github.com/wf4ever/astrotaverna/issues</url>
+  </issueManagement>
+  <organization>
+  	<name>Wf4Ever</name>
+  	<url>http://www.wf4ever-project.org/</url>
+  </organization>
+  <url>http://www.wf4ever-project.org/wiki/display/docs/Showcase+9+Astrotaverna</url>
 </project>
