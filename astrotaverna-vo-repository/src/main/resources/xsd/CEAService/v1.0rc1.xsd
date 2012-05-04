@@ -17,7 +17,7 @@
   <xs:import namespace="http://www.ivoa.net/xml/VOResource/v1.0" schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0"/>
   <xs:import namespace="http://www.ivoa.net/xml/VODataService/v1.0" schemaLocation="http://www.ivoa.net/xml/VODataService/v1.0"/>
   <xs:import namespace="http://www.ivoa.net/xml/CEA/base/v1.0rc1" schemaLocation="http://software.astrogrid.org/schema/cea/CEABase/v1.0rc1/CEABase.xsd"/>
-  <xs:import namespace="http://www.ivoa.net/xml/VOTable/v1.1" schemaLocation="http://software.astrogrid.org/schema/vo-formats/VOTable/v1.1/VOTable.xsd"/>
+  <xs:import namespace="http://www.ivoa.net/xml/VOTable/v1.1" schemaLocation="http://www.ivoa.net/xml/VOTable/v1.1"/>
   <xs:import namespace="http://www.ivoa.net/xml/VOApplication/v1.0rc1" schemaLocation="http://software.astrogrid.org/schema/vo-resource-types/VOApplication/v1.0rc1/VOApplication.xsd"/>
   
   <xs:complexType name="CeaApplication">

@@ -23,7 +23,7 @@
    <xs:import namespace="http://www.ivoa.net/xml/VOResource/v1.0"
               schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0"/>
    <xs:import namespace="http://www.ivoa.net/xml/STC/stc-v1.30.xsd"
-              schemaLocation="../STC/v1.30.xsd"/>
+              schemaLocation="http://www.ivoa.net/xml/STC/stc-v1.30.xsd"/>
 
    <xs:complexType name="DataCollection">
       <xs:annotation>

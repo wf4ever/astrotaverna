@@ -25,4 +25,7 @@
     <system systemId="http://www.ivoa.net/xml/VOApplication/v1.0rc1" uri="../xsd/VOApplication/v1.0rc1.xsd" />
     <system systemId="http://www.ivoa.net/xml/VOTable/v1.1" uri="../xsd/VOTable/v1.1.xsd" />
  	<system systemId="http://www.w3.org/1999/xlink" uri="../xsd/Xlink/xlink.xsd" />
+ 	<system systemId="http://www.w3.org/1999/xlink.xsd" uri="../xsd/Xlink/xlink.xsd"/>
+ 	<system systemId="http://www.w3.org/2001/xml.xsd" uri="../xsd/XML-namespace/xml.xsd"/>
+ 	<system systemId="http://www.w3.org/XML/1998/namespace" uri="../xsd/XML-namespace/xml.xsd"/>
 </catalog> 
