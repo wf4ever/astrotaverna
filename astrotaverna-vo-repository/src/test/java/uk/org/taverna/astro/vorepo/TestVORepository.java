@@ -48,6 +48,24 @@ public class TestVORepository {
 		assertTrue("Could not find any ConeSearch", foundCapability);
 	}
 
+
+	@Test
+	public void sdssDeserialization() throws Exception {
+		VORepository repo = new VORepository();
+		List<Service> resources = repo
+				.resourceSearch(ConeSearch.class, "SDSS", "DR8");
+		assertFalse(resources.isEmpty());
+		Service s = resources.get(0);
+		boolean foundCapability = false;
+		for (Capability c : s.getCapability()) {
+			if (c instanceof ConeSearch) {
+				// ConeSearch coneSearch = (ConeSearch) c;
+				foundCapability = true;
+			}
+		}
+		assertTrue("Could not find any ConeSearch", foundCapability);
+	}
+	
 	@Test
 	public void defaultConeSearch() throws Exception {
 		VORepository repo = new VORepository();
