@@ -1,11 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?><!--W3C Schema for VOTable  = Virtual Observatory Tabular Format
+<?xml version="1.0" encoding="UTF-8"?>
+<!--W3C Schema for VOTable  = Virtual Observatory Tabular Format
 .Version 1.0 : 15-Apr-2002
 .Version 1.09: 23-Jan-2004 Version 1.09
 .Version 1.09: 30-Jan-2004 Version 1.091
 .Version 1.09: 22-Mar-2004 Version 1.092
 .Version 1.094: 02-Jun-2004 GROUP does not contain FIELD
 .Version 1.1 :  10-Jun-2004 remove the complexContent
---><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ivoa.net/xml/VOTable/v1.1" elementFormDefault="qualified" targetNamespace="http://www.ivoa.net/xml/VOTable/v1.1">
+-->
+<xs:schema 
+   xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+   targetNamespace="http://www.ivoa.net/xml/VOTable/v1.1" 
+   xmlns="http://www.ivoa.net/xml/VOTable/v1.1"
+>
 
 <!-- Here we define some interesting new datatypes:
      - anyTEXT   may have embedded XHTML (conforming HTML)
@@ -23,25 +29,25 @@
       </xs:sequence>
 </xs:complexType>
 
-<xs:simpleType name="astroYear">
+<xs:simpleType  name="astroYear">
   <xs:restriction base="xs:token">
-    <xs:pattern value="[JB]?[0-9]+([.][0-9]*)?"/>
+    <xs:pattern  value="[JB]?[0-9]+([.][0-9]*)?"/>
   </xs:restriction>
 </xs:simpleType>
 
-<xs:simpleType name="ucdType">
+<xs:simpleType  name="ucdType">
   <xs:restriction base="xs:token">
-    <xs:pattern value="[A-Za-z0-9_.;\-]*"/><!-- UCD1 use also / + % -->
+    <xs:pattern  value="[A-Za-z0-9_.;\-]*"/><!-- UCD1 use also / + % -->
   </xs:restriction>
 </xs:simpleType>
 
-<xs:simpleType name="arrayDEF">
+<xs:simpleType  name="arrayDEF">
   <xs:restriction base="xs:token">
-    <xs:pattern value="([0-9]+x)*[0-9]*[*]?(s\W)?"/>
+    <xs:pattern  value="([0-9]+x)*[0-9]*[*]?(s\W)?"/>
   </xs:restriction>
 </xs:simpleType>
 
-<xs:simpleType name="encodingType">
+<xs:simpleType  name="encodingType">
   <xs:restriction base="xs:NMTOKEN">
     <xs:enumeration value="gzip"/>
     <xs:enumeration value="base64"/>
@@ -87,9 +93,9 @@
         <xs:element ref="DESCRIPTION" minOccurs="0"/>
         <xs:element ref="DEFINITIONS" minOccurs="0"/><!-- Deprecated -->
 	<xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="COOSYS"/>
-          <xs:element ref="PARAM"/>
-          <xs:element ref="INFO"/>
+          <xs:element ref="COOSYS" />
+          <xs:element ref="PARAM"  />
+          <xs:element ref="INFO"   />
 	</xs:choice>
         <xs:element ref="RESOURCE" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -110,18 +116,19 @@
       <xs:sequence>
         <xs:element ref="DESCRIPTION" minOccurs="0"/>
 	<xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="INFO"/>
-          <xs:element ref="COOSYS"/>
-          <xs:element ref="PARAM"/>
+          <xs:element ref="INFO" />
+          <xs:element ref="COOSYS" />
+          <xs:element ref="PARAM"  />
 	</xs:choice>
         <xs:element ref="LINK" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="TABLE" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="RESOURCE" minOccurs="0" maxOccurs="unbounded"/>
 	<!-- Suggested Doug Tody, to include new RESOURCE types -->
-	<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+	<xs:any namespace="##other" processContents="lax"
+	    minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
       <xs:attribute name="name" type="xs:token"/>
-      <xs:attribute name="ID" type="xs:ID"/>
+      <xs:attribute name="ID"   type="xs:ID"/>
       <xs:attribute name="utype" type="xs:string"/>
       <xs:attribute name="type" default="results">
         <xs:simpleType>
@@ -136,7 +143,7 @@
     </xs:complexType>
   </xs:element>
 
-  <xs:element name="DESCRIPTION" type="anyTEXT"/>
+  <xs:element name="DESCRIPTION" type="anyTEXT" />
 
   <xs:element name="DEFINITIONS">
   <xs:annotation>
@@ -144,8 +151,8 @@
   </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="COOSYS"/>
-        <xs:element ref="PARAM"/>
+        <xs:element ref="COOSYS" />
+        <xs:element ref="PARAM" />
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -191,17 +198,17 @@
       <xs:sequence>
         <xs:element ref="DESCRIPTION" minOccurs="0"/>
 	<xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="FIELD"/>
-          <xs:element ref="PARAM"/>
-          <xs:element ref="GROUP"/>
+          <xs:element ref="FIELD" />
+          <xs:element ref="PARAM" />
+          <xs:element ref="GROUP" />
 	</xs:choice>
         <xs:element ref="LINK" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="DATA" minOccurs="0"/>
       </xs:sequence>
-      <xs:attribute name="ID" type="xs:ID"/>
+      <xs:attribute name="ID"   type="xs:ID"/>
       <xs:attribute name="name" type="xs:token"/>
-      <xs:attribute name="ref" type="xs:IDREF"/>
-      <xs:attribute name="ucd" type="ucdType"/>
+      <xs:attribute name="ref"  type="xs:IDREF"/>
+      <xs:attribute name="ucd"  type="ucdType"/>
       <xs:attribute name="utype" type="xs:string"/>
       <xs:attribute name="nrows" type="xs:nonNegativeInteger"/>
     </xs:complexType>
@@ -253,10 +260,10 @@
 	  <xs:element ref="GROUP"/>
         </xs:choice>
       </xs:sequence>
-      <xs:attribute name="ID" type="xs:ID"/>
+      <xs:attribute name="ID"   type="xs:ID"/>
       <xs:attribute name="name" type="xs:token"/>
-      <xs:attribute name="ref" type="xs:IDREF"/>
-      <xs:attribute name="ucd" type="ucdType"/>
+      <xs:attribute name="ref"  type="xs:IDREF"/>
+      <xs:attribute name="ucd"  type="ucdType"/>
       <xs:attribute name="utype" type="xs:string"/>
     </xs:complexType>
   </xs:element>
@@ -298,7 +305,7 @@
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="null" type="xs:token"/>
-      <xs:attribute name="ref" type="xs:IDREF"/>
+      <xs:attribute name="ref"  type="xs:IDREF"/>
       <!-- xs:attribute name="invalid" type="yesno" default="no"/ -->
     </xs:complexType>
   </xs:element>
