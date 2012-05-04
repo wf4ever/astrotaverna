@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!-- $Id: VOApplication.xsd,v 1.4 2011/09/01 14:03:58 pah Exp $  
 Defines general application resource metadata.  ...
 --><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ivoa.net/xml/VOApplication/v1.0rc1" xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0" xmlns:vm="http://www.ivoa.net/xml/VOMetadata/v0.1" targetNamespace="http://www.ivoa.net/xml/VOApplication/v1.0rc1" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="1.0 $Revision: 1.4 $">
-   <xs:import schemaLocation="http://software.astrogrid.org/schema/VOResource/v1.0/VOResource.xsd" namespace="http://www.ivoa.net/xml/VOResource/v1.0"/>
+   <xs:import schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0" namespace="http://www.ivoa.net/xml/VOResource/v1.0"/>
    <xs:annotation>
       <xs:appinfo>
          <vm:schemaName>VOApplication</vm:schemaName>

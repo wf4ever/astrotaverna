@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+	<system systemId="http://software.astrogrid.org/schema/VOResource/v1.0/VOResource.xsd" uri="../xsd/VOResource/v1.0.xsd"/>
 	<system systemId="http://software.astrogrid.org/schema/vo-resource-types/VOResource/v1.0/VOResource.xsd" uri="../xsd/VOResource/v1.0.xsd"/>			
     <system systemId="http://software.astrogrid.org/schema/vo-resource-types/CEAService/v1.0rc1/CEAService.xsd" uri="../xsd/CEAService/v1.0rc1.xsd" />
     <system systemId="http://software.astrogrid.org/schema/vo-resource-types/VODataService/v1.0/VODataService.xsd" uri="../xsd/VODataService/v1.0.xsd"/>
