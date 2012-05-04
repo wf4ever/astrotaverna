@@ -1,0 +1,1095 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- $Id: CEABase.xsd,v 1.3 2007/07/24 08:54:59 gtr Exp $ --><!-- This schema represents the first ivoa level release of the CEA defintion schema that was previously internal to Astrogrid.
+This is refactored from the AGParameterDefinition.xsd and CEABase.xsd schema files, to conform to the Registry v1.0 standards and styles.
+In addition there are extensions to the original Astrogrid schema
+
+* array valued parameters are introduced
+* parameter groups are possible in an interface definition
+* conditional parameter groups
+
+Paul Harrison (ESO) - November 2006
+--><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ceab="http://www.ivoa.net/xml/CEA/base/v1.0rc1" xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.0" targetNamespace="http://www.ivoa.net/xml/CEA/base/v1.0rc1" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="1.0 RC$Revision: 1.3 $">
+   <xs:import namespace="http://www.ivoa.net/xml/VODataService/v1.0" schemaLocation="http://software.astrogrid.org/schema/vo-resource-types/VODataService/v1.0/VODataService.xsd"/>
+    <xs:annotation>
+      <xs:documentation>
+         The types in this schema file are the basic CEA types that are
+         used both in the registration of CEA resources and in the WSDL
+         for the CEA interface defintion.
+      </xs:documentation>
+   </xs:annotation>
+   <xs:complexType name="ApplicationBase" abstract="false" mixed="false">
+      <xs:annotation>
+         <xs:documentation>
+            The base application description
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="applicationType" type="ceab:ApplicationKind" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  The CEA type of the application - this allows the
+                  system to determine which CEC it should be talking to.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="parameters" type="ceab:ParameterDefinitionList">
+            <xs:annotation>
+               <xs:documentation>
+                  The complete list of parameters that might occur in
+                  any of the apllication interfaces
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="interfaces" type="ceab:InterfaceDefinitionList">
+            <xs:annotation>
+               <xs:documentation>
+                  The list of interfaces that an application might have
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+      
+   </xs:complexType>
+   <xs:complexType name="InterfaceDefinition" mixed="false">
+      <xs:annotation>
+         <xs:documentation>
+            description of an interface
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="constants" type="ceab:InterfaceConstants" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  parameters that are always passed to the application -
+                  these are not presented to the user, but the server
+                  side of the CEA will pick them up and send to the
+                  application. *EDitor note* perhaps this should be only
+                  an implementation detail.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="input" type="ceab:InputParameterReferenceSpecification">
+            <xs:annotation>
+               <xs:documentation>
+                  The list of input parameters for an interface
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="output" type="ceab:OutputParameterReferenceSpecification">
+            <xs:annotation>
+               <xs:documentation>
+                  The list of output parameters for an interface
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="description" type="xs:string" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  A description of the interface suitable for
+                  presentation in a UI
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string" use="required">
+         <xs:annotation>
+            <xs:documentation>
+               the identifier for the interface
+            </xs:documentation>
+         </xs:annotation></xs:attribute>
+   </xs:complexType>
+   <xs:complexType name="InterfaceDefinitionList">
+        <xs:annotation>
+           <xs:documentation>
+              A list of interface definitions
+           </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+         <xs:element name="interfaceDefinition" type="ceab:InterfaceDefinition" maxOccurs="unbounded">
+            <xs:annotation>
+               <xs:documentation>
+                  A particular application interface
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ParameterRef" mixed="false">
+      <xs:annotation>
+         <xs:documentation>
+            reference to an application parameter. Used in the interface
+            definitions.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexContent mixed="false">
+         <xs:extension base="ceab:SingleParameterRef">
+            <xs:attributeGroup ref="ceab:cardinality"/>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:attributeGroup name="cardinality">
+      <xs:annotation>
+         <xs:documentation>
+            attributes for specifiying how often a parameter or
+            parameter group should occur
+         </xs:documentation>
+      </xs:annotation>
+      <xs:attribute name="minOccurs" type="xs:int" use="optional" default="1"/>
+      <xs:attribute name="maxOccurs" type="xs:int" use="optional" default="1">
+         <xs:annotation>
+            <xs:documentation>
+               a value of 0 implies unbounded
+            </xs:documentation>
+         </xs:annotation>
+      </xs:attribute>
+   </xs:attributeGroup>
+   <xs:complexType name="SingleParameterRef" mixed="false">
+      <xs:annotation>
+         <xs:documentation>
+            reference to an application parameter that is not repeatable
+            or optional. Used in the interface definitions. allow mixed
+            to put the possibility of value? or make this explicit...
+         </xs:documentation>
+      </xs:annotation>
+      <xs:attributeGroup ref="ceab:ParameterReferenceGroup"/>
+   </xs:complexType>
+   <xs:simpleType name="ApplicationKind">
+      <xs:annotation>
+         <xs:documentation>
+            The type of the underlying application - commandline,
+            http-get etc
+         </xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="cmdline">
+            <xs:annotation>
+               <xs:documentation>
+                  application is commandline, wrapped by a CEC
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="http">
+            <xs:annotation>
+               <xs:documentation>
+                  application is a http POST/GET
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="javaclass">
+            <xs:annotation>
+               <xs:documentation>
+                  application is implemented "internally" in the CEA
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="webservice">
+            <xs:annotation>
+               <xs:documentation>
+                  application is an external web service - will be dealt
+                  with by a proxy.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- this can go
+      <xs:element name="ApplicationList">
+      <xs:annotation>
+      <xs:documentation>A list of applications</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+      <xs:sequence>
+      <xs:element name="ApplicationDefn" type="ceab:ApplicationBase" maxOccurs="unbounded">
+      <xs:annotation>
+      <xs:documentation>
+      This is a generic application definition that does
+      not take in all of the specializations for
+      web/commandline etc
+      </xs:documentation>
+      </xs:annotation>
+      </xs:element>
+      </xs:sequence>
+      </xs:complexType>
+      </xs:element>
+   -->
+   <!--
+      
+      Stuff to do with HttpApplications
+      
+      some of this is probably implementation dependent - even though the registry was used to configure the HTTP CEC - needs review.
+      
+   -->
+   <xs:complexType name="ProxyApplicationSetup">
+      <xs:annotation>
+         <xs:documentation>
+            Extra description necessary for describing the case where
+            CEA acts as proxy to underlying service
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:choice>
+            <xs:element name="URL" type="ceab:HttpURLType">
+               <xs:annotation>
+                  <xs:documentation>
+                     A direct reference to a url of the underlying
+                     service
+                  </xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="ResourceReferenceQuery" type="xs:string">
+               <xs:annotation>
+                  <xs:documentation>
+                     A query using the registry query language to
+                     reference one or more registered resources that
+                     provide the underlying http GET/POST service.
+                  </xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:choice>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="WebHttpApplicationSetup">
+      <xs:annotation>
+         <xs:documentation>
+            Description of an HTTP Application
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:extension base="ceab:ProxyApplicationSetup">
+            <xs:sequence>
+               <xs:element name="PreProcessScript" type="ceab:PreProcessScript" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        This script can be used to map the input
+                        parameters to the parameters of the underlying
+                        service. This should not usually be necessary as
+                        the application defintion will usually be a
+                        one-to-one mapping.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="PostProcessScript" type="ceab:PostProcessScript" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        This script can be used to post process the
+                        result returned by the http application. e.g. to
+                        perform a 'screen-scrape'
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!--The calling document describing the call to the web service-->
+   <xs:complexType name="WebHttpCall">
+      <xs:annotation>
+         <xs:documentation>
+            Description of an HTTP get or post service
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="URL" type="ceab:HttpURLType"/>
+         <xs:element name="SimpleParameter" type="ceab:SimpleParameterComplexType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="HttpURLType">
+      <xs:annotation>
+         <xs:documentation>
+            The URL for an http get or post service
+         </xs:documentation>
+      </xs:annotation>
+      <xs:simpleContent>
+         <xs:extension base="xs:string">
+            <xs:attribute name="method" type="ceab:HttpMethodType" default="get">
+               <xs:annotation>
+                  <xs:documentation>
+                     the http method to be used to send parameters to
+                     the service.
+                  </xs:documentation>
+               </xs:annotation>
+            </xs:attribute>
+         </xs:extension>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:simpleType name="HttpMethodType">
+      <xs:annotation>
+         <xs:documentation>
+            http method type: get or post
+         </xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="get"/>
+         <xs:enumeration value="post"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:complexType name="script">
+      <xs:annotation>
+         <xs:documentation>
+            a snippet of code to massage the inputs and outputs
+         </xs:documentation>
+      </xs:annotation>
+      <xs:simpleContent>
+         <xs:extension base="xs:string">
+            <xs:attribute name="lang" type="ceab:scriptingLanguage" use="optional" default="xslt"/>
+         </xs:extension>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:simpleType name="scriptingLanguage">
+      <xs:annotation>
+         <xs:documentation>Scripting language</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="xslt"/>
+         <xs:enumeration value="javascript"/>
+         <xs:enumeration value="groovy"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!--definitions for web service proxy - experimental-->
+   <xs:complexType name="WebServiceApplicationSetup">
+      <xs:annotation>
+         <xs:documentation>Description of WebService</xs:documentation>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:extension base="ceab:ProxyApplicationSetup">
+            <xs:sequence/>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="InputParameterReferenceSpecification">
+        <xs:annotation>
+           <xs:documentation>
+              The allowed structures for input parameters
+           </xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+         <xs:group ref="ceab:ParameterReferenceGroupDefinition"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="OutputParameterReferenceSpecification">
+      <xs:annotation>
+         <xs:documentation>
+            Allowed constructs for output parameters
+         </xs:documentation>
+         <xs:documentation>
+            restricted to prefs at the moment - is there a case for
+            pgroups...
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="pref" type="ceab:ParameterRef" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+               <xs:documentation>
+                  a reference to a parameter which has been defined in
+                  the Parameters section of the application description.
+                  This reference defines how many times the parameter
+                  can occur in the particular interface. The content of
+                  the element can define an interface dependent default
+                  for the parameter?
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="refToParameter">
+      <xs:annotation>
+         <xs:documentation>
+            this type is used to make a reference to a parameter - it
+            uses a standard string type rather than an idref because the
+            integrity of the references is checked using xs:unique
+            constraints within VOCEA.xsd.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string"/>
+   </xs:simpleType>
+   <xs:complexType name="ConditionalPgroupOption">
+      <xs:annotation>
+         <xs:documentation>
+            this is the grouping of parameters that are required for a
+            particular value of a head parameter
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="value" type="xs:string">
+            <xs:annotation>
+               <xs:documentation>
+                  the value that the control parameter has for this
+                  grouping
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:group ref="ceab:ParameterReferenceGroupDefinition" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string">
+         <xs:annotation>
+            <xs:documentation>
+               name for the particular ConditionalPgroup option - can be
+               used in user interface to label the parameter group.
+            </xs:documentation>
+         </xs:annotation></xs:attribute>
+   </xs:complexType>
+   <xs:complexType name="ConditionalPgroup">
+        <xs:annotation>
+           <xs:documentation>
+              A grouping of parameters, where the actual parameters that
+              must be given is specified by the value of a controlling
+              parameter.
+           </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+         <xs:element name="cgroup" type="ceab:ConditionalPgroupOption" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="ceab:ParameterReferenceGroup"/>
+   </xs:complexType>
+   <xs:attributeGroup name="ParameterReferenceGroup">
+      <xs:annotation>
+         <xs:documentation>
+            the parameters that make up a standard reference to a
+            parameter.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:attribute name="ref" type="ceab:refToParameter">
+         <xs:annotation>
+            <xs:documentation>
+               reference to the parameter definition whose value
+               determine which of the cgroups will be chosen
+            </xs:documentation>
+         </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="hidden" type="xs:boolean" default="false">
+         <xs:annotation>
+            <xs:documentation>
+               a flag to allow a suggestion to the user interface that
+               this parameter should normally be hidden from user view
+               
+               ed: note - what is the difference between saying parameter is hidden and specifying a constant in interface
+            </xs:documentation>
+         </xs:annotation>
+      </xs:attribute>
+   </xs:attributeGroup>
+   <xs:complexType name="ParameterDefinitionList">
+        <xs:annotation>
+           <xs:documentation>
+              A list of parameter definitions
+           </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+         <xs:element name="parameterDefinition" type="ceab:BaseParameterDefinition" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="InterfaceConstants">
+        <xs:annotation>
+           <xs:documentation>
+              Any constant values that should be assumed to be set for a
+              particular interface by the CEA application - it should be
+              an error if the CEA client tries to send a value for this
+              parameter - the CEA server should assume the value.
+           </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+         <xs:element name="pval" type="ceab:ParameterValue" maxOccurs="unbounded">
+            <xs:annotation>
+               <xs:documentation>
+                  there needs to be at least one constant specified if
+                  this construct is used.
+               </xs:documentation>
+            </xs:annotation></xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="PGroup">
+      <xs:annotation>
+         <xs:documentation>
+            A grouping of several parameters - this can be done for
+            several reasons 1. provides a group that must be repeated 2.
+            can be used as a visual hint to any applications that use
+            the group.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:group ref="ceab:ParameterReferenceGroupDefinition" minOccurs="2" maxOccurs="unbounded">
+            <xs:annotation>
+               <xs:documentation>
+                  These are the elements that occur anywhere that there
+                  is a parameter reference possible in an interface.
+               </xs:documentation>
+            </xs:annotation></xs:group>
+      </xs:sequence>
+      <xs:attributeGroup ref="ceab:cardinality"/>
+      <xs:attribute name="name" type="xs:string" use="optional">
+         <xs:annotation>
+            <xs:documentation>
+               this is a name for the pgroup that can be used by UI
+               software
+            </xs:documentation>
+         </xs:annotation>
+      </xs:attribute>
+   </xs:complexType>
+   <xs:complexType name="SimpleParameterComplexType">
+      <xs:annotation>
+         <xs:documentation>
+            This really should be unified with the other parameter
+            definitions.....
+         </xs:documentation>
+      </xs:annotation>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="value" type="xs:string" use="required"/>
+   </xs:complexType>
+   <!-- the following used to be in CEAParameterDefinition
+   -->
+   <!-- This is the standard type -->
+   <xs:simpleType name="ParameterTypes">
+      <xs:annotation>
+         <xs:documentation>
+            The list of possible parameter types that are passed in CEA
+            messages. Note that the formal schema type of the parameter value is
+            always a string when passed to the web service -
+            The types below are to indicate how that
+            string should be interpreted. There is a mixture of classic
+            atomic types as well as some aggregate types - this wide
+            scope and slightly "fuzzy" definition of a parameter type is
+            a deliberate design decision in CEA as it reflects the
+            typical "objects" that are passed between astronomical
+            applications
+         </xs:documentation>
+         <xs:documentation>
+            As Data Models become established then references to these
+            should also be made as top level aggregate types
+         </xs:documentation>
+         <xs:documentation>
+            Note that some of the "bulkier" types - e.g. VOTable would
+            normally be passed "by reference"
+         </xs:documentation>
+         <xs:documentation>
+            Note that in a typical atomic parameter definition a UType
+            would be specified so that a workflow builder might be able
+            to automatically insert code to extract such a value from
+            the bulk output of a previous step
+         </xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:NMTOKENS">
+         <xs:enumeration value="integer">
+            <xs:annotation>
+               <xs:documentation>Integer</xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="real">
+            <xs:annotation>
+               <xs:documentation>Real</xs:documentation>
+               <xs:documentation>
+                  The string formats that can be recognised should be as
+                  defined by FORTRAN? Java? C? (all?)
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="complex">
+            <xs:annotation>
+               <xs:documentation>A complex number</xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="text">
+            <xs:annotation>
+               <xs:documentation>
+                  Any string of characters
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="boolean">
+            <xs:annotation>
+               <xs:documentation>
+                  A representation of a boolean - e.g. true/false on/off
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="anyURI">
+            <xs:annotation>
+               <xs:documentation>
+                  Any Uniform Resource Indentifier
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="VOTable">
+            <xs:annotation>
+               <xs:documentation>
+                  A VOTable in its entirety
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <!-- possibly remove these - can be signalled via UCD -->
+         <xs:enumeration value="RA">
+            <xs:annotation>
+               <xs:documentation>
+                  A value that is to be interpreted as a Right Ascension
+               </xs:documentation>
+               <xs:documentation>
+                  This is obviously a convienience simplification of
+                  part of STC
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="Dec">
+            <xs:annotation>
+               <xs:documentation>
+                  A value that is to be interpreted as a Declination
+               </xs:documentation>
+               <xs:documentation>
+                  This is obviously a convienience simplification of
+                  part of STC
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="MJD">
+            <xs:annotation>
+               <xs:documentation>Modified Julian date</xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="DateTime">
+            <xs:annotation>
+               <xs:documentation>
+                  ISO Date representation
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="ADQL">
+            <xs:annotation>
+               <xs:documentation>
+                  the full XML version of the Astronomical Data Query
+                  Language
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="ADQL-S">
+            <xs:annotation>
+               <xs:documentation>
+                  The string representation of Astronomical Data Query
+                  Language
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="STC-S">
+            <xs:annotation>
+               <xs:documentation>
+                  A value that is specified using the Space Time
+                  Coordinate string definition
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="binary">
+            <xs:annotation>
+               <xs:documentation>
+                  A general piece of binary data with no special
+                  interpretation
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="FITS">
+            <xs:annotation>
+               <xs:documentation>
+                  Data encoded in the Flexible Image Transport System
+                  http://fits.gsfc.nasa.gov/iaufwg/iaufwg.html
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+          <xs:enumeration value="XML">
+            <xs:annotation>
+               <xs:documentation>
+                  The data are encoded as generic XML. The schema for the xml is given in the UType?...
+               </xs:documentation>
+               <!-- 
+               it might be useful to have parameters specified as particular elements in an xml file - perhaps one parameter could point to the file,and the other parameters would be references into that - this would probably be best done as an extension to the pref idea - the main pref would point to the "atomic" definitian and a new attributre could point to the 'bulk' parameter
+               -->
+            </xs:annotation>
+         </xs:enumeration>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:complexType name="xhtmlDocumentation" mixed="false">
+      <xs:annotation>
+         <xs:documentation>
+            should really reference the XHTML schema, but just did this
+            for convienience
+         </xs:documentation>
+      </xs:annotation>
+      <xs:simpleContent>
+         <xs:extension base="xs:string"/>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:complexType name="tDocumentation" mixed="true">
+      <xs:annotation>
+         <xs:documentation>
+            a type that allows any style of documentation content.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="java-param">
+      <xs:restriction base="xs:token">
+         <xs:pattern value="[a-zA-Z][a-zA-Z0-9]*"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="java-class">
+      <xs:restriction base="xs:token">
+         <xs:pattern value="([a-zA-Z0-9]+\.)*[a-zA-Z][a-zA-Z0-9]*"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="java-package">
+      <xs:restriction base="xs:token">
+         <xs:pattern value="([a-zA-Z0-9]+\.)*[a-zA-Z0-9]*"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:complexType name="BaseParameterDefinition">
+      <xs:annotation>
+         <xs:documentation>
+            The basic definition of what a parameter is - this is common
+            to all of the CEA implementations.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:extension base="vs:BaseParam">
+            <xs:sequence>
+               <!-- editor note - The UCD, UType, and MimeType are not all expected to be filled in for all parameters, but are there to give a workflow builder "hints" about the semantics of a particular parameter beyond the basic type attribute - 
+                  this is rather fuzzy at the moment and it there is probably some overlap between the scopes of the elements, and certainly there is nothing stopping the user entering inconsistent information-->
+               <xs:element name="UType" type="xs:string" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        possibility to specify a UType
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="mimeType" type="xs:string" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        possibility to specify a mime type
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="defaultValue" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+                  <xs:annotation>
+                     <xs:documentation>
+                        a possible default for this type of parameter
+                        this is repeateable for the case of array
+                        parameters.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:choice minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        various ways of specifying the legal values that
+                        a parameter might have editor note - does this
+                        construct produce nice object models in code
+                        generators, or would it be better to have an
+                        abstract base type here..
+                     </xs:documentation>
+                  </xs:annotation>
+                  <xs:element name="optionList" type="ceab:OptionList">
+                     <xs:annotation>
+                        <xs:documentation>
+                           For parameters that can only have one of a
+                           list of values
+                        </xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="range" type="ceab:Range">
+                     <xs:annotation>
+                        <xs:documentation>
+                           captures the idea that a parameter can have a
+                           range of values
+                        </xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+               </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required">
+               <xs:annotation>
+                  <xs:documentation>
+                     the identifier for the parameter
+                  </xs:documentation>
+               </xs:annotation></xs:attribute>
+            <xs:attribute name="type" type="ceab:ParameterTypes" use="required">
+               <xs:annotation>
+                  <xs:documentation>
+                     The data type of the parameter - note that this is
+                     not restricted to atomic data types.
+                  </xs:documentation>
+               </xs:annotation></xs:attribute>
+            <xs:attribute name="array" type="ceab:arrayDEF" use="optional" default="1">
+               <xs:annotation>
+                  <xs:documentation>
+                     deffines the array shape of the parameter if it is an array
+                  </xs:documentation>
+               </xs:annotation>
+            </xs:attribute>
+         </xs:extension>
+      </xs:complexContent>
+      <!-- for the new derivation from DataService baseParam
+         attribute name -> id
+         element UI_NAME - uses base name 
+         element description - uses base description
+         units - base unit
+         UCD - base ucd
+      -->
+   </xs:complexType>
+    <xs:complexType name="ParameterValue" mixed="false">
+   <!--The parameter value possibly needs to be more strongly typed than it is at the moment...or use the Quantity from the DM working group when available..-->
+   <!-- perhaps the opportunity could be taken to reduce the length of element names for the v1.0 release -->
+      <xs:annotation>
+         <xs:documentation>
+            Defines what a parameter can contain when it is passed to be
+            executed -This can be a single value element, or a simple
+            construction of an array - could perhaps allow a VOQuantity
+            as well.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:choice>
+         <xs:element name="value" type="xs:string">
+            <xs:annotation>
+               <xs:documentation>
+                  The value of the parameter - formally has an xsd type
+                  of string, though the 'real' type is encoded in the
+                  parameter definition
+               </xs:documentation>
+            </xs:annotation></xs:element>
+         <xs:element name="array" type="ceab:ParameterValueArray">
+            <xs:annotation>
+               <xs:documentation>
+                  very simple model of a array - cannot be sparsely
+                  filled,
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:choice>
+      <xs:attribute name="id" type="xs:string" use="required">
+         <xs:annotation>
+            <xs:documentation>
+               The id is a reference to the id of the parameter as
+               defined in the parameters section - used to be called
+               "name"
+            </xs:documentation>
+         </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="encoding" type="ceab:BinaryEncodings" use="optional">
+         <xs:annotation>
+            <xs:documentation>
+               This is unused in implementations at the moment - give
+               the opportunity to specify some form of encoding for
+               parameter values .
+            </xs:documentation>
+         </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="indirect" type="xs:boolean" use="optional" default="false">
+         <xs:annotation>
+            <xs:documentation>
+               This specifies whether the parameter value is indirect -
+               i.e. if value of the parameter is some form of URI to the
+               actual parameter value. If the value is indirect then the
+               CEA server implementation is expected to fetch the
+               parameter before passing it on to the application.
+            </xs:documentation>
+         </xs:annotation>
+      </xs:attribute>
+   </xs:complexType>
+     <xs:complexType name="Tool" mixed="false">
+      <xs:annotation>
+         <xs:documentation>
+            represents an invocation of a CEA application, with all the
+            parameter values defined.
+         </xs:documentation>
+      </xs:annotation>
+          <xs:sequence>
+            <xs:element name="input" type="ceab:ListOfParameterValues" minOccurs="0">
+               <xs:annotation>
+                  <xs:documentation>
+                     the list of parameters supplied as input
+                  </xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="output" type="ceab:ListOfParameterValues" minOccurs="0">
+               <xs:annotation>
+                  <xs:documentation>
+                     the list of parameters expected as output
+                  </xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:sequence>
+         <xs:attribute name="id" type="xs:string" use="required">
+         <!-- perhaps this should be a vr:IdentifierURI, but do not want to include VOResource schema here -->
+            <xs:annotation>
+               <xs:documentation>
+                  ivoa resource identifier of the application to call
+               </xs:documentation>
+            </xs:annotation>
+         </xs:attribute>
+         <xs:attribute name="interface" type="xs:string" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  which interface of the application to call
+               </xs:documentation>
+            </xs:annotation>
+         </xs:attribute>
+      </xs:complexType>
+   <xs:simpleType name="arrayDEF">
+      <xs:annotation>
+         <xs:documentation>
+            taken from the votable definition - the first index varies
+            most rapidy, and the last index may be specified as '*' to
+            mean unbounded.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:token">
+         <xs:pattern value="([0-9]+x)*[0-9]*[*]?(s\W)?"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="RangeType">
+      <xs:annotation>
+         <xs:documentation>
+            this different type of supported ranges
+         </xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="integer"/>
+         <xs:enumeration value="float"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="BinaryEncodings">
+      <xs:annotation>
+         <xs:documentation>
+            the allowable binary encodings for a parameter value. The
+            parameter value formally has an xsd type of string, but the
+            use of encodings would allow a pure binary object, e.g. a
+            jpeg file to be included as a direct parameter value.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="base64"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:complexType name="ParameterValueArray">
+        <xs:annotation>
+           <xs:documentation>
+              simple array model - assumed to be fully filled in a
+              row-major fashion
+           </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+         <xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="arrayShape" type="ceab:arrayDEF">
+         <xs:annotation>
+            <xs:documentation>
+               editor note - should this be here to allow overriding of
+               the parameter defintion.
+            </xs:documentation>
+         </xs:annotation></xs:attribute>
+   </xs:complexType>
+   <xs:complexType name="OptionList">
+        <xs:annotation>
+           <xs:documentation>
+              A way of specifying that a parameter value should be taken
+              from a list of possible values.
+           </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+         <xs:element name="optionVal" type="xs:string" maxOccurs="unbounded">
+            <xs:annotation>
+               <xs:documentation>
+                  a possible value for a value that forms part of a list
+                  of values that a parameter could take.
+               </xs:documentation>
+            </xs:annotation></xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="Range">
+        <xs:annotation>
+           <xs:documentation>
+              used to specify that a parameter value should lie in a
+              particular range.
+           </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+         <xs:element name="min" type="xs:string" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  the minimum value in the range
+               </xs:documentation>
+            </xs:annotation></xs:element>
+         <xs:element name="max" type="xs:string" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  the maximum value in the range.
+               </xs:documentation>
+            </xs:annotation></xs:element>
+      </xs:sequence>
+      <xs:attribute name="kind" type="ceab:RangeType" use="required"/>
+   </xs:complexType>
+   <xs:complexType name="ListOfParameterValues">
+        <xs:annotation>
+           <xs:documentation>
+              A list of parameter values
+           </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+         <xs:element name="parameter" type="ceab:ParameterValue" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- the following used to be in CEAParameterDefinition
+   -->
+   <xs:complexType name="PreProcessScript">
+      <xs:simpleContent>
+         <xs:extension base="ceab:script"/>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:complexType name="PostProcessScript">
+      <xs:simpleContent>
+         <xs:extension base="ceab:script"/>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:group name="ParameterReferenceGroupDefinition">
+      <xs:annotation>
+         <xs:documentation>
+            some form of reference to a parameter that would appear in
+            an interface definition. This can either be a direct
+            reference, a reference to a repeating group of parameters or
+            a reference to a conditional group of parameters.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:choice>
+         <xs:annotation>
+            <xs:documentation>
+               editor note - not too sure what the best multiplicities
+               are here - this would typically be used in a case
+            </xs:documentation>
+         </xs:annotation>
+         <xs:element name="pref" type="ceab:ParameterRef">
+            <xs:annotation>
+               <xs:documentation>
+                  a reference to a parameter which has been defined in
+                  the Parameters section of the application description.
+                  This reference defines how many times the parameter
+                  can occur in the particular interface. The content of
+                  the element can define an interface dependent default
+                  for the parameter?
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="pgroup" type="ceab:PGroup" maxOccurs="unbounded">
+            <xs:annotation>
+               <xs:documentation>
+                  a simple grouping of parameters. The parameters could
+                  be grouped because they should be repeated as a group
+                  or perhaps because they should appear together on a
+                  single pane of the user interface.
+               </xs:documentation>
+            </xs:annotation></xs:element>
+         <xs:element name="cgroupHead" type="ceab:ConditionalPgroup" maxOccurs="unbounded">
+            <xs:annotation>
+               <xs:documentation>
+                  this represents a point in the parameter tree where
+                  there could be a series of different sequences of
+                  parameters based on the value of the parameter
+                  referred to by this top level.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:choice>
+   </xs:group>
+</xs:schema>
