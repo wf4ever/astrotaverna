@@ -11,6 +11,7 @@
    xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
    targetNamespace="http://www.ivoa.net/xml/VOTable/v1.1" 
    xmlns="http://www.ivoa.net/xml/VOTable/v1.1"
+   xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
 >
 
 <!-- Here we define some interesting new datatypes:
@@ -163,7 +164,13 @@
       <xs:extension base="xs:string">
         <xs:attribute name="ID" type="xs:ID"/>
         <xs:attribute name="name" type="xs:token" use="required"/>
-        <xs:attribute name="value" type="xs:string" use="required"/>
+        <xs:attribute name="value" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:appinfo>
+					<jaxb:property name="infoValue" />
+				</xs:appinfo>
+			</xs:annotation>
+        </xs:attribute>
       </xs:extension>
     </xs:simpleContent></xs:complexType>
   </xs:element>
