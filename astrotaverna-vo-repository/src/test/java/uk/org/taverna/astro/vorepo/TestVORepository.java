@@ -6,11 +6,21 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigInteger;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.ws.BindingProvider;
 
+import net.ivoa.xml.adql.v1.ClosedSearchType;
+import net.ivoa.xml.adql.v1.IntersectionSearchType;
+import net.ivoa.xml.adql.v1.LikePredType;
+import net.ivoa.xml.adql.v1.SearchType;
+import net.ivoa.xml.adql.v1.UnionSearchType;
+import net.ivoa.xml.adql.v1.WhereType;
+import net.ivoa.xml.adql.v1.XMatchType;
 import net.ivoa.xml.conesearch.v1.ConeSearch;
 import net.ivoa.xml.sia.v1.SimpleImageAccess;
 import net.ivoa.xml.ssa.v0.SimpleSpectralAccess;
@@ -46,6 +56,30 @@ public class TestVORepository {
 			}
 		}
 		assertTrue("Could not find any ConeSearch", foundCapability);
+	}
+	
+	@Ignore("Takes a very long time")	
+	@Test
+	public void searchEveryService() throws Exception {
+		BigInteger HUNDRED = BigInteger.valueOf(100);
+		BigInteger ONE = BigInteger.valueOf(1);
+		VORepository repo = new VORepository();
+		WhereType where = new WhereType();
+		where.setCondition(repo.makeLikeCondition("capability/interface/@xsi:type", "%"));
+			// Perform search
+		List<Resource> resources = null;
+		BigInteger count = BigInteger.valueOf(0);
+		while (resources == null || ! resources.isEmpty()) {
+			resources = repo.getPort().search(where, count, count.add(HUNDRED), false)
+				.getResource();
+			for (Resource res : resources) {
+				System.out.println(res);
+				count = count.add(ONE);
+			}
+			Thread.sleep(500);
+		}
+		System.out.println(count);
+		
 	}
 
 

@@ -239,7 +239,7 @@ public class VORepository {
 		return closed;
 	}
 
-	private LikePredType makeLikeCondition(String xpath, String literal) {
+	protected LikePredType makeLikeCondition(String xpath, String literal) {
 		LikePredType like = new LikePredType();
 		ColumnReferenceType typeArg = new ColumnReferenceType();
 		// TODO: Is this temp name really needed?
