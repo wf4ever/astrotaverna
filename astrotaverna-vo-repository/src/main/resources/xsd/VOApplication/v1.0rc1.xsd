@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- $Id: VOApplication.xsd,v 1.4 2011/09/01 14:03:58 pah Exp $  
+Defines general application resource metadata.  ...
+--><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ivoa.net/xml/VOApplication/v1.0rc1" xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0" xmlns:vm="http://www.ivoa.net/xml/VOMetadata/v0.1" targetNamespace="http://www.ivoa.net/xml/VOApplication/v1.0rc1" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="1.0 $Revision: 1.4 $">
+   <xs:import schemaLocation="http://software.astrogrid.org/schema/VOResource/v1.0/VOResource.xsd" namespace="http://www.ivoa.net/xml/VOResource/v1.0"/>
+   <xs:annotation>
+      <xs:appinfo>
+         <vm:schemaName>VOApplication</vm:schemaName>
+         <vm:schemaPrefix>xs</vm:schemaPrefix>
+         <vm:targetPrefix>va</vm:targetPrefix>
+      </xs:appinfo>
+      <xs:documentation>
+         This is a schema for describing applications.. See complete
+         specification at
+         http://www.ivoa.net/Documents/latest/VOApplication.html.
+      </xs:documentation>
+   </xs:annotation>
+   <xs:complexType name="Application">
+      <xs:annotation>
+         <xs:documentation>
+            The basic description of an application.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:extension base="vr:Resource">
+            <xs:sequence>
+               <!-- <xs:element name="ApplicationInfo">
+                  <xs:complexType>
+                  <xs:sequence>   -->
+               <xs:element name="cost" minOccurs="0" type="xs:string">
+                  <xs:annotation>
+                     <xs:documentation>
+                        an indication as to what the cost of the
+                        application is - the string "free" or "none"
+                        should be used to indicate that the application
+                        does not cost anything. Any value for the cost
+                        of any non-free software should be taken to be
+                        an approximate cost for one license - it is
+                        obviously difficult to curate this value for
+                        non-free software so that the main use of this
+                        element will be to distinguish between free and
+                        non-free.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="licence" type="xs:string" maxOccurs="1" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        A free text value that indicates what type of
+                        licence is in force. This can either be a common
+                        name of a license or a URL pointing to the
+                        license text.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="openSource" type="xs:boolean" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        Is the software open source. See
+                        http://www.opensource.org/docs/definition.php
+                        for the definition of "open source"
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="dataFormat" type="DataFormat" maxOccurs="unbounded" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        File formats that this application can read or
+                        write. The formats are specified by reference to
+                        an IVOA identifier that describes the format.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="voStandard" type="ApplicationCapability" maxOccurs="unbounded" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        enumerate which standards this application is
+                        compliant with - *Editor note* not really too
+                        happy with this, as there is a certain amount of
+                        potential redundancy here if there is a derived
+                        type - e.g. a CeaApplication type will support
+                        CEA standard so at least one entry would have to
+                        be placed here...
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="sourceLanguage" type="ProgrammingLanguage" maxOccurs="unbounded" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The IVOA identifier for the principal language
+                        that the application is written in.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="sourceCodeURL" type="xs:anyURI" maxOccurs="1" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The location where the source code can be found.
+                        This might be a URL to a specific archive file
+                        containing the source, or to the access pages
+                        for a source code management system.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <!--</xs:sequence>
+                  </xs:complexType>
+                  </xs:element>-->
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="DesktopApplication">
+      <xs:annotation>
+         <xs:documentation>
+            An application that can actually be run on a user's desktop
+            computer.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:extension base="Application">
+            <xs:sequence>
+               <xs:element name="binarySize" type="xs:int" maxOccurs="1" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        The size of the executable in bytes.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="memoryRequirement" type="xs:string" maxOccurs="1" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        An estimate in bytes of the mimimum memory that
+                        the application requires to function with
+                        acceptable interactive performance.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="network" type="NetworkRequirement" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        An assertion about the network requirements for
+                        the proper functioning of the application.
+                     </xs:documentation>
+                     <xs:documentation>
+                        This can take on the values;
+                        <dl>
+                           <dt>Essential</dt>
+                           <dd>
+                              The application will not even start
+                              without a network connection.
+                           </dd>
+                           <dt>Useful</dt>
+                           <dd>
+                              The application will start, but the
+                              primary use for the application requires a
+                              network connection.
+                           </dd>
+                           <dt>Limited</dt>
+                           <dd>
+                              The application makes only limited use of
+                              network facilities, thus the majority of
+                              its functionality is still available
+                              without a network connection.
+                           </dd>
+                           <dt>Unnecessary</dt>
+                           <dd>
+                              The application makes no use of the
+                              network.
+                           </dd>
+                        </dl>
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="dependsOn" type="vr:IdentifierURI" maxOccurs="unbounded" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        Can be used to indicate other
+                        applications/software libraries that the
+                        application depends upon. This should only be
+                        used to indicate dependencies that must be
+                        installed separately from the main application
+                        installation for it to function properly.
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="executable" type="ExecutionEnvironment" maxOccurs="unbounded" minOccurs="0">
+                  <xs:annotation>
+                     <xs:documentation>
+                        how to obtain the executable
+                     </xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="SoftwareLibrary">
+      <xs:annotation>
+         <xs:documentation>
+            Software the cannot be independently executed, but can be
+            used to build applications
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:extension base="Application">
+            <xs:sequence>
+               <xs:element name="library" type="ExecutionEnvironment" maxOccurs="unbounded" minOccurs="1">
+               </xs:element>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="ExecutionEnvironment">
+      <xs:annotation>
+         <xs:documentation>
+            Description of the full execution environment. Where
+            possible this description should be sufficient to download
+            and run the application.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="platform" type="Platform">
+            <xs:annotation>
+               <xs:documentation>
+                  The major classification of the execution environment.
+                  This should be an ivoa identifier for the platform
+                  name;
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="architecture" type="xs:string" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  The hardware architecture that the software is
+                  compiled for, if relevant.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="subtype" type="xs:string" maxOccurs="1" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  this is used to specify exactly the specific kind of
+                  the environment - e.g. in the case of unix/linux it
+                  would be nice if the output of uname would suffice
+                  here - however the most common
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="minVersion" type="xs:string" maxOccurs="1" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  the minimum version of the environment that the code
+                  will run in -
+               </xs:documentation>
+               <!--                  lots of problems here for practical use of this element
+                  *  need to be able to compare versions...possibly not so easy e.g. windows XP > windows 2000
+                  *  In addition there are lots of "marketing versions" of operating systems that are not the same as the versions that the operating system itself uses..
+                  *  Also linux based systems often report version of kernel, which is not necessarily the determining factor as to whether a particular version of an application can run...
+               -->
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="maxVersion" type="xs:string" maxOccurs="1" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  The highest version of the environment that this
+                  applies to.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="download" type="xs:anyURI" maxOccurs="unbounded" minOccurs="1">
+            <xs:annotation>
+               <xs:documentation>
+                  The url that can be used to download (and possibly
+                  execute) the application.
+               </xs:documentation>
+               <xs:documentation>
+                  This can actually point to different types of entity
+                  depending on the platform e.g. for the "unix" platform
+                  this would typically point to a compiled executable
+                  image (though it might point to an archive or
+                  "packaging" file that contains the executable amongst
+                  other files). For the "Java Webstart" platform this
+                  element will point to a ".jnlp" file that contains all
+                  of the information necessary for the Java Webstart
+                  technology to download and run the application.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="path" type="xs:string" maxOccurs="1" minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  If the software image is packaged within some form of
+                  archive format (e.g. tar or zip format) then this
+                  element can be used to indicate the exact location of
+                  the software image within the archive file.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="DataFormat">
+      <xs:annotation>
+         <xs:documentation>
+            Data File Format. This should be a uri reference to a value
+            from the ivo://net.ivoa.application/formats resource. Editor
+            note - it would really be nice to have a connection with
+            mime-types here rather/as well as the standard reference
+            mechanism
+         </xs:documentation>
+      </xs:annotation>
+      <!-- could be made more explict with the vstd:StandardKeyURI but have choosen not to couple this to the VOStandard schema -->
+      <xs:attribute name="standardID" type="xs:anyURI" use="required"/>
+      <xs:attribute name="direction" type="DataFormatDirection" use="required">
+      </xs:attribute>
+   </xs:complexType>
+   <xs:simpleType name="ProgrammingLanguage">
+      <xs:annotation>
+         <xs:documentation>
+            The programming language. This should be a uri reference to
+            a value from the ivo://net.ivoa.application/languages
+            resource.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:anyURI">
+         <!-- could be made more explict with the vstd:StandardKeyURI but have choosen not to couple this to the VOStandard schema -->
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="Platform">
+      <xs:annotation>
+         <xs:documentation>
+            The execution environment name. This should be a uri
+            reference to a value from the
+            ivo://net.ivoa.application/platforms resource.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:anyURI">
+         <!-- could be made more explict with the vstd:StandardKeyURI but have choosen not to couple this to the VOStandard schema -->
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:complexType name="ApplicationCapability">
+      <xs:annotation>
+         <xs:documentation>
+            generic description of a capability of an application - this
+            is different from a service capability because it does not
+            have an interface associated - perhaps should be derived
+            from a common base class though.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:attribute name="standardID" type="vr:IdentifierURI"/>
+   </xs:complexType>
+   <xs:simpleType name="NetworkRequirement">
+      <xs:annotation>
+         <xs:documentation>
+            Characterization as to whether a network connection is
+            required by the application.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="Essential">
+            <xs:annotation>
+               <xs:documentation>
+                  The application cannot function without a network
+                  connection
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="Useful">
+            <xs:annotation>
+               <xs:documentation>
+                  The application will function without a network
+                  connection, but the primary use for the application
+                  requires a network connection.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="Limited">
+            <xs:annotation>
+               <xs:documentation>
+                  The application makes only limited use of network
+                  facilities, thus the majority of its functionality is
+                  still available without a network connection.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="Unnecessary">
+            <xs:annotation>
+               <xs:documentation>
+                  The application makes no use of the network.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:enumeration>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="DataFormatDirection">
+      <xs:annotation>
+         <xs:documentation>
+            Description of whether an application can both read and
+            write a particular data format.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="read"/>
+         <xs:enumeration value="write"/>
+         <xs:enumeration value="both"/>
+      </xs:restriction>
+   </xs:simpleType>
+</xs:schema>
