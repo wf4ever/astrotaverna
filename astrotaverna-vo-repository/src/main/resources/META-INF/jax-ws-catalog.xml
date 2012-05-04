@@ -1,21 +1,27 @@
 <?xml version="1.0"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+	<system systemId="http://software.astrogrid.org/schema/vo-resource-types/VOResource/v1.0/VOResource.xsd" uri="../xsd/VOResource/v1.0.xsd"/>			
+    <system systemId="http://software.astrogrid.org/schema/vo-resource-types/CEAService/v1.0rc1/CEAService.xsd" uri="../xsd/CEAService/v1.0rc1.xsd" />
+    <system systemId="http://software.astrogrid.org/schema/vo-resource-types/VODataService/v1.0/VODataService.xsd" uri="../xsd/VODataService/v1.0.xsd"/>
+    <system systemId="http://software.astrogrid.org/schema/vo-resource-types/VOApplication/v1.0rc1/VOApplication.xsd" uri="../xsd/VOApplication/v1.0rc1.xsd" />
+    <system systemId="http://software.astrogrid.org/schema/vo-formats/VOTable/v1.1/VOTable.xsd" uri="../xsd/VOTable/v1.1.xsd"/>
+    <system systemId="http://software.astrogrid.org/schema/cea/CEABase/v1.0rc1/CEABase.xsd" uri="../xsd/CEABase/v1.0rc1.xsd" />
 	<system systemId="http://www.ivoa.net/xml/ADQL/v1.0" uri="../xsd/ADQL/v1.0.xsd" />
  	<system systemId="http://www.ivoa.net/xml/ConeSearch/v1.0" uri="../xsd/ConeSearch/v1.0.xsd"/>
  	<system systemId="http://www.ivoa.net/xml/RegistryInterface/v1.0" uri="../xsd/RegistryInterface/v1.0.xsd"/>
  	<system systemId="http://www.ivoa.net/xml/SIA/v1.0" uri="../xsd/SIA/v1.0.xsd"/>
  	<system systemId="http://www.ivoa.net/xml/SLAP/v0.1" uri="../xsd/SLAP/v0.1.xsd"/>
  	<system systemId="http://www.ivoa.net/xml/SSA/v0.4" uri="../xsd/SSA/v0.4.xsd"/>
- 	<system systemId="http://www.ivoa.net/xml/STC/stc-v1.30.xsd" uri="../STC/v1.30.xsd" /> 	         
+ 	<system systemId="http://www.ivoa.net/xml/STC/stc-v1.30.xsd" uri="../xsd/STC/v1.30.xsd" /> 	         
 	<system systemId="http://www.ivoa.net/xml/STC/STCcoords/v1.10" uri="../xsd/STCcoords/v1.10.xsd" />
  	<system systemId="http://www.ivoa.net/xml/STC/STCregion/v1.10" uri="../xsd/STCregion/v1.10.xsd" />
  	<system systemId="http://www.ivoa.net/xml/VODataService/v1.0" uri="../xsd/VODataService/v1.0.xsd"/>
  	<system systemId="http://www.ivoa.net/xml/VOResource/v1.0" uri="../xsd/VOResource/v1.0.xsd"/>
  	<system systemId="http://www.ivoa.net/xml/VOStandard/v0.1" uri="../xsd/VOStandard/v0.1.xsd"/>
-    <system systemId="http://www.ivoa.net/xml/Xlink/xlink.xsd" uri="../Xlink/xlink.xsd" />	
-    <system systemId="http://www.ivoa.net/xml/CEA/base/v1.0rc1" uri="../CEABase/v1.0rc1.xsd" />
-    <system systemId="http://www.ivoa.net/xml/CEA/v1.0rc1" uri="../CEAService/v1.0rc1.xsd" />
-    <system systemId="http://www.ivoa.net/xml/VOApplication/v1.0rc1" uri="../VOApplication/v1.0rc1.xsd" />
-    <system systemId="http://www.ivoa.net/xml/VOTable/v1.1" uri="../VOTable/v1.1.xsd" />
- 	<system systemId="http://www.w3.org/1999/xlink" uri="../Xlink/xlink.xsd" />
+    <system systemId="http://www.ivoa.net/xml/Xlink/xlink.xsd" uri="../xsd/Xlink/xlink.xsd" />	
+    <system systemId="http://www.ivoa.net/xml/CEA/base/v1.0rc1" uri="../xsd/CEABase/v1.0rc1.xsd" />
+    <system systemId="http://www.ivoa.net/xml/CEA/v1.0rc1" uri="../xsd/CEAService/v1.0rc1.xsd" />
+    <system systemId="http://www.ivoa.net/xml/VOApplication/v1.0rc1" uri="../xsd/VOApplication/v1.0rc1.xsd" />
+    <system systemId="http://www.ivoa.net/xml/VOTable/v1.1" uri="../xsd/VOTable/v1.1.xsd" />
+ 	<system systemId="http://www.w3.org/1999/xlink" uri="../xsd/Xlink/xlink.xsd" />
 </catalog> 
