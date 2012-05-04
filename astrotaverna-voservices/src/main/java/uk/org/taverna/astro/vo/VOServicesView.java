@@ -187,12 +187,12 @@ public class VOServicesView extends JPanel implements UIComponentSPI {
 		if (row < 0) {
 			return null;
 		}
+		row = resultsTable.convertRowIndexToModel(row);		
 		return ((Service) resultsTableModel.getValueAt(row, RESOURCE_COLUMN));
 	}
 
 	protected Service getTableSelection() {
-		return getServiceAtRow(resultsTable.getSelectionModel()
-				.getMinSelectionIndex());
+		return getServiceAtRow(resultsTable.getSelectedRow());
 	}
 
 	protected void initialize() {
