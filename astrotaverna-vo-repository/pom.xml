@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>astrotaverna</artifactId>
-		<groupId>uk.org.taverna.astro</groupId>
+		<groupId>org.purl.wf4ever.astrotaverna</groupId>
 		<version>0.4-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
