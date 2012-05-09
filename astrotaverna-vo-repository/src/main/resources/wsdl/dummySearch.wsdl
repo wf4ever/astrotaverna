@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?> <!-- uk.org.taverna.astro.vorepo -->
+<?xml version="1.0" encoding="UTF-8"?>
 <definitions name="searchableRegistry"
 	targetNamespace="http://purl.org/wf4ever/astrotaverna/wsdl/RegistrySearch"
 	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ris="http://www.ivoa.net/wsdl/RegistrySearch/v1.0"
