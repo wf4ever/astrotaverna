@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>uk.org.taverna.astro</groupId>
@@ -7,7 +8,6 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>astrotaverna-workbench-test</artifactId>
-
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -19,8 +19,8 @@
 			<artifactId>coordinatestool-activity-ui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
-		
+
+
 		<!-- Workbench runtime for testing from IDE, remove if not using TavernaWorkbenchWithExamplePlugin.main() -->
 		<dependency>
 			<groupId>net.sf.taverna.t2.taverna-workbench</groupId>
@@ -112,8 +112,19 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
-		
+
+
 	</dependencies>
+	<repositories>
+		<repository>
+			<!-- Needed due to http://www.mygrid.org.uk/dev/issues/browse/T2-2089 -->
+			<id>opm</id>
+			<name>Open Provenance (OPM)</name>
+			<url>http://openprovenance.org/java/maven-releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 </project>
