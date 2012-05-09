@@ -1,4 +1,4 @@
-package uk.org.taverna.astro.vo.utils;
+package org.purl.wf4ever.astrotaverna.vo.utils;
 
 import java.awt.Desktop;
 import java.io.IOException;

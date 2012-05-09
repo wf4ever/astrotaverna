@@ -1,4 +1,4 @@
-package uk.org.taverna.astro.vo;
+package org.purl.wf4ever.astrotaverna.vo;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.purl.wf4ever.astrotaverna.vorepo.VORepository;
+import org.purl.wf4ever.astrotaverna.wsdl.registrysearch.ErrorResp;
 
 import net.ivoa.xml.conesearch.v1.ConeSearch;
 import net.ivoa.xml.sia.v1.SimpleImageAccess;
@@ -15,7 +16,6 @@ import net.ivoa.xml.slap.v0.SimpleLineAccess;
 import net.ivoa.xml.ssa.v0.SimpleSpectralAccess;
 import net.ivoa.xml.voresource.v1.Capability;
 import net.ivoa.xml.voresource.v1.Service;
-import uk.org.taverna.astro.wsdl.registrysearch.ErrorResp;
 
 public class VOServicesModel {
 	private static List<Service> EMPTY_SERVICES = Collections

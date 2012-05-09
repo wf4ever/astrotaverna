@@ -1,0 +1,17 @@
+<basepane>
+  <child>
+    <znode classname="net.sf.taverna.zaria.ZRavenComponent">
+      <namedcomponent scroll="false">
+        <name>voservices</name>
+      </namedcomponent>
+    </znode>
+  </child>
+  <namedcomponents>    
+    <namedcomponent>
+      <groupid>org.purl.wf4ever.astrotaverna</groupid>
+      <artifact>astrotaverna-voservices</artifact>
+      <classname>org.purl.wf4ever.astrotaverna.vo.VOServicesComponentFactory</classname>
+      <name>voservices</name>
+    </namedcomponent>    
+  </namedcomponents>
+</basepane>

@@ -1,4 +1,4 @@
-package uk.org.taverna.astro.vo;
+package org.purl.wf4ever.astrotaverna.vo;
 
 import java.net.URI;
 
