@@ -1,4 +1,4 @@
-package com.astrotaverna.coordinatestool.ui.serviceprovider;
+package org.purl.wf4ever.astrotaverna.coordinates.ui.serviceprovider;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -6,11 +6,12 @@ import java.util.List;
 
 import javax.swing.Icon;
 
+import org.purl.wf4ever.astrotaverna.coordinates.CoordinatesActivity;
+import org.purl.wf4ever.astrotaverna.coordinates.CoordinatesActivityConfigurationBean;
+
 import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
-import com.astrotaverna.coordinatestool.CoordinatesActivity;
-import com.astrotaverna.coordinatestool.CoordinatesActivityConfigurationBean;
 
 public class CoordinatesServiceDesc extends ServiceDescription<CoordinatesActivityConfigurationBean> {
 

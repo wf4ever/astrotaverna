@@ -1,12 +1,13 @@
-package com.astrotaverna.coordinatestool.ui.serviceprovider;
+package org.purl.wf4ever.astrotaverna.coordinates.ui.serviceprovider;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.purl.wf4ever.astrotaverna.coordinates.CoordinatesActivity;
+import org.purl.wf4ever.astrotaverna.coordinates.CoordinatesDegreeActivity;
+
 import net.sf.taverna.t2.workbench.activityicons.ActivityIconSPI;
 import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
-import com.astrotaverna.coordinatestool.CoordinatesActivity;
-import com.astrotaverna.coordinatestool.CoordinatesDegreeActivity;
 
 public class CoordinatesServiceIcon implements ActivityIconSPI {
 

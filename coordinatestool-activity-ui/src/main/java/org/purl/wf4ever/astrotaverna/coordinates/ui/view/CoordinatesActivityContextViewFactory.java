@@ -1,12 +1,13 @@
-package com.astrotaverna.coordinatestool.ui.view;
+package org.purl.wf4ever.astrotaverna.coordinates.ui.view;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.purl.wf4ever.astrotaverna.coordinates.CoordinatesActivity;
+
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory;
 
-import com.astrotaverna.coordinatestool.CoordinatesActivity;
 
 public class CoordinatesActivityContextViewFactory implements
 		ContextualViewFactory<CoordinatesActivity> {

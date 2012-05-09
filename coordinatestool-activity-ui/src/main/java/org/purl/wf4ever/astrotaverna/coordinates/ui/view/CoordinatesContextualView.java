@@ -1,4 +1,4 @@
-package com.astrotaverna.coordinatestool.ui.view;
+package org.purl.wf4ever.astrotaverna.coordinates.ui.view;
 
 import java.awt.Frame;
 
@@ -7,11 +7,12 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.purl.wf4ever.astrotaverna.coordinates.CoordinatesActivity;
+import org.purl.wf4ever.astrotaverna.coordinates.CoordinatesActivityConfigurationBean;
+import org.purl.wf4ever.astrotaverna.coordinates.ui.config.CoordinatesConfigureAction;
+
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 
-import com.astrotaverna.coordinatestool.CoordinatesActivity;
-import com.astrotaverna.coordinatestool.CoordinatesActivityConfigurationBean;
-import com.astrotaverna.coordinatestool.ui.config.CoordinatesConfigureAction;
 
 @SuppressWarnings("serial")
 public class CoordinatesContextualView extends ContextualView {

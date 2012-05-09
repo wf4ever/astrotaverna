@@ -1,1 +1,1 @@
-com.astrotaverna.coordinatestool.ui.serviceprovider.CoordinatesServiceProvider
+org.purl.wf4ever.astrotaverna.coordinates.ui.serviceprovider.CoordinatesServiceProvider

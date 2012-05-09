@@ -1,4 +1,4 @@
-package com.astrotaverna.coordinatestool;
+package org.purl.wf4ever.astrotaverna.coordinates;
 
 import java.util.ArrayList;
 import java.util.List;

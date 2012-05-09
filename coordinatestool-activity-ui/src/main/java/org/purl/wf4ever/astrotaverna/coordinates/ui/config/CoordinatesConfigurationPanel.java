@@ -1,4 +1,4 @@
-package com.astrotaverna.coordinatestool.ui.config;
+package org.purl.wf4ever.astrotaverna.coordinates.ui.config;
 
 import java.awt.GridLayout;
 import java.net.URI;
@@ -7,10 +7,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import org.purl.wf4ever.astrotaverna.coordinates.CoordinatesActivity;
+import org.purl.wf4ever.astrotaverna.coordinates.CoordinatesActivityConfigurationBean;
+
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ActivityConfigurationPanel;
 
-import com.astrotaverna.coordinatestool.CoordinatesActivity;
-import com.astrotaverna.coordinatestool.CoordinatesActivityConfigurationBean;
 
 
 @SuppressWarnings("serial")

@@ -1,4 +1,4 @@
-package com.astrotaverna.coordinatestool.ui.serviceprovider;
+package org.purl.wf4ever.astrotaverna.coordinates.ui.serviceprovider;
 
 import java.net.URI;
 import java.util.ArrayList;

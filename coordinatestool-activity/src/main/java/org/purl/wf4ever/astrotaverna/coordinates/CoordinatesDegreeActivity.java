@@ -1,4 +1,4 @@
-package com.astrotaverna.coordinatestool;
+package org.purl.wf4ever.astrotaverna.coordinates;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationE
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCallback;
 
-public class CoordinatesActivity extends
+public class CoordinatesDegreeActivity extends
 		AbstractAsynchronousActivity<CoordinatesActivityConfigurationBean>
 		implements AsynchronousActivity<CoordinatesActivityConfigurationBean> {
 
@@ -28,10 +28,10 @@ public class CoordinatesActivity extends
 			 * operation, like done for WSDL services.
 			 */
 			
-			private static final String RA = "RA";
-			private static final String DEC = "DEC";
-			private static final String L_COORD = "L_COORD";
-			private static final String B_COORD = "B_COORD";
+			private static final String RA_HMS = "RA_HMS";
+			private static final String DEC_DMS = "DEC_DMS";
+			private static final String RA_DEG = "RA_DEG";
+			private static final String DEC_DEG = "DEC_DEG";
 	
 	private CoordinatesActivityConfigurationBean configBean;
 
@@ -66,10 +66,10 @@ public class CoordinatesActivity extends
 				removeOutputs();
 
 				
-				addInput(RA, 0, true, null, String.class);
-				addInput(DEC, 0, true, null, String.class);		
-				addOutput(L_COORD, 0);
-				addOutput(B_COORD, 0);
+				addInput(RA_HMS, 0, true, null, String.class);
+				addInput(DEC_DMS, 0, true, null, String.class);		
+				addOutput(RA_DEG, 0);
+				addOutput(DEC_DEG, 0);
 
 	}
 	
@@ -87,49 +87,88 @@ public class CoordinatesActivity extends
 				ReferenceService referenceService = context
 						.getReferenceService();
 				// Resolve inputs 				
-				String raInput = (String) referenceService.renderIdentifier(inputs.get(RA), 
+				String raInput = (String) referenceService.renderIdentifier(inputs.get(RA_HMS), 
 						String.class, context);
-				String decInput = (String) referenceService.renderIdentifier(inputs.get(DEC), 
+				String decInput = (String) referenceService.renderIdentifier(inputs.get(DEC_DMS), 
 						String.class, context);
 				
+
+				double sign = 1.0;
+				Double rah, ram,ras, decd, decm, decs;
+				Double hh;
+				Double deg;
 				
-				Double stheta = 0.88998808748;
-				Double ctheta = 0.45598377618;
-				Double psi = 0.57477043300;
-				Double phi = 4.9368292465;
+				String[] temp = raInput.split(":");
 				
-				Double ra = Double.parseDouble(raInput);
-				Double dec = Double.parseDouble(decInput);
-				Double raa = ra*Math.PI/180.0;
-				Double deca = dec*Math.PI/180.0;
+				try{
+					 rah = Double.parseDouble(temp[0]);
+					 ram = Double.parseDouble(temp[1]);
+					 ras = Double.parseDouble(temp[2]);
+				} catch (Exception e) {
+					 rah = Double.NaN;
+					 ram = Double.NaN;
+					 ras = Double.NaN;
+				}
+				temp = decInput.split(":");
 				
-				Double a = raa - phi;
-				Double b1 = deca;
-				Double sb = Math.sin(b1);
-				Double cb = Math.cos(b1);
-				Double cbsa = cb * Math.sin(a);
-				Double b = -stheta * cbsa + ctheta * sb;
-				Double lout = Math.atan2(ctheta * cbsa + stheta * sb, cb * Math.cos(a))+psi;
-				Double bout = Math.asin(b);
-					    
-				while(lout < 0.0){
-				        lout = lout + 2.0*Math.PI;
-				};
-				while(lout >= 2.0*Math.PI){
-				        lout = lout - 2.0*Math.PI;
-				};
-				Double l_coord = lout/Math.PI*180.0;
-				Double b_coord = bout/Math.PI*180.0;
+				try{
+					 decd = Double.parseDouble(temp[0]);
+					 decm = Double.parseDouble(temp[1]);
+					 decs = Double.parseDouble(temp[2]);
+				} catch (Exception e) {
+					 decd = Double.NaN;
+					 decm = Double.NaN;
+					 decs = Double.NaN;
+				}
+				//Calculating ra degrees		
+				if (rah < 0.0) {
+					sign = -1.0;
+					rah = 0.0 - rah;
+				}
+				if (ram < 0.0) {
+					sign = -1.0;
+					ram = 0.0 - ram;
+				}
+				if (ras < 0.0) {
+					sign = -1.0;
+					ras = 0.0 - ras;
+				}
+				hh = sign*(rah + ram/60.0 + ras/3600.0);
+				
+				deg = 15.0*hh;
+				
+				if (deg == 360.0)
+					deg = 0.0;
+				
+				Double ra_deg = deg;
+				
+				//Calculating DEC degrees
+				if (decd < 0.0) {
+					sign = -1.0;
+					decd = 0.0 - decd;
+				}
+				if (decm < 0.0) {
+					sign = -1.0;
+					decm = 0.0 - decm;
+				}
+				if (decs < 0.0) {
+					sign = -1.0;
+					decs = 0.0 - decs;
+				}
+				hh = sign*(decd + decm/60.0 + decs/3600.0);
+				Double dec_deg = hh;
+						
+				
 				
 				
 				// Register outputs
 				Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
 				
-				T2Reference lRef = referenceService.register(l_coord, 0, true, context);
-				outputs.put(L_COORD, lRef);
+				T2Reference lRef = referenceService.register(ra_deg, 0, true, context);
+				outputs.put(RA_DEG, lRef);
 				
-				T2Reference bRef = referenceService.register(b_coord, 0, true, context);
-				outputs.put(B_COORD, bRef);
+				T2Reference bRef = referenceService.register(dec_deg, 0, true, context);
+				outputs.put(DEC_DEG, bRef);
 				
 			
 				callback.receiveResult(outputs, new int[0]);

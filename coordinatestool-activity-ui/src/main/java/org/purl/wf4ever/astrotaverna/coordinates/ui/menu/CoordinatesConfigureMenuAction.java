@@ -1,10 +1,11 @@
-package com.astrotaverna.coordinatestool.ui.menu;
+package org.purl.wf4ever.astrotaverna.coordinates.ui.menu;
 
 import javax.swing.Action;
 
+import org.purl.wf4ever.astrotaverna.coordinates.CoordinatesActivity;
+import org.purl.wf4ever.astrotaverna.coordinates.ui.config.CoordinatesConfigureAction;
+
 import net.sf.taverna.t2.workbench.activitytools.AbstractConfigureActivityMenuAction;
-import com.astrotaverna.coordinatestool.CoordinatesActivity;
-import com.astrotaverna.coordinatestool.ui.config.CoordinatesConfigureAction;
 
 public class CoordinatesConfigureMenuAction extends
 		AbstractConfigureActivityMenuAction<CoordinatesActivity> {

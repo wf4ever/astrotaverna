@@ -1,4 +1,4 @@
-package com.astrotaverna.coordinatestool;
+package org.purl.wf4ever.astrotaverna.coordinates;
 
 import org.junit.Ignore;
 
