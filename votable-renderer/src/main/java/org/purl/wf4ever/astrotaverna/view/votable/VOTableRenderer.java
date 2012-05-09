@@ -2,6 +2,7 @@ package org.purl.wf4ever.astrotaverna.view.votable;
 
 
 import javax.swing.JComponent;
+import javax.swing.JTextArea;
 
 import net.sf.taverna.t2.reference.ReferenceService;
 import net.sf.taverna.t2.reference.T2Reference;
@@ -31,14 +32,13 @@ public class VOTableRenderer implements Renderer {
 	@Override
 	public JComponent getComponent(ReferenceService referenceService,
 			T2Reference reference) throws RendererException {
-		// TODO Auto-generated method stub
-		return null;
+		String asString = (String) referenceService.renderIdentifier(reference, String.class, null);
+		return new JTextArea(asString);
 	}
 
 	@Override
 	public String getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return "VOTable";
 	}
 
 }
