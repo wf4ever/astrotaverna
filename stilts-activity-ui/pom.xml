@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>uk.org.taverna.astro</groupId>
@@ -7,22 +7,34 @@
 		<version>0.4-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>astrotaverna-workbench-test</artifactId>
+	<artifactId>stilts-activity-ui</artifactId>
+	<name>stilts utilities suite UI bindings</name>
+
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>astrotaverna-voservices</artifactId>
-			<version>${project.version}</version>
+			<artifactId>stilts-activity</artifactId>
+			<version>0.0.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>coordinatestool-activity-ui</artifactId>
-			<version>${project.version}</version>
+			<groupId>net.sf.taverna.t2.ui-api</groupId>
+			<artifactId>activity-palette-api</artifactId>
+			<version>${t2.ui.api.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>stilts-activity-ui</artifactId>
-			<version>${project.version}</version>
+			<groupId>net.sf.taverna.t2.ui-api</groupId>
+			<artifactId>menu-api</artifactId>
+			<version>${t2.ui.api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.taverna.t2.ui-api</groupId>
+			<artifactId>contextual-views-api</artifactId>
+			<version>${t2.ui.api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.taverna.t2.ui-impl</groupId>
+			<artifactId>activity-tools</artifactId>
+			<version>${t2.ui.impl.version}</version>
 		</dependency>
 
 		<!-- Workbench runtime for testing from IDE, remove if not using TavernaWorkbenchWithExamplePlugin.main() -->
@@ -107,29 +119,15 @@
 				</exclusion>
 				<!-- Perspectives pulling in too many dependencies -->
 				<exclusion>
-					<groupId>net.sf.taverna.t2.ui-exts</groupId>
-					<artifactId>perspective-biocatalogue</artifactId>
+				 	<!--  fails due to direct dependency to WSDL -->
+				 	<groupId>net.sf.taverna.t2.ui-exts</groupId>
+				 	<artifactId>perspective-biocatalogue</artifactId>
 				</exclusion>
 				<exclusion>
-					<groupId>net.sf.taverna.t2.ui-exts</groupId>
-					<artifactId>perspective-myexperiment</artifactId>
+				 	<groupId>net.sf.taverna.t2.ui-exts</groupId>
+				 	<artifactId>perspective-myexperiment</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-
 	</dependencies>
-	<repositories>
-		<repository>
-			<!-- Needed due to http://www.mygrid.org.uk/dev/issues/browse/T2-2089 -->
-			<id>opm</id>
-			<name>Open Provenance (OPM)</name>
-			<url>http://openprovenance.org/java/maven-releases</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
-	<name>Astro Taverna Workbench test environment</name>
 </project>

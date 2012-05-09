@@ -135,6 +135,8 @@
     <module>coordinatestool-activity</module>
     <module>coordinatestool-activity-ui</module>
     <module>astrotaverna-workbench-test</module>
+    <module>stilts-activity</module>
+    <module>stilts-activity-ui</module>
   </modules>
   <scm>
   	<url>https://github.com/wf4ever/astrotaverna</url>
