@@ -35,9 +35,9 @@ import net.ivoa.xml.voresource.v1.Service;
 import net.sf.taverna.t2.workbench.ui.zaria.UIComponentSPI;
 
 import org.apache.log4j.Logger;
+import org.purl.wf4ever.astrotaverna.vorepo.VORepository.Status;
 
 import uk.org.taverna.astro.vo.utils.ModelIterator;
-import uk.org.taverna.astro.vorepo.VORepository.Status;
 
 public class VOServicesView extends JPanel implements UIComponentSPI {
 	public class RegistryChange implements ActionListener {

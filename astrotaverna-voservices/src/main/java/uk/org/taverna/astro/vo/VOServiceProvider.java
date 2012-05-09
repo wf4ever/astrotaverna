@@ -7,13 +7,14 @@ import java.util.List;
 
 import javax.swing.Icon;
 
+import org.purl.wf4ever.astrotaverna.vorepo.VORepository;
+
 import net.ivoa.xml.conesearch.v1.ConeSearch;
 import net.ivoa.xml.voresource.v1.Service;
 import net.sf.taverna.t2.servicedescriptions.AbstractConfigurableServiceProvider;
 import net.sf.taverna.t2.servicedescriptions.ConfigurableServiceProvider;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescriptionProvider;
-import uk.org.taverna.astro.vorepo.VORepository;
 import uk.org.taverna.astro.wsdl.registrysearch.ErrorResp;
 
 public class VOServiceProvider extends

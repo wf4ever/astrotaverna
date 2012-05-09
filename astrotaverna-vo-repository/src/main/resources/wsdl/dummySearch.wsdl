@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?> <!-- uk.org.taverna.astro.vorepo -->
 <definitions name="searchableRegistry"
-	targetNamespace="http://taverna.org.uk/astro/wsdl/RegistrySearch"
+	targetNamespace="http://purl.org/wf4ever/astrotaverna/wsdl/RegistrySearch"
 	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ris="http://www.ivoa.net/wsdl/RegistrySearch/v1.0"
-	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://taverna.org.uk/astro/vorepo/wsdl"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://purl.org/wf4ever/astrotaverna/wsdl/RegistrySearch"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:vds="http://www.ivoa.net/xml/VODataService/v1.0">
 
 	<!-- Dummy search WSDL - as there is no wsdl:service in http://www.ivoa.net/wsdl/RegistrySearch/v1.0. 
 		Adapted from http://registry.euro-vo.org/services/RegistrySearch?wsdl -->
-	<import location="./RegistrySearch-v1.0.wsdl" namespace="http://taverna.org.uk/astro/vorepo/wsdl"></import>
+	<import location="./RegistrySearch-v1.0.wsdl" namespace="http://purl.org/wf4ever/astrotaverna/vorepo/wsdl"></import>
 
 	<types>
 		<xs:schema>

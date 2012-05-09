@@ -1,4 +1,4 @@
-package uk.org.taverna.astro.vorepo;
+package org.purl.wf4ever.astrotaverna.vorepo;
 
 import java.util.Iterator;
 

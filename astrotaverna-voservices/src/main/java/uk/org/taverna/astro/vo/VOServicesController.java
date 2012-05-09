@@ -22,8 +22,8 @@ import net.sf.taverna.t2.workbench.ui.impl.Workbench;
 import net.sf.taverna.t2.workbench.ui.workflowview.WorkflowView;
 
 import org.apache.log4j.Logger;
+import org.purl.wf4ever.astrotaverna.vorepo.VORepository.Status;
 
-import uk.org.taverna.astro.vorepo.VORepository.Status;
 
 public class VOServicesController {
 

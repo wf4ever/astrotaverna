@@ -1,4 +1,4 @@
-package uk.org.taverna.astro.vorepo;
+package org.purl.wf4ever.astrotaverna.vorepo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -30,8 +30,9 @@ import net.ivoa.xml.voresource.v1.Service;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.purl.wf4ever.astrotaverna.vorepo.VORepository;
+import org.purl.wf4ever.astrotaverna.wsdl.registrysearch.RegistrySearchPortType;
 
-import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchPortType;
 
 /*
  To debug SOAP messages, set system properties:

@@ -1,4 +1,4 @@
-package uk.org.taverna.astro.vorepo;
+package org.purl.wf4ever.astrotaverna.vorepo;
 
 import java.net.URI;
 import java.net.URL;
@@ -30,9 +30,9 @@ import net.ivoa.xml.voresource.v1.Service;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.log4j.Logger;
 
-import uk.org.taverna.astro.wsdl.registrysearch.ErrorResp;
-import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchPortType;
-import uk.org.taverna.astro.wsdl.registrysearch.RegistrySearchService;
+import org.purl.wf4ever.astrotaverna.wsdl.registrysearch.ErrorResp;
+import org.purl.wf4ever.astrotaverna.wsdl.registrysearch.RegistrySearchPortType;
+import org.purl.wf4ever.astrotaverna.wsdl.registrysearch.RegistrySearchService;
 
 public class VORepository {
 	private static final String DUMMY_SEARCH_WSDL = "/wsdl/dummySearch.wsdl";
@@ -54,7 +54,7 @@ public class VORepository {
 			"content/type");
 
 	protected final static QName REGISTRYSEARCHSERVICE_QNAME = new QName(
-			"http://taverna.org.uk/astro/wsdl/RegistrySearch",
+			"http://purl.org/wf4ever/astrotaverna/wsdl/RegistrySearch",
 			"RegistrySearchService");
 
 	public static final URI DEFAULT_ENDPOINT = URI
