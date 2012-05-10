@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 import net.sf.taverna.t2.reference.ReferenceService;
 import net.sf.taverna.t2.reference.T2Reference;
@@ -34,7 +33,7 @@ public class VOTableRenderer implements Renderer {
 		}
 		String asString = (String) referenceService.renderIdentifier(reference, String.class, null);
 		// TODO: Also recognize FITS and other formats from 
-		// http://www.star.bris.ac.uk/~mbt/stil/sun252/tableBuilders.html
+		// http://www.star.bris.ac.uk/~mbt/stil/sun252/tableBuilders.html ? 
 		return asString.contains("http://www.ivoa.net/xml/VOTable");		
 	}
 
@@ -52,12 +51,14 @@ public class VOTableRenderer implements Renderer {
 		} catch (IOException e) {
 			throw new RendererException(e.getLocalizedMessage(), e);
 		}
-	    JTable jTable;
+		StarJTable jTable;
+	    jTable = new StarJTable(starTable, false);
 //	    StarTableModel model = new StarTableModel(starTable, false);
-//	    jTable = new JTable(model);
+//	    jTable = new JTable(model);	
 //		jTable.setAutoCreateColumnsFromModel(true);
-//		jTable.setAutoCreateRowSorter(true);
-		jTable = new StarJTable(starTable, false);
+		jTable.setAutoCreateRowSorter(true);
+		jTable.configureColumnWidths(400, 100);
+	    
 		
 		return new JScrollPane(jTable);
 	}
