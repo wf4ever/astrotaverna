@@ -13,7 +13,7 @@ import net.sf.taverna.t2.renderers.RendererException;
 import uk.ac.starlink.table.StarTable;
 import uk.ac.starlink.table.StarTableFactory;
 import uk.ac.starlink.table.TableFormatException;
-import uk.ac.starlink.table.gui.StarTableModel;
+import uk.ac.starlink.table.gui.StarJTable;
 import uk.ac.starlink.util.ByteArrayDataSource;
 
 public class VOTableRenderer implements Renderer {
@@ -33,6 +33,8 @@ public class VOTableRenderer implements Renderer {
 			return true;
 		}
 		String asString = (String) referenceService.renderIdentifier(reference, String.class, null);
+		// TODO: Also recognize FITS and other formats from 
+		// http://www.star.bris.ac.uk/~mbt/stil/sun252/tableBuilders.html
 		return asString.contains("http://www.ivoa.net/xml/VOTable");		
 	}
 
@@ -50,10 +52,12 @@ public class VOTableRenderer implements Renderer {
 		} catch (IOException e) {
 			throw new RendererException(e.getLocalizedMessage(), e);
 		}
-	    StarTableModel model = new StarTableModel(starTable, false);
-		JTable jTable = new JTable(model);
-		jTable.setAutoCreateColumnsFromModel(true);
-		jTable.setAutoCreateRowSorter(true);
+	    JTable jTable;
+//	    StarTableModel model = new StarTableModel(starTable, false);
+//	    jTable = new JTable(model);
+//		jTable.setAutoCreateColumnsFromModel(true);
+//		jTable.setAutoCreateRowSorter(true);
+		jTable = new StarJTable(starTable, false);
 		
 		return new JScrollPane(jTable);
 	}
