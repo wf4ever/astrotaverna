@@ -1,13 +1,20 @@
 package org.purl.wf4ever.astrotaverna.view.votable;
 
+import java.io.IOException;
 
 import javax.swing.JComponent;
-import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import net.sf.taverna.t2.reference.ReferenceService;
 import net.sf.taverna.t2.reference.T2Reference;
 import net.sf.taverna.t2.renderers.Renderer;
 import net.sf.taverna.t2.renderers.RendererException;
+import uk.ac.starlink.table.StarTable;
+import uk.ac.starlink.table.StarTableFactory;
+import uk.ac.starlink.table.TableFormatException;
+import uk.ac.starlink.table.gui.StarTableModel;
+import uk.ac.starlink.util.ByteArrayDataSource;
 
 public class VOTableRenderer implements Renderer {
 
@@ -24,7 +31,7 @@ public class VOTableRenderer implements Renderer {
 		}
 		if (canHandle(mimeType)) { 
 			return true;
-		} 
+		}
 		String asString = (String) referenceService.renderIdentifier(reference, String.class, null);
 		return asString.contains("http://www.ivoa.net/xml/VOTable");		
 	}
@@ -32,8 +39,23 @@ public class VOTableRenderer implements Renderer {
 	@Override
 	public JComponent getComponent(ReferenceService referenceService,
 			T2Reference reference) throws RendererException {
-		String asString = (String) referenceService.renderIdentifier(reference, String.class, null);
-		return new JTextArea(asString);
+		byte[] bytes = (byte[]) referenceService.renderIdentifier(reference, byte[].class, null);		
+		StarTableFactory factory = new StarTableFactory();
+		ByteArrayDataSource dataSource = new ByteArrayDataSource("votable", bytes);
+	    StarTable starTable;
+		try {
+			starTable = factory.makeStarTable(dataSource);
+		} catch (TableFormatException e) {
+			throw new RendererException("Not votable format", e);
+		} catch (IOException e) {
+			throw new RendererException(e.getLocalizedMessage(), e);
+		}
+	    StarTableModel model = new StarTableModel(starTable, false);
+		JTable jTable = new JTable(model);
+		jTable.setAutoCreateColumnsFromModel(true);
+		jTable.setAutoCreateRowSorter(true);
+		
+		return new JScrollPane(jTable);
 	}
 
 	@Override
