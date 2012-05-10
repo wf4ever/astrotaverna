@@ -1,0 +1,89 @@
+<workflow xmlns="http://taverna.sf.net/2008/xml/t2flow" version="1" producedBy="taverna-2.4.0"><dataflow id="595e49be-8e33-45e5-a981-c1df2bd7df53" role="top"><name>Workflow3</name><inputPorts /><outputPorts><port><name>VOTable_value</name><annotations /></port></outputPorts><processors><processor><name>VOTable</name><inputPorts /><outputPorts><port><name>value</name><depth>0</depth><granularDepth>0</granularDepth></port></outputPorts><annotations /><activities><activity><class>net.sf.taverna.t2.activities.stringconstant.StringConstantActivity</class><inputMap /><outputMap><map from="value" to="value" /></outputMap><configBean encoding="xstream"><net.sf.taverna.t2.activities.stringconstant.StringConstantConfigurationBean xmlns="">
+  <value>&lt;?xml version="1.0"?&gt;
+&lt;VOTABLE version="1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns="http://www.ivoa.net/xml/VOTable/v1.2" 
+ xmlns:stc="http://www.ivoa.net/xml/STC/v1.30" &gt;
+  &lt;RESOURCE name="myFavouriteGalaxies"&gt;
+    &lt;TABLE name="results"&gt;
+      &lt;DESCRIPTION&gt;Velocities and Distance estimations&lt;/DESCRIPTION&gt;
+      &lt;GROUP ID="J2000" utype="stc:AstroCoords"&gt;
+        &lt;PARAM datatype="char" arraysize="*" ucd="pos.frame" name="cooframe"
+             utype="stc:AstroCoords.coord_system_id" value="UTC-ICRS-TOPO" /&gt;
+        &lt;FIELDref ref="col1"/&gt;
+        &lt;FIELDref ref="col2"/&gt;
+      &lt;/GROUP&gt;
+      &lt;PARAM name="Telescope" datatype="float" ucd="phys.size;instr.tel" 
+             unit="m" value="3.6"/&gt;
+      &lt;FIELD name="RA"   ID="col1" ucd="pos.eq.ra;meta.main" ref="J2000" 
+             utype="stc:AstroCoords.Position2D.Value2.C1"
+             datatype="float" width="6" precision="2" unit="deg"/&gt;
+      &lt;FIELD name="Dec"  ID="col2" ucd="pos.eq.dec;meta.main" ref="J2000" 
+             utype="stc:AstroCoords.Position2D.Value2.C2"
+             datatype="float" width="6" precision="2" unit="deg"/&gt;
+      &lt;FIELD name="Name" ID="col3" ucd="meta.id;meta.main" 
+             datatype="char" arraysize="8*"/&gt;
+      &lt;FIELD name="RVel" ID="col4" ucd="spect.dopplerVeloc" datatype="int"
+             width="5" unit="km/s"/&gt;
+      &lt;FIELD name="e_RVel" ID="col5" ucd="stat.error;spect.dopplerVeloc" 
+             datatype="int" width="3" unit="km/s"/&gt;
+      &lt;FIELD name="R" ID="col6" ucd="pos.distance;pos.heliocentric" 
+             datatype="float" width="4" precision="1" unit="Mpc"&gt;
+        &lt;DESCRIPTION&gt;Distance of Galaxy, assuming H=75km/s/Mpc&lt;/DESCRIPTION&gt;
+      &lt;/FIELD&gt;
+      &lt;DATA&gt;
+        &lt;TABLEDATA&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;010.68&lt;/TD&gt;&lt;TD&gt;+41.27&lt;/TD&gt;&lt;TD&gt;N  224&lt;/TD&gt;&lt;TD&gt;-297&lt;/TD&gt;&lt;TD&gt;5&lt;/TD&gt;&lt;TD&gt;0.7&lt;/TD&gt;
+        &lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;287.43&lt;/TD&gt;&lt;TD&gt;-63.85&lt;/TD&gt;&lt;TD&gt;N 6744&lt;/TD&gt;&lt;TD&gt;839&lt;/TD&gt;&lt;TD&gt;6&lt;/TD&gt;&lt;TD&gt;10.4&lt;/TD&gt;
+        &lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;023.48&lt;/TD&gt;&lt;TD&gt;+30.66&lt;/TD&gt;&lt;TD&gt;N  598&lt;/TD&gt;&lt;TD&gt;-182&lt;/TD&gt;&lt;TD&gt;3&lt;/TD&gt;&lt;TD&gt;0.7&lt;/TD&gt;
+        &lt;/TR&gt;
+        &lt;/TABLEDATA&gt;
+      &lt;/DATA&gt;
+    &lt;/TABLE&gt;
+  &lt;/RESOURCE&gt;
+&lt;/VOTABLE&gt;</value>
+</net.sf.taverna.t2.activities.stringconstant.StringConstantConfigurationBean></configBean><annotations /></activity></activities><dispatchStack><dispatchLayer><class>net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.Parallelize</class><configBean encoding="xstream"><net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.ParallelizeConfig xmlns="">
+  <maxJobs>1</maxJobs>
+</net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.ParallelizeConfig></configBean></dispatchLayer><dispatchLayer><class>net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.ErrorBounce</class><configBean encoding="xstream"><null xmlns="" /></configBean></dispatchLayer><dispatchLayer><class>net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.Failover</class><configBean encoding="xstream"><null xmlns="" /></configBean></dispatchLayer><dispatchLayer><class>net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.Retry</class><configBean encoding="xstream"><net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.RetryConfig xmlns="">
+  <backoffFactor>1.0</backoffFactor>
+  <initialDelay>1000</initialDelay>
+  <maxDelay>5000</maxDelay>
+  <maxRetries>0</maxRetries>
+</net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.RetryConfig></configBean></dispatchLayer><dispatchLayer><class>net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.Invoke</class><configBean encoding="xstream"><null xmlns="" /></configBean></dispatchLayer></dispatchStack><iterationStrategyStack><iteration><strategy /></iteration></iterationStrategyStack></processor></processors><conditions /><datalinks><datalink><sink type="dataflow"><port>VOTable_value</port></sink><source type="processor"><processor>VOTable</processor><port>value</port></source></datalink></datalinks><annotations><annotation_chain_2_2 encoding="xstream"><net.sf.taverna.t2.annotation.AnnotationChainImpl xmlns="">
+  <annotationAssertions>
+    <net.sf.taverna.t2.annotation.AnnotationAssertionImpl>
+      <annotationBean class="net.sf.taverna.t2.annotation.annotationbeans.IdentificationAssertion">
+        <identification>595e49be-8e33-45e5-a981-c1df2bd7df53</identification>
+      </annotationBean>
+      <date>2012-05-10 13:36:55.789 UTC</date>
+      <creators />
+      <curationEventList />
+    </net.sf.taverna.t2.annotation.AnnotationAssertionImpl>
+  </annotationAssertions>
+</net.sf.taverna.t2.annotation.AnnotationChainImpl></annotation_chain_2_2><annotation_chain_2_2 encoding="xstream"><net.sf.taverna.t2.annotation.AnnotationChainImpl xmlns="">
+  <annotationAssertions>
+    <net.sf.taverna.t2.annotation.AnnotationAssertionImpl>
+      <annotationBean class="net.sf.taverna.t2.annotation.annotationbeans.IdentificationAssertion">
+        <identification>9f8447fc-bb6d-47cf-8ccc-f7baf9709d9a</identification>
+      </annotationBean>
+      <date>2012-05-10 13:23:29.450 UTC</date>
+      <creators />
+      <curationEventList />
+    </net.sf.taverna.t2.annotation.AnnotationAssertionImpl>
+  </annotationAssertions>
+</net.sf.taverna.t2.annotation.AnnotationChainImpl></annotation_chain_2_2><annotation_chain_2_2 encoding="xstream"><net.sf.taverna.t2.annotation.AnnotationChainImpl xmlns="">
+  <annotationAssertions>
+    <net.sf.taverna.t2.annotation.AnnotationAssertionImpl>
+      <annotationBean class="net.sf.taverna.t2.annotation.annotationbeans.IdentificationAssertion">
+        <identification>f7c4943f-d018-479d-a436-e02e4c0e1502</identification>
+      </annotationBean>
+      <date>2012-05-10 13:28:36.639 UTC</date>
+      <creators />
+      <curationEventList />
+    </net.sf.taverna.t2.annotation.AnnotationAssertionImpl>
+  </annotationAssertions>
+</net.sf.taverna.t2.annotation.AnnotationChainImpl></annotation_chain_2_2></annotations></dataflow></workflow>
