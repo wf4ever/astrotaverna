@@ -139,8 +139,7 @@ public class SelectRowsActivityTest {
 
 		String a = new String(resultSelectRows.toCharArray());
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
-		System.out.println(a.length());
-		System.out.println(b.length());
+		
 		assertTrue("Wrong output : ", a.length()==b.length());
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
 		
@@ -158,6 +157,41 @@ public class SelectRowsActivityTest {
 		Map<String, Object> inputs = new HashMap<String, Object>();
 		inputs.put(IN_FIRST_INPUT_TABLE, MyUtils.getExampleVOtable());
 		inputs.put(IN_FORMAT_INPUT_TABLE, "votable");
+		inputs.put(IN_FORMAT_OUTPUT_TABLE, "ascii");
+		inputs.put(IN_FILTER, "U < 15");
+		//inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.ascii");
+		
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put("simpleOutput", String.class);
+		//expectedOutputTypes.put("moreOutputs", String.class);
+		expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		String a = new String(resultSelectRows.toCharArray());
+		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
+		
+		assertTrue("Wrong output : ", a.length()==b.length());
+		assertEquals("simple-report", outputs.get(OUT_REPORT));
+		
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
+	
+	@Test
+	public void executeAsynchWithDefaultFormats() throws Exception {
+		configBean.setTypeOfInput("String");
+		//configBean.setTypeOfFilter("Column names");
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		inputs.put(IN_FIRST_INPUT_TABLE, MyUtils.getExampleVOtable());
+		inputs.put(IN_FORMAT_INPUT_TABLE, "");
 		inputs.put(IN_FORMAT_OUTPUT_TABLE, "ascii");
 		inputs.put(IN_FILTER, "U < 15");
 		//inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.ascii");

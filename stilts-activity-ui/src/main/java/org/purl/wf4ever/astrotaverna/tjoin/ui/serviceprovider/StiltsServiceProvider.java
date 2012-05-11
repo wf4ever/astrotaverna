@@ -56,9 +56,9 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		
 		results.add(service2);
 		
-		SelectColumnsServiceDesc service3 = new SelectColumnsServiceDesc();
+		SelectRowsServiceDesc service3 = new SelectRowsServiceDesc();
 		service3.setTypeOfInput("String");
-		service3.setTypeOfFilter("Column names");
+		//service3.setTypeOfFilter("Column names");
 		service3.setDescription("Rows selection in a table");
 		
 		results.add(service3);
