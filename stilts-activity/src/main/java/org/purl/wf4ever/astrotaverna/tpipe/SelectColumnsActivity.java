@@ -130,6 +130,7 @@ public class SelectColumnsActivity extends
 			
 			public void run() {
 				
+				boolean callbackfails=false;
 				InvocationContext context = callback.getContext();
 				ReferenceService referenceService = context.getReferenceService();
 				// Resolve inputs 				
@@ -160,11 +161,14 @@ public class SelectColumnsActivity extends
 				
 				//check correct input values
 				if(!MyUtils.isValidInputFormat(formatInputTable)){
-					callback.fail("Invalid input table format: "+ formatInputTable,new Exception());
+					callback.fail("Invalid input table format: "+ formatInputTable,new IOException());
+					callbackfails = true;
 				}
 				
+				
 				if(!MyUtils.isValidOutputFormat(formatOutputTable)){
-					callback.fail("Invalid output table format: "+ formatOutputTable,new Exception());
+					callback.fail("Invalid output table format: "+ formatOutputTable,new IOException());
+					callbackfails = true;
 				}
 				//check if input files exist??
 				
@@ -195,6 +199,7 @@ public class SelectColumnsActivity extends
 				//Performing the work: Stilts functinalities
 				String [] parameters;
 				
+				if(!callbackfails){
 				//handling redirection of standard input and output
 				PrintStream out = System.out;
 				PrintStream stdout = System.out;
@@ -343,6 +348,7 @@ public class SelectColumnsActivity extends
 				// the only and final result (this index parameter is used if
 				// pipelining output)
 				callback.receiveResult(outputs, new int[0]);
+				}
 			}
 		});
 	}
