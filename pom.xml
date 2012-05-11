@@ -4,7 +4,7 @@
 
 	<groupId>org.purl.wf4ever.astrotaverna</groupId>
 	<artifactId>astrotaverna</artifactId>
-	<version>0.5-SNAPSHOT</version>
+	<version>0.6-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Astro Taverna</name>
 
@@ -137,6 +137,7 @@
     <module>astrotaverna-workbench-test</module>
     <module>stilts-activity</module>
     <module>stilts-activity-ui</module>
+    <module>votable-renderer</module>
   </modules>
   <scm>
   	<url>https://github.com/wf4ever/astrotaverna</url>
