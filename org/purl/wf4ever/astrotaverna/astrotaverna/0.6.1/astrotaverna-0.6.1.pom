@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.purl.wf4ever.astrotaverna</groupId>
+	<artifactId>astrotaverna</artifactId>
+	<version>0.6.1</version>
+	<packaging>pom</packaging>
+	<name>Astro Taverna</name>
+
+	<properties>
+		<!--  Update according to latest Taverna version in 
+		http://www.mygrid.org.uk/dev/wiki/display/developer/Maven+module+version+numbers
+		 -->
+		<t2.core.version>1.4</t2.core.version>
+		<t2.activities.version>1.4</t2.activities.version>
+		<t2.ui.api.version>1.4</t2.ui.api.version>
+		<t2.ui.impl.version>1.4</t2.ui.impl.version>
+		<t2.ui.components.version>1.4</t2.ui.components.version>
+		<t2.ui.activities.version>1.4</t2.ui.activities.version>
+		<t2.workbench.version>2.4.0</t2.workbench.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.7.1</version>
+				<configuration>
+					<skip>false</skip>
+					<systemProperties>
+						<property>
+							<name>java.awt.headless</name>
+							<value>true</value>
+						</property>
+					</systemProperties>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<!-- The myGrid repository for Taverna dependencies -->
+			<releases />
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>mygrid-repository</id>
+			<name>myGrid Repository</name>
+			<url>http://www.mygrid.org.uk/maven/repository</url>
+		</repository>
+		<repository>
+			<!-- The repository that your snapshot jars are deployed to -->
+			<releases />
+			<snapshots />
+			<id>astrotaverna</id>
+			<name>AstroTaverna repository</name>
+			<url>http://wf4ever.github.com/astrotaverna/</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>mygrid-repository</id>
+			<name>myGrid Repository</name>
+			<url>http://www.mygrid.org.uk/maven/repository</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<!-- The location of your plugin site -->
+	<distributionManagement>
+		<repository>
+			<id>astrotaverna</id>
+			<name>AstroTaverna repository</name>
+			<url>file:///C:/Users/stain/src/astrotaverna-gh/</url>
+		</repository>
+		<snapshotRepository>
+			<id>astrotaverna</id>
+			<name>AstroTaverna repository</name>
+			<url>file:///C:/Users/stain/src/astrotaverna-gh/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+  <modules>
+    
+    <module>astrotaverna-voservices</module>
+    <module>astrotaverna-plugin</module>
+    <module>astrotaverna-vo-repository</module>
+    <module>coordinatestool-activity</module>
+    <module>coordinatestool-activity-ui</module>
+    <module>astrotaverna-workbench-test</module>
+    <module>stilts-activity</module>
+    <module>stilts-activity-ui</module>
+    <module>votable-renderer</module>
+  </modules>
+  <scm>
+  	<url>https://github.com/wf4ever/astrotaverna</url>
+  	<connection>scm:git:git://github.com/wf4ever/astrotaverna.git</connection>
+  	<developerConnection>scm:git:git@github.com:wf4ever/astrotaverna.git</developerConnection>
+  </scm>
+  <issueManagement>
+  	<system>github</system>
+  	<url>https://github.com/wf4ever/astrotaverna/issues</url>
+  </issueManagement>
+  <organization>
+  	<name>Wf4Ever</name>
+  	<url>http://www.wf4ever-project.org/</url>
+  </organization>
+  <url>http://www.wf4ever-project.org/wiki/display/docs/Showcase+9+Astrotaverna</url>
+</project>
