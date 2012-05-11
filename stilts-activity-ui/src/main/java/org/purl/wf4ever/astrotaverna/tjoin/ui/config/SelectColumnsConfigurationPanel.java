@@ -3,6 +3,7 @@ package org.purl.wf4ever.astrotaverna.tjoin.ui.config;
 import java.awt.GridLayout;
 import java.net.URI;
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -25,8 +26,11 @@ public class SelectColumnsConfigurationPanel
 	private SelectColumnsActivity activity;
 	private SelectColumnsActivityConfigurationBean configBean;
 	
-	private JTextField typeOfInput;
-	private JTextField typeOfFilter;
+	String[] inputTypesStrings = {"File", "Query", "URL", "String"};
+	String[] filterTypesStrings = {"Column names", "UCDs"};
+	
+	private JComboBox  typeOfInput;
+	private JComboBox typeOfFilter;
 
 
 	public SelectColumnsConfigurationPanel(SelectColumnsActivity activity) {
@@ -41,15 +45,17 @@ public class SelectColumnsConfigurationPanel
 		// FIXME: Create GUI depending on activity configuration bean
 		JLabel labelString = new JLabel("Input type:");
 		add(labelString);
-		typeOfInput = new JTextField(20);
+		typeOfInput = new JComboBox(inputTypesStrings);
 		add(typeOfInput);
 		labelString.setLabelFor(typeOfInput);
+		typeOfInput.setSelectedIndex(1);
 		
 		labelString = new JLabel("Filter type:");
 		add(labelString);
-		typeOfFilter = new JTextField(20);
+		typeOfFilter = new JComboBox(filterTypesStrings);
 		add(typeOfFilter);
 		labelString.setLabelFor(typeOfFilter);
+		typeOfFilter.setSelectedIndex(1);
 
 			
 		// Populate fields from activity configuration bean
@@ -64,7 +70,7 @@ public class SelectColumnsConfigurationPanel
 		//THIS MUST BE ADDAPTED TO THE TPIPE REQUIREMENS.
 		String errorMessage=null;
 		
-		String  tinput = typeOfInput.getText();
+		String  tinput = (String)typeOfInput.getSelectedItem();
 		if(!(      tinput.compareTo("File")==0
 				|| tinput.compareTo("Query")==0
 				|| tinput.compareTo("URL")==0
@@ -75,7 +81,7 @@ public class SelectColumnsConfigurationPanel
 			
 		}
 		
-		String  tfilter = typeOfFilter.getText();
+		String  tfilter = (String)typeOfFilter.getSelectedItem();
 		if(!(      tfilter.compareTo("Column names")==0
 				|| tfilter.compareTo("UCDs")==0)){
 			//"Invalid filter type
@@ -113,8 +119,8 @@ public class SelectColumnsConfigurationPanel
 		String originalTypeOfFilter = configBean.getTypeOfFilter();
 		// true (changed) unless all fields match the originals
 		
-		return ! (originalTypeOfInput.equals(typeOfInput.getText())
-				&& originalTypeOfFilter.equals(typeOfFilter.getText()) );
+		return ! (originalTypeOfInput.equals((String)typeOfInput.getSelectedItem())
+				&& originalTypeOfFilter.equals((String)typeOfFilter.getSelectedItem()) );
 	}
 
 	/**
@@ -126,8 +132,8 @@ public class SelectColumnsConfigurationPanel
 		configBean = new SelectColumnsActivityConfigurationBean();
 		
 		// FIXME: Update bean fields from your UI elements
-		configBean.setTypeOfInput(typeOfInput.getText());
-		configBean.setTypeOfFilter(typeOfFilter.getText());
+		configBean.setTypeOfInput((String)typeOfInput.getSelectedItem());
+		configBean.setTypeOfFilter((String)typeOfFilter.getSelectedItem());
 		
 	}
 
@@ -140,8 +146,8 @@ public class SelectColumnsConfigurationPanel
 		configBean = activity.getConfiguration();
 		
 		// FIXME: Update UI elements from your bean fields
-		typeOfInput.setText(configBean.getTypeOfInput());
-		typeOfFilter.setText(configBean.getTypeOfFilter());
+		typeOfInput.setSelectedItem(configBean.getTypeOfInput());
+		typeOfFilter.setSelectedItem(configBean.getTypeOfFilter());
 
 	}
 }
