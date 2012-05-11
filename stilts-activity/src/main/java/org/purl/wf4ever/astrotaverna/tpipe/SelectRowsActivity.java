@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.purl.wf4ever.astrotaverna.tpipe.SelectColumnsActivityConfigurationBean;
+import org.purl.wf4ever.astrotaverna.tpipe.SelectRowsActivityConfigurationBean;
 import org.purl.wf4ever.astrotaverna.utils.MyUtils;
 
 import uk.ac.starlink.ttools.Stilts;
@@ -29,9 +29,9 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationE
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCallback;
 
-public class SelectColumnsActivity extends
-		AbstractAsynchronousActivity<SelectColumnsActivityConfigurationBean>
-		implements AsynchronousActivity<SelectColumnsActivityConfigurationBean> {
+public class SelectRowsActivity extends
+		AbstractAsynchronousActivity<SelectRowsActivityConfigurationBean>
+		implements AsynchronousActivity<SelectRowsActivityConfigurationBean> {
 
 	/*
 	 * Best practice: Keep port names as constants to avoid misspelling. This
@@ -47,10 +47,10 @@ public class SelectColumnsActivity extends
 	private static final String OUT_SIMPLE_OUTPUT = "outputTable";
 	private static final String OUT_REPORT = "report";
 	
-	private SelectColumnsActivityConfigurationBean configBean;
+	private SelectRowsActivityConfigurationBean configBean;
 
 	@Override
-	public void configure(SelectColumnsActivityConfigurationBean configBean)
+	public void configure(SelectRowsActivityConfigurationBean configBean)
 			throws ActivityConfigurationException {
 
 		// Any pre-config sanity checks
@@ -67,11 +67,13 @@ public class SelectColumnsActivity extends
 					"Invalid input type for the tables");
 		}
 		
+		/*
 		if(!(      configBean.getTypeOfFilter().compareTo("Column names")==0 
 				|| configBean.getTypeOfFilter().compareTo("UCDs")==0)){
 			throw new ActivityConfigurationException(
 					"Invalid filter type for the tables");
 		}
+		*/
 		
 		// Store for getConfiguration(), but you could also make
 		// getConfiguration() return a new bean from other sources
@@ -190,7 +192,7 @@ public class SelectColumnsActivity extends
 						callbackfails = true;
 					}
 				}
-				
+	
 				
 				
 				// Support our configuration-dependendent input
@@ -233,12 +235,7 @@ public class SelectColumnsActivity extends
 					parameters[1] = "ifmt="+formatInputTable;
 					parameters[2] = "in="+inputTable;
 					parameters[3] = "ofmt="+formatOutputTable;
-					if(configBean.getTypeOfFilter().compareTo("Column names")==0){
-						parameters[4] = "cmd=keepcols '"+ filter +"'";
-					}else{
-						filter = MyUtils.checkAndRepairUCDlist(filter);
-						parameters[4] = "cmd=keepcols '"+ filter +"'";
-					}
+					parameters[4] = "cmd=select '"+ filter +"'";
 					parameters[5] = "out="+outputTableName;
 				}else if(configBean.getTypeOfInput().compareTo("Query")==0 
 							||configBean.getTypeOfInput().compareTo("URL")==0){
@@ -248,12 +245,8 @@ public class SelectColumnsActivity extends
 					parameters[1] = "ifmt="+formatInputTable;
 					parameters[2] = "in="+inputTable;
 					parameters[3] = "ofmt="+formatOutputTable;
-					if(configBean.getTypeOfFilter().compareTo("Column names")==0){
-						parameters[4] = "cmd=keepcols '"+ filter +"'";
-					}else{
-						filter = MyUtils.checkAndRepairUCDlist(filter);
-						parameters[4] = "cmd=keepcols '"+ filter +"'";
-					}
+					parameters[4] = "cmd=select '"+ filter +"'";
+					
 					//Redirecting output
 					System.setOut(out);
 				}else if(configBean.getTypeOfInput().compareTo("String")==0){
@@ -262,12 +255,8 @@ public class SelectColumnsActivity extends
 					parameters[1] = "ifmt="+formatInputTable;
 					parameters[2] = "in=-";
 					parameters[3] = "ofmt="+formatOutputTable;
-					if(configBean.getTypeOfFilter().compareTo("Column names")==0){
-						parameters[4] = "cmd=keepcols '"+ filter +"'";
-					}else{
-						filter = MyUtils.checkAndRepairUCDlist(filter);
-						parameters[4] = "cmd=keepcols '"+ filter +"'";
-					}
+					parameters[4] = "cmd=select '"+ filter +"'";
+					
 					//Redirecting output and input
 					in = IOUtils.toInputStream(inputTable);
 					//Optionally, do this: 
@@ -288,8 +277,10 @@ public class SelectColumnsActivity extends
 					System.setIn(in);
 					System.setOut(out);
 				}
-					
+				
+				
 				System.setProperty("votable.strict", "false");
+				
 				Stilts.main(parameters);
 					
 				
@@ -374,7 +365,7 @@ public class SelectColumnsActivity extends
 	}
 
 	@Override
-	public SelectColumnsActivityConfigurationBean getConfiguration() {
+	public SelectRowsActivityConfigurationBean getConfiguration() {
 		return this.configBean;
 	}
 
