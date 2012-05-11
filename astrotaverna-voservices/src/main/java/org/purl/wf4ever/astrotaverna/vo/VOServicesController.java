@@ -148,6 +148,7 @@ public class VOServicesController {
 					"Could not add to workflow", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
+	
 
 		AddToWorkflowDialog addDialog = new AddToWorkflowDialog(
 				serviceDescription, service);
@@ -169,8 +170,15 @@ public class VOServicesController {
 				if (i instanceof ParamHTTP) {
 					serviceDescription.setIdentifier(URI.create(service
 							.getIdentifier().trim()));
-					serviceDescription.setName(service.getShortName());
-					serviceDescription.setSearchType(searchType.getSimpleName());
+					String searchTypeName = searchType.getSimpleName();
+					serviceDescription.setSearchType(searchTypeName);
+					
+					String serviceName = service.getShortName();
+					if (serviceName == null || serviceName.trim().isEmpty()) {
+						serviceDescription.setName(searchTypeName);
+					} else {
+						serviceDescription.setName(serviceName.trim());						
+					}
 
 					ParamHTTP http = (ParamHTTP) i;
 					AccessURL accessURL = http.getAccessURL().get(0);

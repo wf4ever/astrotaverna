@@ -163,7 +163,7 @@ public class AddToWorkflowDialog extends JDialog {
 						+ "<p>You may specify constant parameters here, or tick the <em>Input port</em> box to provide them in the workflow.</p>"
 						+ "<p><p>Note: <b>Required</b> parameters will always appear as input ports "
 						+ "in the workflow if no value is provided. The service might not support all optional parameters."
-						+ "</body></html>", service.getShortName());
+						+ "</body></html>", restServiceDescription.getName());
 		add(new JLabel(message), gbcOuter);
 		add(new JPanel(), gbcOuter);
 
