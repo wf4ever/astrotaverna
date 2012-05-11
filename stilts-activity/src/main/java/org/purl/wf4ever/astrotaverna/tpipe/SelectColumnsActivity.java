@@ -1,11 +1,17 @@
 package org.purl.wf4ever.astrotaverna.tpipe;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.purl.wf4ever.astrotaverna.tpipe.SelectColumnsActivityConfigurationBean;
+import org.purl.wf4ever.astrotaverna.utils.MyUtils;
 
 import uk.ac.starlink.ttools.Stilts;
 
@@ -153,23 +159,11 @@ public class SelectColumnsActivity extends
 				}
 				
 				//check correct input values
-				if(!(formatInputTable.compareTo("fits")==0 
-						|| formatInputTable.compareTo("colfits")==0
-						|| formatInputTable.compareTo("votable")==0
-						|| formatInputTable.compareTo("ascii")==0
-						|| formatInputTable.compareTo("csv")==0
-						|| formatInputTable.compareTo("tst")==0
-						|| formatInputTable.compareTo("ipac")==0)){
+				if(!MyUtils.isValidInputFormat(formatInputTable)){
 					callback.fail("Invalid input table format: "+ formatInputTable,new Exception());
 				}
 				
-				if(!(formatOutputTable.compareTo("fits")==0 
-						|| formatOutputTable.compareTo("colfits")==0
-						|| formatOutputTable.compareTo("votable")==0
-						|| formatOutputTable.compareTo("ascii")==0
-						|| formatOutputTable.compareTo("csv")==0
-						|| formatOutputTable.compareTo("tst")==0
-						|| formatOutputTable.compareTo("ipac")==0)){
+				if(!MyUtils.isValidOutputFormat(formatOutputTable)){
 					callback.fail("Invalid output table format: "+ formatOutputTable,new Exception());
 				}
 				//check if input files exist??
@@ -200,56 +194,131 @@ public class SelectColumnsActivity extends
 				
 				//Performing the work: Stilts functinalities
 				String [] parameters;
-				/*
-				//set up parameters depending on the number of inputs
-				if(thirdInput==null && fourthInput ==null){
-					parameters = new String[7];
-					parameters[0] = "tjoin";
-					parameters[1] = "nin=2";
-					parameters[2] = "in1="+firstInput;
-					parameters[3] = "in2="+secondInput;
-					parameters[4] = "out="+lastInput;
-					parameters[5] = "ifmt1="+configBean.getInputFormat();
-					parameters[6] = "ifmt2="+configBean.getInputFormat();
-					
-					Stilts.main(parameters);
-					
-				}else if(thirdInput!=null && fourthInput ==null){
-					parameters = new String[9];
-					parameters[0] = "tjoin";
-					parameters[1] = "nin=2";
-					parameters[2] = "in1="+firstInput;
-					parameters[3] = "in2="+secondInput;
-					parameters[4] = "in3="+thirdInput;
-					parameters[5] = "out="+lastInput;
-					parameters[6] = "ifmt1="+configBean.getInputFormat();
-					parameters[7] = "ifmt2="+configBean.getInputFormat();
-					parameters[8] = "ifmt3="+configBean.getInputFormat();
-					
-					Stilts.main(parameters);
-					
-				}else if(thirdInput!=null && fourthInput !=null){
-					parameters = new String[11];
-					parameters[0] = "tjoin";
-					parameters[1] = "nin=2";
-					parameters[2] = "in1="+firstInput;
-					parameters[3] = "in2="+secondInput;
-					parameters[4] = "in3="+thirdInput;
-					parameters[5] = "in4="+fourthInput;
-					parameters[6] = "out="+lastInput;
-					parameters[7] = "ifmt1="+configBean.getInputFormat();
-					parameters[8] = "ifmt2="+configBean.getInputFormat();
-					parameters[9] = "ifmt3="+configBean.getInputFormat();
-					parameters[10] = "ifmt4="+configBean.getInputFormat();
-					
-					Stilts.main(parameters);
-					
+				
+				//handling redirection of standard input and output
+				PrintStream out = System.out;
+				PrintStream stdout = System.out;
+				InputStream in = System.in;
+				InputStream stdin = System.in;
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				out = new PrintStream(baos);
+				
+				if(optionalPorts){ //case File
+					parameters = new String[6];
+					parameters[0] = "tpipe";
+					parameters[1] = "ifmt="+formatInputTable;
+					parameters[2] = "in="+inputTable;
+					parameters[3] = "ofmt="+formatOutputTable;
+					if(configBean.getTypeOfFilter().compareTo("Column names")==0){
+						parameters[4] = "cmd=keepcols '"+ filter +"'";
+					}else{
+						filter = MyUtils.checkAndRepairUCDlist(filter);
+						parameters[4] = "cmd=keepcols '"+ filter +"'";
+					}
+					parameters[5] = "out="+outputTableName;
+				}else if(configBean.getTypeOfInput().compareTo("Query")==0 
+							||configBean.getTypeOfInput().compareTo("URL")==0){
+						
+					parameters = new String[5];
+					parameters[0] = "tpipe";
+					parameters[1] = "ifmt="+formatInputTable;
+					parameters[2] = "in="+inputTable;
+					parameters[3] = "ofmt="+formatOutputTable;
+					if(configBean.getTypeOfFilter().compareTo("Column names")==0){
+						parameters[4] = "cmd=keepcols '"+ filter +"'";
+					}else{
+						filter = MyUtils.checkAndRepairUCDlist(filter);
+						parameters[4] = "cmd=keepcols '"+ filter +"'";
+					}
+					//Redirecting output
+					System.setOut(out);
+				}else if(configBean.getTypeOfInput().compareTo("String")==0){
+					parameters = new String[5];
+					parameters[0] = "tpipe";
+					parameters[1] = "ifmt="+formatInputTable;
+					parameters[2] = "in=-";
+					parameters[3] = "ofmt="+formatOutputTable;
+					if(configBean.getTypeOfFilter().compareTo("Column names")==0){
+						parameters[4] = "cmd=keepcols '"+ filter +"'";
+					}else{
+						filter = MyUtils.checkAndRepairUCDlist(filter);
+						parameters[4] = "cmd=keepcols '"+ filter +"'";
+					}
+					//Redirecting output and input
+					in = IOUtils.toInputStream(inputTable);
+					//Optionally, do this: 
+					//InputStream is = new ByteArrayInputStream(resultTable.getBytes( charset ) );
+					System.setIn(in);
+					System.setOut(out);
+				}else{
+					parameters = new String[5];
+					parameters[0] = "tpipe";
+					parameters[1] = "ifmt="+formatInputTable;
+					parameters[2] = "in=-";
+					parameters[3] = "ofmt="+formatOutputTable;
+
+					//Redirecting output and input
+					in = IOUtils.toInputStream(inputTable);
+					//Optionally, do this: 
+					//InputStream is = new ByteArrayInputStream(resultTable.getBytes( charset ) );
+					System.setIn(in);
+					System.setOut(out);
 				}
-				*/
+					
+				Stilts.main(parameters);
+					
+				
+				
 				// Register outputs
 				Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-				String simpleValue = "/home/julian/Documents/wf4ever/tables/resultTable.ascii";// lastInput;//Name of the output file
+				String simpleValue = "/home/julian/Documents/wf4ever/tables/resultTable.ascii";// //Name of the output file or result
 				String simpleoutput = "simple-report";
+				
+				if(optionalPorts){ //case File
+					simpleValue = outputTableName;
+				}else if(configBean.getTypeOfInput().compareTo("Query")==0 
+							||configBean.getTypeOfInput().compareTo("URL")==0){
+			
+					out.close();
+					if(out.checkError()){
+						simpleoutput += "Output redirection failed.\n";
+					}
+					
+					simpleValue = baos.toString();
+					System.setOut(stdout);	
+					
+				}else if(configBean.getTypeOfInput().compareTo("String")==0){
+					out.close();
+					if(out.checkError()){
+						simpleoutput += "Output redirection failed.\n";
+					}
+					
+					simpleValue = baos.toString();
+					System.setOut(stdout);	
+					
+					try {
+						in.close();
+					} catch (IOException e) {
+						simpleoutput += "Input redirection failed.\n" + e.toString();
+					}
+					System.setIn(stdin);
+				}else{
+					out.close();
+					if(out.checkError()){
+						simpleoutput += "Output redirection failed.\n";
+					}
+					
+					simpleValue = baos.toString();
+					System.setOut(stdout);	
+					
+					try {
+						in.close();
+					} catch (IOException e) {
+						simpleoutput += "Input redirection failed.\n" + e.toString();
+					}
+					System.setIn(stdin);
+				}
+
 				T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
 				outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
 				T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 

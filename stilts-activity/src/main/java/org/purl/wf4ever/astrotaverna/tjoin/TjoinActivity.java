@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.purl.wf4ever.astrotaverna.utils.MyUtils;
+
 import uk.ac.starlink.ttools.Stilts;
 
 import net.sf.taverna.t2.invocation.InvocationContext;
@@ -47,13 +49,7 @@ public class TjoinActivity extends
 		//			"Input table file 1 doesn't exist");
 		//}
 		
-		if(!(configBean.getInputFormat().compareTo("fits")==0 
-				|| configBean.getInputFormat().compareTo("colfits")==0
-				|| configBean.getInputFormat().compareTo("votable")==0
-				|| configBean.getInputFormat().compareTo("ascii")==0
-				|| configBean.getInputFormat().compareTo("csv")==0
-				|| configBean.getInputFormat().compareTo("tst")==0
-				|| configBean.getInputFormat().compareTo("ipac")==0)){
+		if(!MyUtils.isValidInputFormat(configBean.getInputFormat())){				
 			throw new ActivityConfigurationException(
 					"Invalid format for the input tables");
 		}

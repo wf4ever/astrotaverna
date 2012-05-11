@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.purl.wf4ever.astrotaverna.utils.MyUtils;
 
 public class SelectColumnsActivityTest {
 
@@ -37,6 +39,11 @@ public class SelectColumnsActivityTest {
 	
 	private SelectColumnsActivity activity = new SelectColumnsActivity();
 
+	private static final String resultSelectColumns = 
+			   "# U        G        R        I        Z         \n"       
+			  +"  17.52193 17.47281 17.50826 17.99788 17.8128\n" 
+			  +"  13.7583  12.79937 12.27589 11.99715 11.71331";
+	
 	@Ignore("Not ready to run")
 	@BeforeClass
 	public static void createTableFiles(){
@@ -82,6 +89,7 @@ public class SelectColumnsActivityTest {
 
 	//this test is valid only with the right folders
 	
+	@Ignore
 	@Test
 	public void executeAsynch() throws Exception {
 		configBean.setTypeOfInput("File");
@@ -115,6 +123,40 @@ public class SelectColumnsActivityTest {
 
 	}
 
+	@Test
+	public void executeAsynchWithStrings() throws Exception {
+		configBean.setTypeOfInput("String");
+		configBean.setTypeOfFilter("Column names");
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		inputs.put(IN_FIRST_INPUT_TABLE, MyUtils.getExampleVOtable());
+		inputs.put(IN_FORMAT_INPUT_TABLE, "votable");
+		inputs.put(IN_FORMAT_OUTPUT_TABLE, "ascii");
+		inputs.put(IN_FILTER, "U G R I Z");
+		inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.ascii");
+		
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put("simpleOutput", String.class);
+		//expectedOutputTypes.put("moreOutputs", String.class);
+		expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		String a = new String(resultSelectColumns.toCharArray());
+		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
+		assertTrue("Wrong output : ", a.length()==b.length());
+		assertEquals("simple-report", outputs.get(OUT_REPORT));
+		
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
+	
 	
 	@Test
 	public void reConfiguredActivity() throws Exception {
@@ -133,46 +175,5 @@ public class SelectColumnsActivityTest {
 		assertEquals("Unexpected outputs", 2, activity.getOutputPorts().size());
 	}
 
-	
-
-
-
-	@Test
-	public void configureActivity() throws Exception {
-		Set<String> expectedInputs = new HashSet<String>();
-		/*
-		configBean.setNumberOfTables(3);
-		
-		expectedInputs.add("firstFile");
-		expectedInputs.add("secondFile");
-		if(configBean.getNumberOfTables()>2)
-			expectedInputs.add("thirdFile");
-		if(configBean.getNumberOfTables()>3)
-			expectedInputs.add("fourthFile");
-		expectedInputs.add("outputFileIn");
-		
-		
-		Set<String> expectedOutputs = new HashSet<String>();
-		expectedOutputs.add("outputFileOut");
-		expectedOutputs.add("report");
-
-		activity.configure(configBean);
-
-		Set<ActivityInputPort> inputPorts = activity.getInputPorts();
-		assertEquals(expectedInputs.size(), inputPorts.size());
-		for (ActivityInputPort inputPort : inputPorts) {
-			assertTrue("Wrong input : " + inputPort.getName(), expectedInputs
-					.remove(inputPort.getName()));
-		}
-
-		Set<OutputPort> outputPorts = activity.getOutputPorts();
-		assertEquals(expectedOutputs.size(), outputPorts.size());
-		for (OutputPort outputPort : outputPorts) {
-			assertTrue("Wrong output : " + outputPort.getName(),
-					expectedOutputs.remove(outputPort.getName()));
-		}
-		*/
-	}
-	
 	
 }
