@@ -1,6 +1,8 @@
 package org.purl.wf4ever.astrotaverna.view.votable;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -17,6 +19,14 @@ import uk.ac.starlink.util.ByteArrayDataSource;
 
 public class VOTableRenderer implements Renderer {
 
+	protected List<String> PREDICTORS = Arrays.asList(
+			"http://www.ivoa.net/xml/VOTable",
+			"http://vizier.u-strasbg.fr/VOTable",
+			"http://vizier.u-strasbg.fr/xml/VOTable-1.1.xsd",
+			"http://www.ivoa.net/xml/VOTable/v1.0",
+			"http://www.ivoa.net/xml/VOTable/v1.2",
+			"http://us-vo.org/xml/VOTable.dtd");
+	
 	@Override
 	public boolean canHandle(String mimeType) {
 		return "application/x-votable+xml".equals(mimeType);
@@ -31,10 +41,14 @@ public class VOTableRenderer implements Renderer {
 		if (canHandle(mimeType)) { 
 			return true;
 		}
-		String asString = (String) referenceService.renderIdentifier(reference, String.class, null);
-		// TODO: Also recognize FITS and other formats from 
-		// http://www.star.bris.ac.uk/~mbt/stil/sun252/tableBuilders.html ? 
-		return asString.contains("http://www.ivoa.net/xml/VOTable");		
+		String asString = (String) referenceService.renderIdentifier(reference,
+				String.class, null);
+		for (String predictor : PREDICTORS) {
+			if (asString.contains(predictor)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
