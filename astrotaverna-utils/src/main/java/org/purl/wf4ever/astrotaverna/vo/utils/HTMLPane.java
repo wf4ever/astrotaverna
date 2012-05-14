@@ -4,6 +4,8 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JEditorPane;
 import javax.swing.event.HyperlinkEvent;
@@ -73,5 +75,38 @@ public class HTMLPane extends JEditorPane {
 	public void setText(String t) {
 		super.setText(t);
 		setCaretPosition(0);
+	}
+
+	/**
+	 * HTML-safe version of String.format
+	 * <p>
+	 * Characters &amp;, &lt; and &gt; will be substituted with the HTML
+	 * entities. <code>null</code> is replaced with an empty string. 
+	 * If all arguments are <code>null</code>, an empty string is returned
+	 * instead of the formatted string, unless there was no arguments.
+	 * 
+	 * @see String#format(String, Object...)
+	 * @param format
+	 *            The format
+	 * @param args
+	 *            Arguments for the format
+	 * @return Formatted string
+	 */
+	public static String format(String format, Object... args) {		
+		List<String> strings = new ArrayList<String>();
+		boolean foundValue = false;
+		for (Object arg : args) {
+			if (arg == null) {
+				strings.add("");
+				continue;
+			}
+			foundValue = true;
+			strings.add(arg.toString().replace("&", "&amp;")
+					.replace("<", "&lt;").replace(">", "&gt;"));
+		}
+		if (! foundValue && args.length > 1) {
+			return "";
+		}
+		return String.format(format, strings.toArray());
 	}
 }
