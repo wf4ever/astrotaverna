@@ -8,6 +8,7 @@ import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualV
 
 import org.purl.wf4ever.astrotaverna.tjoin.TjoinActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.SelectColumnsActivity;
+import org.purl.wf4ever.astrotaverna.tpipe.SelectRowsActivity;
 
 public class StiltsActivityContextViewFactory implements
 		ContextualViewFactory  {
@@ -18,6 +19,8 @@ public class StiltsActivityContextViewFactory implements
 		if(selection instanceof TjoinActivity)
 			return true;
 		else if(selection instanceof SelectColumnsActivity)
+			return true;
+		else if(selection instanceof SelectRowsActivity)
 			return true;
 		else
 			return false;
@@ -32,6 +35,10 @@ public class StiltsActivityContextViewFactory implements
 	public List<ContextualView> getViews(SelectColumnsActivity selection) {
 		return Arrays.<ContextualView>asList(new SelectColumnsContextualView(selection));
 	}
+	
+	public List<ContextualView> getViews(SelectRowsActivity selection) {
+		return Arrays.<ContextualView>asList(new SelectRowsContextualView(selection));
+	}
 
 	@Override
 	public List<ContextualView> getViews(Object arg0) {
@@ -40,6 +47,8 @@ public class StiltsActivityContextViewFactory implements
 			return getViews((TjoinActivity) arg0);
 		else if(arg0 instanceof SelectColumnsActivity)
 			return getViews((SelectColumnsActivity) arg0);
+		else if(arg0 instanceof SelectRowsActivity)
+			return getViews((SelectRowsActivity) arg0);
 		else
 			return null;
 	}
