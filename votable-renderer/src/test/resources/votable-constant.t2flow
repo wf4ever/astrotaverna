@@ -1,0 +1,326 @@
+<workflow xmlns="http://taverna.sf.net/2008/xml/t2flow" version="1" producedBy="taverna-2.4.0"><dataflow id="2afc8871-ff01-4107-a757-1d22d5b330d5" role="top"><name>Workflow1</name><inputPorts /><outputPorts><port><name>Text_constant_value</name><annotations /></port></outputPorts><processors><processor><name>Text_constant</name><inputPorts /><outputPorts><port><name>value</name><depth>0</depth><granularDepth>0</granularDepth></port></outputPorts><annotations /><activities><activity><raven><group>net.sf.taverna.t2.activities</group><artifact>stringconstant-activity</artifact><version>1.4</version></raven><class>net.sf.taverna.t2.activities.stringconstant.StringConstantActivity</class><inputMap /><outputMap><map from="value" to="value" /></outputMap><configBean encoding="xstream"><net.sf.taverna.t2.activities.stringconstant.StringConstantConfigurationBean xmlns="">
+  <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;VOTABLE version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.ivoa.net/xml/VOTable/v1.1"
+  xsi:schemaLocation="http://www.ivoa.net/xml/VOTable/v1.1 http://www.ivoa.net/xml/VOTable/v1.1"&gt;
+ &lt;DESCRIPTION&gt;
+   VizieR Astronomical Server vizier.u-strasbg.fr 	2012-05-14T08:36:56 [V1.88 (30-Jan-2012)]
+   Explanations and Statistics of UCDs:			See LINK below
+   In case of problem, please report to:	question@simbad.u-strasbg.fr
+ &lt;/DESCRIPTION&gt;
+&lt;!-- VOTable description at http://www.ivoa.net/Documents/latest/VOT.html --&gt;
+
+&lt;DEFINITIONS&gt;
+  &lt;COOSYS ID="J2000" system="eq_FK5" equinox="J2000"/&gt;
+&lt;/DEFINITIONS&gt;
+
+&lt;INFO ID="VERSION" name="votable-version" value="1.88 (30-Jan-2012)"/&gt;
+&lt;INFO ID="Ref" name="-ref" value="VOTx18141"/&gt;
+&lt;INFO ID="MaxTuples" name="-out.max" value="unlimited"/&gt;
+&lt;INFO name="queryParameters" value="8"&gt;
+-oc.form=DM
+-source=II/246
+-c
+-out.max=unlimited
+-out=_r _RAJ() _DEJ() **
+-c.ra=127.5
+-c.dec= 1.5
+-c.rd=0.2333
+&lt;/INFO&gt;
+
+&lt;!--
+Execution Reports
+ --&gt;
+&lt;INFO ID="Target" name="-c" value="127.500000+01.500000,rd=0.2333"&gt;
+&lt;/INFO&gt;
+
+&lt;RESOURCE ID="yCat_2246" name="II/246"&gt;
+  &lt;DESCRIPTION&gt;2MASS All-Sky Catalog of Point Sources (Cutri+ 2003)&lt;/DESCRIPTION&gt;
+  &lt;TABLE ID="II_246_out" name="II/246/out"&gt;
+    &lt;DESCRIPTION&gt;The Point Source catalogue of 470,992,970 sources. % Additions to 2MASS Intro (last modif: 27-Nov-2007)
+%---------------------------------------===========
+Please {\bf
+\aW{ack}{http://www.ipac.caltech.edu/2mass/releases/allsky/doc/sec1_8b.html}
+ {acknowledge the usage of the 2MASS All-Sky Survey}};
+ see also the \W{ext}{http://www.ipac.caltech.edu/2mass/}{2MASS Pages}.
+\ifnum\Vphase&amp;gt;3{\fg{red3}\quad
+Note that the magnitudes in red correspond to low quality results
+(upper limits or very poor photometry)}\fi
+&lt;/DESCRIPTION&gt;
+    &lt;!-- RowName: ${2MASS} --&gt;
+    &lt;!-- Definitions of GROUPs and FIELDs --&gt;
+    &lt;FIELD name="_r" ucd="POS_ANG_DIST_GENERAL" datatype="double" width="8" precision="6" unit="deg"&gt;&lt;!-- ucd="pos.angDistance" --&gt;
+      &lt;DESCRIPTION&gt;Distance from center (127.500000+01.500000)[FK5/J2000]&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="_RAJ2000" ucd="POS_EQ_RA_MAIN" ref="J2000" datatype="double" width="10" precision="6" unit="deg"&gt;&lt;!-- ucd="pos.eq.ra;meta.main" --&gt;
+      &lt;DESCRIPTION&gt;Right ascension (FK5, Equinox=J2000.0) (computed by VizieR, not part of the original data)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="_DEJ2000" ucd="POS_EQ_DEC_MAIN" ref="J2000" datatype="double" width="10" precision="6" unit="deg"&gt;&lt;!-- ucd="pos.eq.dec;meta.main" --&gt;
+      &lt;DESCRIPTION&gt;Declination (FK5, Equinox=J2000.0) (computed by VizieR, not part of the original data)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="RAJ2000" ucd="POS_EQ_RA" ref="J2000" datatype="double" width="10" precision="6" unit="deg"&gt;&lt;!-- ucd="pos.eq.ra" --&gt;
+      &lt;DESCRIPTION&gt;(ra) Right ascension (J2000)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="DEJ2000" ucd="POS_EQ_DEC" ref="J2000" datatype="double" width="10" precision="6" unit="deg"&gt;&lt;!-- ucd="pos.eq.dec" --&gt;
+      &lt;DESCRIPTION&gt;(dec) Declination (J2000) (dec)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="errMaj" ucd="ERROR" datatype="float" width="5" precision="2" unit="arcsec"&gt;&lt;!-- ucd="stat.error" --&gt;
+      &lt;DESCRIPTION&gt;(err_maj) Major axis of position error ellipse&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="errMin" ucd="ERROR" datatype="float" width="5" precision="2" unit="arcsec"&gt;&lt;!-- ucd="stat.error" --&gt;
+      &lt;DESCRIPTION&gt;(err_min) Minor axis of position error ellipse&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="errPA" ucd="ERROR" datatype="short" width="3" unit="deg"&gt;&lt;!-- ucd="stat.error" --&gt;
+      &lt;DESCRIPTION&gt;[0,180] (err_ang) Position angle of error ellipse major axis (E of N)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="2MASS" ucd="ID_MAIN" datatype="char" arraysize="17*"&gt;&lt;!-- ucd="meta.id;meta.main" --&gt;
+      &lt;DESCRIPTION&gt;(designation) Source designation (1) [datatype=char]&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Jmag" ucd="PHOT_JHN_J" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="phot.mag;em.IR.J" --&gt;
+      &lt;DESCRIPTION&gt;?(j_m) J selected default magnitude (2)&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Jcmsig" ucd="ERROR" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="stat.error;phot.mag" --&gt;
+      &lt;DESCRIPTION&gt;?(j_cmsig) J default magnitude uncertainty (3)&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="e_Jmag" ucd="ERROR" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="stat.error;phot.mag;em.IR.J" --&gt;
+      &lt;DESCRIPTION&gt;?(j_msigcom) J total magnitude uncertainty (4)&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Jsnr" ucd="INST_S/N" datatype="double" width="10" precision="1"&gt;&lt;!-- ucd="stat.snr" --&gt;
+      &lt;DESCRIPTION&gt;?(j_snr) J Signal-to-noise ratio&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Hmag" ucd="PHOT_JHN_H" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="phot.mag;em.IR.H" --&gt;
+      &lt;DESCRIPTION&gt;?(h_m) H selected default magnitude (2)&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Hcmsig" ucd="ERROR" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="stat.error;phot.mag" --&gt;
+      &lt;DESCRIPTION&gt;?(h_cmsig) H default magnitude uncertainty (3)&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="e_Hmag" ucd="ERROR" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="stat.error;phot.mag;em.IR.H" --&gt;
+      &lt;DESCRIPTION&gt;?(h_msigcom) H total magnitude uncertainty (4)&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Hsnr" ucd="INST_S/N" datatype="double" width="10" precision="1"&gt;&lt;!-- ucd="stat.snr" --&gt;
+      &lt;DESCRIPTION&gt;?(h_snr) H Signal-to-noise ratio&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Kmag" ucd="PHOT_JHN_K" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="phot.mag;em.IR.K" --&gt;
+      &lt;DESCRIPTION&gt;?(k_m) K selected default magnitude (2)&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Kcmsig" ucd="ERROR" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="stat.error;phot.mag" --&gt;
+      &lt;DESCRIPTION&gt;?(k_cmsig) K default magnitude uncertainty (3)&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="e_Kmag" ucd="ERROR" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="stat.error;phot.mag;em.IR.K" --&gt;
+      &lt;DESCRIPTION&gt;?(k_msigcom) K total magnitude uncertainty (4)&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Ksnr" ucd="INST_S/N" datatype="double" width="10" precision="1"&gt;&lt;!-- ucd="stat.snr" --&gt;
+      &lt;DESCRIPTION&gt;?(k_snr) K Signal-to-noise ratio&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Qflg" ucd="CODE_QUALITY" datatype="char" arraysize="3"&gt;&lt;!-- ucd="meta.code.qual;phot" --&gt;
+      &lt;DESCRIPTION&gt;(ph_qual) JHK Photometric quality flag (5)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Rflg" ucd="REFER_CODE" datatype="char" arraysize="3"&gt;&lt;!-- ucd="meta.ref" --&gt;
+      &lt;DESCRIPTION&gt;(rd_flg) Source of JHK default mag (6)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Bflg" ucd="CODE_MISC" datatype="char" arraysize="3"&gt;&lt;!-- ucd="meta.code" --&gt;
+      &lt;DESCRIPTION&gt;(bl_flg) JHK components fit to source (7)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Cflg" ucd="CODE_MISC" datatype="char" arraysize="3"&gt;&lt;!-- ucd="meta.code" --&gt;
+      &lt;DESCRIPTION&gt;(cc_flg) Artifact contamination, confusion (8)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Ndet" ucd="NUMBER" datatype="char" arraysize="6*"&gt;&lt;!-- ucd="meta.number" --&gt;
+      &lt;DESCRIPTION&gt;[0-9] (ndet) Number of aperture measurements (jjhhkk) (9)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="prox" ucd="POS_ANG_DIST_GENERAL" datatype="float" width="5" precision="1" unit="arcsec"&gt;&lt;!-- ucd="pos.angDistance" --&gt;
+      &lt;DESCRIPTION&gt;Distance between source and nearest neighbour&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="pxPA" ucd="POS_POS-ANG" datatype="short" width="3" unit="deg"&gt;&lt;!-- ucd="pos.posAng" --&gt;
+      &lt;DESCRIPTION&gt;? (pxpa) Position angle of vector from source to nearest neighbour (E of N)&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="pxCntr" ucd="ID_NUMBER" datatype="int" width="10"&gt;&lt;!-- ucd="meta.number" --&gt;
+      &lt;DESCRIPTION&gt;(pxcntr) Sequence number of nearest neighbour&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Xflg" ucd="CODE_MISC" datatype="unsignedByte" width="1"&gt;&lt;!-- ucd="meta.code" --&gt;
+      &lt;DESCRIPTION&gt;[0,2] (gal_contam) Extended source contamination (10)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Aflg" ucd="CODE_MISC" datatype="unsignedByte" width="1"&gt;&lt;!-- ucd="meta.code" --&gt;
+      &lt;DESCRIPTION&gt;[0,1] (mp_flg) Association with asteroid or comet (11)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Cntr" ucd="ID_NUMBER" datatype="int" width="10"&gt;&lt;!-- ucd="meta.id;meta.table" --&gt;
+      &lt;DESCRIPTION&gt;(pts_key) Unique source identifier in catalogue&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Hemis" ucd="OBS_CODE" datatype="char" arraysize="1"&gt;&lt;!-- ucd="obs.param;obs" --&gt;
+      &lt;DESCRIPTION&gt;[ns] (hemis) Hemisphere of observation&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Date" ucd="TIME_DATE" datatype="char" arraysize="10*"&gt;&lt;!-- ucd="time.epoch;obs" --&gt;
+      &lt;DESCRIPTION&gt;(date) Observation date&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Scan" ucd="ID_FIELD" datatype="short" width="3"&gt;&lt;!-- ucd="obs.field" --&gt;
+      &lt;DESCRIPTION&gt;(scan) Scan number (within date)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="GLON" ucd="POS_GAL_LON" datatype="double" width="7" precision="3" unit="deg"&gt;&lt;!-- ucd="pos.galactic.lon" --&gt;
+      &lt;DESCRIPTION&gt;(glon) Galactic longitude (12)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="GLAT" ucd="POS_GAL_LAT" datatype="double" width="7" precision="3" unit="deg"&gt;&lt;!-- ucd="pos.galactic.lat" --&gt;
+      &lt;DESCRIPTION&gt;(glat) Galactic latitude (12)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Xscan" ucd="INST_POS" datatype="float" width="6" precision="1" unit="arcsec"&gt;&lt;!-- ucd="pos.cartesian;instr.det" --&gt;
+      &lt;DESCRIPTION&gt;(x_scan) Distance of source from focal plane centerline&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="JD" ucd="TIME_DATE" datatype="double" width="12" precision="4" unit="d"&gt;&lt;!-- ucd="time.epoch" --&gt;
+      &lt;DESCRIPTION&gt;(jdate) Julian date of source measurement (13)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Jpsfchi" ucd="FIT_ERROR" datatype="float" width="6" precision="2"&gt;&lt;!-- ucd="stat.fit.chi2;stat.value" --&gt;
+      &lt;DESCRIPTION&gt;?(j_psfchi) J band reduced chi2 value of fit&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Hpsfchi" ucd="FIT_ERROR" datatype="float" width="6" precision="2"&gt;&lt;!-- ucd="stat.fit.chi2;stat.value" --&gt;
+      &lt;DESCRIPTION&gt;?(h_psfchi) H band reduced chi2 value of fit&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Kpsfchi" ucd="FIT_ERROR" datatype="float" width="6" precision="2"&gt;&lt;!-- ucd="stat.fit.chi2;stat.value" --&gt;
+      &lt;DESCRIPTION&gt;?(k_psfchi) K band reduced chi2 value of fit&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Jstdap" ucd="PHOT_JHN_J" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="phot.mag;em.IR.J" --&gt;
+      &lt;DESCRIPTION&gt;?(j_m_stdap) J standard aperture magnitude (18)&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="e_Jstdap" ucd="ERROR" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="stat.error" --&gt;
+      &lt;DESCRIPTION&gt;?(j_msig_stdap) error on Jstdap&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Hstdap" ucd="PHOT_JHN_H" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="phot.mag;em.IR.H" --&gt;
+      &lt;DESCRIPTION&gt;?(h_m_stdap) H standard aperture magnitude (18)&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="e_Hstdap" ucd="ERROR" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="stat.error" --&gt;
+      &lt;DESCRIPTION&gt;?(h_msig_stdap) error on Hstdap&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Kstdap" ucd="PHOT_JHN_K" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="phot.mag;em.IR.K" --&gt;
+      &lt;DESCRIPTION&gt;?(k_m_stdap) K standard aperture magnitude (18)&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="e_Kstdap" ucd="ERROR" datatype="float" width="6" precision="3" unit="mag"&gt;&lt;!-- ucd="stat.error" --&gt;
+      &lt;DESCRIPTION&gt;?(k_msig_stdap) error on Kstdap&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="edgeNS" ucd="INST_PLATE_DIST" datatype="int" width="5" unit="arcsec"&gt;&lt;!-- ucd="pos;arith.diff" --&gt;
+      &lt;DESCRIPTION&gt;(dist_edge_ns) Distance from the source to the nearest North or South scan edge&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="edgeEW" ucd="INST_PLATE_DIST" datatype="short" width="3" unit="arcsec"&gt;&lt;!-- ucd="pos;arith.diff" --&gt;
+      &lt;DESCRIPTION&gt;(dist_edge_ew) Distance from the source to the nearest East or West scan edge&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="edge" ucd="INST_POS" datatype="char" arraysize="2"&gt;&lt;!-- ucd="pos.cartesian;instr.det" --&gt;
+      &lt;DESCRIPTION&gt;[nsew] (dist_edge_flg) flag indicating to which edges the edgeNS and edgeEW values refer&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="dup" ucd="CODE_MISC" datatype="unsignedByte" width="1"&gt;&lt;!-- ucd="meta.code" --&gt;
+      &lt;DESCRIPTION&gt;(dup_src) Flag indicating duplicate source (14)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="use" ucd="CODE_MISC" datatype="unsignedByte" width="1"&gt;&lt;!-- ucd="meta.code" --&gt;
+      &lt;DESCRIPTION&gt;(use_src) Use source flag (15)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="opt" ucd="ID_CATALOG" datatype="char" arraysize="1"&gt;&lt;!-- ucd="meta.id;meta.dataset" --&gt;
+      &lt;DESCRIPTION&gt;[0UT] (a) Associated optical source (16)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Dopt" ucd="POS_ANG_DIST_GENERAL" datatype="float" width="4" precision="1" unit="arcsec"&gt;&lt;!-- ucd="pos.angDistance" --&gt;
+      &lt;DESCRIPTION&gt;?(dist_opt) Distance to associated optical source&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="PAopt" ucd="POS_POS-ANG" datatype="short" width="3" unit="deg"&gt;&lt;!-- ucd="pos.posAng" --&gt;
+      &lt;DESCRIPTION&gt;[0,360]? (phi_opt) position angle from optical source to the 2MASS source position&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Bmag" ucd="PHOT_PHG_B" datatype="float" width="5" precision="2" unit="mag"&gt;&lt;!-- ucd="phot.mag;em.opt.B" --&gt;
+      &lt;DESCRIPTION&gt;?(b_m_opt) Blue magnitude of associated optical source&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Rmag" ucd="PHOT_PHG_R" datatype="float" width="5" precision="2" unit="mag"&gt;&lt;!-- ucd="phot.mag;em.opt.R" --&gt;
+      &lt;DESCRIPTION&gt;?(vr_m_opt) Visual or red mag of associated optical source&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Nopt" ucd="NUMBER" datatype="unsignedByte" width="1"&gt;&lt;!-- ucd="meta.number" --&gt;
+      &lt;DESCRIPTION&gt;(nopt_mchs) Number of optical sources within 5arcsec (17)&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="extKey" ucd="ID_CROSSID" datatype="int" width="7"&gt;&lt;!-- ucd="meta.id.cross" --&gt;
+      &lt;DESCRIPTION&gt;?(ext_key) Record Identifier in XSC&lt;/DESCRIPTION&gt;
+      &lt;VALUES null=" " /&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="scanKey" ucd="ID_NUMBER" datatype="int" width="5"&gt;&lt;!-- ucd="meta.id" --&gt;
+      &lt;DESCRIPTION&gt;(scan_key) Record Identifier in the Scan Information Table&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="coaddKey" ucd="ID_TABLE" datatype="int" width="7"&gt;&lt;!-- ucd="meta.id;meta.dataset" --&gt;
+      &lt;DESCRIPTION&gt;(coadd_key) Record Identifier in the Atlas Image Data Table&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="coadd" ucd="ID_NUMBER" datatype="short" width="3"&gt;&lt;!-- ucd="meta.number" --&gt;
+      &lt;DESCRIPTION&gt;(coadd) Sequence number of the Atlas Image&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+    &lt;FIELD name="Opt" ucd="DATA_LINK" datatype="char" arraysize="3"&gt;&lt;!-- ucd="meta.ref.url" --&gt;
+      &lt;DESCRIPTION&gt;Show the nearby Optical Sources from USNO and GSC Catalogues&lt;/DESCRIPTION&gt;
+    &lt;/FIELD&gt;
+&lt;DATA&gt;&lt;TABLEDATA&gt;
+&lt;TR&gt;&lt;TD&gt;0.213460&lt;/TD&gt;&lt;TD&gt;127.398183&lt;/TD&gt;&lt;TD&gt;+01.312371&lt;/TD&gt;&lt;TD&gt;127.398183&lt;/TD&gt;&lt;TD&gt;+01.312371&lt;/TD&gt;&lt;TD&gt;0.25&lt;/TD&gt;&lt;TD&gt;0.22&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;08293556+0118445&lt;/TD&gt;&lt;TD&gt;16.453&lt;/TD&gt;&lt;TD&gt;0.141&lt;/TD&gt;&lt;TD&gt;0.141&lt;/TD&gt;&lt;TD&gt;8.0&lt;/TD&gt;&lt;TD&gt;16.129&lt;/TD&gt;&lt;TD&gt;0.209&lt;/TD&gt;&lt;TD&gt;0.209&lt;/TD&gt;&lt;TD&gt;5.3&lt;/TD&gt;&lt;TD&gt;16.689&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;BCU&lt;/TD&gt;&lt;TD&gt;220&lt;/TD&gt;&lt;TD&gt;110&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;060600&lt;/TD&gt;&lt;TD&gt;45.2&lt;/TD&gt;&lt;TD&gt;181&lt;/TD&gt;&lt;TD&gt;804019645&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019675&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.455&lt;/TD&gt;&lt;TD&gt;22.332&lt;/TD&gt;&lt;TD&gt;146.3&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;0.87&lt;/TD&gt;&lt;TD&gt;0.76&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;16.278&lt;/TD&gt;&lt;TD&gt;0.312&lt;/TD&gt;&lt;TD&gt;15.734&lt;/TD&gt;&lt;TD&gt;0.263&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;4740&lt;/TD&gt;&lt;TD&gt;106&lt;/TD&gt;&lt;TD&gt;sw&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.211617&lt;/TD&gt;&lt;TD&gt;127.429505&lt;/TD&gt;&lt;TD&gt;+01.300463&lt;/TD&gt;&lt;TD&gt;127.429505&lt;/TD&gt;&lt;TD&gt;+01.300463&lt;/TD&gt;&lt;TD&gt;0.08&lt;/TD&gt;&lt;TD&gt;0.08&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;08294308+0118016&lt;/TD&gt;&lt;TD&gt;15.482&lt;/TD&gt;&lt;TD&gt;0.058&lt;/TD&gt;&lt;TD&gt;0.059&lt;/TD&gt;&lt;TD&gt;19.5&lt;/TD&gt;&lt;TD&gt;14.972&lt;/TD&gt;&lt;TD&gt;0.062&lt;/TD&gt;&lt;TD&gt;0.062&lt;/TD&gt;&lt;TD&gt;15.3&lt;/TD&gt;&lt;TD&gt;15.060&lt;/TD&gt;&lt;TD&gt;0.126&lt;/TD&gt;&lt;TD&gt;0.127&lt;/TD&gt;&lt;TD&gt;7.2&lt;/TD&gt;&lt;TD&gt;AAB&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;360605&lt;/TD&gt;&lt;TD&gt;50.7&lt;/TD&gt;&lt;TD&gt;253&lt;/TD&gt;&lt;TD&gt;804019640&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019647&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.483&lt;/TD&gt;&lt;TD&gt;22.353&lt;/TD&gt;&lt;TD&gt;33.6&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;1.04&lt;/TD&gt;&lt;TD&gt;1.09&lt;/TD&gt;&lt;TD&gt;1.12&lt;/TD&gt;&lt;TD&gt;15.522&lt;/TD&gt;&lt;TD&gt;0.122&lt;/TD&gt;&lt;TD&gt;15.222&lt;/TD&gt;&lt;TD&gt;0.122&lt;/TD&gt;&lt;TD&gt;15.177&lt;/TD&gt;&lt;TD&gt;0.300&lt;/TD&gt;&lt;TD&gt;4697&lt;/TD&gt;&lt;TD&gt;219&lt;/TD&gt;&lt;TD&gt;sw&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;0.6&lt;/TD&gt;&lt;TD&gt;224&lt;/TD&gt;&lt;TD&gt;17.60&lt;/TD&gt;&lt;TD&gt;16.40&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.226718&lt;/TD&gt;&lt;TD&gt;127.414546&lt;/TD&gt;&lt;TD&gt;+01.289993&lt;/TD&gt;&lt;TD&gt;127.414546&lt;/TD&gt;&lt;TD&gt;+01.289993&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;08293949+0117239&lt;/TD&gt;&lt;TD&gt;14.666&lt;/TD&gt;&lt;TD&gt;0.032&lt;/TD&gt;&lt;TD&gt;0.034&lt;/TD&gt;&lt;TD&gt;41.3&lt;/TD&gt;&lt;TD&gt;14.264&lt;/TD&gt;&lt;TD&gt;0.043&lt;/TD&gt;&lt;TD&gt;0.044&lt;/TD&gt;&lt;TD&gt;29.4&lt;/TD&gt;&lt;TD&gt;14.223&lt;/TD&gt;&lt;TD&gt;0.065&lt;/TD&gt;&lt;TD&gt;0.066&lt;/TD&gt;&lt;TD&gt;15.6&lt;/TD&gt;&lt;TD&gt;AAA&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;664616&lt;/TD&gt;&lt;TD&gt;23.6&lt;/TD&gt;&lt;TD&gt;13&lt;/TD&gt;&lt;TD&gt;804019640&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019624&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.485&lt;/TD&gt;&lt;TD&gt;22.335&lt;/TD&gt;&lt;TD&gt;87.4&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;1.40&lt;/TD&gt;&lt;TD&gt;0.77&lt;/TD&gt;&lt;TD&gt;1.15&lt;/TD&gt;&lt;TD&gt;14.729&lt;/TD&gt;&lt;TD&gt;0.040&lt;/TD&gt;&lt;TD&gt;14.389&lt;/TD&gt;&lt;TD&gt;0.118&lt;/TD&gt;&lt;TD&gt;14.418&lt;/TD&gt;&lt;TD&gt;0.225&lt;/TD&gt;&lt;TD&gt;4659&lt;/TD&gt;&lt;TD&gt;165&lt;/TD&gt;&lt;TD&gt;sw&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;0.4&lt;/TD&gt;&lt;TD&gt;205&lt;/TD&gt;&lt;TD&gt;16.30&lt;/TD&gt;&lt;TD&gt;15.30&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.224640&lt;/TD&gt;&lt;TD&gt;127.398036&lt;/TD&gt;&lt;TD&gt;+01.299818&lt;/TD&gt;&lt;TD&gt;127.398036&lt;/TD&gt;&lt;TD&gt;+01.299818&lt;/TD&gt;&lt;TD&gt;0.21&lt;/TD&gt;&lt;TD&gt;0.18&lt;/TD&gt;&lt;TD&gt;86&lt;/TD&gt;&lt;TD&gt;08293552+0117593&lt;/TD&gt;&lt;TD&gt;16.006&lt;/TD&gt;&lt;TD&gt;0.091&lt;/TD&gt;&lt;TD&gt;0.092&lt;/TD&gt;&lt;TD&gt;12.0&lt;/TD&gt;&lt;TD&gt;15.514&lt;/TD&gt;&lt;TD&gt;0.124&lt;/TD&gt;&lt;TD&gt;0.124&lt;/TD&gt;&lt;TD&gt;9.3&lt;/TD&gt;&lt;TD&gt;15.203&lt;/TD&gt;&lt;TD&gt;0.145&lt;/TD&gt;&lt;TD&gt;0.145&lt;/TD&gt;&lt;TD&gt;6.3&lt;/TD&gt;&lt;TD&gt;ABC&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;061606&lt;/TD&gt;&lt;TD&gt;45.2&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;804019675&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019645&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.467&lt;/TD&gt;&lt;TD&gt;22.325&lt;/TD&gt;&lt;TD&gt;146.9&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;0.76&lt;/TD&gt;&lt;TD&gt;1.57&lt;/TD&gt;&lt;TD&gt;1.08&lt;/TD&gt;&lt;TD&gt;16.174&lt;/TD&gt;&lt;TD&gt;0.093&lt;/TD&gt;&lt;TD&gt;15.085&lt;/TD&gt;&lt;TD&gt;0.291&lt;/TD&gt;&lt;TD&gt;15.687&lt;/TD&gt;&lt;TD&gt;0.376&lt;/TD&gt;&lt;TD&gt;4695&lt;/TD&gt;&lt;TD&gt;106&lt;/TD&gt;&lt;TD&gt;sw&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;0.8&lt;/TD&gt;&lt;TD&gt;255&lt;/TD&gt;&lt;TD&gt;18.00&lt;/TD&gt;&lt;TD&gt;17.10&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.232662&lt;/TD&gt;&lt;TD&gt;127.408520&lt;/TD&gt;&lt;TD&gt;+01.286066&lt;/TD&gt;&lt;TD&gt;127.408520&lt;/TD&gt;&lt;TD&gt;+01.286066&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;08293804+0117098&lt;/TD&gt;&lt;TD&gt;13.936&lt;/TD&gt;&lt;TD&gt;0.031&lt;/TD&gt;&lt;TD&gt;0.033&lt;/TD&gt;&lt;TD&gt;80.9&lt;/TD&gt;&lt;TD&gt;13.296&lt;/TD&gt;&lt;TD&gt;0.032&lt;/TD&gt;&lt;TD&gt;0.033&lt;/TD&gt;&lt;TD&gt;71.7&lt;/TD&gt;&lt;TD&gt;13.117&lt;/TD&gt;&lt;TD&gt;0.029&lt;/TD&gt;&lt;TD&gt;0.030&lt;/TD&gt;&lt;TD&gt;43.1&lt;/TD&gt;&lt;TD&gt;AAA&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;666666&lt;/TD&gt;&lt;TD&gt;25.9&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;804019624&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019615&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.486&lt;/TD&gt;&lt;TD&gt;22.328&lt;/TD&gt;&lt;TD&gt;109.1&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;1.01&lt;/TD&gt;&lt;TD&gt;0.95&lt;/TD&gt;&lt;TD&gt;1.10&lt;/TD&gt;&lt;TD&gt;13.927&lt;/TD&gt;&lt;TD&gt;0.030&lt;/TD&gt;&lt;TD&gt;13.241&lt;/TD&gt;&lt;TD&gt;0.045&lt;/TD&gt;&lt;TD&gt;13.122&lt;/TD&gt;&lt;TD&gt;0.059&lt;/TD&gt;&lt;TD&gt;4645&lt;/TD&gt;&lt;TD&gt;144&lt;/TD&gt;&lt;TD&gt;sw&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;0.6&lt;/TD&gt;&lt;TD&gt;234&lt;/TD&gt;&lt;TD&gt;17.20&lt;/TD&gt;&lt;TD&gt;15.70&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.218308&lt;/TD&gt;&lt;TD&gt;127.412629&lt;/TD&gt;&lt;TD&gt;+01.299927&lt;/TD&gt;&lt;TD&gt;127.412629&lt;/TD&gt;&lt;TD&gt;+01.299927&lt;/TD&gt;&lt;TD&gt;0.07&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;4&lt;/TD&gt;&lt;TD&gt;08293903+0117597&lt;/TD&gt;&lt;TD&gt;15.483&lt;/TD&gt;&lt;TD&gt;0.060&lt;/TD&gt;&lt;TD&gt;0.061&lt;/TD&gt;&lt;TD&gt;19.5&lt;/TD&gt;&lt;TD&gt;14.848&lt;/TD&gt;&lt;TD&gt;0.077&lt;/TD&gt;&lt;TD&gt;0.078&lt;/TD&gt;&lt;TD&gt;17.2&lt;/TD&gt;&lt;TD&gt;14.620&lt;/TD&gt;&lt;TD&gt;0.100&lt;/TD&gt;&lt;TD&gt;0.100&lt;/TD&gt;&lt;TD&gt;10.8&lt;/TD&gt;&lt;TD&gt;AAA&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;362616&lt;/TD&gt;&lt;TD&gt;17.6&lt;/TD&gt;&lt;TD&gt;136&lt;/TD&gt;&lt;TD&gt;804019640&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019646&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.475&lt;/TD&gt;&lt;TD&gt;22.338&lt;/TD&gt;&lt;TD&gt;94.3&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;0.80&lt;/TD&gt;&lt;TD&gt;1.08&lt;/TD&gt;&lt;TD&gt;1.04&lt;/TD&gt;&lt;TD&gt;15.382&lt;/TD&gt;&lt;TD&gt;0.090&lt;/TD&gt;&lt;TD&gt;14.712&lt;/TD&gt;&lt;TD&gt;0.175&lt;/TD&gt;&lt;TD&gt;14.508&lt;/TD&gt;&lt;TD&gt;0.246&lt;/TD&gt;&lt;TD&gt;4695&lt;/TD&gt;&lt;TD&gt;158&lt;/TD&gt;&lt;TD&gt;sw&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.220247&lt;/TD&gt;&lt;TD&gt;127.416013&lt;/TD&gt;&lt;TD&gt;+01.296385&lt;/TD&gt;&lt;TD&gt;127.416013&lt;/TD&gt;&lt;TD&gt;+01.296385&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;17&lt;/TD&gt;&lt;TD&gt;08293984+0117469&lt;/TD&gt;&lt;TD&gt;14.667&lt;/TD&gt;&lt;TD&gt;0.039&lt;/TD&gt;&lt;TD&gt;0.041&lt;/TD&gt;&lt;TD&gt;41.3&lt;/TD&gt;&lt;TD&gt;14.285&lt;/TD&gt;&lt;TD&gt;0.054&lt;/TD&gt;&lt;TD&gt;0.055&lt;/TD&gt;&lt;TD&gt;28.8&lt;/TD&gt;&lt;TD&gt;14.226&lt;/TD&gt;&lt;TD&gt;0.082&lt;/TD&gt;&lt;TD&gt;0.082&lt;/TD&gt;&lt;TD&gt;15.5&lt;/TD&gt;&lt;TD&gt;AAA&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;664605&lt;/TD&gt;&lt;TD&gt;17.6&lt;/TD&gt;&lt;TD&gt;316&lt;/TD&gt;&lt;TD&gt;804019646&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019640&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.480&lt;/TD&gt;&lt;TD&gt;22.339&lt;/TD&gt;&lt;TD&gt;82.2&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;1.08&lt;/TD&gt;&lt;TD&gt;1.17&lt;/TD&gt;&lt;TD&gt;1.02&lt;/TD&gt;&lt;TD&gt;14.722&lt;/TD&gt;&lt;TD&gt;0.028&lt;/TD&gt;&lt;TD&gt;14.294&lt;/TD&gt;&lt;TD&gt;0.107&lt;/TD&gt;&lt;TD&gt;14.331&lt;/TD&gt;&lt;TD&gt;0.133&lt;/TD&gt;&lt;TD&gt;4682&lt;/TD&gt;&lt;TD&gt;171&lt;/TD&gt;&lt;TD&gt;sw&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;0.2&lt;/TD&gt;&lt;TD&gt;259&lt;/TD&gt;&lt;TD&gt;16.30&lt;/TD&gt;&lt;TD&gt;15.30&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.191883&lt;/TD&gt;&lt;TD&gt;127.468310&lt;/TD&gt;&lt;TD&gt;+01.310750&lt;/TD&gt;&lt;TD&gt;127.468310&lt;/TD&gt;&lt;TD&gt;+01.310750&lt;/TD&gt;&lt;TD&gt;0.12&lt;/TD&gt;&lt;TD&gt;0.11&lt;/TD&gt;&lt;TD&gt;9&lt;/TD&gt;&lt;TD&gt;08295239+0118387&lt;/TD&gt;&lt;TD&gt;16.062&lt;/TD&gt;&lt;TD&gt;0.091&lt;/TD&gt;&lt;TD&gt;0.092&lt;/TD&gt;&lt;TD&gt;11.4&lt;/TD&gt;&lt;TD&gt;15.293&lt;/TD&gt;&lt;TD&gt;0.093&lt;/TD&gt;&lt;TD&gt;0.094&lt;/TD&gt;&lt;TD&gt;11.4&lt;/TD&gt;&lt;TD&gt;15.237&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;AAU&lt;/TD&gt;&lt;TD&gt;220&lt;/TD&gt;&lt;TD&gt;110&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;060600&lt;/TD&gt;&lt;TD&gt;6.9&lt;/TD&gt;&lt;TD&gt;346&lt;/TD&gt;&lt;TD&gt;804019676&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019672&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.494&lt;/TD&gt;&lt;TD&gt;22.392&lt;/TD&gt;&lt;TD&gt;-106.1&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;1.38&lt;/TD&gt;&lt;TD&gt;1.13&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;16.091&lt;/TD&gt;&lt;TD&gt;0.214&lt;/TD&gt;&lt;TD&gt;15.497&lt;/TD&gt;&lt;TD&gt;0.178&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;4733&lt;/TD&gt;&lt;TD&gt;146&lt;/TD&gt;&lt;TD&gt;se&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;0.4&lt;/TD&gt;&lt;TD&gt;254&lt;/TD&gt;&lt;TD&gt;18.00&lt;/TD&gt;&lt;TD&gt;17.00&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.231037&lt;/TD&gt;&lt;TD&gt;127.463251&lt;/TD&gt;&lt;TD&gt;+01.271903&lt;/TD&gt;&lt;TD&gt;127.463251&lt;/TD&gt;&lt;TD&gt;+01.271903&lt;/TD&gt;&lt;TD&gt;0.07&lt;/TD&gt;&lt;TD&gt;0.07&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;08295118+0116188&lt;/TD&gt;&lt;TD&gt;15.844&lt;/TD&gt;&lt;TD&gt;0.076&lt;/TD&gt;&lt;TD&gt;0.077&lt;/TD&gt;&lt;TD&gt;14.0&lt;/TD&gt;&lt;TD&gt;15.110&lt;/TD&gt;&lt;TD&gt;0.095&lt;/TD&gt;&lt;TD&gt;0.096&lt;/TD&gt;&lt;TD&gt;13.5&lt;/TD&gt;&lt;TD&gt;15.029&lt;/TD&gt;&lt;TD&gt;0.138&lt;/TD&gt;&lt;TD&gt;0.138&lt;/TD&gt;&lt;TD&gt;7.4&lt;/TD&gt;&lt;TD&gt;AAB&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;260606&lt;/TD&gt;&lt;TD&gt;41.0&lt;/TD&gt;&lt;TD&gt;160&lt;/TD&gt;&lt;TD&gt;804019559&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019587&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.528&lt;/TD&gt;&lt;TD&gt;22.369&lt;/TD&gt;&lt;TD&gt;-87.9&lt;/TD&gt;&lt;TD&gt;2451573.6739&lt;/TD&gt;&lt;TD&gt;1.78&lt;/TD&gt;&lt;TD&gt;0.80&lt;/TD&gt;&lt;TD&gt;1.14&lt;/TD&gt;&lt;TD&gt;15.935&lt;/TD&gt;&lt;TD&gt;0.238&lt;/TD&gt;&lt;TD&gt;15.077&lt;/TD&gt;&lt;TD&gt;0.164&lt;/TD&gt;&lt;TD&gt;15.197&lt;/TD&gt;&lt;TD&gt;0.438&lt;/TD&gt;&lt;TD&gt;4593&lt;/TD&gt;&lt;TD&gt;164&lt;/TD&gt;&lt;TD&gt;se&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;1.0&lt;/TD&gt;&lt;TD&gt;281&lt;/TD&gt;&lt;TD&gt;20.00&lt;/TD&gt;&lt;TD&gt;18.40&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.198081&lt;/TD&gt;&lt;TD&gt;127.483247&lt;/TD&gt;&lt;TD&gt;+01.302628&lt;/TD&gt;&lt;TD&gt;127.483247&lt;/TD&gt;&lt;TD&gt;+01.302628&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;08295597+0118094&lt;/TD&gt;&lt;TD&gt;13.484&lt;/TD&gt;&lt;TD&gt;0.025&lt;/TD&gt;&lt;TD&gt;0.027&lt;/TD&gt;&lt;TD&gt;122.7&lt;/TD&gt;&lt;TD&gt;12.862&lt;/TD&gt;&lt;TD&gt;0.020&lt;/TD&gt;&lt;TD&gt;0.022&lt;/TD&gt;&lt;TD&gt;106.9&lt;/TD&gt;&lt;TD&gt;12.807&lt;/TD&gt;&lt;TD&gt;0.033&lt;/TD&gt;&lt;TD&gt;0.034&lt;/TD&gt;&lt;TD&gt;57.4&lt;/TD&gt;&lt;TD&gt;AAA&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;665555&lt;/TD&gt;&lt;TD&gt;27.9&lt;/TD&gt;&lt;TD&gt;314&lt;/TD&gt;&lt;TD&gt;804019667&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019652&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.509&lt;/TD&gt;&lt;TD&gt;22.401&lt;/TD&gt;&lt;TD&gt;-159.8&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;1.06&lt;/TD&gt;&lt;TD&gt;0.70&lt;/TD&gt;&lt;TD&gt;1.10&lt;/TD&gt;&lt;TD&gt;13.457&lt;/TD&gt;&lt;TD&gt;0.027&lt;/TD&gt;&lt;TD&gt;12.875&lt;/TD&gt;&lt;TD&gt;0.060&lt;/TD&gt;&lt;TD&gt;12.777&lt;/TD&gt;&lt;TD&gt;0.069&lt;/TD&gt;&lt;TD&gt;4704&lt;/TD&gt;&lt;TD&gt;92&lt;/TD&gt;&lt;TD&gt;se&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;2.0&lt;/TD&gt;&lt;TD&gt;195&lt;/TD&gt;&lt;TD&gt;16.30&lt;/TD&gt;&lt;TD&gt;14.50&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.193233&lt;/TD&gt;&lt;TD&gt;127.477715&lt;/TD&gt;&lt;TD&gt;+01.308056&lt;/TD&gt;&lt;TD&gt;127.477715&lt;/TD&gt;&lt;TD&gt;+01.308056&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;08295465+0118290&lt;/TD&gt;&lt;TD&gt;14.569&lt;/TD&gt;&lt;TD&gt;0.033&lt;/TD&gt;&lt;TD&gt;0.036&lt;/TD&gt;&lt;TD&gt;45.2&lt;/TD&gt;&lt;TD&gt;13.969&lt;/TD&gt;&lt;TD&gt;0.038&lt;/TD&gt;&lt;TD&gt;0.039&lt;/TD&gt;&lt;TD&gt;38.6&lt;/TD&gt;&lt;TD&gt;13.678&lt;/TD&gt;&lt;TD&gt;0.045&lt;/TD&gt;&lt;TD&gt;0.045&lt;/TD&gt;&lt;TD&gt;25.7&lt;/TD&gt;&lt;TD&gt;AAA&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;456656&lt;/TD&gt;&lt;TD&gt;27.9&lt;/TD&gt;&lt;TD&gt;134&lt;/TD&gt;&lt;TD&gt;804019652&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019667&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.501&lt;/TD&gt;&lt;TD&gt;22.399&lt;/TD&gt;&lt;TD&gt;-139.9&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;1.11&lt;/TD&gt;&lt;TD&gt;1.15&lt;/TD&gt;&lt;TD&gt;1.39&lt;/TD&gt;&lt;TD&gt;13.278&lt;/TD&gt;&lt;TD&gt;1.852&lt;/TD&gt;&lt;TD&gt;13.986&lt;/TD&gt;&lt;TD&gt;0.063&lt;/TD&gt;&lt;TD&gt;13.792&lt;/TD&gt;&lt;TD&gt;0.117&lt;/TD&gt;&lt;TD&gt;4723&lt;/TD&gt;&lt;TD&gt;112&lt;/TD&gt;&lt;TD&gt;se&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;1.8&lt;/TD&gt;&lt;TD&gt;224&lt;/TD&gt;&lt;TD&gt;19.70&lt;/TD&gt;&lt;TD&gt;17.40&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.229322&lt;/TD&gt;&lt;TD&gt;127.484650&lt;/TD&gt;&lt;TD&gt;+01.271192&lt;/TD&gt;&lt;TD&gt;127.484650&lt;/TD&gt;&lt;TD&gt;+01.271192&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;08295631+0116162&lt;/TD&gt;&lt;TD&gt;13.848&lt;/TD&gt;&lt;TD&gt;0.026&lt;/TD&gt;&lt;TD&gt;0.029&lt;/TD&gt;&lt;TD&gt;87.8&lt;/TD&gt;&lt;TD&gt;13.177&lt;/TD&gt;&lt;TD&gt;0.020&lt;/TD&gt;&lt;TD&gt;0.022&lt;/TD&gt;&lt;TD&gt;80.0&lt;/TD&gt;&lt;TD&gt;12.932&lt;/TD&gt;&lt;TD&gt;0.023&lt;/TD&gt;&lt;TD&gt;0.024&lt;/TD&gt;&lt;TD&gt;51.1&lt;/TD&gt;&lt;TD&gt;AAA&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;666655&lt;/TD&gt;&lt;TD&gt;15.7&lt;/TD&gt;&lt;TD&gt;12&lt;/TD&gt;&lt;TD&gt;804019600&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019585&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.540&lt;/TD&gt;&lt;TD&gt;22.387&lt;/TD&gt;&lt;TD&gt;-164.9&lt;/TD&gt;&lt;TD&gt;2451573.6739&lt;/TD&gt;&lt;TD&gt;0.88&lt;/TD&gt;&lt;TD&gt;0.87&lt;/TD&gt;&lt;TD&gt;0.95&lt;/TD&gt;&lt;TD&gt;13.813&lt;/TD&gt;&lt;TD&gt;0.042&lt;/TD&gt;&lt;TD&gt;13.143&lt;/TD&gt;&lt;TD&gt;0.051&lt;/TD&gt;&lt;TD&gt;13.009&lt;/TD&gt;&lt;TD&gt;0.056&lt;/TD&gt;&lt;TD&gt;4591&lt;/TD&gt;&lt;TD&gt;87&lt;/TD&gt;&lt;TD&gt;se&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;0.2&lt;/TD&gt;&lt;TD&gt;244&lt;/TD&gt;&lt;TD&gt;18.80&lt;/TD&gt;&lt;TD&gt;16.70&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.225007&lt;/TD&gt;&lt;TD&gt;127.485565&lt;/TD&gt;&lt;TD&gt;+01.275456&lt;/TD&gt;&lt;TD&gt;127.485565&lt;/TD&gt;&lt;TD&gt;+01.275456&lt;/TD&gt;&lt;TD&gt;0.20&lt;/TD&gt;&lt;TD&gt;0.17&lt;/TD&gt;&lt;TD&gt;4&lt;/TD&gt;&lt;TD&gt;08295653+0116316&lt;/TD&gt;&lt;TD&gt;16.260&lt;/TD&gt;&lt;TD&gt;0.112&lt;/TD&gt;&lt;TD&gt;0.112&lt;/TD&gt;&lt;TD&gt;9.5&lt;/TD&gt;&lt;TD&gt;15.908&lt;/TD&gt;&lt;TD&gt;0.172&lt;/TD&gt;&lt;TD&gt;0.172&lt;/TD&gt;&lt;TD&gt;6.5&lt;/TD&gt;&lt;TD&gt;15.264&lt;/TD&gt;&lt;TD&gt;0.184&lt;/TD&gt;&lt;TD&gt;0.184&lt;/TD&gt;&lt;TD&gt;6.0&lt;/TD&gt;&lt;TD&gt;BCC&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;160606&lt;/TD&gt;&lt;TD&gt;15.7&lt;/TD&gt;&lt;TD&gt;192&lt;/TD&gt;&lt;TD&gt;804019585&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019600&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.536&lt;/TD&gt;&lt;TD&gt;22.390&lt;/TD&gt;&lt;TD&gt;-168.2&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;0.84&lt;/TD&gt;&lt;TD&gt;1.30&lt;/TD&gt;&lt;TD&gt;0.80&lt;/TD&gt;&lt;TD&gt;16.125&lt;/TD&gt;&lt;TD&gt;0.291&lt;/TD&gt;&lt;TD&gt;15.529&lt;/TD&gt;&lt;TD&gt;0.253&lt;/TD&gt;&lt;TD&gt;15.210&lt;/TD&gt;&lt;TD&gt;0.246&lt;/TD&gt;&lt;TD&gt;4606&lt;/TD&gt;&lt;TD&gt;84&lt;/TD&gt;&lt;TD&gt;se&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;0.4&lt;/TD&gt;&lt;TD&gt;232&lt;/TD&gt;&lt;TD&gt;18.10&lt;/TD&gt;&lt;TD&gt;17.40&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.219339&lt;/TD&gt;&lt;TD&gt;127.494339&lt;/TD&gt;&lt;TD&gt;+01.280734&lt;/TD&gt;&lt;TD&gt;127.494339&lt;/TD&gt;&lt;TD&gt;+01.280734&lt;/TD&gt;&lt;TD&gt;0.15&lt;/TD&gt;&lt;TD&gt;0.15&lt;/TD&gt;&lt;TD&gt;145&lt;/TD&gt;&lt;TD&gt;08295864+0116506&lt;/TD&gt;&lt;TD&gt;16.317&lt;/TD&gt;&lt;TD&gt;0.119&lt;/TD&gt;&lt;TD&gt;0.120&lt;/TD&gt;&lt;TD&gt;9.0&lt;/TD&gt;&lt;TD&gt;15.818&lt;/TD&gt;&lt;TD&gt;0.141&lt;/TD&gt;&lt;TD&gt;0.141&lt;/TD&gt;&lt;TD&gt;7.0&lt;/TD&gt;&lt;TD&gt;15.099&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;BBU&lt;/TD&gt;&lt;TD&gt;220&lt;/TD&gt;&lt;TD&gt;110&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;060600&lt;/TD&gt;&lt;TD&gt;36.9&lt;/TD&gt;&lt;TD&gt;239&lt;/TD&gt;&lt;TD&gt;804019600&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019605&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.536&lt;/TD&gt;&lt;TD&gt;22.400&lt;/TD&gt;&lt;TD&gt;-199.8&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;0.96&lt;/TD&gt;&lt;TD&gt;1.62&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;16.264&lt;/TD&gt;&lt;TD&gt;0.088&lt;/TD&gt;&lt;TD&gt;16.219&lt;/TD&gt;&lt;TD&gt;0.553&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;4625&lt;/TD&gt;&lt;TD&gt;52&lt;/TD&gt;&lt;TD&gt;se&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.216775&lt;/TD&gt;&lt;TD&gt;127.463023&lt;/TD&gt;&lt;TD&gt;+01.286400&lt;/TD&gt;&lt;TD&gt;127.463023&lt;/TD&gt;&lt;TD&gt;+01.286400&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;08295112+0117110&lt;/TD&gt;&lt;TD&gt;14.093&lt;/TD&gt;&lt;TD&gt;0.029&lt;/TD&gt;&lt;TD&gt;0.032&lt;/TD&gt;&lt;TD&gt;70.0&lt;/TD&gt;&lt;TD&gt;13.652&lt;/TD&gt;&lt;TD&gt;0.033&lt;/TD&gt;&lt;TD&gt;0.035&lt;/TD&gt;&lt;TD&gt;51.7&lt;/TD&gt;&lt;TD&gt;13.553&lt;/TD&gt;&lt;TD&gt;0.042&lt;/TD&gt;&lt;TD&gt;0.043&lt;/TD&gt;&lt;TD&gt;28.9&lt;/TD&gt;&lt;TD&gt;AAA&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;666635&lt;/TD&gt;&lt;TD&gt;52.2&lt;/TD&gt;&lt;TD&gt;179&lt;/TD&gt;&lt;TD&gt;804019587&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019616&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.514&lt;/TD&gt;&lt;TD&gt;22.376&lt;/TD&gt;&lt;TD&gt;-87.0&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;0.75&lt;/TD&gt;&lt;TD&gt;0.97&lt;/TD&gt;&lt;TD&gt;0.91&lt;/TD&gt;&lt;TD&gt;14.077&lt;/TD&gt;&lt;TD&gt;0.023&lt;/TD&gt;&lt;TD&gt;13.576&lt;/TD&gt;&lt;TD&gt;0.050&lt;/TD&gt;&lt;TD&gt;13.692&lt;/TD&gt;&lt;TD&gt;0.140&lt;/TD&gt;&lt;TD&gt;4646&lt;/TD&gt;&lt;TD&gt;165&lt;/TD&gt;&lt;TD&gt;se&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;0.4&lt;/TD&gt;&lt;TD&gt;160&lt;/TD&gt;&lt;TD&gt;16.30&lt;/TD&gt;&lt;TD&gt;14.60&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.203866&lt;/TD&gt;&lt;TD&gt;127.494645&lt;/TD&gt;&lt;TD&gt;+01.296204&lt;/TD&gt;&lt;TD&gt;127.494645&lt;/TD&gt;&lt;TD&gt;+01.296204&lt;/TD&gt;&lt;TD&gt;0.07&lt;/TD&gt;&lt;TD&gt;0.07&lt;/TD&gt;&lt;TD&gt;17&lt;/TD&gt;&lt;TD&gt;08295871+0117463&lt;/TD&gt;&lt;TD&gt;15.250&lt;/TD&gt;&lt;TD&gt;0.050&lt;/TD&gt;&lt;TD&gt;0.051&lt;/TD&gt;&lt;TD&gt;24.1&lt;/TD&gt;&lt;TD&gt;15.062&lt;/TD&gt;&lt;TD&gt;0.077&lt;/TD&gt;&lt;TD&gt;0.078&lt;/TD&gt;&lt;TD&gt;14.1&lt;/TD&gt;&lt;TD&gt;14.870&lt;/TD&gt;&lt;TD&gt;0.114&lt;/TD&gt;&lt;TD&gt;0.114&lt;/TD&gt;&lt;TD&gt;8.6&lt;/TD&gt;&lt;TD&gt;AAB&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;660506&lt;/TD&gt;&lt;TD&gt;47.1&lt;/TD&gt;&lt;TD&gt;299&lt;/TD&gt;&lt;TD&gt;804019652&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804019639&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;57&lt;/TD&gt;&lt;TD&gt;223.521&lt;/TD&gt;&lt;TD&gt;22.408&lt;/TD&gt;&lt;TD&gt;-200.9&lt;/TD&gt;&lt;TD&gt;2451573.6740&lt;/TD&gt;&lt;TD&gt;0.98&lt;/TD&gt;&lt;TD&gt;0.89&lt;/TD&gt;&lt;TD&gt;1.01&lt;/TD&gt;&lt;TD&gt;15.178&lt;/TD&gt;&lt;TD&gt;0.064&lt;/TD&gt;&lt;TD&gt;15.195&lt;/TD&gt;&lt;TD&gt;0.302&lt;/TD&gt;&lt;TD&gt;14.779&lt;/TD&gt;&lt;TD&gt;0.326&lt;/TD&gt;&lt;TD&gt;4681&lt;/TD&gt;&lt;TD&gt;51&lt;/TD&gt;&lt;TD&gt;se&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;0.4&lt;/TD&gt;&lt;TD&gt;185&lt;/TD&gt;&lt;TD&gt;16.80&lt;/TD&gt;&lt;TD&gt;16.10&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43955&lt;/TD&gt;&lt;TD&gt;1010947&lt;/TD&gt;&lt;TD&gt;56&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.231521&lt;/TD&gt;&lt;TD&gt;127.551124&lt;/TD&gt;&lt;TD&gt;+01.274191&lt;/TD&gt;&lt;TD&gt;127.551124&lt;/TD&gt;&lt;TD&gt;+01.274191&lt;/TD&gt;&lt;TD&gt;0.20&lt;/TD&gt;&lt;TD&gt;0.19&lt;/TD&gt;&lt;TD&gt;32&lt;/TD&gt;&lt;TD&gt;08301226+0116270&lt;/TD&gt;&lt;TD&gt;16.523&lt;/TD&gt;&lt;TD&gt;0.138&lt;/TD&gt;&lt;TD&gt;0.139&lt;/TD&gt;&lt;TD&gt;7.5&lt;/TD&gt;&lt;TD&gt;15.978&lt;/TD&gt;&lt;TD&gt;0.178&lt;/TD&gt;&lt;TD&gt;0.178&lt;/TD&gt;&lt;TD&gt;6.1&lt;/TD&gt;&lt;TD&gt;15.626&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;BCU&lt;/TD&gt;&lt;TD&gt;220&lt;/TD&gt;&lt;TD&gt;110&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;060600&lt;/TD&gt;&lt;TD&gt;53.1&lt;/TD&gt;&lt;TD&gt;132&lt;/TD&gt;&lt;TD&gt;804040612&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804040583&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;58&lt;/TD&gt;&lt;TD&gt;223.572&lt;/TD&gt;&lt;TD&gt;22.447&lt;/TD&gt;&lt;TD&gt;27.4&lt;/TD&gt;&lt;TD&gt;2451573.6814&lt;/TD&gt;&lt;TD&gt;0.86&lt;/TD&gt;&lt;TD&gt;1.10&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;17.253&lt;/TD&gt;&lt;TD&gt;0.528&lt;/TD&gt;&lt;TD&gt;15.720&lt;/TD&gt;&lt;TD&gt;0.401&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;4606&lt;/TD&gt;&lt;TD&gt;225&lt;/TD&gt;&lt;TD&gt;sw&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;0.5&lt;/TD&gt;&lt;TD&gt;205&lt;/TD&gt;&lt;TD&gt;18.20&lt;/TD&gt;&lt;TD&gt;17.30&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43956&lt;/TD&gt;&lt;TD&gt;1010984&lt;/TD&gt;&lt;TD&gt;221&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.201722&lt;/TD&gt;&lt;TD&gt;127.559129&lt;/TD&gt;&lt;TD&gt;+01.307133&lt;/TD&gt;&lt;TD&gt;127.559129&lt;/TD&gt;&lt;TD&gt;+01.307133&lt;/TD&gt;&lt;TD&gt;0.22&lt;/TD&gt;&lt;TD&gt;0.17&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;08301419+0118256&lt;/TD&gt;&lt;TD&gt;16.259&lt;/TD&gt;&lt;TD&gt;0.120&lt;/TD&gt;&lt;TD&gt;0.121&lt;/TD&gt;&lt;TD&gt;9.5&lt;/TD&gt;&lt;TD&gt;15.686&lt;/TD&gt;&lt;TD&gt;0.139&lt;/TD&gt;&lt;TD&gt;0.139&lt;/TD&gt;&lt;TD&gt;7.9&lt;/TD&gt;&lt;TD&gt;15.241&lt;/TD&gt;&lt;TD&gt;0.175&lt;/TD&gt;&lt;TD&gt;0.176&lt;/TD&gt;&lt;TD&gt;6.1&lt;/TD&gt;&lt;TD&gt;BBC&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;060606&lt;/TD&gt;&lt;TD&gt;45.1&lt;/TD&gt;&lt;TD&gt;278&lt;/TD&gt;&lt;TD&gt;804040510&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804040513&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;58&lt;/TD&gt;&lt;TD&gt;223.545&lt;/TD&gt;&lt;TD&gt;22.470&lt;/TD&gt;&lt;TD&gt;-1.4&lt;/TD&gt;&lt;TD&gt;2451573.6814&lt;/TD&gt;&lt;TD&gt;0.80&lt;/TD&gt;&lt;TD&gt;0.90&lt;/TD&gt;&lt;TD&gt;1.16&lt;/TD&gt;&lt;TD&gt;16.032&lt;/TD&gt;&lt;TD&gt;0.067&lt;/TD&gt;&lt;TD&gt;15.848&lt;/TD&gt;&lt;TD&gt;0.325&lt;/TD&gt;&lt;TD&gt;14.886&lt;/TD&gt;&lt;TD&gt;0.238&lt;/TD&gt;&lt;TD&gt;4725&lt;/TD&gt;&lt;TD&gt;251&lt;/TD&gt;&lt;TD&gt;se&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;0.3&lt;/TD&gt;&lt;TD&gt;223&lt;/TD&gt;&lt;TD&gt;20.10&lt;/TD&gt;&lt;TD&gt;18.30&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43956&lt;/TD&gt;&lt;TD&gt;1010983&lt;/TD&gt;&lt;TD&gt;209&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.232625&lt;/TD&gt;&lt;TD&gt;127.586772&lt;/TD&gt;&lt;TD&gt;+01.715849&lt;/TD&gt;&lt;TD&gt;127.586772&lt;/TD&gt;&lt;TD&gt;+01.715849&lt;/TD&gt;&lt;TD&gt;0.07&lt;/TD&gt;&lt;TD&gt;0.07&lt;/TD&gt;&lt;TD&gt;45&lt;/TD&gt;&lt;TD&gt;08302082+0142570&lt;/TD&gt;&lt;TD&gt;15.723&lt;/TD&gt;&lt;TD&gt;0.066&lt;/TD&gt;&lt;TD&gt;0.067&lt;/TD&gt;&lt;TD&gt;15.6&lt;/TD&gt;&lt;TD&gt;14.973&lt;/TD&gt;&lt;TD&gt;0.060&lt;/TD&gt;&lt;TD&gt;0.060&lt;/TD&gt;&lt;TD&gt;15.3&lt;/TD&gt;&lt;TD&gt;14.812&lt;/TD&gt;&lt;TD&gt;0.120&lt;/TD&gt;&lt;TD&gt;0.120&lt;/TD&gt;&lt;TD&gt;9.1&lt;/TD&gt;&lt;TD&gt;AAB&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;360605&lt;/TD&gt;&lt;TD&gt;28.2&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804039552&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804039566&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;58&lt;/TD&gt;&lt;TD&gt;223.171&lt;/TD&gt;&lt;TD&gt;22.691&lt;/TD&gt;&lt;TD&gt;-100.9&lt;/TD&gt;&lt;TD&gt;2451573.6811&lt;/TD&gt;&lt;TD&gt;1.08&lt;/TD&gt;&lt;TD&gt;0.96&lt;/TD&gt;&lt;TD&gt;1.11&lt;/TD&gt;&lt;TD&gt;15.705&lt;/TD&gt;&lt;TD&gt;0.181&lt;/TD&gt;&lt;TD&gt;15.211&lt;/TD&gt;&lt;TD&gt;0.160&lt;/TD&gt;&lt;TD&gt;14.664&lt;/TD&gt;&lt;TD&gt;0.119&lt;/TD&gt;&lt;TD&gt;6196&lt;/TD&gt;&lt;TD&gt;151&lt;/TD&gt;&lt;TD&gt;se&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43956&lt;/TD&gt;&lt;TD&gt;1010982&lt;/TD&gt;&lt;TD&gt;198&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;TR&gt;&lt;TD&gt;0.226304&lt;/TD&gt;&lt;TD&gt;127.626044&lt;/TD&gt;&lt;TD&gt;+01.687986&lt;/TD&gt;&lt;TD&gt;127.626044&lt;/TD&gt;&lt;TD&gt;+01.687986&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;0.06&lt;/TD&gt;&lt;TD&gt;73&lt;/TD&gt;&lt;TD&gt;08303025+0141167&lt;/TD&gt;&lt;TD&gt;14.101&lt;/TD&gt;&lt;TD&gt;0.032&lt;/TD&gt;&lt;TD&gt;0.034&lt;/TD&gt;&lt;TD&gt;67.2&lt;/TD&gt;&lt;TD&gt;13.812&lt;/TD&gt;&lt;TD&gt;0.036&lt;/TD&gt;&lt;TD&gt;0.037&lt;/TD&gt;&lt;TD&gt;41.6&lt;/TD&gt;&lt;TD&gt;13.789&lt;/TD&gt;&lt;TD&gt;0.051&lt;/TD&gt;&lt;TD&gt;0.051&lt;/TD&gt;&lt;TD&gt;23.2&lt;/TD&gt;&lt;TD&gt;AAA&lt;/TD&gt;&lt;TD&gt;222&lt;/TD&gt;&lt;TD&gt;111&lt;/TD&gt;&lt;TD&gt;000&lt;/TD&gt;&lt;TD&gt;666656&lt;/TD&gt;&lt;TD&gt;49.8&lt;/TD&gt;&lt;TD&gt;19&lt;/TD&gt;&lt;TD&gt;804047159&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;804047134&lt;/TD&gt;&lt;TD&gt;s&lt;/TD&gt;&lt;TD&gt;2000-01-30&lt;/TD&gt;&lt;TD&gt;59&lt;/TD&gt;&lt;TD&gt;223.218&lt;/TD&gt;&lt;TD&gt;22.712&lt;/TD&gt;&lt;TD&gt;191.4&lt;/TD&gt;&lt;TD&gt;2451573.6840&lt;/TD&gt;&lt;TD&gt;0.84&lt;/TD&gt;&lt;TD&gt;1.04&lt;/TD&gt;&lt;TD&gt;1.05&lt;/TD&gt;&lt;TD&gt;14.155&lt;/TD&gt;&lt;TD&gt;0.022&lt;/TD&gt;&lt;TD&gt;13.925&lt;/TD&gt;&lt;TD&gt;0.089&lt;/TD&gt;&lt;TD&gt;13.796&lt;/TD&gt;&lt;TD&gt;0.148&lt;/TD&gt;&lt;TD&gt;6093&lt;/TD&gt;&lt;TD&gt;61&lt;/TD&gt;&lt;TD&gt;sw&lt;/TD&gt;&lt;TD&gt;0&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;U&lt;/TD&gt;&lt;TD&gt;0.1&lt;/TD&gt;&lt;TD&gt;188&lt;/TD&gt;&lt;TD&gt;15.90&lt;/TD&gt;&lt;TD&gt;14.90&lt;/TD&gt;&lt;TD&gt;1&lt;/TD&gt;&lt;TD&gt;&lt;/TD&gt;&lt;TD&gt;43957&lt;/TD&gt;&lt;TD&gt;1010995&lt;/TD&gt;&lt;TD&gt;80&lt;/TD&gt;&lt;TD&gt;Opt&lt;/TD&gt;&lt;/TR&gt;
+&lt;/TABLEDATA&gt;&lt;/DATA&gt;
+&lt;/TABLE&gt;
+&lt;/RESOURCE&gt;
+&lt;/VOTABLE&gt;
+</value>
+</net.sf.taverna.t2.activities.stringconstant.StringConstantConfigurationBean></configBean><annotations /></activity></activities><dispatchStack><dispatchLayer><raven><group>net.sf.taverna.t2.core</group><artifact>workflowmodel-impl</artifact><version>1.4</version></raven><class>net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.Parallelize</class><configBean encoding="xstream"><net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.ParallelizeConfig xmlns="">
+  <maxJobs>1</maxJobs>
+</net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.ParallelizeConfig></configBean></dispatchLayer><dispatchLayer><raven><group>net.sf.taverna.t2.core</group><artifact>workflowmodel-impl</artifact><version>1.4</version></raven><class>net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.ErrorBounce</class><configBean encoding="xstream"><null xmlns="" /></configBean></dispatchLayer><dispatchLayer><raven><group>net.sf.taverna.t2.core</group><artifact>workflowmodel-impl</artifact><version>1.4</version></raven><class>net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.Failover</class><configBean encoding="xstream"><null xmlns="" /></configBean></dispatchLayer><dispatchLayer><raven><group>net.sf.taverna.t2.core</group><artifact>workflowmodel-impl</artifact><version>1.4</version></raven><class>net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.Retry</class><configBean encoding="xstream"><net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.RetryConfig xmlns="">
+  <backoffFactor>1.0</backoffFactor>
+  <initialDelay>1000</initialDelay>
+  <maxDelay>5000</maxDelay>
+  <maxRetries>0</maxRetries>
+</net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.RetryConfig></configBean></dispatchLayer><dispatchLayer><raven><group>net.sf.taverna.t2.core</group><artifact>workflowmodel-impl</artifact><version>1.4</version></raven><class>net.sf.taverna.t2.workflowmodel.processor.dispatch.layers.Invoke</class><configBean encoding="xstream"><null xmlns="" /></configBean></dispatchLayer></dispatchStack><iterationStrategyStack><iteration><strategy /></iteration></iterationStrategyStack></processor></processors><conditions /><datalinks><datalink><sink type="dataflow"><port>Text_constant_value</port></sink><source type="processor"><processor>Text_constant</processor><port>value</port></source></datalink></datalinks><annotations><annotation_chain_2_2 encoding="xstream"><net.sf.taverna.t2.annotation.AnnotationChainImpl xmlns="">
+  <annotationAssertions>
+    <net.sf.taverna.t2.annotation.AnnotationAssertionImpl>
+      <annotationBean class="net.sf.taverna.t2.annotation.annotationbeans.IdentificationAssertion">
+        <identification>b97141f4-e826-4ae0-bfa5-ce0afc7bda4d</identification>
+      </annotationBean>
+      <date>2012-05-14 08:51:45.325 UTC</date>
+      <creators />
+      <curationEventList />
+    </net.sf.taverna.t2.annotation.AnnotationAssertionImpl>
+  </annotationAssertions>
+</net.sf.taverna.t2.annotation.AnnotationChainImpl></annotation_chain_2_2><annotation_chain_2_2 encoding="xstream"><net.sf.taverna.t2.annotation.AnnotationChainImpl xmlns="">
+  <annotationAssertions>
+    <net.sf.taverna.t2.annotation.AnnotationAssertionImpl>
+      <annotationBean class="net.sf.taverna.t2.annotation.annotationbeans.IdentificationAssertion">
+        <identification>2afc8871-ff01-4107-a757-1d22d5b330d5</identification>
+      </annotationBean>
+      <date>2012-05-14 08:51:58.253 UTC</date>
+      <creators />
+      <curationEventList />
+    </net.sf.taverna.t2.annotation.AnnotationAssertionImpl>
+  </annotationAssertions>
+</net.sf.taverna.t2.annotation.AnnotationChainImpl></annotation_chain_2_2></annotations></dataflow></workflow>
