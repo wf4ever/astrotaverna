@@ -138,6 +138,7 @@
     <module>stilts-activity</module>
     <module>stilts-activity-ui</module>
     <module>votable-renderer</module>
+    <module>astrotaverna-utils</module>
   </modules>
   <scm>
   	<url>https://github.com/wf4ever/astrotaverna</url>
