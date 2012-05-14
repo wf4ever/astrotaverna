@@ -1,5 +1,11 @@
 package org.purl.wf4ever.astrotaverna.utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Vector;
+
+import antlr.collections.List;
+
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
 
 public class MyUtils {
@@ -36,7 +42,7 @@ public class MyUtils {
 		  
 	}
 	
-	
+		
 	public static String checkAndRepairUCDlist(String ucdlist){
 		ucdlist = ucdlist.replaceAll(".", "_");
 		String [] splitfilter = ucdlist.split(" ");
@@ -153,4 +159,7 @@ public class MyUtils {
 				+ "</VOTABLE> ";
 		return example;
 	}
+	
+	
+	
 }
