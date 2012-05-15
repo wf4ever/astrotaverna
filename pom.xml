@@ -4,7 +4,7 @@
 
 	<groupId>org.purl.wf4ever.astrotaverna</groupId>
 	<artifactId>astrotaverna</artifactId>
-	<version>0.6.2-SNAPSHOT</version>
+	<version>0.6.3</version>
 	<packaging>pom</packaging>
 	<name>Astro Taverna</name>
 
