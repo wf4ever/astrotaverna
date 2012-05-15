@@ -4,13 +4,17 @@
 	<parent>
 		<groupId>org.purl.wf4ever.astrotaverna</groupId>
 		<artifactId>astrotaverna</artifactId>
-		<version>0.6.2-SNAPSHOT</version>
+		<version>0.6.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>astrotaverna-voservices</artifactId>
 	<name>Astro Taverna VO services perspective</name>
 
 	<dependencies>
-
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>astrotaverna-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>net.sf.taverna.t2.ui-api</groupId>
 			<artifactId>activity-palette-api</artifactId>

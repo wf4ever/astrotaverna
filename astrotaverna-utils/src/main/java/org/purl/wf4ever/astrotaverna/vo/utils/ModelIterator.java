@@ -2,7 +2,6 @@ package org.purl.wf4ever.astrotaverna.vo.utils;
 
 import java.util.Iterator;
 
-import javax.help.UnsupportedOperationException;
 import javax.swing.ComboBoxModel;
 import javax.swing.MutableComboBoxModel;
 
@@ -37,7 +36,7 @@ public class ModelIterator<T> implements Iterator<T>, Iterable<T> {
 	@Override
 	public void remove() {
 		if (!(model instanceof MutableComboBoxModel)) {
-			throw new UnsupportedOperationException(
+			throw new IllegalStateException(
 					"Model is not a MutableComboBoxModel");
 		}
 		MutableComboBoxModel mutable = (MutableComboBoxModel) model;
