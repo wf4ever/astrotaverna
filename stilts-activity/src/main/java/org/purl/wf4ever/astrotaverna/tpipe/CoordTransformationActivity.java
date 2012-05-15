@@ -44,7 +44,7 @@ public class CoordTransformationActivity extends
 	private static final String IN_FIRST_INPUT_TABLE = "firstTable";
 	private static final String IN_FORMAT_INPUT_TABLE = "formatTableIn";
 	private static final String IN_FORMAT_OUTPUT_TABLE = "formatTableOut";
-	//private static final String IN_FILTER = "filter";
+	private static final String IN_NAME_NEW_COL = "nameNewCol";
 	private static final String IN_OUTPUT_TABLE_NAME = "outputFileNameIn";
 
 	private static final String OUT_SIMPLE_OUTPUT = "outputTable";
@@ -103,7 +103,7 @@ public class CoordTransformationActivity extends
 		addInput(IN_FIRST_INPUT_TABLE, 0, true, null, String.class);
 		addInput(IN_FORMAT_INPUT_TABLE, 0, true, null, String.class);
 		addInput(IN_FORMAT_OUTPUT_TABLE, 0, true, null, String.class);
-		//addInput(IN_FILTER, 0, true, null, String.class);
+		addInput(IN_NAME_NEW_COL, 0, true, null, String.class);
 		
 		
 		if(configBean.getTypeOfInput().compareTo("File")==0){
@@ -112,10 +112,10 @@ public class CoordTransformationActivity extends
 		
 		
 		//coordenates parameters
-		Vector<Parameter<String, Object>> inParams = getNameParamsOfCoordFunctions(configBean.getTypeOfFilter());
+		Vector<String> inParams = getNameParamsOfCoordFunctions(configBean.getTypeOfFilter());
 		if(inParams!=null)
-			for(Parameter<String, Object> param : inParams){
-				addInput(param.getName(), 0, true, null, (Class<?>) param.getClassName());
+			for(String param : inParams){
+				addInput(param, 0, true, null, String.class);
 			}
 		
 
@@ -136,7 +136,8 @@ public class CoordTransformationActivity extends
 		callback.requestRun(new Runnable() {
 			
 			public void run() {
-				
+				Vector<String> inParams;
+				Vector<String> paramValues;
 				boolean callbackfails=false;
 				InvocationContext context = callback.getContext();
 				ReferenceService referenceService = context.getReferenceService();
@@ -144,11 +145,9 @@ public class CoordTransformationActivity extends
 				String inputTable = (String) referenceService.renderIdentifier(inputs.get(IN_FIRST_INPUT_TABLE), String.class, context);
 				String formatInputTable = (String) referenceService.renderIdentifier(inputs.get(IN_FORMAT_INPUT_TABLE), String.class, context);
 				String formatOutputTable= (String) referenceService.renderIdentifier(inputs.get(IN_FORMAT_OUTPUT_TABLE), String.class, context);
-				String filter = (String) referenceService.renderIdentifier(inputs.get(IN_FILTER), String.class, context);
+				String nameNewCol = (String) referenceService.renderIdentifier(inputs.get(IN_NAME_NEW_COL), String.class, context);
 				
-				//String lastInput = (String) referenceService.renderIdentifier(inputs.get(IN_OUTPUT_TABLE_NAME), 
-				//		String.class, context);
-
+				
 				boolean optionalPorts = configBean.getTypeOfInput().compareTo("File")==0;
 				
 				String outputTableName = null;
@@ -156,6 +155,20 @@ public class CoordTransformationActivity extends
 					outputTableName = (String) referenceService.renderIdentifier(inputs.get(IN_OUTPUT_TABLE_NAME), 
 							String.class, context);
 				}
+				
+				inParams = getNameParamsOfCoordFunctions(configBean.getTypeOfFilter());
+				paramValues = new Vector<String>();
+				if(inParams!=null && !inParams.isEmpty()){
+					for(String param : inParams)
+						if(inputs.containsKey(param))
+							paramValues.add((String) referenceService.renderIdentifier(inputs.get(param), 
+									String.class, context));
+				}else{
+					callback.fail("Lack of params in the coordenates function",new Exception());
+					callbackfails = true;
+				}
+					
+				
 
 				//include default values if empty inputs
 				//default format => votable
@@ -165,6 +178,8 @@ public class CoordTransformationActivity extends
 				if(formatOutputTable == null || formatOutputTable.trim().isEmpty()){
 					formatOutputTable = "votable";
 				}
+				if(nameNewCol==null || nameNewCol.isEmpty())
+					nameNewCol="NEWCOL";
 				
 				//check correct input values
 				if(!MyUtils.isValidInputFormat(formatInputTable)){
@@ -193,6 +208,19 @@ public class CoordTransformationActivity extends
 						callback.fail("Invalid URL: "+ inputTable,e);
 						callbackfails = true;
 					}
+				}
+				if(inParams.size()!=paramValues.size()){
+					callback.fail("Expected number of parameters for the function: "+ inParams.size()+".\nReceived number of paramaters: "+ paramValues.size(),new Exception());
+					callbackfails = true;
+				}
+				if(paramValues.size()>0){
+					boolean nullvalues = false;
+					for(int i = 0; i<paramValues.size() && !nullvalues;i++)
+						if(paramValues.elementAt(i)==null || paramValues.elementAt(i).isEmpty()){
+							nullvalues = true;
+							callback.fail("Function parameters are empty",new Exception());
+							callbackfails = true;
+						}
 				}
 				
 				
@@ -223,155 +251,158 @@ public class CoordTransformationActivity extends
 				String [] parameters;
 				
 				if(!callbackfails){
-				//handling redirection of standard input and output
-				PrintStream out = System.out;
-				PrintStream stdout = System.out;
-				InputStream in = System.in;
-				InputStream stdin = System.in;
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				out = new PrintStream(baos);
-				
-				if(optionalPorts){ //case File
-					parameters = new String[6];
-					parameters[0] = "tpipe";
-					parameters[1] = "ifmt="+formatInputTable;
-					parameters[2] = "in="+inputTable;
-					parameters[3] = "ofmt="+formatOutputTable;
-					if(configBean.getTypeOfFilter().compareTo("Column names")==0){
-						parameters[4] = "cmd=keepcols '"+ filter +"'";
-					}else{
-						filter = MyUtils.checkAndRepairUCDlist(filter);
-						parameters[4] = "cmd=keepcols '"+ filter +"'";
-					}
-					parameters[5] = "out="+outputTableName;
-				}else if(configBean.getTypeOfInput().compareTo("Query")==0 
-							||configBean.getTypeOfInput().compareTo("URL")==0){
+					String  functionName;
+					String commaSeparatedValues;
+					
+					//handling redirection of standard input and output
+					PrintStream out = System.out;
+					PrintStream stdout = System.out;
+					InputStream in = System.in;
+					InputStream stdin = System.in;
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					out = new PrintStream(baos);
+					
+					
+					for( Object p : paramValues){
+						boolean isinstance = false;
+						if(p instanceof String)
+							isinstance = true;
+						String name = p.getClass().getName();
+						name = "";
 						
-					parameters = new String[5];
-					parameters[0] = "tpipe";
-					parameters[1] = "ifmt="+formatInputTable;
-					parameters[2] = "in="+inputTable;
-					parameters[3] = "ofmt="+formatOutputTable;
-					if(configBean.getTypeOfFilter().compareTo("Column names")==0){
-						parameters[4] = "cmd=keepcols '"+ filter +"'";
+					}
+					
+					commaSeparatedValues = MyUtils.toCommaSeparatedString(paramValues);
+					functionName = ((Map<String, String>)CoordTransformationActivity.getFunctionsNameMap()).get(configBean.getTypeOfFilter());
+					
+					if(optionalPorts){ //case File
+						parameters = new String[6];
+						parameters[0] = "tpipe";
+						parameters[1] = "ifmt="+formatInputTable;
+						parameters[2] = "in="+inputTable;
+						parameters[3] = "ofmt="+formatOutputTable;
+						parameters[4] = "cmd=addcol "+ nameNewCol +" '(" + functionName + "("+ commaSeparatedValues +"))'";
+						//System.out.println(parameters[4]);
+						//parameters[4] = "cmd=addcol newCol '(raFK4toFK5radians(U, R))'";
+						parameters[5] = "out="+outputTableName;
+					}else if(configBean.getTypeOfInput().compareTo("Query")==0 
+								||configBean.getTypeOfInput().compareTo("URL")==0){
+							
+						parameters = new String[5];
+						parameters[0] = "tpipe";
+						parameters[1] = "ifmt="+formatInputTable;
+						parameters[2] = "in="+inputTable;
+						parameters[3] = "ofmt="+formatOutputTable;
+						parameters[4] = "cmd=addcol "+ nameNewCol +" '(" + functionName + "("+ commaSeparatedValues +"))'";
+						//Redirecting output
+						System.setOut(out);
+					}else if(configBean.getTypeOfInput().compareTo("String")==0){
+						parameters = new String[5];
+						parameters[0] = "tpipe";
+						parameters[1] = "ifmt="+formatInputTable;
+						parameters[2] = "in=-";
+						parameters[3] = "ofmt="+formatOutputTable;
+						parameters[4] = "cmd=addcol "+ nameNewCol +" '(" + functionName + "("+ commaSeparatedValues +"))'";
+						//Redirecting output and input
+						in = IOUtils.toInputStream(inputTable);
+						//Optionally, do this: 
+						//InputStream is = new ByteArrayInputStream(resultTable.getBytes( charset ) );
+						System.setIn(in);
+						System.setOut(out);
 					}else{
-						filter = MyUtils.checkAndRepairUCDlist(filter);
-						parameters[4] = "cmd=keepcols '"+ filter +"'";
+						parameters = new String[5];
+						parameters[0] = "tpipe";
+						parameters[1] = "ifmt="+formatInputTable;
+						parameters[2] = "in=-";
+						parameters[3] = "ofmt="+formatOutputTable;
+	
+						//Redirecting output and input
+						in = IOUtils.toInputStream(inputTable);
+						//Optionally, do this: 
+						//InputStream is = new ByteArrayInputStream(resultTable.getBytes( charset ) );
+						System.setIn(in);
+						System.setOut(out);
 					}
-					//Redirecting output
-					System.setOut(out);
-				}else if(configBean.getTypeOfInput().compareTo("String")==0){
-					parameters = new String[5];
-					parameters[0] = "tpipe";
-					parameters[1] = "ifmt="+formatInputTable;
-					parameters[2] = "in=-";
-					parameters[3] = "ofmt="+formatOutputTable;
-					if(configBean.getTypeOfFilter().compareTo("Column names")==0){
-						parameters[4] = "cmd=keepcols '"+ filter +"'";
+						
+					System.setProperty("votable.strict", "false");
+					Stilts.main(parameters);
+						
+					
+					
+					// Register outputs
+					Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
+					String simpleValue = "/home/julian/Documents/wf4ever/tables/resultTable.ascii";// //Name of the output file or result
+					String simpleoutput = "simple-report";
+					
+					if(optionalPorts){ //case File
+						simpleValue = outputTableName;
+					}else if(configBean.getTypeOfInput().compareTo("Query")==0 
+								||configBean.getTypeOfInput().compareTo("URL")==0){
+				
+						out.close();
+						if(out.checkError()){
+							simpleoutput += "Output redirection failed.\n";
+						}
+						
+						simpleValue = baos.toString();
+						System.setOut(stdout);	
+						
+					}else if(configBean.getTypeOfInput().compareTo("String")==0){
+						out.close();
+						if(out.checkError()){
+							simpleoutput += "Output redirection failed.\n";
+						}
+						
+						simpleValue = baos.toString();
+						System.setOut(stdout);	
+						
+						try {
+							in.close();
+						} catch (IOException e) {
+							simpleoutput += "Input redirection failed.\n" + e.toString();
+						}
+						System.setIn(stdin);
 					}else{
-						filter = MyUtils.checkAndRepairUCDlist(filter);
-						parameters[4] = "cmd=keepcols '"+ filter +"'";
+						out.close();
+						if(out.checkError()){
+							simpleoutput += "Output redirection failed.\n";
+						}
+						
+						simpleValue = baos.toString();
+						System.setOut(stdout);	
+						
+						try {
+							in.close();
+						} catch (IOException e) {
+							simpleoutput += "Input redirection failed.\n" + e.toString();
+						}
+						System.setIn(stdin);
 					}
-					//Redirecting output and input
-					in = IOUtils.toInputStream(inputTable);
-					//Optionally, do this: 
-					//InputStream is = new ByteArrayInputStream(resultTable.getBytes( charset ) );
-					System.setIn(in);
-					System.setOut(out);
-				}else{
-					parameters = new String[5];
-					parameters[0] = "tpipe";
-					parameters[1] = "ifmt="+formatInputTable;
-					parameters[2] = "in=-";
-					parameters[3] = "ofmt="+formatOutputTable;
-
-					//Redirecting output and input
-					in = IOUtils.toInputStream(inputTable);
-					//Optionally, do this: 
-					//InputStream is = new ByteArrayInputStream(resultTable.getBytes( charset ) );
-					System.setIn(in);
-					System.setOut(out);
-				}
+	
+					T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
+					outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
+					T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
+					outputs.put(OUT_REPORT, simpleRef2);
+	
+					// For list outputs, only need to register the top level list
+					//List<String> moreValues = new ArrayList<String>();
+					//moreValues.add("Value 1");
+					//moreValues.add("Value 2");
+					//T2Reference moreRef = referenceService.register(moreValues, 1, true, context);
+					//outputs.put(OUT_MORE_OUTPUTS, moreRef);
+	
+					//if (optionalPorts) {
+					//	// Populate our optional output port					
+					//	// NOTE: Need to return output values for all defined output ports
+					//	String report = "Everything OK";
+					//	outputs.put(OUT_REPORT, referenceService.register(report,
+					//			0, true, context));
+					//}
 					
-				System.setProperty("votable.strict", "false");
-				Stilts.main(parameters);
-					
-				
-				
-				// Register outputs
-				Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-				String simpleValue = "/home/julian/Documents/wf4ever/tables/resultTable.ascii";// //Name of the output file or result
-				String simpleoutput = "simple-report";
-				
-				if(optionalPorts){ //case File
-					simpleValue = outputTableName;
-				}else if(configBean.getTypeOfInput().compareTo("Query")==0 
-							||configBean.getTypeOfInput().compareTo("URL")==0){
-			
-					out.close();
-					if(out.checkError()){
-						simpleoutput += "Output redirection failed.\n";
-					}
-					
-					simpleValue = baos.toString();
-					System.setOut(stdout);	
-					
-				}else if(configBean.getTypeOfInput().compareTo("String")==0){
-					out.close();
-					if(out.checkError()){
-						simpleoutput += "Output redirection failed.\n";
-					}
-					
-					simpleValue = baos.toString();
-					System.setOut(stdout);	
-					
-					try {
-						in.close();
-					} catch (IOException e) {
-						simpleoutput += "Input redirection failed.\n" + e.toString();
-					}
-					System.setIn(stdin);
-				}else{
-					out.close();
-					if(out.checkError()){
-						simpleoutput += "Output redirection failed.\n";
-					}
-					
-					simpleValue = baos.toString();
-					System.setOut(stdout);	
-					
-					try {
-						in.close();
-					} catch (IOException e) {
-						simpleoutput += "Input redirection failed.\n" + e.toString();
-					}
-					System.setIn(stdin);
-				}
-
-				T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
-				outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
-				T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
-				outputs.put(OUT_REPORT, simpleRef2);
-
-				// For list outputs, only need to register the top level list
-				//List<String> moreValues = new ArrayList<String>();
-				//moreValues.add("Value 1");
-				//moreValues.add("Value 2");
-				//T2Reference moreRef = referenceService.register(moreValues, 1, true, context);
-				//outputs.put(OUT_MORE_OUTPUTS, moreRef);
-
-				//if (optionalPorts) {
-				//	// Populate our optional output port					
-				//	// NOTE: Need to return output values for all defined output ports
-				//	String report = "Everything OK";
-				//	outputs.put(OUT_REPORT, referenceService.register(report,
-				//			0, true, context));
-				//}
-				
-				// return map of output data, with empty index array as this is
-				// the only and final result (this index parameter is used if
-				// pipelining output)
-				callback.receiveResult(outputs, new int[0]);
+					// return map of output data, with empty index array as this is
+					// the only and final result (this index parameter is used if
+					// pipelining output)
+					callback.receiveResult(outputs, new int[0]);
 				}
 			}
 		});
@@ -385,7 +416,7 @@ public class CoordTransformationActivity extends
 	/*
 	 * Returns a Vector that contains the implemented functions
 	 */
-	static Vector<String> listOfCoordenatesFunctions(){
+	static Vector<String> getListOfCoordenatesFunctions(){
 		String [] array1parameters ={"radiansToDms", "radiansToHms", "dmsToRadians", "hmsToRadians", "hoursToRadians", "degreesToRadians", "radiansToDegrees"};
 		String [] array2parameters ={"raFK4toFK5radians2", "decFK4toFK5radians2", "raFK5toFK4radians2", "decFK5toFK4radians2"};
 		String [] array3parameters ={"raFK4toFK5Radians3", "decFK4toFK5Radians3", "raFK5toFK4Radians3", "decFK5toFK4Radians3"};
@@ -400,7 +431,7 @@ public class CoordTransformationActivity extends
 	}
 	
 	public boolean isAllowedCoordenatesFunction(String name){
-		Vector<String> functions = this.listOfCoordenatesFunctions();
+		Vector<String> functions = this.getListOfCoordenatesFunctions();
 		boolean found=false;
 		Iterator<String> it = functions.iterator();
 	
@@ -415,7 +446,92 @@ public class CoordTransformationActivity extends
 	/*
 	 * Returns an array that contains the inputs names for each function.
 	 */
-	static Vector<Parameter<String, Object>> getNameParamsOfCoordFunctions(String coordenatesFunction){
+	/*
+	 * Returns an array that contains the inputs names for each function.
+	 */
+	static Vector<String> getNameParamsOfCoordFunctions(String coordenatesFunction){
+		Vector<String> params = new Vector<String>();
+		
+		
+		if(coordenatesFunction.compareTo("radiansToDms")==0
+				|| coordenatesFunction.compareTo("radiansToHms")==0
+				|| coordenatesFunction.compareTo("hoursToRadians")==0
+				|| coordenatesFunction.compareTo("degreesToRadians")==0
+				|| coordenatesFunction.compareTo("radiansToDegrees")==0){
+			
+			params.add("value");
+			
+		}else if(coordenatesFunction.compareTo("dmsToRadians")==0
+				|| coordenatesFunction.compareTo("hmsToRadians")==0){
+			
+			params.add("value");
+			
+		}else if(coordenatesFunction.compareTo("raFK4toFK5radians2")==0
+				|| coordenatesFunction.compareTo("decFK4toFK5radians2")==0
+				|| coordenatesFunction.compareTo("raFK5toFK4radians2")==0
+				|| coordenatesFunction.compareTo("decFK5toFK4radians2")==0){
+
+			params.add("RA");
+			params.add("DEC");
+			
+		}else if(coordenatesFunction.compareTo("raFK4toFK5radians3")==0
+				|| coordenatesFunction.compareTo("decFK4toFK5radians3")==0
+				|| coordenatesFunction.compareTo("raFK5toFK4radians3")==0
+				|| coordenatesFunction.compareTo("decFK5toFK4radians3")==0){
+			
+			params.add("RA");
+			params.add("DEC");
+			params.add("bepoch");
+			
+		} else if(coordenatesFunction.compareTo("skyDistanceRadians")==0){
+			
+			params.add("RA1");
+			params.add("DEC1");
+			params.add("RA2");
+			params.add("DEC2");
+			
+		} else {
+			params.add("value");
+		}
+			
+		
+		return params;
+	}
+	
+	static Map<String, String> getFunctionsNameMap(){
+		//<UI function name, real function name> 
+		Map<String, String> mapping = new HashMap<String, String>();
+		
+		String [] array1parameters ={"radiansToDms", "radiansToHms", "dmsToRadians", "hmsToRadians", "hoursToRadians", "degreesToRadians", "radiansToDegrees"};
+		String [] array2parameters ={"raFK4toFK5radians2", "decFK4toFK5radians2", "raFK5toFK4radians2", "decFK5toFK4radians2"};
+		String [] array3parameters ={"raFK4toFK5Radians3", "decFK4toFK5Radians3", "raFK5toFK4Radians3", "decFK5toFK4Radians3"};
+		String [] array4parameters ={"skyDistanceRadians"};
+		mapping.put("radiansToDms", "radiansToDms");
+		mapping.put("radiansToHms", "radiansToHms");
+		mapping.put("dmsToRadians", "dmsToRadians");
+		mapping.put("hmsToRadians", "hmsToRadians");
+		mapping.put("hoursToRadians", "hoursToRadians");
+		mapping.put("degreesToRadians", "degreesToRadians");
+		mapping.put("radiansToDegrees", "radiansToDegrees");
+		
+		mapping.put("raFK4toFK5radians2", "raFK4toFK5radians");
+		mapping.put("decFK4toFK5radians2", "decFK4toFK5radians");
+		mapping.put("raFK5toFK4radians2", "raFK5toFK4radians");
+		mapping.put("decFK5toFK4radians2", "decFK5toFK4radians");
+		
+		mapping.put("raFK4toFK5radians3", "raFK4toFK5radians");
+		mapping.put("decFK4toFK5radians3", "decFK4toFK5radians");
+		mapping.put("raFK5toFK4radians3", "raFK5toFK4radians");
+		mapping.put("decFK5toFK4radians3", "decFK5toFK4radians");
+		
+		mapping.put("skyDistanceRadians", "skyDistanceRadians");
+
+		return mapping;
+		
+	}
+	
+	
+/*	static Vector<Parameter<String, Object>> getNameParamsOfCoordFunctions(String coordenatesFunction){
 		Vector<Parameter<String, Object>> params = new Vector<Parameter<String,Object>>();
 		Parameter<String, Object> result;
 		
@@ -475,8 +591,8 @@ public class CoordTransformationActivity extends
 		
 		return params;
 	}
-	
-	
+	*/
+	/*
 	public static class Parameter<String,Object> {
 	    private String name;
 	    private Object className;
@@ -491,6 +607,7 @@ public class CoordTransformationActivity extends
 	    public void setClassName(Object className){ this.className = className; }
 	}
 
+	*/
 	
 	
 }

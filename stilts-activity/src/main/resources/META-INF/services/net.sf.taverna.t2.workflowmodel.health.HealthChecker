@@ -1,3 +1,4 @@
 org.purl.wf4ever.astrotaverna.tjoin.StiltsActivityHealthChecker
 org.purl.wf4ever.astrotaverna.tpipe.SelectColumnsActivityHealthChecker
 org.purl.wf4ever.astrotaverna.tpipe.SelectRowsActivityHealthChecker
+org.purl.wf4ever.astrotaverna.tpipe.CoordTransformationActivityHealthChecker

@@ -42,6 +42,43 @@ public class MyUtils {
 		  
 	}
 	
+	public static String toSpacedString(String [] array){
+		String result="";
+		
+		for(String cad : array){
+			result= result + cad+" ";
+		}
+		
+		return result.trim();
+	}
+	
+	public static String toCommaSeparatedString(String [] array){
+		String result="";
+		
+		
+		for(int i=0; i<array.length; i++){
+			String cad = array[i];
+			result= result + cad;
+			if((i+1) < array.length)
+				result = result + ", ";
+		}
+		
+		return result.trim();
+	}
+	
+	public static String toCommaSeparatedString(Vector<String> array){
+		String result="";
+		
+		for(int i=0; i<array.size(); i++){
+			String cad = array.elementAt(i);
+			result= result + cad;
+			if((i+1) < array.size())
+				result = result + ", ";
+		}
+		
+		return result.trim();
+	}
+	
 		
 	public static String checkAndRepairUCDlist(String ucdlist){
 		ucdlist = ucdlist.replaceAll(".", "_");
@@ -159,6 +196,7 @@ public class MyUtils {
 				+ "</VOTABLE> ";
 		return example;
 	}
+	
 	
 	
 	
