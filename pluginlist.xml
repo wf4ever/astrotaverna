@@ -6,4 +6,5 @@
 <plugin>astrotaverna-plugin-0.4.xml</plugin>
 <plugin>astrotaverna-plugin-0.5.xml</plugin>
 <plugin>astrotaverna-plugin-0.6.1.xml</plugin>
+<plugin>astrotaverna-plugin-0.6.3.xml</plugin>
 </plugins>
