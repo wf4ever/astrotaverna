@@ -416,7 +416,7 @@ public class CoordTransformationActivity extends
 	/*
 	 * Returns a Vector that contains the implemented functions
 	 */
-	static Vector<String> getListOfCoordenatesFunctions(){
+	public Vector<String> getListOfCoordenatesFunctions(){
 		String [] array1parameters ={"radiansToDms", "radiansToHms", "dmsToRadians", "hmsToRadians", "hoursToRadians", "degreesToRadians", "radiansToDegrees"};
 		String [] array2parameters ={"raFK4toFK5radians2", "decFK4toFK5radians2", "raFK5toFK4radians2", "decFK5toFK4radians2"};
 		String [] array3parameters ={"raFK4toFK5Radians3", "decFK4toFK5Radians3", "raFK5toFK4Radians3", "decFK5toFK4Radians3"};
@@ -443,11 +443,9 @@ public class CoordTransformationActivity extends
 		return found;
 	}
 	
+
 	/*
-	 * Returns an array that contains the inputs names for each function.
-	 */
-	/*
-	 * Returns an array that contains the inputs names for each function.
+	 * Returns an array that contains the inputs parameters name for each function.
 	 */
 	static Vector<String> getNameParamsOfCoordFunctions(String coordenatesFunction){
 		Vector<String> params = new Vector<String>();
@@ -459,12 +457,12 @@ public class CoordTransformationActivity extends
 				|| coordenatesFunction.compareTo("degreesToRadians")==0
 				|| coordenatesFunction.compareTo("radiansToDegrees")==0){
 			
-			params.add("value");
+			params.add("Column");
 			
 		}else if(coordenatesFunction.compareTo("dmsToRadians")==0
 				|| coordenatesFunction.compareTo("hmsToRadians")==0){
 			
-			params.add("value");
+			params.add("Column");
 			
 		}else if(coordenatesFunction.compareTo("raFK4toFK5radians2")==0
 				|| coordenatesFunction.compareTo("decFK4toFK5radians2")==0
@@ -474,10 +472,10 @@ public class CoordTransformationActivity extends
 			params.add("RA");
 			params.add("DEC");
 			
-		}else if(coordenatesFunction.compareTo("raFK4toFK5radians3")==0
-				|| coordenatesFunction.compareTo("decFK4toFK5radians3")==0
-				|| coordenatesFunction.compareTo("raFK5toFK4radians3")==0
-				|| coordenatesFunction.compareTo("decFK5toFK4radians3")==0){
+		}else if(coordenatesFunction.compareTo("raFK4toFK5Radians3")==0
+				|| coordenatesFunction.compareTo("decFK4toFK5Radians3")==0
+				|| coordenatesFunction.compareTo("raFK5toFK4Radians3")==0
+				|| coordenatesFunction.compareTo("decFK5toFK4Radians3")==0){
 			
 			params.add("RA");
 			params.add("DEC");
@@ -491,21 +489,20 @@ public class CoordTransformationActivity extends
 			params.add("DEC2");
 			
 		} else {
-			params.add("value");
+			params.add("Value");
 		}
 			
 		
 		return params;
 	}
 	
+	/*
+	 * mapping between the name in the user interface and the real function name
+	 */
 	static Map<String, String> getFunctionsNameMap(){
 		//<UI function name, real function name> 
 		Map<String, String> mapping = new HashMap<String, String>();
 		
-		String [] array1parameters ={"radiansToDms", "radiansToHms", "dmsToRadians", "hmsToRadians", "hoursToRadians", "degreesToRadians", "radiansToDegrees"};
-		String [] array2parameters ={"raFK4toFK5radians2", "decFK4toFK5radians2", "raFK5toFK4radians2", "decFK5toFK4radians2"};
-		String [] array3parameters ={"raFK4toFK5Radians3", "decFK4toFK5Radians3", "raFK5toFK4Radians3", "decFK5toFK4Radians3"};
-		String [] array4parameters ={"skyDistanceRadians"};
 		mapping.put("radiansToDms", "radiansToDms");
 		mapping.put("radiansToHms", "radiansToHms");
 		mapping.put("dmsToRadians", "dmsToRadians");

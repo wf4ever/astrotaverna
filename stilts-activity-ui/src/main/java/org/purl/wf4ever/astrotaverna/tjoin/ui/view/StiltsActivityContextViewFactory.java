@@ -7,6 +7,8 @@ import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory;
 
 import org.purl.wf4ever.astrotaverna.tjoin.TjoinActivity;
+import org.purl.wf4ever.astrotaverna.tpipe.CoordTransformationActivity;
+import org.purl.wf4ever.astrotaverna.tpipe.FormatConversionActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.SelectColumnsActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.SelectRowsActivity;
 
@@ -21,6 +23,10 @@ public class StiltsActivityContextViewFactory implements
 		else if(selection instanceof SelectColumnsActivity)
 			return true;
 		else if(selection instanceof SelectRowsActivity)
+			return true;
+		else if(selection instanceof CoordTransformationActivity)
+			return true;
+		else if(selection instanceof FormatConversionActivity)
 			return true;
 		else
 			return false;
@@ -39,7 +45,15 @@ public class StiltsActivityContextViewFactory implements
 	public List<ContextualView> getViews(SelectRowsActivity selection) {
 		return Arrays.<ContextualView>asList(new SelectRowsContextualView(selection));
 	}
-
+	
+	public List<ContextualView> getViews(CoordTransformationActivity selection) {
+		return Arrays.<ContextualView>asList(new CoordTransformationContextualView(selection));
+	}
+	
+	public List<ContextualView> getViews(FormatConversionActivity selection) {
+		return Arrays.<ContextualView>asList(new FormatConversionContextualView(selection));
+	}
+	
 	@Override
 	public List<ContextualView> getViews(Object arg0) {
 		// TODO Auto-generated method stub
@@ -49,6 +63,10 @@ public class StiltsActivityContextViewFactory implements
 			return getViews((SelectColumnsActivity) arg0);
 		else if(arg0 instanceof SelectRowsActivity)
 			return getViews((SelectRowsActivity) arg0);
+		else if(arg0 instanceof CoordTransformationActivity)
+			return getViews((CoordTransformationActivity) arg0);
+		else if(arg0 instanceof FormatConversionActivity)
+			return getViews((FormatConversionActivity) arg0);
 		else
 			return null;
 	}

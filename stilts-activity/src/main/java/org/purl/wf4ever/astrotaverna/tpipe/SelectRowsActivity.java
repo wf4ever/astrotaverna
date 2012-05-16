@@ -264,7 +264,7 @@ public class SelectRowsActivity extends
 						System.setIn(in);
 						System.setOut(out);
 					}else{
-						parameters = new String[5];
+						parameters = new String[4];
 						parameters[0] = "tpipe";
 						parameters[1] = "ifmt="+formatInputTable;
 						parameters[2] = "in=-";

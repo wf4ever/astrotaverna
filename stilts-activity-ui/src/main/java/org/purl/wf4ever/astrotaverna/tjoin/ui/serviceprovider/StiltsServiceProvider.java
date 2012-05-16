@@ -63,6 +63,20 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		
 		results.add(service3);
 		
+		CoordTransformationServiceDesc service4 = new CoordTransformationServiceDesc();
+		service4.setTypeOfInput("String");
+		//service3.setTypeOfFilter("Column names");
+		service4.setDescription("Coordenates transformation in a table");
+		
+		results.add(service4);
+		
+		FormatConversionServiceDesc service5 = new FormatConversionServiceDesc();
+		service5.setTypeOfInput("String");
+		//service3.setTypeOfFilter("Column names");
+		service5.setDescription("Table format conversion");
+		
+		results.add(service5);
+		
 		//Put here additional descriptions for other services
 		//............
 		//............
