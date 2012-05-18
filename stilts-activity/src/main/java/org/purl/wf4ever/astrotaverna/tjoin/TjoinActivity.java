@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.purl.wf4ever.astrotaverna.utils.MyUtils;
+import org.purl.wf4ever.astrotaverna.utils.NoExitSecurityManager;
 
 import uk.ac.starlink.ttools.Stilts;
 
@@ -118,6 +119,7 @@ public class TjoinActivity extends
 		callback.requestRun(new Runnable() {
 			
 			public void run() {
+				boolean callbackfails=false;
 				InvocationContext context = callback
 						.getContext();
 				ReferenceService referenceService = context
@@ -170,81 +172,99 @@ public class TjoinActivity extends
 //				}
 				
 				//Performing the work: Stilts functinalities
-				String [] parameters;
+				String [] parameters = new String[1];
+				if(!callbackfails){
+					//set up parameters depending on the number of inputs
+					if(thirdInput==null && fourthInput ==null){
+						parameters = new String[7];
+						parameters[0] = "tjoin";
+						parameters[1] = "nin=2";
+						parameters[2] = "in1="+firstInput;
+						parameters[3] = "in2="+secondInput;
+						parameters[4] = "out="+lastInput;
+						parameters[5] = "ifmt1="+configBean.getInputFormat();
+						parameters[6] = "ifmt2="+configBean.getInputFormat();
+						
+						
+						
+					}else if(thirdInput!=null && fourthInput ==null){
+						parameters = new String[9];
+						parameters[0] = "tjoin";
+						parameters[1] = "nin=2";
+						parameters[2] = "in1="+firstInput;
+						parameters[3] = "in2="+secondInput;
+						parameters[4] = "in3="+thirdInput;
+						parameters[5] = "out="+lastInput;
+						parameters[6] = "ifmt1="+configBean.getInputFormat();
+						parameters[7] = "ifmt2="+configBean.getInputFormat();
+						parameters[8] = "ifmt3="+configBean.getInputFormat();
+						
+						
+						
+					}else if(thirdInput!=null && fourthInput !=null){
+						parameters = new String[11];
+						parameters[0] = "tjoin";
+						parameters[1] = "nin=2";
+						parameters[2] = "in1="+firstInput;
+						parameters[3] = "in2="+secondInput;
+						parameters[4] = "in3="+thirdInput;
+						parameters[5] = "in4="+fourthInput;
+						parameters[6] = "out="+lastInput;
+						parameters[7] = "ifmt1="+configBean.getInputFormat();
+						parameters[8] = "ifmt2="+configBean.getInputFormat();
+						parameters[9] = "ifmt3="+configBean.getInputFormat();
+						parameters[10] = "ifmt4="+configBean.getInputFormat();
+						
+						
+						
+					}
+	
+					SecurityManager securityBackup = System.getSecurityManager();
+					System.setSecurityManager(new NoExitSecurityManager());
+					
+					try{
+						System.setProperty("votable.strict", "false");
+						Stilts.main(parameters);
+					}catch(SecurityException ex){
+						callback.fail("Invalid service call: check the input parameters", ex);
+						callbackfails = true;
+					}
 				
-				//set up parameters depending on the number of inputs
-				if(thirdInput==null && fourthInput ==null){
-					parameters = new String[7];
-					parameters[0] = "tjoin";
-					parameters[1] = "nin=2";
-					parameters[2] = "in1="+firstInput;
-					parameters[3] = "in2="+secondInput;
-					parameters[4] = "out="+lastInput;
-					parameters[5] = "ifmt1="+configBean.getInputFormat();
-					parameters[6] = "ifmt2="+configBean.getInputFormat();
+					System.setSecurityManager(securityBackup);
 					
-					Stilts.main(parameters);
+				
+					if(!callbackfails){
 					
-				}else if(thirdInput!=null && fourthInput ==null){
-					parameters = new String[9];
-					parameters[0] = "tjoin";
-					parameters[1] = "nin=2";
-					parameters[2] = "in1="+firstInput;
-					parameters[3] = "in2="+secondInput;
-					parameters[4] = "in3="+thirdInput;
-					parameters[5] = "out="+lastInput;
-					parameters[6] = "ifmt1="+configBean.getInputFormat();
-					parameters[7] = "ifmt2="+configBean.getInputFormat();
-					parameters[8] = "ifmt3="+configBean.getInputFormat();
-					
-					Stilts.main(parameters);
-					
-				}else if(thirdInput!=null && fourthInput !=null){
-					parameters = new String[11];
-					parameters[0] = "tjoin";
-					parameters[1] = "nin=2";
-					parameters[2] = "in1="+firstInput;
-					parameters[3] = "in2="+secondInput;
-					parameters[4] = "in3="+thirdInput;
-					parameters[5] = "in4="+fourthInput;
-					parameters[6] = "out="+lastInput;
-					parameters[7] = "ifmt1="+configBean.getInputFormat();
-					parameters[8] = "ifmt2="+configBean.getInputFormat();
-					parameters[9] = "ifmt3="+configBean.getInputFormat();
-					parameters[10] = "ifmt4="+configBean.getInputFormat();
-					
-					Stilts.main(parameters);
-					
+						// Register outputs
+						Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
+						String simpleValue = lastInput;//Name of the output file
+						String simpleoutput = "simple-report";
+						T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
+						outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
+						T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
+						outputs.put(OUT_REPORT, simpleRef2);
+		
+						// For list outputs, only need to register the top level list
+						//List<String> moreValues = new ArrayList<String>();
+						//moreValues.add("Value 1");
+						//moreValues.add("Value 2");
+						//T2Reference moreRef = referenceService.register(moreValues, 1, true, context);
+						//outputs.put(OUT_MORE_OUTPUTS, moreRef);
+		
+						//if (optionalPorts) {
+						//	// Populate our optional output port					
+						//	// NOTE: Need to return output values for all defined output ports
+						//	String report = "Everything OK";
+						//	outputs.put(OUT_REPORT, referenceService.register(report,
+						//			0, true, context));
+						//}
+						
+						// return map of output data, with empty index array as this is
+						// the only and final result (this index parameter is used if
+						// pipelining output)
+						callback.receiveResult(outputs, new int[0]);
+					}
 				}
-
-				// Register outputs
-				Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-				String simpleValue = lastInput;//Name of the output file
-				String simpleoutput = "simple-report";
-				T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
-				outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
-				T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
-				outputs.put(OUT_REPORT, simpleRef2);
-
-				// For list outputs, only need to register the top level list
-				//List<String> moreValues = new ArrayList<String>();
-				//moreValues.add("Value 1");
-				//moreValues.add("Value 2");
-				//T2Reference moreRef = referenceService.register(moreValues, 1, true, context);
-				//outputs.put(OUT_MORE_OUTPUTS, moreRef);
-
-				//if (optionalPorts) {
-				//	// Populate our optional output port					
-				//	// NOTE: Need to return output values for all defined output ports
-				//	String report = "Everything OK";
-				//	outputs.put(OUT_REPORT, referenceService.register(report,
-				//			0, true, context));
-				//}
-				
-				// return map of output data, with empty index array as this is
-				// the only and final result (this index parameter is used if
-				// pipelining output)
-				callback.receiveResult(outputs, new int[0]);
 			}
 		});
 	}

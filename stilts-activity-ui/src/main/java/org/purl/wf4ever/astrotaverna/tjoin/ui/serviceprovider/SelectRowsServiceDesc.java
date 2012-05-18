@@ -32,7 +32,7 @@ public class SelectRowsServiceDesc extends ServiceDescription<SelectRowsActivity
 	@Override
 	public SelectRowsActivityConfigurationBean getActivityConfiguration() {
 		SelectRowsActivityConfigurationBean bean = new SelectRowsActivityConfigurationBean();
-		bean.setTypeOfInput("File");
+		bean.setTypeOfInput("String");
 		//bean.setTypeOfFilter("Column names");
 		return bean;
 	}

@@ -28,7 +28,7 @@ public class SelectColumnsActivityTest {
 	private SelectColumnsActivityConfigurationBean configBean;
 	
 	//this variables must be the same than the ones defined at SelectColumnsActivity.java
-	private static final String IN_FIRST_INPUT_TABLE = "firstTable";
+	private static final String IN_FIRST_INPUT_TABLE = "voTable";
 	private static final String IN_FORMAT_INPUT_TABLE = "formatTableIn";
 	private static final String IN_FORMAT_OUTPUT_TABLE = "formatTableOut";
 	private static final String IN_FILTER = "filter";
@@ -39,10 +39,7 @@ public class SelectColumnsActivityTest {
 	
 	private SelectColumnsActivity activity = new SelectColumnsActivity();
 
-	private static final String resultSelectColumns = 
-			   "# U        G        R        I        Z         \n"       
-			  +"  17.52193 17.47281 17.50826 17.99788 17.8128\n" 
-			  +"  13.7583  12.79937 12.27589 11.99715 11.71331";
+	
 	
 	@Ignore("Not ready to run")
 	@BeforeClass
@@ -98,10 +95,8 @@ public class SelectColumnsActivityTest {
 
 		Map<String, Object> inputs = new HashMap<String, Object>();
 		inputs.put(IN_FIRST_INPUT_TABLE, "/home/julian/Documents/wf4ever/tables/sdss_votable2.xml");
-		inputs.put(IN_FORMAT_INPUT_TABLE, "votable");
-		inputs.put(IN_FORMAT_OUTPUT_TABLE, "ascii");
 		inputs.put(IN_FILTER, "U G R I Z");
-		inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.ascii");
+		inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.xml");
 		
 		
 
@@ -115,14 +110,14 @@ public class SelectColumnsActivityTest {
 				activity, inputs, expectedOutputTypes);
 
 		assertEquals("Unexpected outputs", 2, outputs.size());
-		assertEquals("/home/julian/Documents/wf4ever/tables/resultTable.ascii", outputs.get(OUT_SIMPLE_OUTPUT));
+		assertEquals("/home/julian/Documents/wf4ever/tables/resultTable.xml", outputs.get(OUT_SIMPLE_OUTPUT));
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
 		
 		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
 		//		.get("moreOutputs"));
 
 	}
-
+	
 	@Test
 	public void executeAsynchWithStrings() throws Exception {
 		configBean.setTypeOfInput("String");
@@ -131,13 +126,11 @@ public class SelectColumnsActivityTest {
 
 		Map<String, Object> inputs = new HashMap<String, Object>();
 		inputs.put(IN_FIRST_INPUT_TABLE, MyUtils.getExampleVOtable());
-		inputs.put(IN_FORMAT_INPUT_TABLE, "votable");
-		inputs.put(IN_FORMAT_OUTPUT_TABLE, "ascii");
 		inputs.put(IN_FILTER, "U G R I Z");
 		inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.ascii");
 		
 		
-
+		
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
 		//expectedOutputTypes.put("moreOutputs", String.class);
@@ -149,14 +142,101 @@ public class SelectColumnsActivityTest {
 
 		String a = new String(resultSelectColumns.toCharArray());
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
+		
+				
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+		/*
+		System.out.println(a.length());
+		System.out.println(b.length());
+		int i;
+		boolean iguales=true;
+		for(i=330;i<1206 && iguales;i++)
+			if(a.charAt(i)!=b.charAt(i)){
+				iguales = false;
+			}
+		System.out.println(i);
+		System.out.println(a.substring(i-10, i+10));
+		System.out.println(b.substring(i-10, i+10));
+		*/
 		assertTrue("Wrong output : ", a.length()==b.length());
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
+		
 		
 		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
 		//		.get("moreOutputs"));
 
 	}
 	
+	@Test(expected = RuntimeException.class)
+	public void executeAsynchWithNullInput() throws Exception {
+		configBean.setTypeOfInput("String");
+		configBean.setTypeOfFilter("Column names");
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		inputs.put(IN_FIRST_INPUT_TABLE, MyUtils.getExampleVOtable());
+		//inputs.put(IN_FILTER, null);
+		inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.ascii");
+		
+		
+		
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put("simpleOutput", String.class);
+		//expectedOutputTypes.put("moreOutputs", String.class);
+		expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+		
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+				
+		String a = new String(resultSelectColumns.toCharArray());
+		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
+		
+				
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+
+		assertTrue("Wrong output : ", a.length()==b.length());
+		assertEquals("simple-report", outputs.get(OUT_REPORT));
+		
+		
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void executeAsynchWithInvalidInput() throws Exception {
+		configBean.setTypeOfInput("String");
+		configBean.setTypeOfFilter("Column names");
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		inputs.put(IN_FIRST_INPUT_TABLE, MyUtils.getExampleVOtable());
+		inputs.put(IN_FILTER, "sds");
+		inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.ascii");
+		
+		
+		
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put("simpleOutput", String.class);
+		//expectedOutputTypes.put("moreOutputs", String.class);
+		expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+		
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+		
+		String a = new String(resultSelectColumns.toCharArray());
+		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
+		
+				
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+
+		assertTrue("Wrong output : ", a.length()==b.length());
+		assertEquals("simple-report", outputs.get(OUT_REPORT));
+		
+		
+	}
 	
 	@Test
 	public void reConfiguredActivity() throws Exception {
@@ -166,14 +246,57 @@ public class SelectColumnsActivityTest {
 
 		activity.configure(configBean);
 	
-		assertEquals("Unexpected inputs", 5, activity.getInputPorts().size());
+		assertEquals("Unexpected inputs", 3, activity.getInputPorts().size());
 		assertEquals("Unexpected outputs", 2, activity.getOutputPorts().size());
 	
 		activity.configure(configBean);
 		// Should not change on reconfigure
-		assertEquals("Unexpected inputs", 5, activity.getInputPorts().size());
+		assertEquals("Unexpected inputs", 3, activity.getInputPorts().size());
 		assertEquals("Unexpected outputs", 2, activity.getOutputPorts().size());
 	}
 
+	
+	private static final String resultSelectColumns = 
+			"<?xml version='1.0'?>"
+					+ "<VOTABLE version=\"1.1\""
+					+ " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
+					+ " xsi:schemaLocation=\"http://www.ivoa.net/xml/VOTable/v1.1 http://www.ivoa.net/xml/VOTable/v1.1\""
+					+ " xmlns=\"http://www.ivoa.net/xml/VOTable/v1.1\">"
+					+ "<!--"
+					+ " !  VOTable written by STIL version 3.0-3 (uk.ac.starlink.votable.VOTableWriter)"
+					+ " !  at 2012-05-18T09:05:51"
+					+ " !-->"
+					+ "<RESOURCE>"
+					+ "<TABLE name=\"votable\">" //modified in order to match length: nrows=\"2\"
+					+ "<PARAM datatype=\"float\" name=\"inputRA\" unit=\"degrees\" value=\"195.16333\"/>"
+					+ "<PARAM datatype=\"float\" name=\"inputDEC\" unit=\"degrees\" value=\"2.5007777\"/>"
+					+ "<PARAM datatype=\"float\" name=\"inputSR\" unit=\"degrees\" value=\"0.001\"/>"
+					+ "<PARAM arraysize=\"1\" datatype=\"char\" name=\"rowcount, table 0\" value=\"2\"/>"
+					+ "<FIELD ID=\"U\" datatype=\"float\" name=\"U\" ucd=\"PHOT_SDSS_U FIT_PARAM\"/>"
+					+ "<FIELD ID=\"G\" datatype=\"float\" name=\"G\" ucd=\"PHOT_SDSS_G FIT_PARAM\"/>"
+					+ "<FIELD ID=\"R\" datatype=\"float\" name=\"R\" ucd=\"PHOT_SDSS_R FIT_PARAM\"/>"
+					+ "<FIELD ID=\"I\" datatype=\"float\" name=\"I\" ucd=\"PHOT_SDSS_I FIT_PARAM\"/>"
+					+ "<FIELD ID=\"Z\" datatype=\"float\" name=\"Z\" ucd=\"PHOT_SDSS_Z FIT_PARAM\"/>"
+					+ "<DATA>"
+					+ "<TABLEDATA>"
+					+ "  <TR>"
+					+ "    <TD>17.52193</TD>"
+					+ "    <TD>17.47281</TD>"
+					+ "    <TD>17.50826</TD>"
+					+ "    <TD>17.99788</TD>"
+					+ "    <TD>17.8128</TD>"
+					+ "  </TR>"
+					+ "  <TR>"
+					+ "    <TD>13.7583</TD>"
+					+ "    <TD>12.79937</TD>"
+					+ "    <TD>12.27589</TD>"
+					+ "    <TD>11.99715</TD>"
+					+ "    <TD>11.71331</TD>"
+					+ "  </TR>"
+					+ "</TABLEDATA>"
+					+ "</DATA>"
+					+ "</TABLE>"
+					+ "</RESOURCE>"
+					+ "</VOTABLE>";
 	
 }

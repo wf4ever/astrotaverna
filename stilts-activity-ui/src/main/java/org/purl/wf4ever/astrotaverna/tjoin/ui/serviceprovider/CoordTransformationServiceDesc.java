@@ -32,7 +32,7 @@ public class CoordTransformationServiceDesc extends ServiceDescription<CoordTran
 	@Override
 	public CoordTransformationActivityConfigurationBean getActivityConfiguration() {
 		CoordTransformationActivityConfigurationBean bean = new CoordTransformationActivityConfigurationBean();
-		bean.setTypeOfInput("File");
+		bean.setTypeOfInput("String");
 		bean.setTypeOfFilter("radiansToDms");
 		return bean;
 	}

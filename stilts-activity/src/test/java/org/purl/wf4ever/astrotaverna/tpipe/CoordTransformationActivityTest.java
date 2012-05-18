@@ -28,9 +28,7 @@ public class CoordTransformationActivityTest {
 	private CoordTransformationActivityConfigurationBean configBean;
 	
 	//this variables must be the same than the ones defined at CoordTransformationActivity.java
-	private static final String IN_FIRST_INPUT_TABLE = "firstTable";
-	private static final String IN_FORMAT_INPUT_TABLE = "formatTableIn";
-	private static final String IN_FORMAT_OUTPUT_TABLE = "formatTableOut";
+	private static final String IN_FIRST_INPUT_TABLE = "voTable";
 	private static final String IN_NAME_NEW_COL = "nameNewCol";
 	private static final String IN_OUTPUT_TABLE_NAME = "outputFileNameIn";
 
@@ -39,10 +37,6 @@ public class CoordTransformationActivityTest {
 	
 	private CoordTransformationActivity activity = new CoordTransformationActivity();
 
-	private static final String resultCoordTransformation = 	
-				"# OBJID              RA               DEC              TYPE   U        G        R        I        Z        ERR_U       ERR_G       ERR_R       ERR_I       ERR_Z       PSFMAG_U PSFMAGERR_U PSFMAG_G PSFMAGERR_G PSFMAG_R PSFMAGERR_R PSFMAG_I PSFMAGERR_I PSFMAG_Z PSFMAGERR_Z newCol            \n"            
-			  + "  587726032792059953 195.163538721478 2.50072618814849 STAR   17.52193 17.47281 17.50826 17.99788 17.8128  0.0127011   0.006139796 0.007103184 0.01207803  0.03062468  17.59192 0.04599576  17.55609 0.1091162   17.60397 0.1366048   18.09505 0.2507383   17.93584 0.1380201   4.986799968980389 \n" 
-			  + "  587726032792059952 195.162958157847 2.50144182633295 GALAXY 13.7583  12.79937 12.27589 11.99715 11.71331 0.004007341 0.001826325 0.001757175 0.001762709 0.002704954 17.67873 0.0193816   16.67595 0.03404235  16.40215 0.06255744  16.2727  0.02829609  16.17118 0.07506536  1.2017617375882266 ";
 	
 	@Ignore("Not ready to run")
 	@BeforeClass
@@ -94,15 +88,13 @@ public class CoordTransformationActivityTest {
 		activity.configure(configBean);
 
 		Map<String, Object> inputs = new HashMap<String, Object>();
-		inputs.put(IN_FIRST_INPUT_TABLE, "/home/julian/Documents/wf4ever/tables/sdss_votable2.xml");
-		inputs.put(IN_FORMAT_INPUT_TABLE, "votable");
-		inputs.put(IN_FORMAT_OUTPUT_TABLE, "ascii");
+		inputs.put(IN_FIRST_INPUT_TABLE, "/home/julian/Documents/wf4ever/tables/othershortvotable.xml");
 		inputs.put(IN_NAME_NEW_COL, "newCol");
-		inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.ascii");
+		inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.xml");
 		
 		//function parameters
-		inputs.put("RA", "U");
-		inputs.put("DEC", "R");
+		inputs.put("RA", "ra");
+		inputs.put("DEC", "dec");
 
 		
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
@@ -115,7 +107,7 @@ public class CoordTransformationActivityTest {
 				activity, inputs, expectedOutputTypes);
 
 		assertEquals("Unexpected outputs", 2, outputs.size());
-		assertEquals("/home/julian/Documents/wf4ever/tables/resultTable.ascii", outputs.get(OUT_SIMPLE_OUTPUT));
+		assertEquals("/home/julian/Documents/wf4ever/tables/resultTable.xml", outputs.get(OUT_SIMPLE_OUTPUT));
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
 		
 		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
@@ -130,15 +122,13 @@ public class CoordTransformationActivityTest {
 		activity.configure(configBean);
 
 		Map<String, Object> inputs = new HashMap<String, Object>();
-		inputs.put(IN_FIRST_INPUT_TABLE, MyUtils.getExampleVOtable());
-		inputs.put(IN_FORMAT_INPUT_TABLE, "votable");
-		inputs.put(IN_FORMAT_OUTPUT_TABLE, "ascii");
+		inputs.put(IN_FIRST_INPUT_TABLE, MyUtils.getExampleVOTable2());
 		inputs.put(IN_NAME_NEW_COL, "newCol");
 		//inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.ascii");
 		
 		//function parameters
-		inputs.put("RA", "U");
-		inputs.put("DEC", "R");
+		inputs.put("RA", "ra");
+		inputs.put("DEC", "dec");
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
@@ -146,11 +136,63 @@ public class CoordTransformationActivityTest {
 		expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
 		expectedOutputTypes.put(OUT_REPORT, String.class);
 
-		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+		Map<String, Object> outputs = null;
+		try{
+			outputs= ActivityInvoker.invokeAsyncActivity(
 				activity, inputs, expectedOutputTypes);
-
+		
+		
 		String a = new String(resultCoordTransformation.toCharArray());
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
+		
+				
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+				
+		assertTrue("Wrong output: ", a.length()==b.length());
+		
+		}catch(Exception ex){System.out.println(ex.toString());}
+		
+		assertEquals("simple-report", outputs.get(OUT_REPORT));
+		
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void executeAsynchWithNullInput() throws Exception {
+		configBean.setTypeOfInput("String");
+		configBean.setTypeOfFilter("raFK4toFK5radians2");
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		inputs.put(IN_FIRST_INPUT_TABLE, MyUtils.getExampleVOTable2());
+		//inputs.put(IN_NAME_NEW_COL, "newCol");
+		//inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.ascii");
+		
+		//function parameters
+		inputs.put("RA", "ra");
+		inputs.put("DEC", "dec");
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put("simpleOutput", String.class);
+		//expectedOutputTypes.put("moreOutputs", String.class);
+		expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+
+		Map<String, Object> outputs = null;
+		outputs= ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+		
+		
+		String a = new String(resultCoordTransformation.toCharArray());
+		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
+		
+				
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+				
 		assertTrue("Wrong output: ", a.length()==b.length());
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
 		
@@ -159,6 +201,45 @@ public class CoordTransformationActivityTest {
 
 	}
 	
+	@Test(expected = RuntimeException.class)
+	public void executeAsynchWithInvalidInput() throws Exception {
+		configBean.setTypeOfInput("String");
+		configBean.setTypeOfFilter("raFK4toFK5radians2");
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		inputs.put(IN_FIRST_INPUT_TABLE, MyUtils.getExampleVOTable2());
+		inputs.put(IN_NAME_NEW_COL, "newCol");
+		
+		//function parameters
+		inputs.put("RA", "othercolumn");
+		inputs.put("DEC", "dec");
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put("simpleOutput", String.class);
+		//expectedOutputTypes.put("moreOutputs", String.class);
+		expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+
+		Map<String, Object> outputs = null;
+		outputs= ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+		
+		
+		String a = new String(resultCoordTransformation.toCharArray());
+		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
+		
+				
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+				
+		assertTrue("Wrong output: ", a.length()==b.length());	
+		assertEquals("simple-report", outputs.get(OUT_REPORT));
+		
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
 	
 	@Test
 	public void reConfiguredActivity() throws Exception {
@@ -172,16 +253,115 @@ public class CoordTransformationActivityTest {
 		//for (ActivityInputPort activ : activity.getInputPorts()){
 		//	System.out.print(activ.getName()+", ");
 		//}
-		assertEquals("Unexpected inputs", 7, activity.getInputPorts().size());
+		assertEquals("Unexpected inputs", 5, activity.getInputPorts().size());
 		assertEquals("Unexpected outputs", 2, activity.getOutputPorts().size());
 	
 		
 		
 		activity.configure(configBean);
 		// Should not change on reconfigure
-		assertEquals("Unexpected inputs", 7, activity.getInputPorts().size());
+		assertEquals("Unexpected inputs", 5, activity.getInputPorts().size());
 		assertEquals("Unexpected outputs", 2, activity.getOutputPorts().size());
 	}
 
-	
+	private static final String resultCoordTransformation = 	
+			"<?xml version='1.0'?>"
+					+ "<VOTABLE version=\"1.1\""
+					+ " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
+					+ " xsi:schemaLocation=\"http://www.ivoa.net/xml/VOTable/v1.1 http://www.ivoa.net/xml/VOTable/v1.1\""
+					+ " xmlns=\"http://www.ivoa.net/xml/VOTable/v1.1\">"
+					+ "<!--"
+					+ " !  VOTable written by STIL version 3.0-3 (uk.ac.starlink.votable.VOTableWriter)"
+					+ " !  at 2012-05-18T10:44:23"
+					+ " !-->"
+					+ "<RESOURCE>"
+					+ "<TABLE name=\"votable\">"
+					+ "<DESCRIPTION>"
+					+ "Faint Images of the Radio Sky at Twenty cm (FIRST)"
+					+ "</DESCRIPTION>"
+					+ "<PARAM arraysize=\"18\" datatype=\"char\" name=\"default_search_radius\" ucd=\"OBS_ANG-SIZE\" value=\"0.0166666666666667\"/>"
+					+ "<FIELD datatype=\"int\" name=\"unique_id\">"
+					+ "<DESCRIPTION>Integer key</DESCRIPTION>"
+					+ "<VALUES null='-2147483648'/>"
+					+ "</FIELD>"
+					+ "<FIELD arraysize=\"*\" datatype=\"char\" name=\"name\" ucd=\"ID_MAIN\">"
+					+ "<DESCRIPTION>FIRST Source Designation</DESCRIPTION>"
+					+ "</FIELD>"
+					+ "<FIELD datatype=\"double\" name=\"ra\" ucd=\"POS_EQ_RA_MAIN\" unit=\"degree\">"
+					+ "<DESCRIPTION>Right Ascension</DESCRIPTION>"
+					+ "</FIELD>"
+					+ "<FIELD datatype=\"double\" name=\"dec\" ucd=\"POS_EQ_DEC_MAIN\" unit=\"degree\">"
+					+ "<DESCRIPTION>Declination</DESCRIPTION>"
+					+ "</FIELD>"
+					+ "<FIELD datatype=\"double\" name=\"flux_20_cm\" ucd=\"phot.flux.density;em.radio.750-1500MHz\" unit=\"mJy\">"
+					+ "<DESCRIPTION>Peak Flux Density at 1.4GHz (mJy)</DESCRIPTION>"
+					+ "</FIELD>"
+					+ "<FIELD datatype=\"double\" name=\"flux_20_cm_error\" ucd=\"stat.error;phot.flux.density;em.radio.750-1500MHz\" unit=\"mJy\">"
+					+ "<DESCRIPTION>Local Noise Estimate of Source (mJy)</DESCRIPTION>"
+					+ "</FIELD>"
+					+ "<FIELD datatype=\"double\" name=\"int_flux_20_cm\" ucd=\"phot.flux.density;em.radio.750-1500MHz\" unit=\"mJy\">"
+					+ "<DESCRIPTION>Integrated Flux Density at 1.4GHz (mJy)</DESCRIPTION>"
+					+ "</FIELD>"
+					+ "<FIELD datatype=\"double\" name=\"sidelobe_prob\" ucd=\"stat.probability\">"
+					+ "<DESCRIPTION>Probability That Source Is a Sidelobe</DESCRIPTION>"
+					+ "</FIELD>"
+					+ "<FIELD datatype=\"double\" name=\"twomass_first_offset\" ucd=\"pos.angDistance;em.IR;em.radio.750-1500MHz\" unit=\"arcsec\">"
+					+ "<DESCRIPTION>Offset of Nearest 2MASS Source</DESCRIPTION>"
+					+ "</FIELD>"
+					+ "<FIELD datatype=\"double\" name=\"twomass_kmag\" ucd=\"phot.mag;em.IR.K\" unit=\"mag\">"
+					+ "<DESCRIPTION>K Magnitude of Nearest 2MASS Source</DESCRIPTION>"
+					+ "</FIELD>"
+					+ "<FIELD datatype=\"double\" name=\"Search_Offset\" unit=\"'\">"
+					+ "<DESCRIPTION>Offset of target/observation from query center</DESCRIPTION>"
+					+ "</FIELD>"
+					+ "<FIELD datatype=\"double\" name=\"newCol\"/>"
+					+ "<DATA>"
+					+ "<TABLEDATA>"
+					+ "  <TR>"
+					+ "    <TD>946464</TD>"
+					+ "    <TD>FIRST J233859.7-112355</TD>"
+					+ "    <TD>354.749046</TD>"
+					+ "    <TD>-11.398828</TD>"
+					+ "    <TD>1.68</TD>"
+					+ "    <TD>0.14</TD>"
+					+ "    <TD>1.75</TD>"
+					+ "    <TD>0.016</TD>"
+					+ "    <TD></TD>"
+					+ "    <TD></TD>"
+					+ "    <TD>0.0</TD>"
+					+ "    <TD>2.9045820502288446</TD>"
+					+ "  </TR>"
+					+ "  <TR>"
+					+ "    <TD>946352</TD>"
+					+ "    <TD>FIRST J233916.9-111928</TD>"
+					+ "    <TD>354.820408</TD>"
+					+ "    <TD>-11.324472</TD>"
+					+ "    <TD>1.62</TD>"
+					+ "    <TD>0.138</TD>"
+					+ "    <TD>1.48</TD>"
+					+ "    <TD>0.047</TD>"
+					+ "    <TD>0.12</TD>"
+					+ "    <TD>14.99</TD>"
+					+ "    <TD>6.126</TD>"
+					+ "    <TD>2.9756390660036365</TD>"
+					+ "  </TR>"
+					+ "  <TR>"
+					+ "    <TD>946331</TD>"
+					+ "    <TD>FIRST J233846.4-111841</TD>"
+					+ "    <TD>354.693467</TD>"
+					+ "    <TD>-11.311506</TD>"
+					+ "    <TD>11.41</TD>"
+					+ "    <TD>0.137</TD>"
+					+ "    <TD>15.56</TD>"
+					+ "    <TD>0.014</TD>"
+					+ "    <TD></TD>"
+					+ "    <TD></TD>"
+					+ "    <TD>6.176</TD>"
+					+ "    <TD>2.8506099560359695</TD>"
+					+ "  </TR>"
+					+ "</TABLEDATA>"
+					+ "</DATA>"
+					+ "</TABLE>"
+					+ "</RESOURCE>"
+					+ "</VOTABLE>";
 }

@@ -33,7 +33,7 @@ public class FormatConversionServiceDesc extends ServiceDescription<FormatConver
 	public FormatConversionActivityConfigurationBean getActivityConfiguration() {
 		FormatConversionActivityConfigurationBean bean = new FormatConversionActivityConfigurationBean();
 		if(typeOfInput!=null && !typeOfInput.isEmpty())
-			bean.setTypeOfInput("File");
+			bean.setTypeOfInput("String");
 		//bean.setTypeOfFilter("Column names");
 		return bean;
 	}

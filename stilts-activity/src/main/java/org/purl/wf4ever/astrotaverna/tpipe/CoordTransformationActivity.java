@@ -18,6 +18,7 @@ import java.util.Vector;
 import org.apache.commons.io.IOUtils;
 import org.purl.wf4ever.astrotaverna.tpipe.CoordTransformationActivityConfigurationBean;
 import org.purl.wf4ever.astrotaverna.utils.MyUtils;
+import org.purl.wf4ever.astrotaverna.utils.NoExitSecurityManager;
 
 import uk.ac.starlink.ttools.Stilts;
 
@@ -41,9 +42,7 @@ public class CoordTransformationActivity extends
 	 * would not apply if port names are looked up dynamically from the service
 	 * operation, like done for WSDL services.
 	 */
-	private static final String IN_FIRST_INPUT_TABLE = "firstTable";
-	private static final String IN_FORMAT_INPUT_TABLE = "formatTableIn";
-	private static final String IN_FORMAT_OUTPUT_TABLE = "formatTableOut";
+	private static final String IN_FIRST_INPUT_TABLE = "voTable";
 	private static final String IN_NAME_NEW_COL = "nameNewCol";
 	private static final String IN_OUTPUT_TABLE_NAME = "outputFileNameIn";
 
@@ -101,8 +100,6 @@ public class CoordTransformationActivity extends
 		// Hard coded input port, expecting a single String
 		//File name for the Input tables
 		addInput(IN_FIRST_INPUT_TABLE, 0, true, null, String.class);
-		addInput(IN_FORMAT_INPUT_TABLE, 0, true, null, String.class);
-		addInput(IN_FORMAT_OUTPUT_TABLE, 0, true, null, String.class);
 		addInput(IN_NAME_NEW_COL, 0, true, null, String.class);
 		
 		
@@ -135,274 +132,294 @@ public class CoordTransformationActivity extends
 		// from thread pool and return asynchronously
 		callback.requestRun(new Runnable() {
 			
+			public boolean areMandatoryInputsNotNull(){
+				boolean validStatus = true;
+				
+				if(inputs.get(IN_FIRST_INPUT_TABLE)==null
+						|| inputs.get(IN_NAME_NEW_COL)==null){
+					validStatus = false;
+				}else{
+					if(configBean.getTypeOfInput().compareTo("File")==0 
+						&& inputs.get(IN_OUTPUT_TABLE_NAME)==null){
+						validStatus = false;
+					} else{
+						Vector<String> inParams = getNameParamsOfCoordFunctions(configBean.getTypeOfFilter());
+						if(inParams!=null)
+							for(String param : inParams){
+								if(inputs.get(param)==null)
+									validStatus = false;
+							}
+					}
+				}
+				
+				return validStatus;
+			}
+			
 			public void run() {
 				Vector<String> inParams;
 				Vector<String> paramValues;
 				boolean callbackfails=false;
-				InvocationContext context = callback.getContext();
-				ReferenceService referenceService = context.getReferenceService();
-				// Resolve inputs 				
-				String inputTable = (String) referenceService.renderIdentifier(inputs.get(IN_FIRST_INPUT_TABLE), String.class, context);
-				String formatInputTable = (String) referenceService.renderIdentifier(inputs.get(IN_FORMAT_INPUT_TABLE), String.class, context);
-				String formatOutputTable= (String) referenceService.renderIdentifier(inputs.get(IN_FORMAT_OUTPUT_TABLE), String.class, context);
-				String nameNewCol = (String) referenceService.renderIdentifier(inputs.get(IN_NAME_NEW_COL), String.class, context);
 				
-				
-				boolean optionalPorts = configBean.getTypeOfInput().compareTo("File")==0;
-				
-				String outputTableName = null;
-				if(optionalPorts && inputs.containsKey(IN_OUTPUT_TABLE_NAME)){ //configBean.getNumberOfTables()==3
-					outputTableName = (String) referenceService.renderIdentifier(inputs.get(IN_OUTPUT_TABLE_NAME), 
-							String.class, context);
-				}
-				
-				inParams = getNameParamsOfCoordFunctions(configBean.getTypeOfFilter());
-				paramValues = new Vector<String>();
-				if(inParams!=null && !inParams.isEmpty()){
-					for(String param : inParams)
-						if(inputs.containsKey(param))
-							paramValues.add((String) referenceService.renderIdentifier(inputs.get(param), 
-									String.class, context));
-				}else{
-					callback.fail("Lack of params in the coordenates function",new Exception());
-					callbackfails = true;
-				}
+				if(areMandatoryInputsNotNull()){
+					InvocationContext context = callback.getContext();
+					ReferenceService referenceService = context.getReferenceService();
+					// Resolve inputs 				
+					String inputTable = (String) referenceService.renderIdentifier(inputs.get(IN_FIRST_INPUT_TABLE), String.class, context);
+					String nameNewCol = (String) referenceService.renderIdentifier(inputs.get(IN_NAME_NEW_COL), String.class, context);
 					
-				
-
-				//include default values if empty inputs
-				//default format => votable
-				if(formatInputTable == null || formatInputTable.trim().isEmpty()){
-					formatInputTable = "votable";
-				}
-				if(formatOutputTable == null || formatOutputTable.trim().isEmpty()){
-					formatOutputTable = "votable";
-				}
-				if(nameNewCol==null || nameNewCol.isEmpty())
-					nameNewCol="NEWCOL";
-				
-				//check correct input values
-				if(!MyUtils.isValidInputFormat(formatInputTable)){
-					callback.fail("Invalid input table format: "+ formatInputTable,new IOException());
-					callbackfails = true;
-				}
-				
-				
-				if(!MyUtils.isValidOutputFormat(formatOutputTable)){
-					callback.fail("Invalid output table format: "+ formatOutputTable,new IOException());
-					callbackfails = true;
-				}
-				
-				if(configBean.getTypeOfInput().compareTo("File")==0){
-					File file = new File(inputTable);
-					if(!file.exists()){
-						callback.fail("Input table file does not exist: "+ inputTable,new IOException());
+					
+					boolean optionalPorts = configBean.getTypeOfInput().compareTo("File")==0;
+					
+					String outputTableName = null;
+					if(optionalPorts && inputs.containsKey(IN_OUTPUT_TABLE_NAME)){ //configBean.getNumberOfTables()==3
+						outputTableName = (String) referenceService.renderIdentifier(inputs.get(IN_OUTPUT_TABLE_NAME), 
+								String.class, context);
+					}
+					
+					inParams = getNameParamsOfCoordFunctions(configBean.getTypeOfFilter());
+					paramValues = new Vector<String>();
+					if(inParams!=null && !inParams.isEmpty()){
+						for(String param : inParams)
+							if(inputs.containsKey(param))
+								paramValues.add((String) referenceService.renderIdentifier(inputs.get(param), 
+										String.class, context));
+					}else{
+						callback.fail("Lack of params in the coordenates function",new Exception());
 						callbackfails = true;
 					}
-				}
-				
-				if(configBean.getTypeOfInput().compareTo("URL")==0){
-					try {
-						URI exampleUri = new URI(inputTable);
-					} catch (URISyntaxException e) {
-						callback.fail("Invalid URL: "+ inputTable,e);
-						callbackfails = true;
-					}
-				}
-				if(inParams.size()!=paramValues.size()){
-					callback.fail("Expected number of parameters for the function: "+ inParams.size()+".\nReceived number of paramaters: "+ paramValues.size(),new Exception());
-					callbackfails = true;
-				}
-				if(paramValues.size()>0){
-					boolean nullvalues = false;
-					for(int i = 0; i<paramValues.size() && !nullvalues;i++)
-						if(paramValues.elementAt(i)==null || paramValues.elementAt(i).isEmpty()){
-							nullvalues = true;
-							callback.fail("Function parameters are empty",new Exception());
+						
+					
+	
+					//check correct input values
+					
+					if(configBean.getTypeOfInput().compareTo("File")==0){
+						File file = new File(inputTable);
+						if(!file.exists()){
+							callback.fail("Input table file does not exist: "+ inputTable,new IOException());
 							callbackfails = true;
 						}
-				}
-				
-				
-				
-				// Support our configuration-dependendent input
-				//boolean optionalPorts = configBean.getExampleString().equals("specialCase"); 
-				
-				//List<byte[]> special = null;
-				// We'll also allow IN_EXTRA_DATA to be optionally not provided
-				//if (optionalPorts && inputs.containsKey(IN_EXTRA_DATA)) {
-				//	// Resolve as a list of byte[]
-				//	special = (List<byte[]>) referenceService.renderIdentifier(
-				//			inputs.get(IN_EXTRA_DATA), byte[].class, context);
-				//}
-				
-
-				// TODO: Do the actual service invocation
-//				try {
-//					results = this.service.invoke(firstInput, special)
-//				} catch (ServiceException ex) {
-//					callback.fail("Could not invoke Stilts service " + configBean.getExampleUri(),
-//							ex);
-//					// Make sure we don't call callback.receiveResult later 
-//					return;
-//				}
-				
-				//Performing the work: Stilts functinalities
-				String [] parameters;
-				
-				if(!callbackfails){
-					String  functionName;
-					String commaSeparatedValues;
-					
-					//handling redirection of standard input and output
-					PrintStream out = System.out;
-					PrintStream stdout = System.out;
-					InputStream in = System.in;
-					InputStream stdin = System.in;
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					out = new PrintStream(baos);
-					
-					
-					for( Object p : paramValues){
-						boolean isinstance = false;
-						if(p instanceof String)
-							isinstance = true;
-						String name = p.getClass().getName();
-						name = "";
-						
 					}
 					
-					commaSeparatedValues = MyUtils.toCommaSeparatedString(paramValues);
-					functionName = ((Map<String, String>)CoordTransformationActivity.getFunctionsNameMap()).get(configBean.getTypeOfFilter());
-					
-					if(optionalPorts){ //case File
-						parameters = new String[6];
-						parameters[0] = "tpipe";
-						parameters[1] = "ifmt="+formatInputTable;
-						parameters[2] = "in="+inputTable;
-						parameters[3] = "ofmt="+formatOutputTable;
-						parameters[4] = "cmd=addcol "+ nameNewCol +" '(" + functionName + "("+ commaSeparatedValues +"))'";
-						//System.out.println(parameters[4]);
-						//parameters[4] = "cmd=addcol newCol '(raFK4toFK5radians(U, R))'";
-						parameters[5] = "out="+outputTableName;
-					}else if(configBean.getTypeOfInput().compareTo("Query")==0 
-								||configBean.getTypeOfInput().compareTo("URL")==0){
-							
-						parameters = new String[5];
-						parameters[0] = "tpipe";
-						parameters[1] = "ifmt="+formatInputTable;
-						parameters[2] = "in="+inputTable;
-						parameters[3] = "ofmt="+formatOutputTable;
-						parameters[4] = "cmd=addcol "+ nameNewCol +" '(" + functionName + "("+ commaSeparatedValues +"))'";
-						//Redirecting output
-						System.setOut(out);
-					}else if(configBean.getTypeOfInput().compareTo("String")==0){
-						parameters = new String[5];
-						parameters[0] = "tpipe";
-						parameters[1] = "ifmt="+formatInputTable;
-						parameters[2] = "in=-";
-						parameters[3] = "ofmt="+formatOutputTable;
-						parameters[4] = "cmd=addcol "+ nameNewCol +" '(" + functionName + "("+ commaSeparatedValues +"))'";
-						//Redirecting output and input
-						in = IOUtils.toInputStream(inputTable);
-						//Optionally, do this: 
-						//InputStream is = new ByteArrayInputStream(resultTable.getBytes( charset ) );
-						System.setIn(in);
-						System.setOut(out);
-					}else{
-						parameters = new String[5];
-						parameters[0] = "tpipe";
-						parameters[1] = "ifmt="+formatInputTable;
-						parameters[2] = "in=-";
-						parameters[3] = "ofmt="+formatOutputTable;
-	
-						//Redirecting output and input
-						in = IOUtils.toInputStream(inputTable);
-						//Optionally, do this: 
-						//InputStream is = new ByteArrayInputStream(resultTable.getBytes( charset ) );
-						System.setIn(in);
-						System.setOut(out);
-					}
-						
-					System.setProperty("votable.strict", "false");
-					Stilts.main(parameters);
-						
-					
-					
-					// Register outputs
-					Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-					String simpleValue = "/home/julian/Documents/wf4ever/tables/resultTable.ascii";// //Name of the output file or result
-					String simpleoutput = "simple-report";
-					
-					if(optionalPorts){ //case File
-						simpleValue = outputTableName;
-					}else if(configBean.getTypeOfInput().compareTo("Query")==0 
-								||configBean.getTypeOfInput().compareTo("URL")==0){
-				
-						out.close();
-						if(out.checkError()){
-							simpleoutput += "Output redirection failed.\n";
-						}
-						
-						simpleValue = baos.toString();
-						System.setOut(stdout);	
-						
-					}else if(configBean.getTypeOfInput().compareTo("String")==0){
-						out.close();
-						if(out.checkError()){
-							simpleoutput += "Output redirection failed.\n";
-						}
-						
-						simpleValue = baos.toString();
-						System.setOut(stdout);	
-						
+					if(configBean.getTypeOfInput().compareTo("URL")==0){
 						try {
-							in.close();
-						} catch (IOException e) {
-							simpleoutput += "Input redirection failed.\n" + e.toString();
+							URI exampleUri = new URI(inputTable);
+						} catch (URISyntaxException e) {
+							callback.fail("Invalid URL: "+ inputTable,e);
+							callbackfails = true;
 						}
-						System.setIn(stdin);
-					}else{
-						out.close();
-						if(out.checkError()){
-							simpleoutput += "Output redirection failed.\n";
-						}
-						
-						simpleValue = baos.toString();
-						System.setOut(stdout);	
-						
-						try {
-							in.close();
-						} catch (IOException e) {
-							simpleoutput += "Input redirection failed.\n" + e.toString();
-						}
-						System.setIn(stdin);
 					}
-	
-					T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
-					outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
-					T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
-					outputs.put(OUT_REPORT, simpleRef2);
-	
-					// For list outputs, only need to register the top level list
-					//List<String> moreValues = new ArrayList<String>();
-					//moreValues.add("Value 1");
-					//moreValues.add("Value 2");
-					//T2Reference moreRef = referenceService.register(moreValues, 1, true, context);
-					//outputs.put(OUT_MORE_OUTPUTS, moreRef);
-	
-					//if (optionalPorts) {
-					//	// Populate our optional output port					
-					//	// NOTE: Need to return output values for all defined output ports
-					//	String report = "Everything OK";
-					//	outputs.put(OUT_REPORT, referenceService.register(report,
-					//			0, true, context));
+					if(inParams.size()!=paramValues.size()){
+						callback.fail("Expected number of parameters for the function: "+ inParams.size()+".\nReceived number of paramaters: "+ paramValues.size(),new Exception());
+						callbackfails = true;
+					}
+					if(paramValues.size()>0){
+						boolean nullvalues = false;
+						for(int i = 0; i<paramValues.size() && !nullvalues;i++)
+							if(paramValues.elementAt(i)==null || paramValues.elementAt(i).isEmpty()){
+								nullvalues = true;
+								callback.fail("Function parameters are empty",new Exception());
+								callbackfails = true;
+							}
+					}
+					
+					
+					
+					// Support our configuration-dependendent input
+					//boolean optionalPorts = configBean.getExampleString().equals("specialCase"); 
+					
+					//List<byte[]> special = null;
+					// We'll also allow IN_EXTRA_DATA to be optionally not provided
+					//if (optionalPorts && inputs.containsKey(IN_EXTRA_DATA)) {
+					//	// Resolve as a list of byte[]
+					//	special = (List<byte[]>) referenceService.renderIdentifier(
+					//			inputs.get(IN_EXTRA_DATA), byte[].class, context);
 					//}
 					
-					// return map of output data, with empty index array as this is
-					// the only and final result (this index parameter is used if
-					// pipelining output)
-					callback.receiveResult(outputs, new int[0]);
+	
+					// TODO: Do the actual service invocation
+	//				try {
+	//					results = this.service.invoke(firstInput, special)
+	//				} catch (ServiceException ex) {
+	//					callback.fail("Could not invoke Stilts service " + configBean.getExampleUri(),
+	//							ex);
+	//					// Make sure we don't call callback.receiveResult later 
+	//					return;
+	//				}
+					
+					//Performing the work: Stilts functinalities
+					String [] parameters;
+					
+					if(!callbackfails){
+						String  functionName;
+						String commaSeparatedValues;
+						
+						//handling redirection of standard input and output
+						PrintStream out = System.out;
+						PrintStream stdout = System.out;
+						InputStream in = System.in;
+						InputStream stdin = System.in;
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						out = new PrintStream(baos);
+						
+						
+						for( Object p : paramValues){
+							boolean isinstance = false;
+							if(p instanceof String)
+								isinstance = true;
+							String name = p.getClass().getName();
+							name = "";
+							
+						}
+						
+						commaSeparatedValues = MyUtils.toCommaSeparatedString(paramValues);
+						functionName = ((Map<String, String>)CoordTransformationActivity.getFunctionsNameMap()).get(configBean.getTypeOfFilter());
+						
+						if(optionalPorts){ //case File
+							parameters = new String[6];
+							parameters[0] = "tpipe";
+							parameters[1] = "ifmt=votable";
+							parameters[2] = "in="+inputTable;
+							parameters[3] = "ofmt=votable";
+							parameters[4] = "cmd=addcol "+ nameNewCol +" '(" + functionName + "("+ commaSeparatedValues +"))'";
+							//System.out.println(parameters[4]);
+							//parameters[4] = "cmd=addcol newCol '(raFK4toFK5radians(U, R))'";
+							parameters[5] = "out="+outputTableName;
+						}else if(configBean.getTypeOfInput().compareTo("Query")==0 
+									||configBean.getTypeOfInput().compareTo("URL")==0){
+								
+							parameters = new String[5];
+							parameters[0] = "tpipe";
+							parameters[1] = "ifmt=votable";
+							parameters[2] = "in="+inputTable;
+							parameters[3] = "ofmt=votable";
+							parameters[4] = "cmd=addcol "+ nameNewCol +" '(" + functionName + "("+ commaSeparatedValues +"))'";
+							//Redirecting output
+							System.setOut(out);
+						}else if(configBean.getTypeOfInput().compareTo("String")==0){
+							parameters = new String[5];
+							parameters[0] = "tpipe";
+							parameters[1] = "ifmt=votable";
+							parameters[2] = "in=-";
+							parameters[3] = "ofmt=votable";
+							parameters[4] = "cmd=addcol "+ nameNewCol +" '(" + functionName + "("+ commaSeparatedValues +"))'";
+							//Redirecting output and input
+							in = IOUtils.toInputStream(inputTable);
+							//Optionally, do this: 
+							//InputStream is = new ByteArrayInputStream(resultTable.getBytes( charset ) );
+							System.setIn(in);
+							System.setOut(out);
+						}else{
+							parameters = new String[5];
+							parameters[0] = "tpipe";
+							parameters[1] = "ifmt=votable";
+							parameters[2] = "in=-";
+							parameters[3] = "ofmt=votable";
+		
+							//Redirecting output and input
+							in = IOUtils.toInputStream(inputTable);
+							//Optionally, do this: 
+							//InputStream is = new ByteArrayInputStream(resultTable.getBytes( charset ) );
+							System.setIn(in);
+							System.setOut(out);
+						}
+							
+						SecurityManager securityBackup = System.getSecurityManager();
+						System.setSecurityManager(new NoExitSecurityManager());
+						
+						try{
+							System.setProperty("votable.strict", "false");
+							Stilts.main(parameters);
+						}catch(SecurityException ex){
+							callback.fail("Invalid service call: check the input parameters", ex);
+							callbackfails = true;
+						}
+					
+						System.setSecurityManager(securityBackup);
+						
+						if(!callbackfails){
+							// Register outputs
+							Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
+							String simpleValue = "/home/julian/Documents/wf4ever/tables/resultTable.ascii";// //Name of the output file or result
+							String simpleoutput = "simple-report";
+							
+							if(optionalPorts){ //case File
+								simpleValue = outputTableName;
+							}else if(configBean.getTypeOfInput().compareTo("Query")==0 
+										||configBean.getTypeOfInput().compareTo("URL")==0){
+						
+								out.close();
+								if(out.checkError()){
+									simpleoutput += "Output redirection failed.\n";
+								}
+								
+								simpleValue = baos.toString();
+								System.setOut(stdout);	
+								
+							}else if(configBean.getTypeOfInput().compareTo("String")==0){
+								out.close();
+								if(out.checkError()){
+									simpleoutput += "Output redirection failed.\n";
+								}
+								
+								simpleValue = baos.toString();
+								System.setOut(stdout);	
+								
+								try {
+									in.close();
+								} catch (IOException e) {
+									simpleoutput += "Input redirection failed.\n" + e.toString();
+								}
+								System.setIn(stdin);
+							}else{
+								out.close();
+								if(out.checkError()){
+									simpleoutput += "Output redirection failed.\n";
+								}
+								
+								simpleValue = baos.toString();
+								System.setOut(stdout);	
+								
+								try {
+									in.close();
+								} catch (IOException e) {
+									simpleoutput += "Input redirection failed.\n" + e.toString();
+								}
+								System.setIn(stdin);
+							}
+			
+							T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
+							outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
+							T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
+							outputs.put(OUT_REPORT, simpleRef2);
+			
+							// For list outputs, only need to register the top level list
+							//List<String> moreValues = new ArrayList<String>();
+							//moreValues.add("Value 1");
+							//moreValues.add("Value 2");
+							//T2Reference moreRef = referenceService.register(moreValues, 1, true, context);
+							//outputs.put(OUT_MORE_OUTPUTS, moreRef);
+			
+							//if (optionalPorts) {
+							//	// Populate our optional output port					
+							//	// NOTE: Need to return output values for all defined output ports
+							//	String report = "Everything OK";
+							//	outputs.put(OUT_REPORT, referenceService.register(report,
+							//			0, true, context));
+							//}
+							
+							// return map of output data, with empty index array as this is
+							// the only and final result (this index parameter is used if
+							// pipelining output)
+							callback.receiveResult(outputs, new int[0]);
+						}else{
+							//restore standard in/out
+							System.setOut(stdout);	
+							System.setIn(stdin);
+						}
+					}
+				}else{ //End if isthereMandatoryInputs
+					callback.fail("Mandatory inputs doesn't have any value");
+					callbackfails = true;
 				}
 			}
 		});
