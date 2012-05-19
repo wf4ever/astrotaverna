@@ -79,9 +79,16 @@ public class MyUtils {
 		return result.trim();
 	}
 	
-		
+	/*
+	 * it returns a string with a valid parameter for stilts.
+	 * e.g. if the input is: physic_mag_kg;error_avg coord_ra
+	 * then the output is ucd$physic_mag_kg_error_avg ucd$coord_ra
+	 */
 	public static String checkAndRepairUCDlist(String ucdlist){
+		
 		ucdlist = ucdlist.replaceAll(".", "_");
+		ucdlist = ucdlist.replaceAll(";", "_");
+		
 		String [] splitfilter = ucdlist.split(" ");
 		String result = "";
 		
