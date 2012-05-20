@@ -19,7 +19,7 @@ public class StiltsConfigureMenuAction extends
 		Action result = null;
 		result = new StiltsConfigureAction(findActivity(),
 				getParentFrame());
-		result.putValue(Action.NAME, "Configure example service");
+		result.putValue(Action.NAME, "Configure service");
 		addMenuDots(result);
 		return result;
 	}

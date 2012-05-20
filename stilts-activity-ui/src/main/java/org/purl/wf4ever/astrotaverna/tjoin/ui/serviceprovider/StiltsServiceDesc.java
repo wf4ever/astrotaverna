@@ -32,9 +32,8 @@ public class StiltsServiceDesc extends ServiceDescription<TjoinActivityConfigura
 	@Override
 	public TjoinActivityConfigurationBean getActivityConfiguration() {
 		TjoinActivityConfigurationBean bean = new TjoinActivityConfigurationBean();
-		bean.setInputFormat("votable");
-		bean.setCmd("");
-		bean.setNumberOfTables(2);
+		bean.setTypeOfInput("String");
+		
 		return bean;
 	}
 
@@ -65,7 +64,7 @@ public class StiltsServiceDesc extends ServiceDescription<TjoinActivityConfigura
 		//return Arrays.asList("Stilts -" + exampleUri);
 		//return Arrays.asList("Stilts" + this.getName());
 		//return Arrays.asList("Astro local services", "Stilts");
-		return Arrays.asList("Astro Stilts");
+		return Arrays.asList("Astro tools");
 	}
 
 	/**
@@ -85,52 +84,19 @@ public class StiltsServiceDesc extends ServiceDescription<TjoinActivityConfigura
 	// and optional fields. (All fields are searchable in the Service palette,
 	// for instance try a search for exampleString:3)
 	
-    private int numberOfTables;
+
 	
-	private String cmd;
-	
-	private String inputFormat;
-	
-		
-	public int getNumberOfTables() {
-		return numberOfTables;
+	private String typeOFInput;
+
+
+	public String getTypeOFInput() {
+		return typeOFInput;
 	}
 
-	public void setNumberOfTables(int numberOfTables) {
-		this.numberOfTables = numberOfTables;
-	}
-
-	public String getCmd() {
-		return cmd;
-	}
-
-	public void setCmd(String cmd) {
-		this.cmd = cmd;
-	}
-
-	public String getInputFormat() {
-		return inputFormat;
-	}
-
-	public void setInputFormat(String inputFormat) {
-		this.inputFormat = inputFormat;
+	public void setTypeOFInput(String typeOFInput) {
+		this.typeOFInput = typeOFInput;
 	}
 	
-	//private String exampleString;
-	//private URI exampleUri;
 	
-	//public String getExampleString() {
-	//	return exampleString;
-	//}
-	//public URI getExampleUri() {
-	//	return exampleUri;
-	//}
-	//public void setExampleString(String exampleString) {
-	//	this.exampleString = exampleString;
-	//}
-	//public void setExampleUri(URI exampleUri) {
-	//	this.exampleUri = exampleUri;
-	//}
-
 
 }

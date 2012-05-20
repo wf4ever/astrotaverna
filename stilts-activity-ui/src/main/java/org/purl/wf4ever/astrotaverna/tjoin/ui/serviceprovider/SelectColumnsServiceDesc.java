@@ -64,7 +64,7 @@ public class SelectColumnsServiceDesc extends ServiceDescription<SelectColumnsAc
 		//return Arrays.asList("Stilts -" + exampleUri);
 		//return Arrays.asList("Stilts" + this.getName());
 		//return Arrays.asList("Astro local services", "Stilts");
-		return Arrays.asList("Astro Stilts");
+		return Arrays.asList("Astro tools");
 	}
 
 	/**

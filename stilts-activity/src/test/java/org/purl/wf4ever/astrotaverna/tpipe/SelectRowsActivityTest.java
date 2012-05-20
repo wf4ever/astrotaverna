@@ -23,6 +23,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.purl.wf4ever.astrotaverna.utils.MyUtils;
 
+/**
+ * 
+ * @author julian Garrido 
+ * Some tests may fail because the resulting votable name comes from a random number 
+ */
 public class SelectRowsActivityTest {
 
 	private SelectRowsActivityConfigurationBean configBean;
@@ -54,7 +59,7 @@ public class SelectRowsActivityTest {
 					+ " !  at 2012-05-18T07:15:08"
 					+ " !-->"
 					+ "<RESOURCE>"
-					+ "<TABLE name=\"votable\">"  // change sdss_votable2.xml to votable in order to have equal sizes
+					+ "<TABLE name=\"astro8108859877890412455.tmp\">"  // name may vary at any execution
 					+ "<PARAM datatype=\"float\" name=\"inputRA\" unit=\"degrees\" value=\"195.16333\"/>"
 					+ "<PARAM datatype=\"float\" name=\"inputDEC\" unit=\"degrees\" value=\"2.5007777\"/>"
 					+ "<PARAM datatype=\"float\" name=\"inputSR\" unit=\"degrees\" value=\"0.001\"/>"
@@ -212,12 +217,12 @@ public class SelectRowsActivityTest {
 
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
 				activity, inputs, expectedOutputTypes);
-
-				
+		
 		String a = new String(resultSelectRows.toCharArray());
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+		
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 		
 		assertTrue("Wrong output : ", a.length()==b.length());
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
@@ -226,7 +231,7 @@ public class SelectRowsActivityTest {
 		//		.get("moreOutputs"));
 
 	}
-	
+
 	@Test
 	public void executeAsynchWithNumericExpression() throws Exception {
 		configBean.setTypeOfInput("String");
@@ -254,8 +259,8 @@ public class SelectRowsActivityTest {
 		String a = new String(resultSelectRows.toCharArray());
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
 		
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 		
 		assertTrue("Wrong output : ", a.length()==b.length());
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
@@ -292,8 +297,8 @@ public class SelectRowsActivityTest {
 		String a = new String(resultSelectRows.toCharArray());
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
 		
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 		
 		assertTrue("Wrong output : ", a.length()==b.length());
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
@@ -304,7 +309,6 @@ public class SelectRowsActivityTest {
 	}
 	
 	
-
 	@Test(expected = Exception.class)
 	public void executeAsynchWithNullInput() throws Exception {
 		configBean.setTypeOfInput("String");
@@ -332,8 +336,8 @@ public class SelectRowsActivityTest {
 		String a = new String(resultSelectRows.toCharArray());
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
 		
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 		
 		assertTrue("Wrong output : ", a.length()==b.length());
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
@@ -369,8 +373,8 @@ public class SelectRowsActivityTest {
 		String a = new String(resultSelectRows.toCharArray());
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
 		
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 		
 		assertTrue("Wrong output : ", a.length()==b.length());
 		assertEquals("simple-report", outputs.get(OUT_REPORT));

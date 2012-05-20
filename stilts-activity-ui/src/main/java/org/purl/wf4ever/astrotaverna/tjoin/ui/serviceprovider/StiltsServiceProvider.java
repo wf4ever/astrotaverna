@@ -41,10 +41,8 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		//}
 		
 		StiltsServiceDesc service = new StiltsServiceDesc();
-		service.setCmd("");
-		service.setInputFormat("votable");
-		service.setNumberOfTables(2);
-		service.setDescription("tjoin between tables");
+		service.setTypeOFInput("String");
+		service.setDescription("Join between tables");
 		
 		results.add(service);
 		

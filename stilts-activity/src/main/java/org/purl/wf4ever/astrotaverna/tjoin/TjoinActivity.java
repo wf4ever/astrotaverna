@@ -1,5 +1,9 @@
 package org.purl.wf4ever.astrotaverna.tjoin;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,14 +31,10 @@ public class TjoinActivity extends
 	 * would not apply if port names are looked up dynamically from the service
 	 * operation, like done for WSDL services.
 	 */
-	private static final int MAX_IN_PORT_NUMBER = 4; 
-	private static final String IN_FIRST_INPUT = "firstFile";
-	private static final String IN_SECOND_INPUT = "secondFile";
-	private static final String IN_THIRD_INPUT = "thirdFile";
-	private static final String IN_FOURTH_INPUT = "fourthFile";
-	private static final String IN_LAST_INPUT = "outputFileIn";
-	//private static final String IN_EXTRA_DATA = "extraData";
-	//private static final String OUT_MORE_OUTPUTS = "moreOutputs";
+	private static final String IN_FIRST_INPUT = "votable1";
+	private static final String IN_SECOND_INPUT = "votable2";
+	private static final String IN_OUTPUT_TABLE_NAME = "outputFileNameIn";
+	
 	private static final String OUT_SIMPLE_OUTPUT = "outputFileOut";
 	private static final String OUT_REPORT = "report";
 	
@@ -50,14 +50,12 @@ public class TjoinActivity extends
 		//			"Input table file 1 doesn't exist");
 		//}
 		
-		if(!MyUtils.isValidInputFormat(configBean.getInputFormat())){				
+		if(!(      configBean.getTypeOfInput().compareTo("File")==0
+				|| configBean.getTypeOfInput().compareTo("Query")==0
+				|| configBean.getTypeOfInput().compareTo("URL")==0
+				|| configBean.getTypeOfInput().compareTo("String")==0)){
 			throw new ActivityConfigurationException(
-					"Invalid format for the input tables");
-		}
-		
-		if(configBean.getNumberOfTables()<2 || configBean.getNumberOfTables()>MAX_IN_PORT_NUMBER){
-			throw new ActivityConfigurationException(
-					"Invalid number of input tables. Number beetwen 2 and "+MAX_IN_PORT_NUMBER);
+					"Invalid input type for the tables");
 		}
 		
 		// Store for getConfiguration(), but you could also make
@@ -87,21 +85,11 @@ public class TjoinActivity extends
 		//File name for the Input tables
 		addInput(IN_FIRST_INPUT, 0, true, null, String.class);
 		addInput(IN_SECOND_INPUT, 0, true, null, String.class);
-		if(configBean.getNumberOfTables()==3){
-			addInput(IN_THIRD_INPUT, 0, true, null, String.class);
-		}else if(configBean.getNumberOfTables()==4){
-			addInput(IN_THIRD_INPUT, 0, true, null, String.class);
-			addInput(IN_FOURTH_INPUT, 0, true, null, String.class);
-		}
+		
 		//File name for the output table
-		addInput(IN_LAST_INPUT, 0, true, null, String.class);
-
-		// Optional ports depending on configuration
-		//if (configBean.getExampleString().equals("specialCase")) {
-		//	// depth 1, ie. list of binary byte[] arrays
-		//	addInput(IN_EXTRA_DATA, 1, true, null, byte[].class);
-		//	addOutput(OUT_REPORT, 0);
-		//}
+		if(configBean.getTypeOfInput().compareTo("File")==0){
+			addInput(IN_OUTPUT_TABLE_NAME, 0, true, null, String.class);
+		}
 		
 		// Single value output port (depth 0)
 		addOutput(OUT_SIMPLE_OUTPUT, 0);
@@ -118,151 +106,212 @@ public class TjoinActivity extends
 		// from thread pool and return asynchronously
 		callback.requestRun(new Runnable() {
 			
+			/*
+			 * Check if the mandatory inputs are not null
+			 */
+			public boolean areMandatoryInputsNotNull(){
+				boolean validStatus = true;
+				try{
+					if(inputs.get(IN_FIRST_INPUT)==null
+							|| inputs.get(IN_SECOND_INPUT)==null)
+						validStatus = false;
+					else if(configBean.getTypeOfInput().compareTo("File")==0 
+							&& inputs.get(IN_OUTPUT_TABLE_NAME)==null)
+						validStatus = false;
+				}catch(Exception ex){validStatus = false;}
+				
+				return validStatus;
+			}
+			
 			public void run() {
 				boolean callbackfails=false;
-				InvocationContext context = callback
-						.getContext();
-				ReferenceService referenceService = context
-						.getReferenceService();
-				// Resolve inputs 				
-				String firstInput = (String) referenceService.renderIdentifier(inputs.get(IN_FIRST_INPUT), 
-						String.class, context);
-				String secondInput = (String) referenceService.renderIdentifier(inputs.get(IN_SECOND_INPUT), 
-						String.class, context);
+				File tmpInFile1 = null;
+				File tmpInFile2 = null;
+				File tmpOutFile = null;
 				
-				String lastInput = (String) referenceService.renderIdentifier(inputs.get(IN_LAST_INPUT), 
-						String.class, context);
-
-				boolean optionalPorts = configBean.getNumberOfTables() > 2 && configBean.getNumberOfTables()<=MAX_IN_PORT_NUMBER;
+				if(areMandatoryInputsNotNull()){
 				
-				String thirdInput = null;
-				String fourthInput = null;
-				if(optionalPorts && inputs.containsKey(IN_THIRD_INPUT)){ //configBean.getNumberOfTables()==3
-					thirdInput = (String) referenceService.renderIdentifier(inputs.get(IN_THIRD_INPUT), 
+					InvocationContext context = callback
+							.getContext();
+					ReferenceService referenceService = context
+							.getReferenceService();
+					// Resolve inputs 				
+					String firstInput = (String) referenceService.renderIdentifier(inputs.get(IN_FIRST_INPUT), 
 							String.class, context);
-				}
-				if(optionalPorts && inputs.containsKey(IN_FOURTH_INPUT)){//configBean.getNumberOfTables()==4
-					thirdInput = (String) referenceService.renderIdentifier(inputs.get(IN_THIRD_INPUT), 
+					String secondInput = (String) referenceService.renderIdentifier(inputs.get(IN_SECOND_INPUT), 
 							String.class, context);
-					fourthInput = (String) referenceService.renderIdentifier(inputs.get(IN_FOURTH_INPUT), 
-							String.class, context);
-				}
-
-				
-				// Support our configuration-dependendent input
-				//boolean optionalPorts = configBean.getExampleString().equals("specialCase"); 
-				
-				//List<byte[]> special = null;
-				// We'll also allow IN_EXTRA_DATA to be optionally not provided
-				//if (optionalPorts && inputs.containsKey(IN_EXTRA_DATA)) {
-				//	// Resolve as a list of byte[]
-				//	special = (List<byte[]>) referenceService.renderIdentifier(
-				//			inputs.get(IN_EXTRA_DATA), byte[].class, context);
-				//}
-				
-
-				// TODO: Do the actual service invocation
-//				try {
-//					results = this.service.invoke(firstInput, special)
-//				} catch (ServiceException ex) {
-//					callback.fail("Could not invoke Stilts service " + configBean.getExampleUri(),
-//							ex);
-//					// Make sure we don't call callback.receiveResult later 
-//					return;
-//				}
-				
-				//Performing the work: Stilts functinalities
-				String [] parameters = new String[1];
-				if(!callbackfails){
-					//set up parameters depending on the number of inputs
-					if(thirdInput==null && fourthInput ==null){
-						parameters = new String[7];
-						parameters[0] = "tjoin";
-						parameters[1] = "nin=2";
-						parameters[2] = "in1="+firstInput;
-						parameters[3] = "in2="+secondInput;
-						parameters[4] = "out="+lastInput;
-						parameters[5] = "ifmt1="+configBean.getInputFormat();
-						parameters[6] = "ifmt2="+configBean.getInputFormat();
-						
-						
-						
-					}else if(thirdInput!=null && fourthInput ==null){
-						parameters = new String[9];
-						parameters[0] = "tjoin";
-						parameters[1] = "nin=2";
-						parameters[2] = "in1="+firstInput;
-						parameters[3] = "in2="+secondInput;
-						parameters[4] = "in3="+thirdInput;
-						parameters[5] = "out="+lastInput;
-						parameters[6] = "ifmt1="+configBean.getInputFormat();
-						parameters[7] = "ifmt2="+configBean.getInputFormat();
-						parameters[8] = "ifmt3="+configBean.getInputFormat();
-						
-						
-						
-					}else if(thirdInput!=null && fourthInput !=null){
-						parameters = new String[11];
-						parameters[0] = "tjoin";
-						parameters[1] = "nin=2";
-						parameters[2] = "in1="+firstInput;
-						parameters[3] = "in2="+secondInput;
-						parameters[4] = "in3="+thirdInput;
-						parameters[5] = "in4="+fourthInput;
-						parameters[6] = "out="+lastInput;
-						parameters[7] = "ifmt1="+configBean.getInputFormat();
-						parameters[8] = "ifmt2="+configBean.getInputFormat();
-						parameters[9] = "ifmt3="+configBean.getInputFormat();
-						parameters[10] = "ifmt4="+configBean.getInputFormat();
-						
-						
-						
+					
+					boolean optionalPorts = configBean.getTypeOfInput().compareTo("File")==0;
+					
+					String outputTableName = null;
+					if(optionalPorts && inputs.containsKey(IN_OUTPUT_TABLE_NAME)){ //configBean.getNumberOfTables()==3
+						outputTableName = (String) referenceService.renderIdentifier(inputs.get(IN_OUTPUT_TABLE_NAME), 
+								String.class, context);
 					}
 	
-					SecurityManager securityBackup = System.getSecurityManager();
-					System.setSecurityManager(new NoExitSecurityManager());
 					
-					try{
-						System.setProperty("votable.strict", "false");
-						Stilts.main(parameters);
-					}catch(SecurityException ex){
-						callback.fail("Invalid service call: check the input parameters", ex);
-						callbackfails = true;
+					
+					if(configBean.getTypeOfInput().compareTo("File")==0){
+						File file = new File(firstInput);
+						if(!file.exists()){
+							callback.fail("Input table file does not exist: "+ firstInput,new IOException());
+							callbackfails = true;
+						}
+						file = new File(secondInput);
+						if(!file.exists()){
+							callback.fail("Input table file does not exist: "+ secondInput,new IOException());
+							callbackfails = true;
+						}
 					}
-				
-					System.setSecurityManager(securityBackup);
+					
+					
+					if(configBean.getTypeOfInput().compareTo("URL")==0){
+						try {
+							URI exampleUri = new URI(firstInput);
+						} catch (URISyntaxException e) {
+							callback.fail("Invalid URL: "+ firstInput,e);
+							callbackfails = true;
+						}
+						try {
+							URI exampleUri = new URI(secondInput);
+						} catch (URISyntaxException e) {
+							callback.fail("Invalid URL: "+ secondInput,e);
+							callbackfails = true;
+						}
+					}
+					
+					
+					//prepare tmp input files if needed
+					if(configBean.getTypeOfInput().compareTo("String")==0){
+						try{
+							tmpInFile1 = MyUtils.writeStringAsTmpFile(firstInput);
+							tmpInFile1.deleteOnExit();
+							firstInput = tmpInFile1.getAbsolutePath();
+							
+							tmpInFile2 = MyUtils.writeStringAsTmpFile(secondInput);
+							tmpInFile2.deleteOnExit();
+							secondInput = tmpInFile2.getAbsolutePath();
+						}catch(Exception ex){
+							callback.fail("It wasn't possible to create a temporary file",ex);
+							callbackfails = true;
+						}
+					}
+					
+					//prepare tmp output files if needed
+					if(configBean.getTypeOfInput().compareTo("String")==0
+							|| configBean.getTypeOfInput().compareTo("URL")==0
+							|| configBean.getTypeOfInput().compareTo("Query")==0){
+						try{
+							tmpOutFile = File.createTempFile("astro", null);
+							tmpOutFile.deleteOnExit();
+							outputTableName = tmpOutFile.getAbsolutePath();
+						}catch(Exception ex){
+							callback.fail("It wasn't possible to create a temporary file",ex);
+							callbackfails = true;
+						}
+					}
 					
 				
+					// Support our configuration-dependendent input
+					//boolean optionalPorts = configBean.getExampleString().equals("specialCase"); 
+					
+					//List<byte[]> special = null;
+					// We'll also allow IN_EXTRA_DATA to be optionally not provided
+					//if (optionalPorts && inputs.containsKey(IN_EXTRA_DATA)) {
+					//	// Resolve as a list of byte[]
+					//	special = (List<byte[]>) referenceService.renderIdentifier(
+					//			inputs.get(IN_EXTRA_DATA), byte[].class, context);
+					//}
+					
+	
+					// TODO: Do the actual service invocation
+	//				try {
+	//					results = this.service.invoke(firstInput, special)
+	//				} catch (ServiceException ex) {
+	//					callback.fail("Could not invoke Stilts service " + configBean.getExampleUri(),
+	//							ex);
+	//					// Make sure we don't call callback.receiveResult later 
+	//					return;
+	//				}
+					
+					//Performing the work: Stilts functinalities
+					String [] parameters;
+					
 					if(!callbackfails){
-					
-						// Register outputs
-						Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-						String simpleValue = lastInput;//Name of the output file
-						String simpleoutput = "simple-report";
-						T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
-						outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
-						T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
-						outputs.put(OUT_REPORT, simpleRef2);
-		
-						// For list outputs, only need to register the top level list
-						//List<String> moreValues = new ArrayList<String>();
-						//moreValues.add("Value 1");
-						//moreValues.add("Value 2");
-						//T2Reference moreRef = referenceService.register(moreValues, 1, true, context);
-						//outputs.put(OUT_MORE_OUTPUTS, moreRef);
-		
-						//if (optionalPorts) {
-						//	// Populate our optional output port					
-						//	// NOTE: Need to return output values for all defined output ports
-						//	String report = "Everything OK";
-						//	outputs.put(OUT_REPORT, referenceService.register(report,
-						//			0, true, context));
-						//}
+						//set up parameters 
+						parameters = new String[8];
+						parameters[0] = "tjoin";
+						parameters[1] = "nin=2";
+						parameters[2] = "ifmt1=votable";
+						parameters[3] = "in1="+firstInput;
+						parameters[4] = "ifmt2=votable";
+						parameters[5] = "in2="+secondInput;
+						parameters[6] = "ofmt=votable";
+						parameters[7] = "out="+outputTableName;
 						
-						// return map of output data, with empty index array as this is
-						// the only and final result (this index parameter is used if
-						// pipelining output)
-						callback.receiveResult(outputs, new int[0]);
+						
+						
+		
+						SecurityManager securityBackup = System.getSecurityManager();
+						System.setSecurityManager(new NoExitSecurityManager());
+						
+						try{
+							System.setProperty("votable.strict", "false");
+							Stilts.main(parameters);
+						}catch(SecurityException ex){
+							callback.fail("Invalid service call: check the input parameters", ex);
+							callbackfails = true;
+						}
+					
+						System.setSecurityManager(securityBackup);
+						
+					
+						if(!callbackfails){
+							// Register outputs
+							Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
+							String simpleValue = "";// //Name of the output file or result
+							String simpleoutput = "simple-report";
+							
+							if(optionalPorts){ //case File
+								simpleValue = outputTableName;
+							}else if(configBean.getTypeOfInput().compareTo("Query")==0 
+										|| configBean.getTypeOfInput().compareTo("URL")==0
+										|| configBean.getTypeOfInput().compareTo("String")==0){
+						
+								try{
+									simpleValue = MyUtils.readFileAsString(tmpOutFile.getAbsolutePath());
+								}catch (Exception ex){
+									callback.fail("It wasn't possible to read the result from a temporary file", ex);
+									callbackfails = true;
+								}
+							}
+							if(!callbackfails){
+								T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
+								outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
+								T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
+								outputs.put(OUT_REPORT, simpleRef2);
+				
+								// For list outputs, only need to register the top level list
+								//List<String> moreValues = new ArrayList<String>();
+								//moreValues.add("Value 1");
+								//moreValues.add("Value 2");
+								//T2Reference moreRef = referenceService.register(moreValues, 1, true, context);
+								//outputs.put(OUT_MORE_OUTPUTS, moreRef);
+				
+								//if (optionalPorts) {
+								//	// Populate our optional output port					
+								//	// NOTE: Need to return output values for all defined output ports
+								//	String report = "Everything OK";
+								//	outputs.put(OUT_REPORT, referenceService.register(report,
+								//			0, true, context));
+								//}
+								
+								// return map of output data, with empty index array as this is
+								// the only and final result (this index parameter is used if
+								// pipelining output)
+								callback.receiveResult(outputs, new int[0]);
+							}
+						}
 					}
 				}
 			}

@@ -6,7 +6,8 @@ import java.io.Serializable;
 
 /**
  * Stilts activity configuration bean.
- * 
+ * @author Julian Garrido
+ * @since    19 May 2011
  */
 public class SelectColumnsActivityConfigurationBean implements Serializable {
 

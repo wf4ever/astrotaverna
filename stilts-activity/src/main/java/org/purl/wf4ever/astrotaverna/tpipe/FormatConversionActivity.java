@@ -30,6 +30,11 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationE
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCallback;
 
+/**
+ * 
+ * @author Julian Garrido
+ * @since    19 May 2011
+ */
 public class FormatConversionActivity extends
 		AbstractAsynchronousActivity<FormatConversionActivityConfigurationBean>
 		implements AsynchronousActivity<FormatConversionActivityConfigurationBean> {
@@ -39,6 +44,7 @@ public class FormatConversionActivity extends
 	 * would not apply if port names are looked up dynamically from the service
 	 * operation, like done for WSDL services.
 	 */
+	
 	private static final String IN_FIRST_INPUT_TABLE = "voTable";
 	private static final String IN_FORMAT_INPUT_TABLE = "formatTableIn";
 	private static final String IN_FORMAT_OUTPUT_TABLE = "formatTableOut";
@@ -151,6 +157,9 @@ public class FormatConversionActivity extends
 			public void run() {
 				
 				boolean callbackfails=false;
+				File tmpInFile = null;
+				File tmpOutFile = null;
+				
 				if(areMandatoryInputsNotNull()){
 					InvocationContext context = callback.getContext();
 					ReferenceService referenceService = context.getReferenceService();
@@ -209,7 +218,31 @@ public class FormatConversionActivity extends
 						}
 					}
 		
+					//prepare tmp input files if needed
+					if(configBean.getTypeOfInput().compareTo("String")==0){
+						try{
+							tmpInFile = MyUtils.writeStringAsTmpFile(inputTable);
+							tmpInFile.deleteOnExit();
+							inputTable = tmpInFile.getAbsolutePath();
+						}catch(Exception ex){
+							callback.fail("It wasn't possible to create a temporary file",ex);
+							callbackfails = true;
+						}
+					}
 					
+					//prepare tmp output files if needed
+					if(configBean.getTypeOfInput().compareTo("String")==0
+							|| configBean.getTypeOfInput().compareTo("URL")==0
+							|| configBean.getTypeOfInput().compareTo("Query")==0){
+						try{
+							tmpOutFile = File.createTempFile("astro", null);
+							tmpOutFile.deleteOnExit();
+							outputTableName = tmpOutFile.getAbsolutePath();
+						}catch(Exception ex){
+							callback.fail("It wasn't possible to create a temporary file",ex);
+							callbackfails = true;
+						}
+					}
 					
 					// Support our configuration-dependendent input
 					//boolean optionalPorts = configBean.getExampleString().equals("specialCase"); 
@@ -237,63 +270,15 @@ public class FormatConversionActivity extends
 					String [] parameters;
 					
 					if(!callbackfails){
-						//handling redirection of standard input and output
-						PrintStream out = System.out;
-						PrintStream stdout = System.out;
-						InputStream in = System.in;
-						InputStream stdin = System.in;
-						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						out = new PrintStream(baos);
 						
-						if(optionalPorts){ //case File
-							parameters = new String[5];
-							parameters[0] = "tpipe";
-							parameters[1] = "ifmt="+formatInputTable;
-							parameters[2] = "in="+inputTable;
-							parameters[3] = "ofmt="+formatOutputTable;
-							//parameters[4] = "cmd=select '"+ filter +"'";
-							parameters[4] = "out="+outputTableName;
-						}else if(configBean.getTypeOfInput().compareTo("Query")==0 
-									||configBean.getTypeOfInput().compareTo("URL")==0){
-							
-							parameters = new String[4];
-							parameters[0] = "tpipe";
-							parameters[1] = "ifmt="+formatInputTable;
-							parameters[2] = "in="+inputTable;
-							parameters[3] = "ofmt="+formatOutputTable;
-							//parameters[4] = "cmd=select '"+ filter +"'";
-						
-							//Redirecting output
-							System.setOut(out);
-						}else if(configBean.getTypeOfInput().compareTo("String")==0){
-							parameters = new String[4];
-							parameters[0] = "tpipe";
-							parameters[1] = "ifmt="+formatInputTable;
-							parameters[2] = "in=-";
-							parameters[3] = "ofmt="+formatOutputTable;
-							//parameters[4] = "cmd=select '"+ filter +"'";
-							
-							//Redirecting output and input
-							in = IOUtils.toInputStream(inputTable);
-							//Optionally, do this: 
-							//InputStream is = new ByteArrayInputStream(resultTable.getBytes( charset ) );
-							System.setIn(in);
-							System.setOut(out);
-						}else{
-							parameters = new String[4];
-							parameters[0] = "tpipe";
-							parameters[1] = "ifmt="+formatInputTable;
-							parameters[2] = "in=-";
-							parameters[3] = "ofmt="+formatOutputTable;
-	
-							//Redirecting output and input
-							in = IOUtils.toInputStream(inputTable);
-							//Optionally, do this: 
-							//InputStream is = new ByteArrayInputStream(resultTable.getBytes( charset ) );
-							System.setIn(in);
-							System.setOut(out);
-						}
-					
+						parameters = new String[5];
+						parameters[0] = "tpipe";
+						parameters[1] = "ifmt="+formatInputTable;
+						parameters[2] = "in="+inputTable;
+						parameters[3] = "ofmt="+formatOutputTable;
+						//parameters[4] = "cmd=select '"+ filter +"'";
+						parameters[4] = "out="+outputTableName;
+											
 					
 						SecurityManager securityBackup = System.getSecurityManager();
 						System.setSecurityManager(new NoExitSecurityManager());
@@ -312,82 +297,48 @@ public class FormatConversionActivity extends
 						if(!callbackfails){
 							// Register outputs
 							Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-							String simpleValue = "/home/julian/Documents/wf4ever/tables/resultTable.ascii";// //Name of the output file or result
+							String simpleValue = "";// //Name of the output file or result
 							String simpleoutput = "simple-report";
 						
 							if(optionalPorts){ //case File
 								simpleValue = outputTableName;
 							}else if(configBean.getTypeOfInput().compareTo("Query")==0 
-										||configBean.getTypeOfInput().compareTo("URL")==0){
+									|| configBean.getTypeOfInput().compareTo("URL")==0
+									|| configBean.getTypeOfInput().compareTo("String")==0){
 					
-								out.close();
-								if(out.checkError()){
-									simpleoutput += "Output redirection failed.\n";
+								try{
+									simpleValue = MyUtils.readFileAsString(tmpOutFile.getAbsolutePath());
+								}catch (Exception ex){
+									callback.fail("It wasn't possible to read the result from a temporary file", ex);
+									callbackfails = true;
 								}
-							
-								simpleValue = baos.toString();
-								System.setOut(stdout);	
-							
-							}else if(configBean.getTypeOfInput().compareTo("String")==0){
-								out.close();
-								if(out.checkError()){
-									simpleoutput += "Output redirection failed.\n";
-								}
-							
-								simpleValue = baos.toString();
-								System.setOut(stdout);	
-							
-								try {
-									in.close();
-								} catch (IOException e) {
-									simpleoutput += "Input redirection failed.\n" + e.toString();
-								}
-								System.setIn(stdin);
-							}else{
-								out.close();
-								if(out.checkError()){
-									simpleoutput += "Output redirection failed.\n";
-								}
-							
-								simpleValue = baos.toString();
-								System.setOut(stdout);	
-							
-								try {
-									in.close();
-								} catch (IOException e) {
-									simpleoutput += "Input redirection failed.\n" + e.toString();
-								}
-								System.setIn(stdin);
 							}
-		
-							T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
-							outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
-							T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
-							outputs.put(OUT_REPORT, simpleRef2);
-		
-							// For list outputs, only need to register the top level list
-							//List<String> moreValues = new ArrayList<String>();
-							//moreValues.add("Value 1");
-							//moreValues.add("Value 2");
-							//T2Reference moreRef = referenceService.register(moreValues, 1, true, context);
-							//outputs.put(OUT_MORE_OUTPUTS, moreRef);
+							if(!callbackfails){
+								T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
+								outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
+								T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
+								outputs.put(OUT_REPORT, simpleRef2);
 			
-							//if (optionalPorts) {
-							//	// Populate our optional output port					
-							//	// NOTE: Need to return output values for all defined output ports
-							//	String report = "Everything OK";
-							//	outputs.put(OUT_REPORT, referenceService.register(report,
-							//			0, true, context));
-							//}
-							
-							// return map of output data, with empty index array as this is
-							// the only and final result (this index parameter is used if
-							// pipelining output)
-							callback.receiveResult(outputs, new int[0]);
-						}else{
-							//restore standard in/out
-							System.setOut(stdout);	
-							System.setIn(stdin);
+								// For list outputs, only need to register the top level list
+								//List<String> moreValues = new ArrayList<String>();
+								//moreValues.add("Value 1");
+								//moreValues.add("Value 2");
+								//T2Reference moreRef = referenceService.register(moreValues, 1, true, context);
+								//outputs.put(OUT_MORE_OUTPUTS, moreRef);
+				
+								//if (optionalPorts) {
+								//	// Populate our optional output port					
+								//	// NOTE: Need to return output values for all defined output ports
+								//	String report = "Everything OK";
+								//	outputs.put(OUT_REPORT, referenceService.register(report,
+								//			0, true, context));
+								//}
+								
+								// return map of output data, with empty index array as this is
+								// the only and final result (this index parameter is used if
+								// pipelining output)
+								callback.receiveResult(outputs, new int[0]);
+							}
 						}
 					}
 				}else{ //End if isthereMandatoryInputs

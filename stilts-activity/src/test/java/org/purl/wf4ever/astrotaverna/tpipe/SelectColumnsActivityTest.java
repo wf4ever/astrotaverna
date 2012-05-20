@@ -22,7 +22,11 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.purl.wf4ever.astrotaverna.utils.MyUtils;
-
+/**
+ * 
+ * @author julian Garrido 
+ * Some tests may fail because the resulting votable name comes from a random number 
+ */
 public class SelectColumnsActivityTest {
 
 	private SelectColumnsActivityConfigurationBean configBean;
@@ -127,7 +131,6 @@ public class SelectColumnsActivityTest {
 		Map<String, Object> inputs = new HashMap<String, Object>();
 		inputs.put(IN_FIRST_INPUT_TABLE, MyUtils.getExampleVOtable());
 		inputs.put(IN_FILTER, "U G R I Z");
-		inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.ascii");
 		
 		
 		
@@ -144,8 +147,8 @@ public class SelectColumnsActivityTest {
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
 		
 				
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 		/*
 		System.out.println(a.length());
 		System.out.println(b.length());
@@ -168,6 +171,7 @@ public class SelectColumnsActivityTest {
 
 	}
 	
+
 	@Test(expected = RuntimeException.class)
 	public void executeAsynchWithNullInput() throws Exception {
 		configBean.setTypeOfInput("String");
@@ -194,8 +198,8 @@ public class SelectColumnsActivityTest {
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
 		
 				
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 
 		assertTrue("Wrong output : ", a.length()==b.length());
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
@@ -229,8 +233,8 @@ public class SelectColumnsActivityTest {
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
 		
 				
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 
 		assertTrue("Wrong output : ", a.length()==b.length());
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
@@ -267,7 +271,7 @@ public class SelectColumnsActivityTest {
 					+ " !  at 2012-05-18T09:05:51"
 					+ " !-->"
 					+ "<RESOURCE>"
-					+ "<TABLE name=\"votable\">" //modified in order to match length: nrows=\"2\"
+					+ "<TABLE name=\"astro1467408768841096458.tmp\" nrows=\"2\">" 
 					+ "<PARAM datatype=\"float\" name=\"inputRA\" unit=\"degrees\" value=\"195.16333\"/>"
 					+ "<PARAM datatype=\"float\" name=\"inputDEC\" unit=\"degrees\" value=\"2.5007777\"/>"
 					+ "<PARAM datatype=\"float\" name=\"inputSR\" unit=\"degrees\" value=\"0.001\"/>"

@@ -1,5 +1,10 @@
 package org.purl.wf4ever.astrotaverna.utils;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
@@ -8,8 +13,35 @@ import antlr.collections.List;
 
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
 
+/**
+ * 
+ * @author Julian Garrido
+ * @since    19 May 2011
+ */
 public class MyUtils {
 
+	public static String readFileAsString(String filePath) throws java.io.IOException{
+	    byte[] buffer = new byte[(int) new File(filePath).length()];
+	    BufferedInputStream f = null;
+	    try {
+	        f = new BufferedInputStream(new FileInputStream(filePath));
+	        f.read(buffer);
+	    } finally {
+	        if (f != null) try { f.close(); } catch (IOException ignored) { }
+	    }
+	    return new String(buffer);
+	}
+	
+	public static File writeStringAsTmpFile(String content) throws java.io.IOException{
+	    
+	    File file = File.createTempFile("astro", null);
+	    FileWriter writer = new FileWriter(file);
+	    writer.write(content);
+	    writer.close();
+	    
+	    return file;
+	}
+	
 	public static boolean isValidInputFormat(String format){
 		if(format== null) 
 			return false;

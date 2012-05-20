@@ -23,6 +23,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.purl.wf4ever.astrotaverna.utils.MyUtils;
 
+/**
+ * 
+ * @author Julian Garrido
+ * @since    19 May 2011
+ */
 public class FormatConversionActivityTest {
 
 	private FormatConversionActivityConfigurationBean configBean;

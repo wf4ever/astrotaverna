@@ -56,24 +56,16 @@ public class TjoinActivityHealthChecker implements
 
 		*/
 		
-		if(!(config.getInputFormat().compareTo("fits")==0 
-				|| config.getInputFormat().compareTo("colfits")==0
-				|| config.getInputFormat().compareTo("votable")==0
-				|| config.getInputFormat().compareTo("ascii")==0
-				|| config.getInputFormat().compareTo("csv")==0
-				|| config.getInputFormat().compareTo("tst")==0
-				|| config.getInputFormat().compareTo("ipac")==0)){
+		if(!(      config.getTypeOfInput().compareTo("File")==0
+				|| config.getTypeOfInput().compareTo("Query")==0
+				|| config.getTypeOfInput().compareTo("URL")==0
+				|| config.getTypeOfInput().compareTo("String")==0)){
 			subReports.add(new VisitReport(HealthCheck.getInstance(), activity,
-					"Invalid format", HealthCheck.INVALID_CONFIGURATION,
+					"Invalid input type.", HealthCheck.INVALID_CONFIGURATION,
 					Status.WARNING));
 		}
 		
-		if(config.getNumberOfTables()<2 || config.getNumberOfTables()>4){
-			subReports.add(new VisitReport(HealthCheck.getInstance(), activity,
-					"Invalid number of inputs", HealthCheck.INVALID_CONFIGURATION,
-					Status.WARNING));
-		}
-		
+				
 		
 		
 		// The default explanation here will be used if the subreports list is

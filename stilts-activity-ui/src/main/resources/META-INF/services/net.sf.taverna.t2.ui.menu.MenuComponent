@@ -1,1 +1,5 @@
 org.purl.wf4ever.astrotaverna.tjoin.ui.menu.StiltsConfigureMenuAction
+org.purl.wf4ever.astrotaverna.tjoin.ui.menu.SelectRowsConfigureMenuAction
+org.purl.wf4ever.astrotaverna.tjoin.ui.menu.SelectColumnsConfigureMenuAction
+org.purl.wf4ever.astrotaverna.tjoin.ui.menu.FormatConversionConfigureMenuAction
+org.purl.wf4ever.astrotaverna.tjoin.ui.menu.CoordTransformationConfigureMenuAction

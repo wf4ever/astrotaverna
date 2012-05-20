@@ -29,55 +29,17 @@ public class TjoinActivityConfigurationBean implements Serializable {
 	 */
 	
 	// TODO: Remove the example fields and getters/setters and add your own	
-	private int numberOfTables;
 	
-	private String cmd;
-	
-	private String inputFormat;
-	
-	//private String shortDescription;
-	
-	//private String longDescription; 
+	private String typeOfInput;
 
-	public int getNumberOfTables() {
-		return numberOfTables;
+	public String getTypeOfInput() {
+		return typeOfInput;
 	}
 
-	public void setNumberOfTables(int numberOfTables) {
-		this.numberOfTables = numberOfTables;
+	public void setTypeOfInput(String typeOfInput) {
+		this.typeOfInput = typeOfInput;
 	}
 
-	public String getCmd() {
-		return cmd;
-	}
-
-	public void setCmd(String cmd) {
-		this.cmd = cmd;
-	}
-
-	public String getInputFormat() {
-		return inputFormat;
-	}
-
-	public void setInputFormat(String inputFormat) {
-		this.inputFormat = inputFormat;
-	}
-
-	//public String getShortDescription() {
-	//	return shortDescription;
-	//}
-
-	//public void setShortDescription(String shortDescription) {
-	//	this.shortDescription = shortDescription;
-	//}
-
-	//public String getLongDescription() {
-	//	return longDescription;
-	//}
-
-	//public void setLongDescription(String longDescription) {
-	//	this.longDescription = longDescription;
-	//}
 	
 	
 

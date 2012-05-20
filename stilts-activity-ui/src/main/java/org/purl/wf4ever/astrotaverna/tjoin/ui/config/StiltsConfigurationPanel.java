@@ -3,6 +3,7 @@ package org.purl.wf4ever.astrotaverna.tjoin.ui.config;
 import java.awt.GridLayout;
 import java.net.URI;
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -25,11 +26,10 @@ public class StiltsConfigurationPanel
 	private TjoinActivity activity;
 	private TjoinActivityConfigurationBean configBean;
 	
-	private JTextField fieldFormat;
-	//private JTextField fieldCmd;
-	//private JTextField fieldNTables;
-	private JSpinner fieldNTables;
-	//ADDITIONAL FIELD FOR NUMBER OF TABLES
+	String[] inputTypesStrings = {"File", "Query", "URL", "String"};
+	//String[] filterTypesStrings = {"Column names", "UCDs"};
+	
+	private JComboBox  typeOfInput;
 
 	public StiltsConfigurationPanel(TjoinActivity activity) {
 		this.activity = activity;
@@ -41,20 +41,12 @@ public class StiltsConfigurationPanel
 		setLayout(new GridLayout(0, 2));
 
 		// FIXME: Create GUI depending on activity configuration bean
-		JLabel labelString = new JLabel("Files format:");
+		JLabel labelString = new JLabel("Input type:");
 		add(labelString);
-		fieldFormat = new JTextField(20);
-		add(fieldFormat);
-		labelString.setLabelFor(fieldFormat);
-
-		JLabel labelNTables = new JLabel("Number of files:");
-		add(labelNTables);
-		//fieldNTables = new JTextField(25);
-		int min = 2; int max = 4; int step = 1; int initValue = 2;
-		SpinnerModel model = new SpinnerNumberModel(initValue, min, max, step);
-		fieldNTables = new JSpinner(model);
-		add(fieldNTables);
-		labelNTables.setLabelFor(fieldNTables);
+		typeOfInput = new JComboBox(inputTypesStrings);
+		add(typeOfInput);
+		labelString.setLabelFor(typeOfInput);
+		typeOfInput.setSelectedIndex(1);
 		
 		//JLabel labelCmd = new JLabel("Additional commands:");
 		//add(labelCmd);
@@ -76,30 +68,18 @@ public class StiltsConfigurationPanel
 		//THIS MUST BE ADDAPTED TO THE TJOIN REQUIREMENS.
 		String errorMessage=null;
 		
-		String format = fieldFormat.getText();
-		if(!(format.compareTo("fits")==0 
-				|| format.compareTo("colfits")==0
-				|| format.compareTo("votable")==0
-				|| format.compareTo("ascii")==0
-				|| format.compareTo("csv")==0
-				|| format.compareTo("tst")==0
-				|| format.compareTo("ipac")==0)){
-					//"Invalid format for the input tables");
+		String  tinput = (String)typeOfInput.getSelectedItem();
+		if(!(      tinput.compareTo("File")==0
+				|| tinput.compareTo("Query")==0
+				|| tinput.compareTo("URL")==0
+				|| tinput.compareTo("String")==0)){
+			//"Invalid input type
 
-			errorMessage = "Valid formats: colfits, votable, csv, tst, tst, ipac";
+			errorMessage = "Valid inputs: file, query, url or string.";
 			
 		}
 		
-		//int number = (Integer)((SpinnerNumberModel)fieldNTables.getModel()).getValue();
-		int number = ((Integer)((SpinnerNumberModel)fieldNTables.getModel()).getValue()).intValue();
 		
-		if(number<2 || number >4){
-			if(errorMessage!=null){
-				errorMessage += "\nThe number of files shoud be between 2 and 4";
-			}else{
-				errorMessage = "\nThe number of files shoud be between 2 and 4";
-			}
-		}
 		//try{ 
 		//	int number = Integer.parseInt(fieldNTables.getText());
 		//	if(number<2 || number >4){
@@ -142,14 +122,9 @@ public class StiltsConfigurationPanel
 	 */
 	@Override
 	public boolean isConfigurationChanged() {
-		String originalFormat = configBean.getInputFormat();
-		String originalCmd = configBean.getCmd();
-		int originalNTables = configBean.getNumberOfTables();
-		// true (changed) unless all fields match the originals
+		String originalTypeOfInput = configBean.getTypeOfInput();
 		
-		return ! (originalFormat.equals(fieldFormat.getText())
-//				&& originalCmd.equals(fieldCmd.getText()) 
-				&& originalNTables == ((Integer)((SpinnerNumberModel)fieldNTables.getModel()).getValue()).intValue());
+		return ! (originalTypeOfInput.equals((String)typeOfInput.getSelectedItem()));
 	}
 
 	/**
@@ -161,9 +136,7 @@ public class StiltsConfigurationPanel
 		configBean = new TjoinActivityConfigurationBean();
 		
 		// FIXME: Update bean fields from your UI elements
-		configBean.setInputFormat(fieldFormat.getText());
-		//configBean.setCmd(fieldCmd.getText());
-		configBean.setNumberOfTables(((Integer)((SpinnerNumberModel)fieldNTables.getModel()).getValue()).intValue());
+		configBean.setTypeOfInput((String)typeOfInput.getSelectedItem());
 		
 	}
 
@@ -176,8 +149,6 @@ public class StiltsConfigurationPanel
 		configBean = activity.getConfiguration();
 		
 		// FIXME: Update UI elements from your bean fields
-		fieldFormat.setText(configBean.getInputFormat());
-		//fieldCmd.setText(configBean.getCmd());
-		((SpinnerNumberModel)fieldNTables.getModel()).setValue(new Integer(configBean.getNumberOfTables()));
+		typeOfInput.setSelectedItem(configBean.getTypeOfInput());
 	}
 }

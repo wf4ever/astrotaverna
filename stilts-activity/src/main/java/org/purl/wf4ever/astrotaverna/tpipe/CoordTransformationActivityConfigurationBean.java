@@ -5,8 +5,9 @@ import java.io.Serializable;
 //import java.net.URI;
 
 /**
- * Stilts activity configuration bean.
- * 
+ * Activity Configuration bean
+ * @author Julian Garrido
+ * @since    19 May 2011
  */
 public class CoordTransformationActivityConfigurationBean implements Serializable {
 

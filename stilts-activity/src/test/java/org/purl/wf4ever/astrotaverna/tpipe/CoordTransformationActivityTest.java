@@ -23,6 +23,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.purl.wf4ever.astrotaverna.utils.MyUtils;
 
+/**
+ * 
+ * @author julian Garrido 
+ * Some tests may fail because the resulting votable name comes from a random number 
+ */
 public class CoordTransformationActivityTest {
 
 	private CoordTransformationActivityConfigurationBean configBean;
@@ -144,10 +149,9 @@ public class CoordTransformationActivityTest {
 		
 		String a = new String(resultCoordTransformation.toCharArray());
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
-		
 				
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 				
 		assertTrue("Wrong output: ", a.length()==b.length());
 		
@@ -190,8 +194,8 @@ public class CoordTransformationActivityTest {
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
 		
 				
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 				
 		assertTrue("Wrong output: ", a.length()==b.length());
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
@@ -230,8 +234,8 @@ public class CoordTransformationActivityTest {
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
 		
 				
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "");
+		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
+		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 				
 		assertTrue("Wrong output: ", a.length()==b.length());	
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
@@ -275,7 +279,7 @@ public class CoordTransformationActivityTest {
 					+ " !  at 2012-05-18T10:44:23"
 					+ " !-->"
 					+ "<RESOURCE>"
-					+ "<TABLE name=\"votable\">"
+					+ "<TABLE name=\"astro8330722452932962800.tmp\" nrows=\"3\">" // the name comes from a random number. it should be different
 					+ "<DESCRIPTION>"
 					+ "Faint Images of the Radio Sky at Twenty cm (FIRST)"
 					+ "</DESCRIPTION>"
@@ -326,8 +330,8 @@ public class CoordTransformationActivityTest {
 					+ "    <TD>0.14</TD>"
 					+ "    <TD>1.75</TD>"
 					+ "    <TD>0.016</TD>"
-					+ "    <TD></TD>"
-					+ "    <TD></TD>"
+					+ "    <TD>NaN</TD>"
+					+ "    <TD>NaN</TD>"
 					+ "    <TD>0.0</TD>"
 					+ "    <TD>2.9045820502288446</TD>"
 					+ "  </TR>"
@@ -354,8 +358,8 @@ public class CoordTransformationActivityTest {
 					+ "    <TD>0.137</TD>"
 					+ "    <TD>15.56</TD>"
 					+ "    <TD>0.014</TD>"
-					+ "    <TD></TD>"
-					+ "    <TD></TD>"
+					+ "    <TD>NaN</TD>"
+					+ "    <TD>NaN</TD>"
 					+ "    <TD>6.176</TD>"
 					+ "    <TD>2.8506099560359695</TD>"
 					+ "  </TR>"
