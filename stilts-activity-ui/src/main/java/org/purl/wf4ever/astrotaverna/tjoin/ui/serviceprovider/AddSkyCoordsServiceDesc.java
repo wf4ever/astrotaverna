@@ -9,18 +9,18 @@ import javax.swing.Icon;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
-import org.purl.wf4ever.astrotaverna.tpipe.CoordTransformationActivity;
-import org.purl.wf4ever.astrotaverna.tpipe.CoordTransformationActivityConfigurationBean;
+import org.purl.wf4ever.astrotaverna.tpipe.AddSkyCoordsActivity;
+import org.purl.wf4ever.astrotaverna.tpipe.AddSkyCoordsActivityConfigurationBean;
 
-public class CoordTransformationServiceDesc extends ServiceDescription<CoordTransformationActivityConfigurationBean> {
+public class AddSkyCoordsServiceDesc extends ServiceDescription<AddSkyCoordsActivityConfigurationBean> {
 
 	/**
 	 * The subclass of Activity which should be instantiated when adding a service
 	 * for this description 
 	 */
 	@Override
-	public Class<? extends Activity<CoordTransformationActivityConfigurationBean>> getActivityClass() {
-		return CoordTransformationActivity.class;
+	public Class<? extends Activity<AddSkyCoordsActivityConfigurationBean>> getActivityClass() {
+		return AddSkyCoordsActivity.class;
 	}
 
 	/**
@@ -30,10 +30,11 @@ public class CoordTransformationServiceDesc extends ServiceDescription<CoordTran
 	 * 
 	 */
 	@Override
-	public CoordTransformationActivityConfigurationBean getActivityConfiguration() {
-		CoordTransformationActivityConfigurationBean bean = new CoordTransformationActivityConfigurationBean();
+	public AddSkyCoordsActivityConfigurationBean getActivityConfiguration() {
+		AddSkyCoordsActivityConfigurationBean bean = new AddSkyCoordsActivityConfigurationBean();
 		bean.setTypeOfInput("String");
-		bean.setTypeOfFilter("radiansToDms");
+		bean.setTypeOfInSystem("fk5");
+		bean.setTypeOfOutSystem("galactic");
 		return bean;
 	}
 
@@ -51,7 +52,7 @@ public class CoordTransformationServiceDesc extends ServiceDescription<CoordTran
 	 */
 	@Override
 	public String getName() {
-		return "Coordinates transformation";//exampleString;
+		return "Add sky coordinates";//exampleString;
 	}
 
 	/**
@@ -87,7 +88,9 @@ public class CoordTransformationServiceDesc extends ServiceDescription<CoordTran
 	
 	private String typeOfInput;
 	
-	private String typeOfFilter;
+	private String typeInSystem;
+	
+	private String typeOutSystem;
 
 	public String getTypeOfInput() {
 		return typeOfInput;
@@ -97,13 +100,23 @@ public class CoordTransformationServiceDesc extends ServiceDescription<CoordTran
 		this.typeOfInput = typeOfInput;
 	}
 
-	public String getTypeOfFilter() {
-		return typeOfFilter;
+	public String getTypeInSystem() {
+		return typeInSystem;
 	}
 
-	public void setTypeOfFilter(String typeOfFilter) {
-		this.typeOfFilter = typeOfFilter;
+	public void setTypeInSystem(String typeInSystem) {
+		this.typeInSystem = typeInSystem;
 	}
+
+	public String getTypeOutSystem() {
+		return typeOutSystem;
+	}
+
+	public void setTypeOutSystem(String typeOutSystem) {
+		this.typeOutSystem = typeOutSystem;
+	}
+
+	
 	
 
 	

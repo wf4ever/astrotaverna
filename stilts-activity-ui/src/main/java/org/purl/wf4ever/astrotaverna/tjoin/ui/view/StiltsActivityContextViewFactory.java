@@ -7,6 +7,8 @@ import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory;
 
 import org.purl.wf4ever.astrotaverna.tjoin.TjoinActivity;
+import org.purl.wf4ever.astrotaverna.tpipe.AddColumnByExpressionActivity;
+import org.purl.wf4ever.astrotaverna.tpipe.AddSkyCoordsActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.CoordTransformationActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.FormatConversionActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.SelectColumnsActivity;
@@ -27,6 +29,10 @@ public class StiltsActivityContextViewFactory implements
 		else if(selection instanceof CoordTransformationActivity)
 			return true;
 		else if(selection instanceof FormatConversionActivity)
+			return true;
+		else if(selection instanceof AddColumnByExpressionActivity)
+			return true;
+		else if(selection instanceof AddSkyCoordsActivity)
 			return true;
 		else
 			return false;
@@ -54,6 +60,14 @@ public class StiltsActivityContextViewFactory implements
 		return Arrays.<ContextualView>asList(new FormatConversionContextualView(selection));
 	}
 	
+	public List<ContextualView> getViews(AddColumnByExpressionActivity selection) {
+		return Arrays.<ContextualView>asList(new AddColumnByExpressionContextualView(selection));
+	}
+	
+	public List<ContextualView> getViews(AddSkyCoordsActivity selection) {
+		return Arrays.<ContextualView>asList(new AddSkyCoordsContextualView(selection));
+	}
+	
 	@Override
 	public List<ContextualView> getViews(Object arg0) {
 		// TODO Auto-generated method stub
@@ -67,6 +81,10 @@ public class StiltsActivityContextViewFactory implements
 			return getViews((CoordTransformationActivity) arg0);
 		else if(arg0 instanceof FormatConversionActivity)
 			return getViews((FormatConversionActivity) arg0);
+		else if(arg0 instanceof AddColumnByExpressionActivity)
+			return getViews((AddColumnByExpressionActivity) arg0);
+		else if(arg0 instanceof AddSkyCoordsActivity)
+			return getViews((AddSkyCoordsActivity) arg0);
 		else
 			return null;
 	}

@@ -53,7 +53,7 @@ public class StiltsContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Stilts service: tjoin";
+		return "Join tables";
 	}
 
 	/**

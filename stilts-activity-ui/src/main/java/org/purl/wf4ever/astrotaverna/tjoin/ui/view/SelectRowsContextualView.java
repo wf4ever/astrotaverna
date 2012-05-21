@@ -57,7 +57,7 @@ public class SelectRowsContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Stilts service: Rows selection";
+		return "Rows selection";
 	}
 
 	/**

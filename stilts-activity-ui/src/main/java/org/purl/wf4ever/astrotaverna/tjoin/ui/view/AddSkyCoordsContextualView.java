@@ -10,19 +10,19 @@ import javax.swing.JTextArea;
 
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 
-import org.purl.wf4ever.astrotaverna.tpipe.FormatConversionActivity;
-import org.purl.wf4ever.astrotaverna.tpipe.FormatConversionActivityConfigurationBean;
-import org.purl.wf4ever.astrotaverna.tjoin.ui.config.FormatConversionConfigureAction;
+import org.purl.wf4ever.astrotaverna.tpipe.AddSkyCoordsActivity;
+import org.purl.wf4ever.astrotaverna.tpipe.AddSkyCoordsActivityConfigurationBean;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.config.AddSkyCoordsConfigureAction;
 import org.purl.wf4ever.astrotaverna.tjoin.ui.config.StiltsConfigureAction;
 
 
 @SuppressWarnings("serial")
-public class FormatConversionContextualView extends ContextualView {
-	private final FormatConversionActivity activity;
+public class AddSkyCoordsContextualView extends ContextualView {
+	private final AddSkyCoordsActivity activity;
 	private JTextArea description;
 	private javax.swing.JScrollPane jScrollPane1;
 
-	public FormatConversionContextualView(FormatConversionActivity activity) {
+	public AddSkyCoordsContextualView(AddSkyCoordsActivity activity) {
 		this.activity = activity;
 		initView(); //this method will call the getMainFrame()
 	}
@@ -38,14 +38,13 @@ public class FormatConversionContextualView extends ContextualView {
 		description.setEditable(false);
 		description.setColumns(30);
 		description.setLineWrap(true);
-		description.setText("The service applies a format transformation to the table. " +
+		description.setText("The service adds two columns to the table representing position on the sky. " +
+				"The values are determined by converting a sky position whose coordinates are contained in existing columns. " +
+				"The units input provides the existing units of the existing coordinates (degrees, radians or sexagesimal)." +
 				"Using the configure service option you can choose between direct votable input, " +
 				"a query, a URL or a File. If the input is a file path then the output is a File path whereas the output " +
-				"is a string with the votable in the remaining cases. \n" +
-				"Valid input formats are: fits, colfits, votable, ascii, csv, tst, ipac, wdc. \n" +
-				"Valid output formats are: fits-plus, fits-basic, colfits-plus, colfits-basic, votable-tabledata, " +
-				"votable-binary-inline, votable-binary-href, votable-fits-href, votable-fits-inline, ascii, " +
-				"text, csv, csv-noheader, tst, html, html-element, latex, latex-document, mirage.");
+				"is a string with the votable in the remaining cases. The configure option also allow selection of the " +
+				"input and output coordinate systems. ");
 		
 		jScrollPane1.setViewportView(description);
 		jPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -59,7 +58,7 @@ public class FormatConversionContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Format conversion";
+		return "Add sky coordinates";
 	}
 
 	/**
@@ -73,7 +72,8 @@ public class FormatConversionContextualView extends ContextualView {
 		//		+ " - " + configuration.getExampleString());
 		// TODO: Might also show extra service information looked
 		// up dynamically from endpoint/registry
-	
+		
+		
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class FormatConversionContextualView extends ContextualView {
 	//the section.
 	@Override
 	public Action getConfigureAction(final Frame owner) {
-		return new FormatConversionConfigureAction(activity, owner);
+		return new AddSkyCoordsConfigureAction(activity, owner);
 	}
 
 }

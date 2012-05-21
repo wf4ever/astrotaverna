@@ -75,6 +75,20 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		
 		results.add(service5);
 		
+		AddColumnByExpressionServiceDesc service6 = new AddColumnByExpressionServiceDesc();
+		service6.setTypeOfInput("String");
+		//service3.setTypeOfFilter("Column names");
+		service6.setDescription("Add column using a expression");
+		
+		results.add(service6);
+		
+		AddSkyCoordsServiceDesc service7 = new AddSkyCoordsServiceDesc();
+		service7.setTypeOfInput("String");
+		//service3.setTypeOfFilter("Column names");
+		service7.setDescription("Add column using a expression");
+		
+		results.add(service7);
+		
 		//Put here additional descriptions for other services
 		//............
 		//............

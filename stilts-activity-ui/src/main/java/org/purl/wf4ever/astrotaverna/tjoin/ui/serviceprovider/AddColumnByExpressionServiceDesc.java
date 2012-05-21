@@ -9,19 +9,19 @@ import javax.swing.Icon;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
-import org.purl.wf4ever.astrotaverna.tpipe.CoordTransformationActivity;
-import org.purl.wf4ever.astrotaverna.tpipe.CoordTransformationActivityConfigurationBean;
+import org.purl.wf4ever.astrotaverna.tpipe.AddColumnByExpressionActivity;
+import org.purl.wf4ever.astrotaverna.tpipe.AddColumnByExpressionActivityConfigurationBean;
 
-public class CoordTransformationServiceDesc extends ServiceDescription<CoordTransformationActivityConfigurationBean> {
+public class AddColumnByExpressionServiceDesc extends ServiceDescription<AddColumnByExpressionActivityConfigurationBean> {
 
 	/**
 	 * The subclass of Activity which should be instantiated when adding a service
 	 * for this description 
 	 */
 	@Override
-	public Class<? extends Activity<CoordTransformationActivityConfigurationBean>> getActivityClass() {
-		return CoordTransformationActivity.class;
-	}
+	public Class<? extends Activity<AddColumnByExpressionActivityConfigurationBean>> getActivityClass() {
+		return AddColumnByExpressionActivity.class;
+	} 
 
 	/**
 	 * The configuration bean which is to be used for configuring the instantiated activity.
@@ -30,10 +30,10 @@ public class CoordTransformationServiceDesc extends ServiceDescription<CoordTran
 	 * 
 	 */
 	@Override
-	public CoordTransformationActivityConfigurationBean getActivityConfiguration() {
-		CoordTransformationActivityConfigurationBean bean = new CoordTransformationActivityConfigurationBean();
+	public AddColumnByExpressionActivityConfigurationBean getActivityConfiguration() {
+		AddColumnByExpressionActivityConfigurationBean bean = new AddColumnByExpressionActivityConfigurationBean();
 		bean.setTypeOfInput("String");
-		bean.setTypeOfFilter("radiansToDms");
+		//bean.setTypeOfFilter("Column names");
 		return bean;
 	}
 
@@ -51,7 +51,7 @@ public class CoordTransformationServiceDesc extends ServiceDescription<CoordTran
 	 */
 	@Override
 	public String getName() {
-		return "Coordinates transformation";//exampleString;
+		return "Add Column";//exampleString;
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class CoordTransformationServiceDesc extends ServiceDescription<CoordTran
 	
 	private String typeOfInput;
 	
-	private String typeOfFilter;
+	//private String typeOfFilter;
 
 	public String getTypeOfInput() {
 		return typeOfInput;
@@ -96,32 +96,6 @@ public class CoordTransformationServiceDesc extends ServiceDescription<CoordTran
 	public void setTypeOfInput(String typeOfInput) {
 		this.typeOfInput = typeOfInput;
 	}
-
-	public String getTypeOfFilter() {
-		return typeOfFilter;
-	}
-
-	public void setTypeOfFilter(String typeOfFilter) {
-		this.typeOfFilter = typeOfFilter;
-	}
-	
-
-	
-	//private String exampleString;
-	//private URI exampleUri;
-	
-	//public String getExampleString() {
-	//	return exampleString;
-	//}
-	//public URI getExampleUri() {
-	//	return exampleUri;
-	//}
-	//public void setExampleString(String exampleString) {
-	//	this.exampleString = exampleString;
-	//}
-	//public void setExampleUri(URI exampleUri) {
-	//	this.exampleUri = exampleUri;
-	//}
 
 
 }
