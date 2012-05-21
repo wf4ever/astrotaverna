@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.purl.wf4ever.astrotaverna.tpipe.SelectRowsActivityConfigurationBean;
 import org.purl.wf4ever.astrotaverna.utils.MyUtils;
 import org.purl.wf4ever.astrotaverna.utils.NoExitSecurityManager;
