@@ -19,8 +19,8 @@ import org.purl.wf4ever.astrotaverna.tjoin.ui.config.StiltsConfigureAction;
 @SuppressWarnings("serial")
 public class SelectRowsContextualView extends ContextualView {
 	private final SelectRowsActivity activity;
-	private JTextArea description = new JTextArea("ads");
-	//private JTextArea description = new JLabel("ads");
+	private JTextArea description;
+	private javax.swing.JScrollPane jScrollPane1;
 
 	public SelectRowsContextualView(SelectRowsActivity activity) {
 		this.activity = activity;
@@ -30,9 +30,24 @@ public class SelectRowsContextualView extends ContextualView {
 	@Override
 	public JComponent getMainFrame() {
 		JPanel jPanel = new JPanel();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		description = new JTextArea();
+		
+		jPanel.setLayout(new java.awt.BorderLayout());
+		
 		description.setEditable(false);
-		description.setWrapStyleWord(false);
-		jPanel.add(description);
+		description.setColumns(30);
+		description.setLineWrap(true);
+		description.setText("The service returns a votable whose rows match the filter expression. Using the " +
+				"configure service option you can choose between direct votable input, " +
+				"a query, a URL or a File. If the input is a file path then the output is a File path whereas the output " +
+				"is a string with the votable in the remaining cases. Filter examples:\n" +
+				"(RA > 230 && DEC < 20) || RA <=200\n" +
+				"startsWith( TYPE, \"S\" ) || equals( TYPE, \"GALAXY\" )");
+
+		jScrollPane1.setViewportView(description);
+		jPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+		
 		refreshView();
 		return jPanel;
 	}
@@ -57,9 +72,7 @@ public class SelectRowsContextualView extends ContextualView {
 		// TODO: Might also show extra service information looked
 		// up dynamically from endpoint/registry
 		
-		description.setText("The service returns a table aplying the filter (subset of rows). " 
-						+ "\n The rows that makes true the expression filter are selected."
-						+ "\n e.g. RA > 230 && DEC < 20 ");
+		
 	}
 
 	/**

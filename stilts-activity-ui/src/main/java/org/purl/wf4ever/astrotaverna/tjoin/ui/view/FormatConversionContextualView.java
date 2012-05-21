@@ -19,8 +19,8 @@ import org.purl.wf4ever.astrotaverna.tjoin.ui.config.StiltsConfigureAction;
 @SuppressWarnings("serial")
 public class FormatConversionContextualView extends ContextualView {
 	private final FormatConversionActivity activity;
-	private JTextArea description = new JTextArea("ads");
-	//private JTextArea description = new JLabel("ads");
+	private JTextArea description;
+	private javax.swing.JScrollPane jScrollPane1;
 
 	public FormatConversionContextualView(FormatConversionActivity activity) {
 		this.activity = activity;
@@ -30,9 +30,26 @@ public class FormatConversionContextualView extends ContextualView {
 	@Override
 	public JComponent getMainFrame() {
 		JPanel jPanel = new JPanel();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		description = new JTextArea();
+		
+		jPanel.setLayout(new java.awt.BorderLayout());
+		
 		description.setEditable(false);
-		description.setWrapStyleWord(false);
-		jPanel.add(description);
+		description.setColumns(30);
+		description.setLineWrap(true);
+		description.setText("The service applies a format transformation to the table. " +
+				"Using the configure service option you can choose between direct votable input, " +
+				"a query, a URL or a File. If the input is a file path then the output is a File path whereas the output " +
+				"is a string with the votable in the remaining cases. \n" +
+				"Valid input formats are: fits, colfits, votable, ascii, csv, tst, ipac, wdc. \n" +
+				"Valid output formats are: fits-plus, fits-basic, colfits-plus, colfits-basic, votable-tabledata, " +
+				"votable-binary-inline, votable-binary-href, votable-fits-href, votable-fits-inline, ascii, " +
+				"text, csv, csv-noheader, tst, html, html-element, latex, latex-document, mirage.");
+		
+		jScrollPane1.setViewportView(description);
+		jPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+		
 		refreshView();
 		return jPanel;
 	}
@@ -56,9 +73,7 @@ public class FormatConversionContextualView extends ContextualView {
 		//		+ " - " + configuration.getExampleString());
 		// TODO: Might also show extra service information looked
 		// up dynamically from endpoint/registry
-		
-		description.setText("The service applies a format transformation to the table. " 
-						+ "");
+	
 	}
 
 	/**

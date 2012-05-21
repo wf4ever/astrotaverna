@@ -19,8 +19,8 @@ import org.purl.wf4ever.astrotaverna.tjoin.ui.config.StiltsConfigureAction;
 @SuppressWarnings("serial")
 public class CoordTransformationContextualView extends ContextualView {
 	private final CoordTransformationActivity activity;
-	private JTextArea description = new JTextArea("ads");
-	//private JTextArea description = new JLabel("ads");
+	private JTextArea description;
+	private javax.swing.JScrollPane jScrollPane1;
 
 	public CoordTransformationContextualView(CoordTransformationActivity activity) {
 		this.activity = activity;
@@ -30,9 +30,24 @@ public class CoordTransformationContextualView extends ContextualView {
 	@Override
 	public JComponent getMainFrame() {
 		JPanel jPanel = new JPanel();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		description = new JTextArea();
+		
+		jPanel.setLayout(new java.awt.BorderLayout());
+		
 		description.setEditable(false);
-		description.setWrapStyleWord(false);
-		jPanel.add(description);
+		description.setColumns(30);
+		description.setLineWrap(true);
+		description.setText("The service returns a votable with a new column resulting of aplying the function" +
+				"selected in the configure service option. Depending on the function, it will require one or more" +
+				"parameters so that the input ports will vary. " +
+				"Using the configure option you can choose between direct votable input, " +
+				"a query, a URL or a File. If the input is a file path then the output is a File path whereas the output " +
+				"is a string with the votable in the remaining cases. ");
+		
+		jScrollPane1.setViewportView(description);
+		jPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+		
 		refreshView();
 		return jPanel;
 	}
@@ -57,10 +72,6 @@ public class CoordTransformationContextualView extends ContextualView {
 		// TODO: Might also show extra service information looked
 		// up dynamically from endpoint/registry
 		
-		description.setText("The service returns a table with a new column. "
-						  + "\n Its value is calculated using the function" 
-						  + "\n selected in configuration. Its parameters"
-						  + "\n are the columns especified as inports");
 	}
 
 	/**

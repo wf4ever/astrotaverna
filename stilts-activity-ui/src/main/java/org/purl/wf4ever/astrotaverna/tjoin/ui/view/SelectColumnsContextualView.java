@@ -19,8 +19,8 @@ import org.purl.wf4ever.astrotaverna.tjoin.ui.config.StiltsConfigureAction;
 @SuppressWarnings("serial")
 public class SelectColumnsContextualView extends ContextualView {
 	private final SelectColumnsActivity activity;
-	private JTextArea description = new JTextArea("ads");
-	//private JTextArea description = new JLabel("ads");
+	private JTextArea description;
+	private javax.swing.JScrollPane jScrollPane1;
 
 	public SelectColumnsContextualView(SelectColumnsActivity activity) {
 		this.activity = activity;
@@ -30,9 +30,26 @@ public class SelectColumnsContextualView extends ContextualView {
 	@Override
 	public JComponent getMainFrame() {
 		JPanel jPanel = new JPanel();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		description = new JTextArea();
+		
+		jPanel.setLayout(new java.awt.BorderLayout());
+		
 		description.setEditable(false);
-		description.setWrapStyleWord(false);
-		jPanel.add(description);
+		description.setColumns(30);
+		description.setLineWrap(true);
+		description.setText("The service returns a votable whose columns are the specfied in filter. " +
+				"Using the configure service option you can choose between direct votable input, " +
+				"a query, a URL or a File. If the input is a file path then the output is a File path whereas the output " +
+				"is a string with the votable in the remaining cases. The configure option also allow selection by UCDs." +
+				"Column names should be separated by a space. Complex UCD cannot include spaces and must use ';' as a separator." +
+				"Examples:\n" +
+				"ColumnId RA DEC flux_20\n" +
+				"phot.flux.density;em.radio.750-1500MHz stat.error;phot.flux.density");
+		
+		jScrollPane1.setViewportView(description);
+		jPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+		
 		refreshView();
 		return jPanel;
 	}
@@ -57,8 +74,7 @@ public class SelectColumnsContextualView extends ContextualView {
 		// TODO: Might also show extra service information looked
 		// up dynamically from endpoint/registry
 		
-		description.setText("The service returns a table aplying the filter (subset of columns). " +
-				"\n e.g. col1 col2 col4 ");
+		
 	}
 
 	/**

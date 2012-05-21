@@ -17,7 +17,8 @@ import org.purl.wf4ever.astrotaverna.tjoin.ui.config.StiltsConfigureAction;
 @SuppressWarnings("serial")
 public class StiltsContextualView extends ContextualView {
 	private final TjoinActivity activity;
-	private JTextArea description = new JTextArea("ads");
+	private JTextArea description;
+	private javax.swing.JScrollPane jScrollPane1;
 	//private JTextArea description = new JLabel("ads");
 
 	public StiltsContextualView(TjoinActivity activity) {
@@ -28,9 +29,21 @@ public class StiltsContextualView extends ContextualView {
 	@Override
 	public JComponent getMainFrame() {
 		JPanel jPanel = new JPanel();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		description = new JTextArea();
+		
+		jPanel.setLayout(new java.awt.BorderLayout());
+		
 		description.setEditable(false);
-		description.setWrapStyleWord(false);
-		jPanel.add(description);
+		description.setColumns(30);
+		description.setLineWrap(true);
+		description.setText("The service makes the join of two votables tables with the same " +
+				"number of rows. Using the configure service option you can choose between direct vo table input, " +
+				"a query, a URL or a File. If the input is a file path then the output is a File path whereas the output " +
+				"is a string with the votable in the remaining cases.");
+		jScrollPane1.setViewportView(description);
+		jPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+		
 		refreshView();
 		return jPanel;
 	}
@@ -55,10 +68,10 @@ public class StiltsContextualView extends ContextualView {
 		// TODO: Might also show extra service information looked
 		// up dynamically from endpoint/registry
 		
-		description.setText("The service makes the join of two tables with the same format and the same " +
-				"\n number of rows. The inputs are the names of the files or URLsthat contain the tables " +
-				"\n and the name of the output file. All the tables must have the same number of " +
-				"\n rows");
+		//description.setText("The service makes the join of two tables with the same format and the same " +
+		//		"\n number of rows. The inputs are the names of the files or URLsthat contain the tables " +
+		//		"\n and the name of the output file. All the tables must have the same number of " +
+		//		"\n rows");
 	}
 
 	/**
