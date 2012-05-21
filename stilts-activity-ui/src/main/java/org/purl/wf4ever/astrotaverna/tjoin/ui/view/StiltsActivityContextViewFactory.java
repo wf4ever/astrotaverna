@@ -11,6 +11,7 @@ import org.purl.wf4ever.astrotaverna.tpipe.AddColumnByExpressionActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.AddSkyCoordsActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.CoordTransformationActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.FormatConversionActivity;
+import org.purl.wf4ever.astrotaverna.tpipe.ResolveCoordsActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.SelectColumnsActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.SelectRowsActivity;
 
@@ -33,6 +34,8 @@ public class StiltsActivityContextViewFactory implements
 		else if(selection instanceof AddColumnByExpressionActivity)
 			return true;
 		else if(selection instanceof AddSkyCoordsActivity)
+			return true;
+		else if(selection instanceof ResolveCoordsActivity)
 			return true;
 		else
 			return false;
@@ -68,6 +71,10 @@ public class StiltsActivityContextViewFactory implements
 		return Arrays.<ContextualView>asList(new AddSkyCoordsContextualView(selection));
 	}
 	
+	public List<ContextualView> getViews(ResolveCoordsActivity selection) {
+		return Arrays.<ContextualView>asList(new ResolveCoordsContextualView(selection));
+	}
+	
 	@Override
 	public List<ContextualView> getViews(Object arg0) {
 		// TODO Auto-generated method stub
@@ -85,6 +92,8 @@ public class StiltsActivityContextViewFactory implements
 			return getViews((AddColumnByExpressionActivity) arg0);
 		else if(arg0 instanceof AddSkyCoordsActivity)
 			return getViews((AddSkyCoordsActivity) arg0);
+		if(arg0 instanceof ResolveCoordsActivity)
+			return getViews((ResolveCoordsActivity) arg0);
 		else
 			return null;
 	}

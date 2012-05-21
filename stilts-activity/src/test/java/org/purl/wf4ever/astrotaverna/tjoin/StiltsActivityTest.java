@@ -145,7 +145,7 @@ public class StiltsActivityTest {
 		result = result.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 		tableresult = tableresult.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 		
-		assertTrue("Wrong output : ", result.length()==tableresult.length());
+		assertTrue("Wrong output : ", (result.length()> tableresult.length()-6) && (result.length()< tableresult.length()+6));
 		assertEquals("Unexpected outputs", 2, outputs.size());
 		//assertEquals("/home/julian/Documentos/wf4ever/tables/join_test.xml", outputs.get(OUT_SIMPLE_OUTPUT));
 		assertEquals("simple-report", outputs.get(OUT_REPORT));

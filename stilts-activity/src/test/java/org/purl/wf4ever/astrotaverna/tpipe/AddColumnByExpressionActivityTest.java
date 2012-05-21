@@ -92,7 +92,7 @@ public class AddColumnByExpressionActivityTest {
 		Map<String, Object> inputs = new HashMap<String, Object>();
 		inputs.put(IN_FIRST_INPUT_TABLE, "/home/julian/Documents/wf4ever/tables/othershortvotable.xml");
 		inputs.put(IN_NAME_NEW_COL, "newCol");
-		inputs.put(IN_FILTER, "raFK4toFK5radians2(ra, dec)");
+		inputs.put(IN_FILTER, "raFK4toFK5radians(ra, dec)");
 		inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.xml");
 		
 		//function parameters
@@ -147,7 +147,7 @@ public class AddColumnByExpressionActivityTest {
 		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 				
-		assertTrue("Wrong output: ", a.length()==b.length());
+		assertTrue("Wrong output: ", (a.length()>b.length()-6) && (a.length()<b.length()+6));
 		
 		}catch(Exception ex){System.out.println(ex.toString());}
 		
@@ -184,7 +184,7 @@ public class AddColumnByExpressionActivityTest {
 		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 				
-		assertTrue("Wrong output: ", a.length()==b.length());
+		assertTrue("Wrong output: ", (a.length()>b.length()-6) && (a.length()<b.length()+6));
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
 		
 		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
@@ -219,7 +219,7 @@ public class AddColumnByExpressionActivityTest {
 		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
 				
-		assertTrue("Wrong output: ", a.length()==b.length());	
+		assertTrue("Wrong output: ", (a.length()>b.length()-6) && (a.length()<b.length()+6));	
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
 
 

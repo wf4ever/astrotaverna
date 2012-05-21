@@ -89,6 +89,11 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		
 		results.add(service7);
 		
+		ResolveCoordsServiceDesc service8 = new ResolveCoordsServiceDesc();
+		service8.setTypeOfInput("String");
+		service8.setDescription("Add column using a expression");
+		results.add(service8);
+		
 		//Put here additional descriptions for other services
 		//............
 		//............
@@ -116,7 +121,7 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 	 * provider'
 	 */
 	public String getName() {
-		return "My stilts local services";
+		return "My astro local services";
 	}
 	
 	@Override
