@@ -85,13 +85,13 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		AddSkyCoordsServiceDesc service7 = new AddSkyCoordsServiceDesc();
 		service7.setTypeOfInput("String");
 		//service3.setTypeOfFilter("Column names");
-		service7.setDescription("Add column using a expression");
+		service7.setDescription("Add sky coordinates");
 		
 		results.add(service7);
 		
 		ResolveCoordsServiceDesc service8 = new ResolveCoordsServiceDesc();
 		service8.setTypeOfInput("String");
-		service8.setDescription("Add column using a expression");
+		service8.setDescription("Resolve object coordinates");
 		results.add(service8);
 		
 		//Put here additional descriptions for other services

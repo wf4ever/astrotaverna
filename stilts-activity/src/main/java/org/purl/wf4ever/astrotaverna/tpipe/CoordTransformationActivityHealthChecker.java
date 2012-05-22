@@ -64,7 +64,6 @@ public class CoordTransformationActivityHealthChecker implements
 		}
 		
 		if(!(      config.getTypeOfInput().compareTo("File")==0
-				|| config.getTypeOfInput().compareTo("Query")==0
 				|| config.getTypeOfInput().compareTo("URL")==0
 				|| config.getTypeOfInput().compareTo("String")==0)){
 			subReports.add(new VisitReport(HealthCheck.getInstance(), activity,

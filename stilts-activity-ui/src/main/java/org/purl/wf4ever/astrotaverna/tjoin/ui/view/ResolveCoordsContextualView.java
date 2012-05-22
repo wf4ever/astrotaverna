@@ -39,9 +39,10 @@ public class ResolveCoordsContextualView extends ContextualView {
 		description.setColumns(30);
 		description.setLineWrap(true);
 		description.setText("The service adds two columns (RA and DEC) by resolving the position. It needs " +
-				"a column that contains the object name. " +
+				"a column that contains the object name. The object name may be referenced by the column name or" +
+				"the column index ($1, $2, $3, ...). " +
 				"Using the configure service option you can choose between direct votable input, " +
-				"a query, a URL or a File. If the input is a file path then the output is a File path whereas the output " +
+				"a URL or a File. If the input is a file path then the output is a File path whereas the output " +
 				"is a string with the votable in the remaining cases. ");
 		
 		jScrollPane1.setViewportView(description);

@@ -68,7 +68,6 @@ public class AddColumnByExpressionActivity extends
 		//}
 		
 		if(!(      configBean.getTypeOfInput().compareTo("File")==0
-				|| configBean.getTypeOfInput().compareTo("Query")==0
 				|| configBean.getTypeOfInput().compareTo("URL")==0
 				|| configBean.getTypeOfInput().compareTo("String")==0)){
 			throw new ActivityConfigurationException(
@@ -202,8 +201,7 @@ public class AddColumnByExpressionActivity extends
 					
 					//prepare tmp output files if needed
 					if(configBean.getTypeOfInput().compareTo("String")==0
-							|| configBean.getTypeOfInput().compareTo("URL")==0
-							|| configBean.getTypeOfInput().compareTo("Query")==0){
+							|| configBean.getTypeOfInput().compareTo("URL")==0){
 						try{
 							tmpOutFile = File.createTempFile("astro", null);
 							tmpOutFile.deleteOnExit();
@@ -274,8 +272,7 @@ public class AddColumnByExpressionActivity extends
 							
 							if(optionalPorts){ //case File
 								simpleValue = outputTableName;
-							}else if(configBean.getTypeOfInput().compareTo("Query")==0 
-										||configBean.getTypeOfInput().compareTo("URL")==0
+							}else if(configBean.getTypeOfInput().compareTo("URL")==0
 										|| configBean.getTypeOfInput().compareTo("String")==0){
 								
 								try{

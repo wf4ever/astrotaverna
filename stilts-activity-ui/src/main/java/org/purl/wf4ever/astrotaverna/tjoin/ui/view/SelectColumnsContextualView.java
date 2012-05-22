@@ -40,11 +40,12 @@ public class SelectColumnsContextualView extends ContextualView {
 		description.setLineWrap(true);
 		description.setText("The service returns a votable whose columns are the specfied in filter. " +
 				"Using the configure service option you can choose between direct votable input, " +
-				"a query, a URL or a File. If the input is a file path then the output is a File path whereas the output " +
-				"is a string with the votable in the remaining cases. The configure option also allow selection by UCDs." +
-				"Column names should be separated by a space. Complex UCD cannot include spaces and must use ';' as a separator." +
+				"a URL or a File. If the input is a file path then the output is a File path whereas the output " +
+				"is a string with the votable in the remaining cases. The configure option also allow selection by UCDs. " +
+				"Column names should be separated by a space. Complex UCD cannot include spaces and must use ';' as a separator. \n" +
+				"If 'column names' is selected you can include the column names or the index of the column (the first column is '1': $1). \n" +
 				"Examples:\n" +
-				"ColumnId RA DEC flux_20\n" +
+				"ColumnId RA DEC flux_20 $7 $10\n" +
 				"phot.flux.density;em.radio.750-1500MHz stat.error;phot.flux.density");
 		
 		jScrollPane1.setViewportView(description);

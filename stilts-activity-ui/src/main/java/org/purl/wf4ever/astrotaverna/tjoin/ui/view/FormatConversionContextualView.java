@@ -40,7 +40,7 @@ public class FormatConversionContextualView extends ContextualView {
 		description.setLineWrap(true);
 		description.setText("The service applies a format transformation to the table. " +
 				"Using the configure service option you can choose between direct votable input, " +
-				"a query, a URL or a File. If the input is a file path then the output is a File path whereas the output " +
+				"a URL or a File. If the input is a file path then the output is a File path whereas the output " +
 				"is a string with the votable in the remaining cases. \n" +
 				"Valid input formats are: fits, colfits, votable, ascii, csv, tst, ipac, wdc. \n" +
 				"Valid output formats are: fits-plus, fits-basic, colfits-plus, colfits-basic, votable-tabledata, " +

@@ -26,7 +26,7 @@ public class ResolveCoordsConfigurationPanel
 	private ResolveCoordsActivity activity;
 	private ResolveCoordsActivityConfigurationBean configBean;
 	
-	String[] inputTypesStrings = {"File", "Query", "URL", "String"};
+	String[] inputTypesStrings = {"File", "URL", "String"};
 	
 	private JComboBox  typeOfInput;
 
@@ -70,12 +70,11 @@ public class ResolveCoordsConfigurationPanel
 		
 		String  tinput = (String)typeOfInput.getSelectedItem();
 		if(!(      tinput.compareTo("File")==0
-				|| tinput.compareTo("Query")==0
 				|| tinput.compareTo("URL")==0
 				|| tinput.compareTo("String")==0)){
 			//"Invalid input type
 
-			errorMessage = "Valid inputs: File, Query, Url or String.";
+			errorMessage = "Valid inputs: File, Url or String.";
 			
 		}
 		

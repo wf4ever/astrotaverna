@@ -40,9 +40,10 @@ public class AddSkyCoordsContextualView extends ContextualView {
 		description.setLineWrap(true);
 		description.setText("The service adds two columns to the table representing position on the sky. " +
 				"The values are determined by converting a sky position whose coordinates are contained in existing columns. " +
-				"The units input provides the existing units of the existing coordinates (degrees, radians or sexagesimal)." +
+				"The units input provides the existing units of the existing coordinates (degrees, radians or sexagesimal). " +
+				"A column may be referenced by its name or its column index ($1, $2, $3, ...)" +
 				"Using the configure service option you can choose between direct votable input, " +
-				"a query, a URL or a File. If the input is a file path then the output is a File path whereas the output " +
+				"a URL or a File. If the input is a file path then the output is a File path whereas the output " +
 				"is a string with the votable in the remaining cases. The configure option also allow selection of the " +
 				"input and output coordinate systems. ");
 		

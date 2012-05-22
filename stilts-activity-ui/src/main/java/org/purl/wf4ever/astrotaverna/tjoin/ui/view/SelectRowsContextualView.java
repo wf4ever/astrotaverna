@@ -38,10 +38,12 @@ public class SelectRowsContextualView extends ContextualView {
 		description.setEditable(false);
 		description.setColumns(30);
 		description.setLineWrap(true);
-		description.setText("The service returns a votable whose rows match the filter expression. Using the " +
+		description.setText("The service returns a votable whose rows match the filter expression. " +
+				"A column in the filter may be referenced by its name or its column index ($1, $2, $3, ...) " +
+				"Using the " +
 				"configure service option you can choose between direct votable input, " +
-				"a query, a URL or a File. If the input is a file path then the output is a File path whereas the output " +
-				"is a string with the votable in the remaining cases. Filter examples:\n" +
+				"a URL or a File. If the input is a file path then the output is a File path whereas the output " +
+				"is a string with the votable in the remaining cases. \nFilter examples:\n" +
 				"(RA > 230 && DEC < 20) || RA <=200\n" +
 				"startsWith( TYPE, \"S\" ) || equals( TYPE, \"GALAXY\" )");
 

@@ -29,7 +29,7 @@ public class AddSkyCoordsConfigurationPanel
 	private AddSkyCoordsActivity activity;
 	private AddSkyCoordsActivityConfigurationBean configBean;
 	
-	String[] inputTypesStrings = {"File", "Query", "URL", "String"};
+	String[] inputTypesStrings = {"File", "URL", "String"};
 	String[] coordSystem = {"icrs", "fk4", "fk5", "galactic", "supergalactic", "ecliptic"};
 	
 	private JComboBox  typeOfInput;
@@ -83,12 +83,11 @@ public class AddSkyCoordsConfigurationPanel
 		
 		String  tinput = (String)typeOfInput.getSelectedItem();
 		if(!(      tinput.compareTo("File")==0
-				|| tinput.compareTo("Query")==0
 				|| tinput.compareTo("URL")==0
 				|| tinput.compareTo("String")==0)){
 			//"Invalid input type
 
-			errorMessage = "Valid inputs: file, query, url or string.";
+			errorMessage = "Valid inputs: file, url or string.";
 			
 		}
 		

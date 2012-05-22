@@ -39,7 +39,7 @@ public class StiltsContextualView extends ContextualView {
 		description.setLineWrap(true);
 		description.setText("The service makes the join of two votables tables with the same " +
 				"number of rows. Using the configure service option you can choose between direct vo table input, " +
-				"a query, a URL or a File. If the input is a file path then the output is a File path whereas the output " +
+				"a URL or a File. If the input is a file path then the output is a File path whereas the output " +
 				"is a string with the votable in the remaining cases.");
 		jScrollPane1.setViewportView(description);
 		jPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);

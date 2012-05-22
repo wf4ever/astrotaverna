@@ -41,8 +41,9 @@ public class CoordTransformationContextualView extends ContextualView {
 		description.setText("The service returns a votable with a new column resulting of aplying the function" +
 				"selected in the configure service option. Depending on the function, it will require one or more" +
 				"parameters so that the input ports will vary. " +
+				"A column may be referenced by its name or its column index ($1, $2, $3, ...). \n" +
 				"Using the configure option you can choose between direct votable input, " +
-				"a query, a URL or a File. If the input is a file path then the output is a File path whereas the output " +
+				"a URL or a File. If the input is a file path then the output is a File path whereas the output " +
 				"is a string with the votable in the remaining cases. ");
 		
 		jScrollPane1.setViewportView(description);
