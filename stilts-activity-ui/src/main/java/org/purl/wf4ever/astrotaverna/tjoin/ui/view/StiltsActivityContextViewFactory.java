@@ -6,6 +6,7 @@ import java.util.List;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory;
 
+import org.purl.wf4ever.astrotaverna.tcat.TcatActivity;
 import org.purl.wf4ever.astrotaverna.tjoin.TjoinActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.AddColumnByExpressionActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.AddSkyCoordsActivity;
@@ -36,6 +37,8 @@ public class StiltsActivityContextViewFactory implements
 		else if(selection instanceof AddSkyCoordsActivity)
 			return true;
 		else if(selection instanceof ResolveCoordsActivity)
+			return true;
+		else if(selection instanceof TcatActivity)
 			return true;
 		else
 			return false;
@@ -75,6 +78,10 @@ public class StiltsActivityContextViewFactory implements
 		return Arrays.<ContextualView>asList(new ResolveCoordsContextualView(selection));
 	}
 	
+	public List<ContextualView> getViews(TcatActivity selection) {
+		return Arrays.<ContextualView>asList(new TcatContextualView(selection));
+	}
+	
 	@Override
 	public List<ContextualView> getViews(Object arg0) {
 		// TODO Auto-generated method stub
@@ -92,8 +99,10 @@ public class StiltsActivityContextViewFactory implements
 			return getViews((AddColumnByExpressionActivity) arg0);
 		else if(arg0 instanceof AddSkyCoordsActivity)
 			return getViews((AddSkyCoordsActivity) arg0);
-		if(arg0 instanceof ResolveCoordsActivity)
+		else if(arg0 instanceof ResolveCoordsActivity)
 			return getViews((ResolveCoordsActivity) arg0);
+		else if(arg0 instanceof TcatActivity)
+			return getViews((TcatActivity) arg0);
 		else
 			return null;
 	}

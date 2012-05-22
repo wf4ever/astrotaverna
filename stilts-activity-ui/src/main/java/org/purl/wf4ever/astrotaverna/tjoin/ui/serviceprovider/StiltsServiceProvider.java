@@ -94,6 +94,11 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		service8.setDescription("Resolve object coordinates");
 		results.add(service8);
 		
+		TcatServiceDesc service9 = new TcatServiceDesc();
+		service9.setTypeOfInput("String");
+		service9.setDescription("Cat tables");
+		results.add(service9);
+		
 		//Put here additional descriptions for other services
 		//............
 		//............
@@ -121,7 +126,7 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 	 * provider'
 	 */
 	public String getName() {
-		return "My astro local services";
+		return "My astro services";
 	}
 	
 	@Override
