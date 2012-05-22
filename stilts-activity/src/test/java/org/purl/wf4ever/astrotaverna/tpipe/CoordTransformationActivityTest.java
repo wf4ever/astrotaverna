@@ -98,8 +98,8 @@ public class CoordTransformationActivityTest {
 		inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.xml");
 		
 		//function parameters
-		inputs.put("RA", "ra");
-		inputs.put("DEC", "dec");
+		inputs.put("nameRA", "ra");
+		inputs.put("nameDEC", "dec");
 
 		
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
@@ -132,8 +132,8 @@ public class CoordTransformationActivityTest {
 		//inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.ascii");
 		
 		//function parameters
-		inputs.put("RA", "ra");
-		inputs.put("DEC", "dec");
+		inputs.put("nameRA", "ra");
+		inputs.put("nameDEC", "dec");
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
@@ -176,8 +176,8 @@ public class CoordTransformationActivityTest {
 		//inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.ascii");
 		
 		//function parameters
-		inputs.put("RA", "ra");
-		inputs.put("DEC", "dec");
+		inputs.put("nameRA", "ra");
+		inputs.put("nameDEC", "dec");
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
@@ -216,8 +216,8 @@ public class CoordTransformationActivityTest {
 		inputs.put(IN_NAME_NEW_COL, "newCol");
 		
 		//function parameters
-		inputs.put("RA", "othercolumn");
-		inputs.put("DEC", "dec");
+		inputs.put("nameRA", "othercolumn");
+		inputs.put("nameDEC", "dec");
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);

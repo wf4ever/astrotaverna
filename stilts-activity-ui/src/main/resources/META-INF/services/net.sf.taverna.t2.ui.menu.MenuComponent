@@ -3,3 +3,6 @@ org.purl.wf4ever.astrotaverna.tjoin.ui.menu.SelectRowsConfigureMenuAction
 org.purl.wf4ever.astrotaverna.tjoin.ui.menu.SelectColumnsConfigureMenuAction
 org.purl.wf4ever.astrotaverna.tjoin.ui.menu.FormatConversionConfigureMenuAction
 org.purl.wf4ever.astrotaverna.tjoin.ui.menu.CoordTransformationConfigureMenuAction
+org.purl.wf4ever.astrotaverna.tjoin.ui.menu.ResolveCoordsConfigureMenuAction
+org.purl.wf4ever.astrotaverna.tjoin.ui.menu.AddSkyCoordsConfigureMenuAction
+org.purl.wf4ever.astrotaverna.tjoin.ui.menu.AddColumnByExpressionConfigureMenuAction

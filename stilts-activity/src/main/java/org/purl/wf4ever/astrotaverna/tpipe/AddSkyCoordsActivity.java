@@ -467,15 +467,15 @@ public class AddSkyCoordsActivity extends
 				|| coordinatesSystem.compareTo("fk4")==0
 				|| coordinatesSystem.compareTo("fk5")==0){
 			
-			params.add("RA");
-			params.add("DEC");
+			params.add("nameRA");
+			params.add("nameDEC");
 			
 		}else if(coordinatesSystem.compareTo("galactic")==0
 				|| coordinatesSystem.compareTo("supergalactic")==0
 				|| coordinatesSystem.compareTo("ecliptic")==0){
 
-			params.add("Longitude");
-			params.add("Latitude");
+			params.add("nameLong");
+			params.add("nameLat");
 			
 		}
 			

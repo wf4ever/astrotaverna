@@ -102,10 +102,10 @@ public class AddSkyCoordsActivityTest {
 		inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documents/wf4ever/tables/resultTable.xml");
 		
 		//function parameters
-		inputs.put("RAIn", "ra");
-		inputs.put("DECIn", "dec");
-		inputs.put("LongitudeOut", "latitute");
-		inputs.put("LatitudeOut", "longitude");
+		inputs.put("nameRAIn", "ra");
+		inputs.put("nameDECIn", "dec");
+		inputs.put("nameLongOut", "latitute");
+		inputs.put("nameLatOut", "longitude");
 
 		
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
@@ -138,10 +138,10 @@ public class AddSkyCoordsActivityTest {
 		inputs.put(IN_UNITS, "degrees");
 		
 		//function parameters
-		inputs.put("RAIn", "ra");
-		inputs.put("DECIn", "dec");
-		inputs.put("LongitudeOut", "latitute");
-		inputs.put("LatitudeOut", "longitude");
+		inputs.put("nameRAIn", "ra");
+		inputs.put("nameDECIn", "dec");
+		inputs.put("nameLongOut", "latitute");
+		inputs.put("nameLatOut", "longitude");
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
@@ -187,10 +187,10 @@ public class AddSkyCoordsActivityTest {
 		//inputs.put(IN_UNITS, "degrees");
 		
 		//function parameters
-		inputs.put("RAIn", "dec");
-		inputs.put("DECIn", "ra");
-		inputs.put("LongitudeOut", "latitute");
-		inputs.put("LatitudeOut", "longitude");
+		inputs.put("nameRAIn", "dec");
+		inputs.put("nameDECIn", "ra");
+		inputs.put("nameLongOut", "latitute");
+		inputs.put("nameLatOut", "longitude");
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
@@ -219,10 +219,10 @@ public class AddSkyCoordsActivityTest {
 		//inputs.put(IN_UNITS, "degrees");
 		
 		//function parameters
-		inputs.put("RAIn", "othernocolumn");
-		inputs.put("DECIn", "dec");
-		inputs.put("LongitudeOut", "latitute");
-		inputs.put("LatitudeOut", "longitude");
+		inputs.put("nameRAIn", "othernocolumn");
+		inputs.put("nameDECIn", "dec");
+		inputs.put("nameLongOut", "latitute");
+		inputs.put("nameLatOut", "longitude");
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);

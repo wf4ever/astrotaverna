@@ -45,8 +45,8 @@ public class ResolveCoordsActivity extends
 	 */
 	
 	private static final String IN_FIRST_INPUT_TABLE = "voTable";
-	private static final String IN_RA_COLUMN = "RA";
-	private static final String IN_DEC_COLUMN = "DEC";
+	private static final String IN_RA_COLUMN = "nameRA";
+	private static final String IN_DEC_COLUMN = "nameDEC";
 	private static final String IN_COL_ID_OBJ_NAME = "objectName";
 	private static final String IN_OUTPUT_TABLE_NAME = "outputFileNameIn";
 

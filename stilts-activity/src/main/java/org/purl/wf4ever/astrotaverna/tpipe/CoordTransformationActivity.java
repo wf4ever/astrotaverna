@@ -419,36 +419,36 @@ public class CoordTransformationActivity extends
 				|| coordenatesFunction.compareTo("degreesToRadians")==0
 				|| coordenatesFunction.compareTo("radiansToDegrees")==0){
 			
-			params.add("Column");
+			params.add("nameColumn");
 			
 		}else if(coordenatesFunction.compareTo("dmsToRadians")==0
 				|| coordenatesFunction.compareTo("hmsToRadians")==0){
 			
-			params.add("Column");
+			params.add("nameColumn");
 			
 		}else if(coordenatesFunction.compareTo("raFK4toFK5radians2")==0
 				|| coordenatesFunction.compareTo("decFK4toFK5radians2")==0
 				|| coordenatesFunction.compareTo("raFK5toFK4radians2")==0
 				|| coordenatesFunction.compareTo("decFK5toFK4radians2")==0){
 
-			params.add("RA");
-			params.add("DEC");
+			params.add("nameRA");
+			params.add("nameDEC");
 			
 		}else if(coordenatesFunction.compareTo("raFK4toFK5Radians3")==0
 				|| coordenatesFunction.compareTo("decFK4toFK5Radians3")==0
 				|| coordenatesFunction.compareTo("raFK5toFK4Radians3")==0
 				|| coordenatesFunction.compareTo("decFK5toFK4Radians3")==0){
 			
-			params.add("RA");
-			params.add("DEC");
-			params.add("bepoch");
+			params.add("nameRA");
+			params.add("nameDEC");
+			params.add("namebepoch");
 			
 		} else if(coordenatesFunction.compareTo("skyDistanceRadians")==0){
 			
-			params.add("RA1");
-			params.add("DEC1");
-			params.add("RA2");
-			params.add("DEC2");
+			params.add("nameRA1");
+			params.add("nameDEC1");
+			params.add("nameRA2");
+			params.add("nameDEC2");
 			
 		} else {
 			params.add("Value");
