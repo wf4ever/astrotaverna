@@ -7,13 +7,13 @@ import net.sf.taverna.t2.workbench.ui.actions.activity.ActivityConfigurationActi
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ActivityConfigurationDialog;
 
 import org.purl.wf4ever.astrotaverna.tcat.TcatListActivity;
-import org.purl.wf4ever.astrotaverna.tcat.TcatActivityConfigurationBean;
+import org.purl.wf4ever.astrotaverna.tcat.TcatListActivityConfigurationBean;
 
 @SuppressWarnings("serial")
 public class TcatListConfigureAction
 		extends
 		ActivityConfigurationAction<TcatListActivity,
-        TcatActivityConfigurationBean> {
+        TcatListActivityConfigurationBean> {
 
 	public TcatListConfigureAction(TcatListActivity activity, Frame owner) {
 		super(activity);
@@ -21,7 +21,7 @@ public class TcatListConfigureAction
 
 	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent e) {
-		ActivityConfigurationDialog<TcatListActivity, TcatActivityConfigurationBean> currentDialog = ActivityConfigurationAction
+		ActivityConfigurationDialog<TcatListActivity, TcatListActivityConfigurationBean> currentDialog = ActivityConfigurationAction
 				.getDialog(getActivity());
 		if (currentDialog != null) {
 			currentDialog.toFront();
@@ -30,7 +30,7 @@ public class TcatListConfigureAction
 		TcatListConfigurationPanel panel = new TcatListConfigurationPanel(
 				getActivity());
 		ActivityConfigurationDialog<TcatListActivity,
-        TcatActivityConfigurationBean> dialog = new ActivityConfigurationDialog<TcatListActivity, TcatActivityConfigurationBean>(
+        TcatListActivityConfigurationBean> dialog = new ActivityConfigurationDialog<TcatListActivity, TcatListActivityConfigurationBean>(
 				getActivity(), panel);
 
 		ActivityConfigurationAction.setDialog(getActivity(), dialog);

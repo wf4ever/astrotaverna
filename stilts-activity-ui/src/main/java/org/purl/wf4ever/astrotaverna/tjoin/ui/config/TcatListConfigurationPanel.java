@@ -10,16 +10,16 @@ import javax.swing.JOptionPane;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ActivityConfigurationPanel;
 
 import org.purl.wf4ever.astrotaverna.tcat.TcatListActivity;
-import org.purl.wf4ever.astrotaverna.tcat.TcatActivityConfigurationBean;
+import org.purl.wf4ever.astrotaverna.tcat.TcatListActivityConfigurationBean;
 
 @SuppressWarnings("serial")
 public class TcatListConfigurationPanel
 		extends
 		ActivityConfigurationPanel<TcatListActivity, 
-        TcatActivityConfigurationBean> {
+        TcatListActivityConfigurationBean> {
 
 	private TcatListActivity activity;
-	private TcatActivityConfigurationBean configBean;
+	private TcatListActivityConfigurationBean configBean;
 	
 	String[] inputTypesStrings = {"File", "URL", "String"};
 	//String[] filterTypesStrings = {"Column names", "UCDs"};
@@ -98,7 +98,7 @@ public class TcatListConfigurationPanel
 	 * noteConfiguration() was called.
 	 */
 	@Override
-	public TcatActivityConfigurationBean getConfiguration() {
+	public TcatListActivityConfigurationBean getConfiguration() {
 		// Should already have been made by noteConfiguration()
 		return configBean;
 	}
@@ -122,7 +122,7 @@ public class TcatListConfigurationPanel
 	 */
 	@Override
 	public void noteConfiguration(){
-		configBean = new TcatActivityConfigurationBean();
+		configBean = new TcatListActivityConfigurationBean();
 		
 		// FIXME: Update bean fields from your UI elements
 		configBean.setTypeOfInput((String)typeOfInput.getSelectedItem());

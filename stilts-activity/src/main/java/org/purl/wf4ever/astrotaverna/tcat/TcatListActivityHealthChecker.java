@@ -7,7 +7,7 @@ import net.sf.taverna.t2.visit.VisitReport;
 import net.sf.taverna.t2.visit.VisitReport.Status;
 import net.sf.taverna.t2.workflowmodel.health.HealthCheck;
 import net.sf.taverna.t2.workflowmodel.health.HealthChecker;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
+
 
 /**
  * Stilts health checker
@@ -34,7 +34,7 @@ public class TcatListActivityHealthChecker implements
 	}
 
 	public VisitReport visit(TcatListActivity activity, List<Object> ancestry) {
-		TcatActivityConfigurationBean config = activity.getConfiguration();
+		TcatListActivityConfigurationBean config = activity.getConfiguration();
 
 		// We'll build a list of subreports
 		List<VisitReport> subReports = new ArrayList<VisitReport>();

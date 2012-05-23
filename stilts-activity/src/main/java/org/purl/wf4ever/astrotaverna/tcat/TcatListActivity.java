@@ -23,8 +23,8 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCallback;
 
 public class TcatListActivity extends
-		AbstractAsynchronousActivity<TcatActivityConfigurationBean>
-		implements AsynchronousActivity<TcatActivityConfigurationBean> {
+		AbstractAsynchronousActivity<TcatListActivityConfigurationBean>
+		implements AsynchronousActivity<TcatListActivityConfigurationBean> {
 
 	/*
 	 * Best practice: Keep port names as constants to avoid misspelling. This
@@ -38,10 +38,10 @@ public class TcatListActivity extends
 	private static final String OUT_SIMPLE_OUTPUT = "outputFileOut";
 	private static final String OUT_REPORT = "report";
 	
-	private TcatActivityConfigurationBean configBean;
+	private TcatListActivityConfigurationBean configBean;
 
 	@Override
-	public void configure(TcatActivityConfigurationBean configBean)
+	public void configure(TcatListActivityConfigurationBean configBean)
 			throws ActivityConfigurationException {
 
 		// Any pre-config sanity checks
@@ -310,7 +310,7 @@ public class TcatListActivity extends
 	}
 
 	@Override
-	public TcatActivityConfigurationBean getConfiguration() {
+	public TcatListActivityConfigurationBean getConfiguration() {
 		return this.configBean;
 	}
 

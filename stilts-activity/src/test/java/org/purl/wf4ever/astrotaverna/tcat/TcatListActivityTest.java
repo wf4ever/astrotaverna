@@ -3,19 +3,18 @@ package org.purl.wf4ever.astrotaverna.tcat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.HashMap;
-import java.util.HashSet;
+
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
 
 import net.sf.taverna.t2.activities.testutils.ActivityInvoker;
-import net.sf.taverna.t2.workflowmodel.OutputPort;
+
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
-import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityInputPort;
+
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -25,7 +24,7 @@ import org.junit.Test;
 
 public class TcatListActivityTest {
 
-	private TcatActivityConfigurationBean configBean;
+	private TcatListActivityConfigurationBean configBean;
 
 	//these variables must be the same than the ones defined in the activity class
 	private static final String IN_FIRST_INPUT = "votableList";
@@ -35,7 +34,7 @@ public class TcatListActivityTest {
 	
 	private TcatListActivity activity = new TcatListActivity();
 	
-	private List votableListIn;
+	private List<String> votableListIn;
 
 	@Ignore("Not ready to run")
 	@BeforeClass
@@ -52,17 +51,17 @@ public class TcatListActivityTest {
 	//this method is invoked before each test method
 	@Before
 	public void makeConfigBean() throws Exception {
-		configBean = new TcatActivityConfigurationBean();
+		configBean = new TcatListActivityConfigurationBean();
 		
 		configBean.setTypeOfInput("File");
-		votableListIn = new ArrayList();
+		votableListIn = new ArrayList<String>();
 		votableListIn.add(table1);
 		votableListIn.add(table2);
 	}
 
 	@Test(expected = ActivityConfigurationException.class)
 	public void invalidConfiguration() throws ActivityConfigurationException {
-		TcatActivityConfigurationBean invalidBean = new TcatActivityConfigurationBean();
+		TcatListActivityConfigurationBean invalidBean = new TcatListActivityConfigurationBean();
 		invalidBean.setTypeOfInput("Fileon");
 		// Should throw ActivityConfigurationException
 		activity.configure(invalidBean);
@@ -184,7 +183,7 @@ public class TcatListActivityTest {
 	public void reConfiguredPorts() throws Exception {
 		activity.configure(configBean);
 
-		TcatActivityConfigurationBean specialBean = new TcatActivityConfigurationBean();
+		TcatListActivityConfigurationBean specialBean = new TcatListActivityConfigurationBean();
 		specialBean.setTypeOfInput("String");
 
 		activity.configure(specialBean);		

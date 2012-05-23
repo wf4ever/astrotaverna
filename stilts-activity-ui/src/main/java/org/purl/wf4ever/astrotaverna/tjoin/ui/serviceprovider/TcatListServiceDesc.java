@@ -10,16 +10,16 @@ import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
 import org.purl.wf4ever.astrotaverna.tcat.TcatListActivity;
-import org.purl.wf4ever.astrotaverna.tcat.TcatActivityConfigurationBean;
+import org.purl.wf4ever.astrotaverna.tcat.TcatListActivityConfigurationBean;
 
-public class TcatListServiceDesc extends ServiceDescription<TcatActivityConfigurationBean> {
+public class TcatListServiceDesc extends ServiceDescription<TcatListActivityConfigurationBean> {
 
 	/**
 	 * The subclass of Activity which should be instantiated when adding a service
 	 * for this description 
 	 */
 	@Override
-	public Class<? extends Activity<TcatActivityConfigurationBean>> getActivityClass() {
+	public Class<? extends Activity<TcatListActivityConfigurationBean>> getActivityClass() {
 		return TcatListActivity.class;
 	} 
 
@@ -30,8 +30,8 @@ public class TcatListServiceDesc extends ServiceDescription<TcatActivityConfigur
 	 * 
 	 */
 	@Override
-	public TcatActivityConfigurationBean getActivityConfiguration() {
-		TcatActivityConfigurationBean bean = new TcatActivityConfigurationBean();
+	public TcatListActivityConfigurationBean getActivityConfiguration() {
+		TcatListActivityConfigurationBean bean = new TcatListActivityConfigurationBean();
 		bean.setTypeOfInput("String");
 		//bean.setTypeOfFilter("Column names");
 		return bean;
