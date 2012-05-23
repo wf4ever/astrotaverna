@@ -7,3 +7,4 @@ org.purl.wf4ever.astrotaverna.tpipe.AddColumnByExpressionActivityHealthChecker
 org.purl.wf4ever.astrotaverna.tpipe.AddSkyCoordsActivityHealthChecker
 org.purl.wf4ever.astrotaverna.tpipe.ResolveCoordsActivityHealthChecker
 org.purl.wf4ever.astrotaverna.tcat.TcatActivityHealthChecker
+org.purl.wf4ever.astrotaverna.tcat.TcatListActivityHealthChecker

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Vector;
 
 
@@ -74,6 +75,17 @@ public class MyUtils {
 		String result="";
 		
 		for(String cad : array){
+			result= result + cad+" ";
+		}
+		
+		return result.trim();
+	}
+	
+	public static String toSpacedString(List<String> array){
+		String result="";
+		
+		for(int i = 0; i < array.size(); i++){
+			String cad = array.get(i);
 			result= result + cad+" ";
 		}
 		

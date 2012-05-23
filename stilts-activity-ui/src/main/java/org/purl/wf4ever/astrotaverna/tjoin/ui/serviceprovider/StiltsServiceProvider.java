@@ -96,8 +96,13 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		
 		TcatServiceDesc service9 = new TcatServiceDesc();
 		service9.setTypeOfInput("String");
-		service9.setDescription("Cat tables");
+		service9.setDescription("Cat two tables");
 		results.add(service9);
+		
+		TcatListServiceDesc service10 = new TcatListServiceDesc();
+		service10.setTypeOfInput("String");
+		service10.setDescription("Cat a list of tables");
+		results.add(service10);
 		
 		//Put here additional descriptions for other services
 		//............

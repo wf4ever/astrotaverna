@@ -10,19 +10,19 @@ import javax.swing.JTextArea;
 
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 
-import org.purl.wf4ever.astrotaverna.tcat.TcatActivity;
+import org.purl.wf4ever.astrotaverna.tcat.TcatListActivity;
 import org.purl.wf4ever.astrotaverna.tcat.TcatActivityConfigurationBean;
-import org.purl.wf4ever.astrotaverna.tjoin.ui.config.TcatConfigureAction;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.config.TcatListConfigureAction;
 import org.purl.wf4ever.astrotaverna.tjoin.ui.config.StiltsConfigureAction;
 
 
 @SuppressWarnings("serial")
-public class TcatContextualView extends ContextualView {
-	private final TcatActivity activity;
+public class TcatListContextualView extends ContextualView {
+	private final TcatListActivity activity;
 	private JTextArea description;
 	private javax.swing.JScrollPane jScrollPane1;
 
-	public TcatContextualView(TcatActivity activity) {
+	public TcatListContextualView(TcatListActivity activity) {
 		this.activity = activity;
 		initView(); //this method will call the getMainFrame()
 	}
@@ -38,10 +38,10 @@ public class TcatContextualView extends ContextualView {
 		description.setEditable(false);
 		description.setColumns(30);
 		description.setLineWrap(true);
-		description.setText("The service returns a votable resulting from concatenating two similar votables. " +
+		description.setText("The service returns a votable resulting from concatenating a list of similar votables. " +
 				"The tables must be of similar form to each other (same number and types of columns). \n" +
-				"Using the configure service option you can choose between direct votable input, " +
-				"a URL or a File. If the input is a file path then the output is a File path whereas the output " +
+				"Using the configure service option you can choose between direct list of votable input, " +
+				"URLs or Files. If the input are files path then the output is a File path whereas the output " +
 				"is a string with the votable in the remaining cases. ");
 
 		jScrollPane1.setViewportView(description);
@@ -56,7 +56,7 @@ public class TcatContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Cat two tables";
+		return "Cat a list of tables";
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class TcatContextualView extends ContextualView {
 	//the section.
 	@Override
 	public Action getConfigureAction(final Frame owner) {
-		return new TcatConfigureAction(activity, owner);
+		return new TcatListConfigureAction(activity, owner);
 	}
 
 }
