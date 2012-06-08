@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>astrotaverna</artifactId>
 		<groupId>org.purl.wf4ever.astrotaverna</groupId>
-		<version>0.8</version>
+		<version>0.9-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>votable-renderer</artifactId>
