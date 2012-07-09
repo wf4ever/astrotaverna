@@ -17,7 +17,10 @@ public class NoExitSecurityManager extends SecurityManager {
     @Override
     public void checkExit(int status)
     {
-      /* Don't allow exit with any status code. */
+      /* Don't allow exit with any status code 1 . */
+      //status == 0: no error
+      //status != 0: error 
+    if(status == 1)
       throw new SecurityException();
     }
 

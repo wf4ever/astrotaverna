@@ -16,6 +16,9 @@ import org.purl.wf4ever.astrotaverna.tpipe.FormatConversionActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.ResolveCoordsActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.SelectColumnsActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.SelectRowsActivity;
+import org.purl.wf4ever.astrotaverna.voutils.CheckTemplateFillerActivity;
+import org.purl.wf4ever.astrotaverna.voutils.GetListFromColumnActivity;
+import org.purl.wf4ever.astrotaverna.voutils.TemplateFillerActivity;
 
 public class StiltsActivityContextViewFactory implements
 		ContextualViewFactory  {
@@ -42,6 +45,12 @@ public class StiltsActivityContextViewFactory implements
 		else if(selection instanceof TcatActivity)
 			return true;
 		else if(selection instanceof TcatListActivity)
+			return true;
+		else if(selection instanceof GetListFromColumnActivity)
+			return true;
+		else if(selection instanceof TemplateFillerActivity)
+			return true;
+		else if(selection instanceof CheckTemplateFillerActivity)
 			return true;
 		else
 			return false;
@@ -89,6 +98,18 @@ public class StiltsActivityContextViewFactory implements
 		return Arrays.<ContextualView>asList(new TcatListContextualView(selection));
 	}
 	
+	public List<ContextualView> getViews(GetListFromColumnActivity selection) {
+		return Arrays.<ContextualView>asList(new GetListFromColumnContextualView(selection));
+	}											 
+	
+	public List<ContextualView> getViews(TemplateFillerActivity selection) {
+		return Arrays.<ContextualView>asList(new TemplateFillerContextualView(selection));
+	}
+	
+	public List<ContextualView> getViews(CheckTemplateFillerActivity selection) {
+		return Arrays.<ContextualView>asList(new CheckTemplateFillerContextualView(selection));
+	}
+	
 	@Override
 	public List<ContextualView> getViews(Object arg0) {
 		// TODO Auto-generated method stub
@@ -112,6 +133,12 @@ public class StiltsActivityContextViewFactory implements
 			return getViews((TcatActivity) arg0);
 		else if(arg0 instanceof TcatListActivity)
 			return getViews((TcatListActivity) arg0);
+		else if(arg0 instanceof GetListFromColumnActivity)
+			return getViews((GetListFromColumnActivity) arg0);
+		else if(arg0 instanceof TemplateFillerActivity)
+			return getViews((TemplateFillerActivity) arg0);
+		else if(arg0 instanceof CheckTemplateFillerActivity)
+			return getViews((CheckTemplateFillerActivity) arg0);
 		else
 			return null;
 	}

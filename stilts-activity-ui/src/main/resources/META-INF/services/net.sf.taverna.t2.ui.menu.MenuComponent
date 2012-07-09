@@ -6,3 +6,8 @@ org.purl.wf4ever.astrotaverna.tjoin.ui.menu.CoordTransformationConfigureMenuActi
 org.purl.wf4ever.astrotaverna.tjoin.ui.menu.ResolveCoordsConfigureMenuAction
 org.purl.wf4ever.astrotaverna.tjoin.ui.menu.AddSkyCoordsConfigureMenuAction
 org.purl.wf4ever.astrotaverna.tjoin.ui.menu.AddColumnByExpressionConfigureMenuAction
+org.purl.wf4ever.astrotaverna.tjoin.ui.menu.TcatConfigureMenuAction
+org.purl.wf4ever.astrotaverna.tjoin.ui.menu.TcatListConfigureMenuAction
+org.purl.wf4ever.astrotaverna.tjoin.ui.menu.GetListFromColumnConfigureMenuAction
+org.purl.wf4ever.astrotaverna.tjoin.ui.menu.TemplateFillerConfigureMenuAction
+org.purl.wf4ever.astrotaverna.tjoin.ui.menu.CheckTemplateFillerConfigureMenuAction

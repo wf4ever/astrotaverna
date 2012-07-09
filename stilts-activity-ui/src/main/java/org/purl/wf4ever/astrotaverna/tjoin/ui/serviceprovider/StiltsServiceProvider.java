@@ -104,6 +104,21 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		service10.setDescription("Cat a list of tables");
 		results.add(service10);
 		
+		GetListFromColumnServiceDesc service11 = new GetListFromColumnServiceDesc();
+		service11.setTypeOfInput("String");
+		service11.setDescription("Get list from column in a votable");
+		results.add(service11);
+		
+		TemplateFillerServiceDesc service12 = new TemplateFillerServiceDesc();
+		service12.setTypeOfInput("String");
+		service12.setDescription("Template filler from a votable");
+		results.add(service12);
+		
+		CheckTemplateFillerServiceDesc service13 = new CheckTemplateFillerServiceDesc();
+		service13.setTypeOfInput("String");
+		service13.setDescription("Check Template filler");
+		results.add(service13);
+		
 		//Put here additional descriptions for other services
 		//............
 		//............

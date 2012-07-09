@@ -1,6 +1,7 @@
 package org.purl.wf4ever.astrotaverna.utils;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -37,6 +38,12 @@ public class MyUtils {
 	    writer.close();
 	    
 	    return file;
+	}
+	
+	public static void writeStringToAFile(String filepath, String content) throws IOException{
+		BufferedWriter out = new BufferedWriter(new FileWriter(filepath));
+		out.write(content);
+		out.close();
 	}
 	
 	public static boolean isValidInputFormat(String format){

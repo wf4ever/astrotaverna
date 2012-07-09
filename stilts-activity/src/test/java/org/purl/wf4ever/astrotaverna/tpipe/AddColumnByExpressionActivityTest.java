@@ -23,7 +23,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.purl.wf4ever.astrotaverna.utils.MyUtils;
 
-/**
+/** 
  * 
  * @author julian Garrido 
  * Some tests may fail because the resulting votable name comes from a random number 
