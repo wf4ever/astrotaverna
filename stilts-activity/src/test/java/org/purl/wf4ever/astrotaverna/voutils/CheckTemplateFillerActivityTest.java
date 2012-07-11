@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import java.util.Map;
 
+import org.purl.wf4ever.astrotaverna.utils.*;
 
 import net.sf.taverna.t2.activities.testutils.ActivityInvoker;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
@@ -18,7 +19,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.purl.wf4ever.astrotaverna.utils.MyUtils;
+//import org.purl.wf4ever.astrotaverna.utils.*;
+//import org.purl.wf4ever.astrotaverna.utils.MyUtils;
+
+//import org.purl.wf4ever.astrotaverna.voutils.CheckTemplateFillerActivityConfigurationBean;
+
 /**
  * 
  * @author julian Garrido 
@@ -249,6 +254,7 @@ public class CheckTemplateFillerActivityTest {
 		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
 	}
 
+	
 	
 	private static final String resultCheckTemplateFiller = 
 			"<?xml version='1.0'?>"

@@ -96,9 +96,9 @@ public class TemplateFillerActivityTest {
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
 				activity, inputs, expectedOutputTypes);
 		
-		String report = "/home/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG0011_g.galfit" + System.lineSeparator()+
-				"/home/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG0011_i.galfit" + System.lineSeparator()+
-				"/home/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG0011_r.galfit" + System.lineSeparator();
+		String report = "/home/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG0011_g.galfit\n" + //System.lineSeparator()+
+				"/home/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG0011_i.galfit\n" + //System.lineSeparator()+
+				"/home/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG0011_r.galfit\n"; // + System.lineSeparator();
 		assertEquals("Unexpected outputs", 1, outputs.size());
 		assertEquals(report, outputs.get(OUT_REPORT));
 		
