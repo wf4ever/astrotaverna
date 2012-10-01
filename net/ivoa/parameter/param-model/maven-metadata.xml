@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>net.ivoa.parameter</groupId>
+  <artifactId>param-model</artifactId>
+  <versioning>
+    <release>0.0.1-utillities-thread-safe</release>
+    <versions>
+      <version>0.0.1-utillities-thread-safe</version>
+    </versions>
+    <lastUpdated>20121001141530</lastUpdated>
+  </versioning>
+</metadata>
