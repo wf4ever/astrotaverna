@@ -51,7 +51,7 @@ public class ValidationPDLClientActivity extends
 	 * operation, like done for WSDL services.
 	 */
 	
-	private static final String OUT_SIMPLE_OUTPUT = "outputFileOut";
+	//private static final String OUT_SIMPLE_OUTPUT = "outputFileOut";
 	private static final String OUT_REPORT = "report";
 	
 	private ValidationPDLClientActivityConfigurationBean configBean;
@@ -140,7 +140,7 @@ public class ValidationPDLClientActivity extends
 
 		
 		// Single value output port (depth 0)
-		addOutput(OUT_SIMPLE_OUTPUT, 0);
+		//addOutput(OUT_SIMPLE_OUTPUT, 0);
 		// Single value output port (depth 0)
 		addOutput(OUT_REPORT, 0);
 
@@ -282,7 +282,6 @@ public class ValidationPDLClientActivity extends
 									Utilities.getInstance().getMapper().getMap()
 									  .put(param.getName(), generalParamList);
 								}
-							
 						}//end for(List<SingleParameter> list : paramsLists){
 					}
 										
@@ -290,121 +289,21 @@ public class ValidationPDLClientActivity extends
 					
 					
 					//gp.process(); //OPTIONAL???
-					checkInfo();
+					//checkInfo();
 					PDLServiceValidation pdlServiceValidation = new PDLServiceValidation(gp);
-					System.out.println("******is valid service???:  "+ pdlServiceValidation.isValid());
-					System.out.println("status:  "+ pdlServiceValidation.getStatus());
 					
-					/*
-					String outputTableName = null;
-					if(optionalPorts && inputs.containsKey(IN_OUTPUT_TABLE_NAME)){ //configBean.getNumberOfTables()==3
-						outputTableName = (String) referenceService.renderIdentifier(inputs.get(IN_OUTPUT_TABLE_NAME), 
-								String.class, context);
+					//System.out.println("******is valid service???:  "+ pdlServiceValidation.isValid());
+					//System.out.println("status:  "+ pdlServiceValidation.getStatus());
+					
+					if(!callbackfails && pdlServiceValidation.isValid()){
+						Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
+						T2Reference simpleRef2 = referenceService.register(valid,0, true, context); 
+						outputs.put(OUT_REPORT, simpleRef2);
+						callback.receiveResult(outputs, new int[0]);
+					}else{
+						callback.fail("Invalid values for the input parameters, check the restrictions");
 					}
 					
-		
-				
-					// Support our configuration-dependendent input
-					//boolean optionalPorts = configBean.getExampleString().equals("specialCase"); 
-					
-					//List<byte[]> special = null;
-					// We'll also allow IN_EXTRA_DATA to be optionally not provided
-					//if (optionalPorts && inputs.containsKey(IN_EXTRA_DATA)) {
-					//	// Resolve as a list of byte[]
-					//	special = (List<byte[]>) referenceService.renderIdentifier(
-					//			inputs.get(IN_EXTRA_DATA), byte[].class, context);
-					//}
-					
-	
-					// TODO: Do the actual service invocation
-	//				try {
-	//					results = this.service.invoke(firstInput, special)
-	//				} catch (ServiceException ex) {
-	//					callback.fail("Could not invoke Stilts service " + configBean.getExampleUri(),
-	//							ex);
-	//					// Make sure we don't call callback.receiveResult later 
-	//					return;
-	//				}
-					
-					//Performing the work: Stilts functinalities
-					String [] parameters;
-					
-					if(!callbackfails){
-						//set up parameters 
-						parameters = new String[6];
-						parameters[0] = "tcat";
-						parameters[1] = "ifmt=votable";
-						parameters[2] = "in="+firstInput;
-						parameters[3] = "in="+secondInput;
-						parameters[4] = "ofmt=votable";
-						parameters[5] = "out="+outputTableName;
-						
-						
-						
-		
-						SecurityManager securityBackup = System.getSecurityManager();
-						System.setSecurityManager(new NoExitSecurityManager());
-						
-						try{
-							System.setProperty("votable.strict", "false");
-							Stilts.main(parameters);
-						}catch(SecurityException ex){
-							callback.fail("Invalid service call: check the input parameters", ex);
-							callbackfails = true;
-						}
-					
-						System.setSecurityManager(securityBackup);
-					*/	
-					
-						if(!callbackfails){
-							// Register outputs
-							Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-							String simpleValue = "simpleValue";// //Name of the output file or result
-							String simpleoutput = "simple-report";
-							/*
-							if(optionalPorts){ //case File
-								simpleValue = outputTableName;
-							}else if(configBean.getTypeOfInput().compareTo("URL")==0
-										|| configBean.getTypeOfInput().compareTo("String")==0){
-						
-								try{
-									simpleValue = MyUtils.readFileAsString(tmpOutFile.getAbsolutePath());
-								}catch (Exception ex){
-									callback.fail("It wasn't possible to read the result from a temporary file", ex);
-									callbackfails = true;
-								}
-							}
-							*/
-							if(!callbackfails){
-								T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
-								outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
-								T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
-								outputs.put(OUT_REPORT, simpleRef2);
-								
-								// For list outputs, only need to register the top level list
-								//List<String> moreValues = new ArrayList<String>();
-								//moreValues.add("Value 1");
-								//moreValues.add("Value 2");
-								//T2Reference moreRef = referenceService.register(moreValues, 1, true, context);
-								//outputs.put(OUT_MORE_OUTPUTS, moreRef);
-				
-								//if (optionalPorts) {
-								//	// Populate our optional output port					
-								//	// NOTE: Need to return output values for all defined output ports
-								//	String report = "Everything OK";
-								//	outputs.put(OUT_REPORT, referenceService.register(report,
-								//			0, true, context));
-								//}
-								
-								// return map of output data, with empty index array as this is
-								// the only and final result (this index parameter is used if
-								// pipelining output)
-								callback.receiveResult(outputs, new int[0]);
-							}
-						}
-						/*
-					}
-					*/
 				}
 			}
 		});

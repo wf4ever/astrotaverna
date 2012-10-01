@@ -3,7 +3,10 @@ package org.purl.wf4ever.astrotaverna.pdl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +24,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.purl.wf4ever.astrotaverna.utils.MyUtils;
 
 public class ValidationPDLClientActivityTest {
 
@@ -57,7 +61,7 @@ public class ValidationPDLClientActivityTest {
 
 	}
 
-	@Ignore
+	
 	@Test(expected = ActivityConfigurationException.class)
 	public void invalidConfiguration() throws ActivityConfigurationException {
 		ValidationPDLClientActivityConfigurationBean invalidBean = new ValidationPDLClientActivityConfigurationBean();
@@ -72,8 +76,11 @@ public class ValidationPDLClientActivityTest {
 
 	
 	@Test
-	public void executeAsynch() throws Exception {
-		configBean.setPdlDescriptionFile("/home/julian/otherworkspaces/pdlworkspace/testPDLcmdLineTool/PDL-Description.xml");
+	public void executeAsynchValid() throws Exception {
+		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");
+	    String pdlContent = MyUtils.convertStreamToString(is);
+	    File tmpFile = MyUtils.writeStringAsTmpFile(pdlContent);
+		configBean.setPdlDescriptionFile(tmpFile.getAbsolutePath());
 		activity.configure(configBean);
 
 		Map<String, Object> inputs = new HashMap<String, Object>();
@@ -98,144 +105,84 @@ public class ValidationPDLClientActivityTest {
 		
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
-		expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
 		expectedOutputTypes.put(OUT_REPORT, String.class);
 
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
 				activity, inputs, expectedOutputTypes);
 
-		assertEquals("Unexpected outputs", 2, outputs.size());
-		assertEquals("simpleValue", outputs.get(OUT_SIMPLE_OUTPUT));
-		assertEquals("simple-report", outputs.get(OUT_REPORT));
-		
-		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
-		//		.get("moreOutputs"));
-
-	}
-	@Ignore
-	@Test(expected = Exception.class)
-	public void executeAsynchWithUnexistingFile() throws Exception {
-		configBean.setPdlDescriptionFile("/home/julian/otherworkspaces/pdlworkspace/testPDLcmdLineTool/PDL-Description.xml");
-		activity.configure(configBean);
-
-		Map<String, Object> inputs = new HashMap<String, Object>();
-		inputs.put(IN_FIRST_INPUT, "/home/julian/Documentos/wf4ever/tables/filenoexist.xml");
-		inputs.put(IN_SECOND_INPUT, "/home/julian/Documentos/wf4ever/tables/filenoexist2.xml");
-		inputs.put(IN_OUTPUT_TABLE_NAME, "/home/julian/Documentos/wf4ever/tables/file.xml");
-		
-
-		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
-		expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
-		expectedOutputTypes.put(OUT_REPORT, String.class);
-
-		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
-				activity, inputs, expectedOutputTypes);
-
-		assertEquals("Unexpected outputs", 2, outputs.size());
-		assertEquals("/home/julian/Documentos/wf4ever/tables/join_test.xml", outputs.get(OUT_SIMPLE_OUTPUT));
-		assertEquals("simple-report", outputs.get(OUT_REPORT));
-		
-		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
-		//		.get("moreOutputs"));
-
-	}
-
-	@Ignore
-	@Test
-	public void executeAsynchWitStrings() throws Exception {
-		configBean.setPdlDescriptionFile("/home/julian/otherworkspaces/pdlworkspace/testPDLcmdLineTool/PDL-Description.xml");
-		activity.configure(configBean);
-
-		Map<String, Object> inputs = new HashMap<String, Object>();
-	//	inputs.put(IN_FIRST_INPUT, table1);
-	//	inputs.put(IN_SECOND_INPUT, table2);
-		
-		
-
-		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
-		expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
-		expectedOutputTypes.put(OUT_REPORT, String.class);
-
-		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
-				activity, inputs, expectedOutputTypes);
-
-		String result = (String) outputs.get(OUT_SIMPLE_OUTPUT);
-		
-		//result = result.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
-		//tableresult = tableresult.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");		
-		//assertTrue("Wrong output : ", (result.length()> tableresult.length()-6) && (result.length()< tableresult.length()+6));
-		assertTrue("Wrong output : ", result.indexOf("nrows=\"3\"")!=-1);
-		assertEquals("Unexpected outputs", 2, outputs.size());
-		//assertEquals("/home/julian/Documentos/wf4ever/tables/join_test.xml", outputs.get(OUT_SIMPLE_OUTPUT));
-		assertEquals("simple-report", outputs.get(OUT_REPORT));
-		
-		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
-		//		.get("moreOutputs"));
-
-	}
-	@Ignore
-	@Test(expected = Exception.class)
-	public void executeAsynchWitNullInport() throws Exception {
-		configBean.setPdlDescriptionFile("/home/julian/otherworkspaces/pdlworkspace/testPDLcmdLineTool/PDL-Description.xml");
-		activity.configure(configBean);
-
-		Map<String, Object> inputs = new HashMap<String, Object>();
-		//inputs.put(IN_FIRST_INPUT, table1);
-		//inputs.put(IN_SECOND_INPUT, table2);
-		
-		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
-		expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
-		expectedOutputTypes.put(OUT_REPORT, String.class);
-
-		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
-				activity, inputs, expectedOutputTypes);
-
-		String result = (String) outputs.get(OUT_SIMPLE_OUTPUT);
-		
-		assertTrue("Wrong output : ", result.indexOf("nrows=\"3\"")!=-1);
-		assertEquals("Unexpected outputs", 2, outputs.size());
-		//assertEquals("/home/julian/Documentos/wf4ever/tables/join_test.xml", outputs.get(OUT_SIMPLE_OUTPUT));
-		assertEquals("simple-report", outputs.get(OUT_REPORT));
+		assertEquals("Unexpected outputs", 1, outputs.size());
+		assertEquals("Valid", outputs.get(OUT_REPORT));
 		
 		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
 		//		.get("moreOutputs"));
 
 	}
 	
-	@Ignore
+	
+	@Test(expected = Exception.class)
+	public void executeAsynchŃotValid() throws Exception {
+		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");
+	    String pdlContent = MyUtils.convertStreamToString(is);
+	    File tmpFile = MyUtils.writeStringAsTmpFile(pdlContent);
+		configBean.setPdlDescriptionFile(tmpFile.getAbsolutePath());
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		Float value = new Float(1/12.0);
+		inputs.put("Ne", value.toString());
+		inputs.put("Si", value.toString());
+		inputs.put("Mg", value.toString());
+		inputs.put("Cr", value.toString());
+		inputs.put("Na", value.toString());
+		inputs.put("Ar", value.toString());
+		inputs.put("Al", value.toString());
+		inputs.put("Ca", value.toString());
+		inputs.put("Fe", value.toString());
+		inputs.put("C", value.toString());
+		inputs.put("N", value.toString());
+		inputs.put("S", value.toString());
+		inputs.put("Mn", value.toString());
+		inputs.put("O", value.toString());
+		inputs.put("Ni", value.toString());
+		inputs.put("email", "email@iaa.es");
+		
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		assertEquals("Unexpected outputs", 1, outputs.size());
+		assertEquals("Valid", outputs.get(OUT_REPORT));
+
+	}
+	
+	
 	@Test
 	public void reConfiguredActivity() throws Exception {
+		
+		
 		assertEquals("Unexpected inputs", 0, activity.getInputPorts().size());
 		assertEquals("Unexpected outputs", 0, activity.getOutputPorts().size());
-		//System.out.println(configBean.getPdlDescriptionFile());
+		
+		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");
+	    String pdlContent = MyUtils.convertStreamToString(is);
+	    File tmpFile = MyUtils.writeStringAsTmpFile(pdlContent);
+		configBean.setPdlDescriptionFile(tmpFile.getAbsolutePath());
 		activity.configure(configBean);
+		
 		assertEquals("Unexpected inputs", 16, activity.getInputPorts().size());
-		assertEquals("Unexpected outputs", 2, activity.getOutputPorts().size());
+		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
 
 		activity.configure(configBean);
 		// Should not change on reconfigure
 		assertEquals("Unexpected inputs", 16, activity.getInputPorts().size());
-		assertEquals("Unexpected outputs", 2, activity.getOutputPorts().size());
+		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
 		Iterator<ActivityInputPort> it = activity.getInputPorts().iterator();
-		//while(it.hasNext()){
-		//	ActivityInputPort act = it.next();
-		//	//System.out.println(act.getName()+" depth: " + act.getDepth());
-		//	System.out.println(act.getName());
-		//}
-	}
-
-	@Ignore
-	@Test
-	public void reConfiguredPorts() throws Exception {
-		activity.configure(configBean);
-
-		ValidationPDLClientActivityConfigurationBean specialBean = new ValidationPDLClientActivityConfigurationBean();
-		configBean.setPdlDescriptionFile("/home/julian/otherworkspaces/pdlworkspace/testPDLcmdLineTool/PDL-Description.xml");
-
-		activity.configure(specialBean);		
-		// Should now have added the optional ports
-		assertEquals("Unexpected inputs", 2, activity.getInputPorts().size());
-		assertEquals("Unexpected outputs", 2, activity.getOutputPorts().size());
 	}
 	
 	
