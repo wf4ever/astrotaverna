@@ -15,6 +15,9 @@ import net.sf.taverna.t2.workbench.dev.DeveloperWorkbench;
  */
 public class TavernaWorkbenchWithExamplePlugin {
 	public static void main(String[] args) throws Exception {
+		System.setProperty("raven.launcher.app.name","taverna-2.4.0-dev");
+		System.setProperty("taverna.startup",".");
+		System.setProperty("sun.swing.enableImprovedDragGesture","");
 		DeveloperWorkbench.main(args);
 	}
 }

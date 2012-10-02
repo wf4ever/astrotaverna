@@ -1,11 +1,18 @@
 package org.purl.wf4ever.astrotaverna.view.votable;
 
+import static org.purl.wf4ever.astrotaverna.samp.TavernaSampConnection.getSampHubConnector;
+
 import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
@@ -14,6 +21,10 @@ import net.sf.taverna.t2.reference.T2Reference;
 import net.sf.taverna.t2.renderers.Renderer;
 import net.sf.taverna.t2.renderers.RendererException;
 
+import org.apache.log4j.Logger;
+import org.astrogrid.samp.Message;
+import org.astrogrid.samp.client.HubConnector;
+import org.astrogrid.samp.client.SampException;
 import org.purl.wf4ever.astrotaverna.vo.utils.HTMLPane;
 
 import uk.ac.starlink.table.ColumnInfo;
@@ -26,6 +37,9 @@ import uk.ac.starlink.util.ByteArrayDataSource;
 
 public class VOTableRenderer implements Renderer {
 
+	private static Logger logger = Logger.getLogger(VOTableRenderer.class);
+
+	
 	protected List<String> PREDICTORS = Arrays.asList(
 			"http://www.ivoa.net/xml/VOTable",
 			"http://vizier.u-strasbg.fr/VOTable",
@@ -83,8 +97,30 @@ public class VOTableRenderer implements Renderer {
 		JTabbedPane tabs = new JTabbedPane();
 		tabs.add("VOTable", new JScrollPane(jTable));
 		tabs.add("Metadata", new JScrollPane(makeMetaData(starTable)));
+		tabs.add("SAMP", new JPanel());
+		tabs.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				HubConnector conn = getSampHubConnector();
+				Message msg = new Message("table.load.votable");
+				msg.addParam("url", new File("/tmp/f.votable").toURI().toASCIIString());
+				msg.addParam("name", "Fred");
+				try {
+					conn.getConnection().notifyAll(msg);
+					JOptionPane.showMessageDialog(e.getComponent(),
+							"Sent over SAMP");
+				} catch (SampException e1) {
+					logger.warn("Could not send to SAMP");
+					JOptionPane.showMessageDialog(e.getComponent(),
+							"Could not send.. " + e1.getLocalizedMessage());
+				}			
+			}
+		});
 		return new JScrollPane(tabs);
 	}
+
+	
+	
 
 	@SuppressWarnings("unchecked")
 	protected Component makeMetaData(StarTable starTable) {
