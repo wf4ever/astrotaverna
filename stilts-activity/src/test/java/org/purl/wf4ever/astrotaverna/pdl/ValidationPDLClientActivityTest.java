@@ -61,7 +61,7 @@ public class ValidationPDLClientActivityTest {
 
 	}
 
-	
+	@Ignore
 	@Test(expected = ActivityConfigurationException.class)
 	public void invalidConfiguration() throws ActivityConfigurationException {
 		ValidationPDLClientActivityConfigurationBean invalidBean = new ValidationPDLClientActivityConfigurationBean();
@@ -74,7 +74,7 @@ public class ValidationPDLClientActivityTest {
 
 	//this test is valid only with the right folders
 
-	
+	@Ignore
 	@Test
 	public void executeAsynchValid() throws Exception {
 		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");
@@ -119,7 +119,7 @@ public class ValidationPDLClientActivityTest {
 
 	}
 	
-	
+	@Ignore
 	@Test(expected = Exception.class)
 	public void executeAsynchŃotValid() throws Exception {
 		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");
@@ -161,7 +161,7 @@ public class ValidationPDLClientActivityTest {
 
 	}
 	
-	
+	@Ignore
 	@Test
 	public void reConfiguredActivity() throws Exception {
 		
