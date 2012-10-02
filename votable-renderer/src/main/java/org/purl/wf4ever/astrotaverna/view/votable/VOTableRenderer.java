@@ -1,14 +1,15 @@
 package org.purl.wf4ever.astrotaverna.view.votable;
 
-import static org.purl.wf4ever.astrotaverna.samp.TavernaSampConnection.getSampHubConnector;
-
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -16,15 +17,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import net.sf.taverna.t2.reference.ExternalReferenceSPI;
 import net.sf.taverna.t2.reference.ReferenceService;
+import net.sf.taverna.t2.reference.ReferenceSet;
 import net.sf.taverna.t2.reference.T2Reference;
+import net.sf.taverna.t2.reference.impl.external.file.FileReference;
 import net.sf.taverna.t2.renderers.Renderer;
 import net.sf.taverna.t2.renderers.RendererException;
 
 import org.apache.log4j.Logger;
-import org.astrogrid.samp.Message;
-import org.astrogrid.samp.client.HubConnector;
 import org.astrogrid.samp.client.SampException;
+import org.purl.wf4ever.astrotaverna.samp.TavernaSampConnection;
 import org.purl.wf4ever.astrotaverna.vo.utils.HTMLPane;
 
 import uk.ac.starlink.table.ColumnInfo;
@@ -37,9 +40,11 @@ import uk.ac.starlink.util.ByteArrayDataSource;
 
 public class VOTableRenderer implements Renderer {
 
+	private TavernaSampConnection sampConn = TavernaSampConnection
+			.getInstance();
+
 	private static Logger logger = Logger.getLogger(VOTableRenderer.class);
 
-	
 	protected List<String> PREDICTORS = Arrays.asList(
 			"http://www.ivoa.net/xml/VOTable",
 			"http://vizier.u-strasbg.fr/VOTable",
@@ -47,7 +52,7 @@ public class VOTableRenderer implements Renderer {
 			"http://www.ivoa.net/xml/VOTable/v1.0",
 			"http://www.ivoa.net/xml/VOTable/v1.2",
 			"http://us-vo.org/xml/VOTable.dtd");
-	
+
 	@Override
 	public boolean canHandle(String mimeType) {
 		return "application/x-votable+xml".equals(mimeType);
@@ -59,7 +64,7 @@ public class VOTableRenderer implements Renderer {
 		if (reference.containsErrors() || reference.getDepth() > 0) {
 			return false;
 		}
-		if (canHandle(mimeType)) { 
+		if (canHandle(mimeType)) {
 			return true;
 		}
 		String asString = (String) referenceService.renderIdentifier(reference,
@@ -73,12 +78,14 @@ public class VOTableRenderer implements Renderer {
 	}
 
 	@Override
-	public JComponent getComponent(ReferenceService referenceService,
-			T2Reference reference) throws RendererException {
-		byte[] bytes = (byte[]) referenceService.renderIdentifier(reference, byte[].class, null);		
+	public JComponent getComponent(final ReferenceService referenceService,
+			final T2Reference reference) throws RendererException {
+		final byte[] bytes = (byte[]) referenceService.renderIdentifier(
+				reference, byte[].class, null);
 		StarTableFactory factory = new StarTableFactory();
-		ByteArrayDataSource dataSource = new ByteArrayDataSource("votable", bytes);
-	    StarTable starTable;
+		ByteArrayDataSource dataSource = new ByteArrayDataSource("votable",
+				bytes);
+		StarTable starTable;
 		try {
 			starTable = factory.makeStarTable(dataSource);
 		} catch (TableFormatException e) {
@@ -86,14 +93,14 @@ public class VOTableRenderer implements Renderer {
 		} catch (IOException e) {
 			throw new RendererException(e.getLocalizedMessage(), e);
 		}
-		StarJTable jTable;
-	    jTable = new StarJTable(starTable, false);
-//	    StarTableModel model = new StarTableModel(starTable, false);
-//	    jTable = new JTable(model);	
-//		jTable.setAutoCreateColumnsFromModel(true);
+		final StarJTable jTable;
+		jTable = new StarJTable(starTable, false);
+		// StarTableModel model = new StarTableModel(starTable, false);
+		// jTable = new JTable(model);
+		// jTable.setAutoCreateColumnsFromModel(true);
 		jTable.setAutoCreateRowSorter(true);
 		jTable.configureColumnWidths(400, 100);
-	    
+
 		JTabbedPane tabs = new JTabbedPane();
 		tabs.add("VOTable", new JScrollPane(jTable));
 		tabs.add("Metadata", new JScrollPane(makeMetaData(starTable)));
@@ -101,50 +108,73 @@ public class VOTableRenderer implements Renderer {
 		tabs.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				HubConnector conn = getSampHubConnector();
-				Message msg = new Message("table.load.votable");
-				msg.addParam("url", new File("/tmp/f.votable").toURI().toASCIIString());
-				msg.addParam("name", "Fred");
-				try {
-					conn.getConnection().notifyAll(msg);
+				try {					
+					FileReference fileRef = getReference(reference, FileReference.class, referenceService);
+					sampConn.sendVOTable(fileRef.getFile().toURI());
 					JOptionPane.showMessageDialog(e.getComponent(),
 							"Sent over SAMP");
-				} catch (SampException e1) {
+				} catch (IOException e1) {
 					logger.warn("Could not send to SAMP");
 					JOptionPane.showMessageDialog(e.getComponent(),
 							"Could not send.. " + e1.getLocalizedMessage());
-				}			
+				}
 			}
 		});
 		return new JScrollPane(tabs);
 	}
 
-	
-	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected <T extends ExternalReferenceSPI> T getReference(T2Reference reference,
+			Class<T> externalReferenceType, ReferenceService referenceService) {
+		Set types = new HashSet();
+		types.add(FileReference.class);
+		ReferenceSet rs = (ReferenceSet) referenceService.resolveIdentifier(
+				reference, types, null);
+		for (ExternalReferenceSPI ref : rs.getExternalReferences()) {
+			if (externalReferenceType.isInstance(ref)) {
+				return (T) ref;
+			}
+		}
+		return null;
+	}
 
 	@SuppressWarnings("unchecked")
 	protected Component makeMetaData(StarTable starTable) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<html><body>");
-		
+
 		sb.append("<h2>Columns</h2>");
-		for (int i=0; i<starTable.getColumnCount(); i++) {
-			ColumnInfo colInfo = starTable.getColumnInfo(i);			
-			sb.append(HTMLPane.format("<div style='font-size: 110%%;'>%s</div>", colInfo.getName()));
-			sb.append(HTMLPane.format("<div><em>%s</em></div>", colInfo.getDescription()));
-			
-			sb.append(HTMLPane.format("<div><strong>Unit</strong> <span>%s</span></div>", colInfo.getUnitString()));			
-			sb.append(HTMLPane.format("<div><strong>UCD</strong> <span>%s</span></div>", colInfo.getUCD()));
-			sb.append(HTMLPane.format("<div><strong>Utype</strong> <span>%s</span></div>", colInfo.getUtype()));
-			sb.append(HTMLPane.format("<div><strong>Element size</strong> <span>%s</span></div>", colInfo.getElementSize()));
-			for (DescribedValue value : (List<DescribedValue>)colInfo.getAuxData()) {
-				sb.append(HTMLPane.format("<div><strong>%s</strong> <span>%s</span></div>", value.getInfo().getName(), value.getValueAsString(150)));
+		for (int i = 0; i < starTable.getColumnCount(); i++) {
+			ColumnInfo colInfo = starTable.getColumnInfo(i);
+			sb.append(HTMLPane.format(
+					"<div style='font-size: 110%%;'>%s</div>",
+					colInfo.getName()));
+			sb.append(HTMLPane.format("<div><em>%s</em></div>",
+					colInfo.getDescription()));
+
+			sb.append(HTMLPane.format(
+					"<div><strong>Unit</strong> <span>%s</span></div>",
+					colInfo.getUnitString()));
+			sb.append(HTMLPane.format(
+					"<div><strong>UCD</strong> <span>%s</span></div>",
+					colInfo.getUCD()));
+			sb.append(HTMLPane.format(
+					"<div><strong>Utype</strong> <span>%s</span></div>",
+					colInfo.getUtype()));
+			sb.append(HTMLPane.format(
+					"<div><strong>Element size</strong> <span>%s</span></div>",
+					colInfo.getElementSize()));
+			for (DescribedValue value : (List<DescribedValue>) colInfo
+					.getAuxData()) {
+				sb.append(HTMLPane.format(
+						"<div><strong>%s</strong> <span>%s</span></div>", value
+								.getInfo().getName(), value
+								.getValueAsString(150)));
 			}
 			sb.append("<p></p>");
-			
 
 		}
-		
+
 		sb.append("</body></html>");
 		return new HTMLPane(sb.toString());
 	}
