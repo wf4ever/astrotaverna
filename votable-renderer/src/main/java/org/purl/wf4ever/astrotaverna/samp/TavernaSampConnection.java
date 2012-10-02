@@ -1,20 +1,35 @@
 package org.purl.wf4ever.astrotaverna.samp;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.astrogrid.samp.Message;
 import org.astrogrid.samp.Metadata;
 import org.astrogrid.samp.client.ClientProfile;
 import org.astrogrid.samp.client.DefaultClientProfile;
+import org.astrogrid.samp.client.HubConnector;
 import org.astrogrid.samp.gui.GuiHubConnector;
-import org.purl.wf4ever.astrotaverna.view.votable.VOTableRenderer;
 
 public class TavernaSampConnection {
 
-	private static GuiHubConnector hubConnector;
+	private GuiHubConnector hubConnector;
 
-	public static GuiHubConnector getSampHubConnector() {
+	private static class Singleton {
+		private static TavernaSampConnection instance = new TavernaSampConnection();
+	}
+	
+	public static TavernaSampConnection getInstance() {
+		return Singleton.instance;
+	}
+	
+	public GuiHubConnector getSampHubConnector() {
 		if (hubConnector != null) {
 			return hubConnector;
 		}
-		synchronized(VOTableRenderer.class) {
+		synchronized(this) {
 			if (hubConnector != null) {
 				return hubConnector;
 			}
@@ -35,5 +50,13 @@ public class TavernaSampConnection {
 			hubConnector = conn;
 			return hubConnector;
 		}
+	}
+
+	public void sendVOTable(URI voTable) throws IOException {
+		HubConnector conn = getSampHubConnector();
+		Message msg = new Message("table.load.votable");
+		msg.addParam("url", voTable.toASCIIString());
+		msg.addParam("name", "Fred");
+		conn.getConnection().notifyAll(msg);
 	}
 }
