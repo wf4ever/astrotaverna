@@ -23,8 +23,6 @@ public class FileReferenceBuilder implements
 		File tmpFile = null;
 		try {
 			tmpFile = File.createTempFile("taverna", ".tmp");
-			// TODO: Is it OK to delete on exit?
-			// tmpFile.deleteOnExit();
 			FileUtils.copyInputStreamToFile(byteStream, tmpFile);
 			logger.debug("Converted reference to file " + tmpFile + " ("
 					+ tmpFile.length() + " bytes)");
