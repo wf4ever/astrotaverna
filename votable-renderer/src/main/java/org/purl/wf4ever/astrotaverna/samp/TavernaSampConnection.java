@@ -50,11 +50,12 @@ public class TavernaSampConnection {
 		}
 	}
 
-	public void sendVOTable(URI voTable) throws IOException {
+	public void sendVOTable(URI voTable, String tableId, String name) throws IOException {
 		HubConnector conn = getSampHubConnector();
 		Message msg = new Message("table.load.votable");
 		msg.addParam("url", voTable.toASCIIString());
-		msg.addParam("name", "Fred");	
+		msg.addParam("table-id", tableId);
+		msg.addParam("name", name);	
 		HubConnection connection = conn.getConnection();
 		if (connection == null) {
 			throw new IOException("Could not connect; is SAMP hub running?");
@@ -62,18 +63,23 @@ public class TavernaSampConnection {
 		connection.notifyAll(msg);
 	}
 
-	public void highlightRow(URI voTable, int row) throws IOException {
+	public void highlightRow(URI voTable, int row, String tableId) throws IOException {
 		if (row < 0) {
 			throw new IllegalArgumentException("Row number can't be negative");
 		}
 		HubConnector conn = getSampHubConnector();
 		Message msg = new Message("table.highlight.row");
 		msg.addParam("url", voTable.toASCIIString());
+		msg.addParam("table-id", tableId);
 		msg.addParam("row", Integer.toString(row));
 		HubConnection connection = conn.getConnection();
 		if (connection == null) {
 			throw new IOException("Could not connect; is SAMP hub running?");
 		}
 		connection.notifyAll(msg);
+	}
+
+	public void registerForSelection(String tableId, Object object) {
+		HubConnector conn = getSampHubConnector();
 	}
 }

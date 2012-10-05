@@ -1,8 +1,6 @@
 package org.purl.wf4ever.astrotaverna.view.votable;
 
 import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
@@ -22,8 +20,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 
 import net.sf.taverna.t2.reference.ExternalReferenceSPI;
 import net.sf.taverna.t2.reference.ReferenceService;
@@ -120,7 +116,9 @@ public class VOTableRenderer implements Renderer {
 		JTabbedPane tabs = new JTabbedPane();
 		tabs.add("VOTable", new JScrollPane(jTable));
 		tabs.add("Metadata", new JScrollPane(makeMetaData(starTable)));
-		tabs.add("SAMP", makeSampPanel(reference, referenceService, jTable));
+		// TODO: Is it possible to get the port name from the renderer instead 
+		// of starTable.getName()?
+		tabs.add("SAMP", makeSampPanel(reference, referenceService, jTable, starTable.getName()));
 
 		return tabs;
 	}
@@ -133,7 +131,7 @@ public class VOTableRenderer implements Renderer {
 				return;
 			}			
 			sampConn.highlightRow(uri, jTable
-					.convertRowIndexToModel(jTable.getSelectedRow()));
+					.convertRowIndexToModel(jTable.getSelectedRow()), reference.toUri().toASCIIString());
 		} catch (IOException e1) {
 			logger.warn("Could not send selection to SAMP", e1);
 		}
@@ -142,18 +140,24 @@ public class VOTableRenderer implements Renderer {
 	private static WeakHashMap<T2Reference, URI> sentTables = new WeakHashMap<T2Reference, URI>();  
 	
 	private JPanel makeSampPanel(final T2Reference reference,
-			final ReferenceService referenceService, final StarJTable jTable) {
+			final ReferenceService referenceService, final StarJTable jTable, final String name) {
 		final JPanel panel = new JPanel();
 
 		panel.add(new JButton(new AbstractAction("Send VOTable to SAMP") {
+			private static final long serialVersionUID = 1L;
+
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent ename) {
 				try {
 					File file = getFileFromReference(reference,
 							referenceService);
 					URI uri = file.toURI();
-					sampConn.sendVOTable(uri);
+					
+					sampConn.sendVOTable(uri, reference.toUri().toASCIIString(), name);
 					sentTables.put(reference, uri);
+					highlightRowSamp(reference, jTable);
+					sampConn.registerForSelection(reference.toUri().toASCIIString(), null);
+					
 					JOptionPane.showMessageDialog(panel, "Sent over SAMP");
 				} catch (IOException e1) {
 					logger.warn("Could not send table to SAMP", e1);
