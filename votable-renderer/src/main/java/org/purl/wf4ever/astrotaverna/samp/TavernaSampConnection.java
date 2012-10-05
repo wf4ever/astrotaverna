@@ -1,15 +1,13 @@
 package org.purl.wf4ever.astrotaverna.samp;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.astrogrid.samp.Message;
 import org.astrogrid.samp.Metadata;
 import org.astrogrid.samp.client.ClientProfile;
 import org.astrogrid.samp.client.DefaultClientProfile;
+import org.astrogrid.samp.client.HubConnection;
 import org.astrogrid.samp.client.HubConnector;
 import org.astrogrid.samp.gui.GuiHubConnector;
 
@@ -20,7 +18,7 @@ public class TavernaSampConnection {
 	private static class Singleton {
 		private static TavernaSampConnection instance = new TavernaSampConnection();
 	}
-	
+
 	public static TavernaSampConnection getInstance() {
 		return Singleton.instance;
 	}
@@ -56,7 +54,26 @@ public class TavernaSampConnection {
 		HubConnector conn = getSampHubConnector();
 		Message msg = new Message("table.load.votable");
 		msg.addParam("url", voTable.toASCIIString());
-		msg.addParam("name", "Fred");
-		conn.getConnection().notifyAll(msg);
+		msg.addParam("name", "Fred");	
+		HubConnection connection = conn.getConnection();
+		if (connection == null) {
+			throw new IOException("Could not connect; is SAMP hub running?");
+		}
+		connection.notifyAll(msg);
+	}
+
+	public void highlightRow(URI voTable, int row) throws IOException {
+		if (row < 0) {
+			throw new IllegalArgumentException("Row number can't be negative");
+		}
+		HubConnector conn = getSampHubConnector();
+		Message msg = new Message("table.highlight.row");
+		msg.addParam("url", voTable.toASCIIString());
+		msg.addParam("row", Integer.toString(row));
+		HubConnection connection = conn.getConnection();
+		if (connection == null) {
+			throw new IOException("Could not connect; is SAMP hub running?");
+		}
+		connection.notifyAll(msg);
 	}
 }

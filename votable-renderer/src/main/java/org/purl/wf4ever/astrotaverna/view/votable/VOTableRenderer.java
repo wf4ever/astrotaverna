@@ -1,21 +1,29 @@
 package org.purl.wf4ever.astrotaverna.view.votable;
 
 import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.WeakHashMap;
 
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import net.sf.taverna.t2.reference.ExternalReferenceSPI;
 import net.sf.taverna.t2.reference.ReferenceService;
@@ -26,7 +34,6 @@ import net.sf.taverna.t2.renderers.Renderer;
 import net.sf.taverna.t2.renderers.RendererException;
 
 import org.apache.log4j.Logger;
-import org.astrogrid.samp.client.SampException;
 import org.purl.wf4ever.astrotaverna.samp.TavernaSampConnection;
 import org.purl.wf4ever.astrotaverna.vo.utils.HTMLPane;
 
@@ -100,32 +107,81 @@ public class VOTableRenderer implements Renderer {
 		// jTable.setAutoCreateColumnsFromModel(true);
 		jTable.setAutoCreateRowSorter(true);
 		jTable.configureColumnWidths(400, 100);
+		ListSelectionListener sampListener = new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				highlightRowSamp(reference, jTable);
+			}
+
+			
+		};
+		jTable.getSelectionModel().addListSelectionListener(sampListener);
 
 		JTabbedPane tabs = new JTabbedPane();
 		tabs.add("VOTable", new JScrollPane(jTable));
 		tabs.add("Metadata", new JScrollPane(makeMetaData(starTable)));
-		tabs.add("SAMP", new JPanel());
-		tabs.addMouseListener(new MouseAdapter() {
+		tabs.add("SAMP", makeSampPanel(reference, referenceService, jTable));
+
+		return tabs;
+	}
+	
+	private void highlightRowSamp(T2Reference reference, StarJTable jTable) {
+		try {
+			URI uri = sentTables.get(reference);
+			if (uri == null) {
+				// SAMP does not know about this one yet
+				return;
+			}			
+			sampConn.highlightRow(uri, jTable
+					.convertRowIndexToModel(jTable.getSelectedRow()));
+		} catch (IOException e1) {
+			logger.warn("Could not send selection to SAMP", e1);
+		}
+	}
+	
+	private static WeakHashMap<T2Reference, URI> sentTables = new WeakHashMap<T2Reference, URI>();  
+	
+	private JPanel makeSampPanel(final T2Reference reference,
+			final ReferenceService referenceService, final StarJTable jTable) {
+		final JPanel panel = new JPanel();
+
+		panel.add(new JButton(new AbstractAction("Send VOTable to SAMP") {
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				try {					
-					FileReference fileRef = getReference(reference, FileReference.class, referenceService);
-					sampConn.sendVOTable(fileRef.getFile().toURI());
-					JOptionPane.showMessageDialog(e.getComponent(),
-							"Sent over SAMP");
+			public void actionPerformed(ActionEvent e) {
+				try {
+					File file = getFileFromReference(reference,
+							referenceService);
+					URI uri = file.toURI();
+					sampConn.sendVOTable(uri);
+					sentTables.put(reference, uri);
+					JOptionPane.showMessageDialog(panel, "Sent over SAMP");
 				} catch (IOException e1) {
-					logger.warn("Could not send to SAMP");
-					JOptionPane.showMessageDialog(e.getComponent(),
-							"Could not send.. " + e1.getLocalizedMessage());
+					logger.warn("Could not send table to SAMP", e1);
+					JOptionPane.showMessageDialog(
+							panel,
+							"Could not send table to SAMP.\n"
+									+ e1.getLocalizedMessage());
 				}
 			}
-		});
-		return new JScrollPane(tabs);
+		}));
+		return panel;
+	}
+
+	protected File getFileFromReference(T2Reference reference,
+			ReferenceService referenceService) throws IOException {
+		FileReference fileRef = getReference(reference, FileReference.class,
+				referenceService);
+		File file = fileRef.getFile();
+		if (!file.isFile()) {
+			throw new IOException("File no longer exists: " + file);
+		}
+		return file;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected <T extends ExternalReferenceSPI> T getReference(T2Reference reference,
-			Class<T> externalReferenceType, ReferenceService referenceService) {
+	protected <T extends ExternalReferenceSPI> T getReference(
+			T2Reference reference, Class<T> externalReferenceType,
+			ReferenceService referenceService) {
 		Set types = new HashSet();
 		types.add(FileReference.class);
 		ReferenceSet rs = (ReferenceSet) referenceService.resolveIdentifier(
