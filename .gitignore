@@ -1,4 +1,6 @@
-.settings
-.project
 .classpath
-target
+.project
+.settings/
+target/
+.svn
+bin
