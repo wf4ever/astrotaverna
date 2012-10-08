@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>astrotaverna</artifactId>
+    <groupId>org.purl.wf4ever.astrotaverna</groupId>
+    <version>0.10-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <artifactId>file-reference-builder</artifactId>
+  <name>Taverna file reference builder</name>  
+  <dependencies>
+  	<dependency>
+  		<groupId>commons-io</groupId>
+  		<artifactId>commons-io</artifactId>
+  		<version>2.4</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>net.sf.taverna.t2.core</groupId>
+  		<artifactId>reference-api</artifactId>
+  		<version>${t2.core.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>net.sf.taverna.t2.core</groupId>
+  		<artifactId>reference-core-extensions</artifactId>
+  		<version>${t2.core.version}</version>
+  	</dependency>
+  </dependencies>
+</project>
