@@ -43,8 +43,6 @@
 			<groupId>net.sf.taverna.t2.core</groupId>
 			<artifactId>reference-core-extensions</artifactId>
 			<version>${t2.core.version}</version>
-		</dependency>
-		
+		</dependency>		
 	</dependencies>
->>>>>>> e6f3e3e960dc14afc3b4147d78aee9d82bbe15db
 </project>

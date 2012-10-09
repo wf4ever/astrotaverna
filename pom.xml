@@ -129,8 +129,7 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-  <modules>
-    
+  <modules>    
     <module>astrotaverna-voservices</module>
     <module>astrotaverna-plugin</module>
     <module>astrotaverna-vo-repository</module>
