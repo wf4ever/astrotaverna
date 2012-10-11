@@ -1,11 +1,10 @@
 package org.purl.wf4ever.astrotaverna.pdl;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,19 +14,17 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 //comment from terminal
-import org.purl.wf4ever.astrotaverna.utils.MyUtils;
-import org.purl.wf4ever.astrotaverna.utils.NoExitSecurityManager;
+import org.apache.log4j.Logger;
+
+
 
 import CommonsObjects.GeneralParameter;
 
-import uk.ac.starlink.ttools.Stilts;
+//import uk.ac.starlink.ttools.Stilts;
 import visitors.GeneralParameterVisitor;
 
-import net.ivoa.parameter.model.ParameterGroup;
-import net.ivoa.parameter.model.ParameterReference;
 import net.ivoa.parameter.model.Service;
 import net.ivoa.parameter.model.SingleParameter;
-import net.ivoa.pdl.interpreter.conditionalStatement.StatementHelperContainer;
 import net.ivoa.pdl.interpreter.expression.ExpressionParserFactory;
 import net.ivoa.pdl.interpreter.groupInterpreter.GroupHandlerHelper;
 import net.ivoa.pdl.interpreter.groupInterpreter.GroupProcessor;
@@ -50,6 +47,8 @@ public class ValidationPDLClientActivity extends
 	 * would not apply if port names are looked up dynamically from the service
 	 * operation, like done for WSDL services.
 	 */
+	
+	private static Logger logger = Logger.getLogger(ValidationPDLClientActivity.class);
 	
 	//private static final String OUT_SIMPLE_OUTPUT = "outputFileOut";
 	private static final String OUT_REPORT = "report";
@@ -91,54 +90,57 @@ public class ValidationPDLClientActivity extends
 	protected void configurePorts() throws ActivityConfigurationException {
 		GroupProcessor gp;
 		Service service;
-		ArrayList<List<SingleParameter>> paramsLists;
-		HashMap<String, Integer> dimensions;
+		//ArrayList<List<SingleParameter>> paramsLists;
+		//HashMap<String, Integer> dimensions;
 		
-		service = buildService(configBean.getPdlDescriptionFile());
-		Utilities.getInstance().setService(service);
-		Utilities.getInstance().setMapper(new UserMapper());
-		// In case we are being reconfigured - remove existing ports first
-		// to avoid duplicates
-		removeInputs();
-		removeOutputs();
-
-		// FIXME: Replace with your input and output port definitions
-		
-		gp = new GroupProcessor(service);
-		System.out.println(service.getInputs().getParameterRef().get(0).getParameterName());
-		gp.process();
-		List<GroupHandlerHelper> groupsHandler = gp.getGroupsHandler();
-		paramsLists = new ArrayList();
-		dimensions = new HashMap();
-		for(GroupHandlerHelper ghh : groupsHandler){
-			List<SingleParameter> paramsList = ghh.getSingleParamIntoThisGroup();
-			for(SingleParameter param: paramsList){
-				int dimension = -1;
-				if(param.getDimension()!=null){
-					try{
-						String value = ExpressionParserFactory.getInstance()
-						   .buildParser(param.getDimension()).parse().get(0).getValue();
-						dimension = new Integer(value).intValue();
-					} catch (Exception ex){
-						System.out.println("I couln't read the dimension value for "+ param.getName());
-						dimension = -1;
+		try{
+			service = buildService(configBean.getPdlDescriptionFile());
+			Utilities.getInstance().setService(service);
+			Utilities.getInstance().setMapper(new UserMapper());
+			// In case we are being reconfigured - remove existing ports first
+			// to avoid duplicates
+			removeInputs();
+			removeOutputs();
+	
+			// FIXME: Replace with your input and output port definitions
+			
+			gp = new GroupProcessor(service);
+			//System.out.println(service.getInputs().getParameterRef().get(0).getParameterName());
+			gp.process();
+			List<GroupHandlerHelper> groupsHandler = gp.getGroupsHandler();
+			//paramsLists = new ArrayList();
+			//dimensions = new HashMap();
+			for(GroupHandlerHelper ghh : groupsHandler){
+				List<SingleParameter> paramsList = ghh.getSingleParamIntoThisGroup();
+				for(SingleParameter param: paramsList){
+					int dimension = -1;
+					if(param.getDimension()!=null){
+						try{
+							String value = ExpressionParserFactory.getInstance()
+							   .buildParser(param.getDimension()).parse().get(0).getValue();
+							dimension = new Integer(value).intValue();
+						} catch (Exception ex){
+							logger.error("I couln't read the dimension value for "+ param.getName());
+							dimension = -1;
+						}
 					}
+					if(dimension > 1 ){
+						addInput(param.getName(), 1, true, null, String.class);		
+						//dimensions.put(param.getName(), new Integer(1));
+					}else{
+						addInput(param.getName(), 0, true, null, String.class);
+						//dimensions.put(param.getName(), new Integer(0));
+					}
+					
 				}
-				if(dimension > 1 ){
-					addInput(param.getName(), 1, true, null, String.class);		
-					dimensions.put(param.getName(), new Integer(1));
-				}else{
-					addInput(param.getName(), 0, true, null, String.class);
-					dimensions.put(param.getName(), new Integer(0));
-				}
-				
+				//if(paramsList!=null && paramsLists.size()>0)
+				//	paramsLists.add(paramsList);
+					
 			}
-			if(paramsList!=null && paramsLists.size()>0)
-				paramsLists.add(paramsList);
-				
+		}catch(ActivityConfigurationException ex){
+			logger.warn("unexisting or invalid pdl description file: the service will not have inports");
 		}
 
-		
 		// Single value output port (depth 0)
 		//addOutput(OUT_SIMPLE_OUTPUT, 0);
 		// Single value output port (depth 0)
@@ -208,7 +210,7 @@ public class ValidationPDLClientActivity extends
 						   .buildParser(param.getDimension()).parse().get(0).getValue();
 						dimension = new Integer(value).intValue();
 					} catch (Exception ex){
-						System.out.println("I couln't read the dimension value for "+ param.getName());
+						logger.error("I couln't read the dimension value for "+ param.getName());
 						dimension = -1;
 					}
 				}
@@ -225,7 +227,7 @@ public class ValidationPDLClientActivity extends
 					service = buildService(configBean.getPdlDescriptionFile());
 				} catch (ActivityConfigurationException e) {
 					// TODO Auto-generated catch block
-					System.out.println("Problems reading the PDL description file: "+ configBean.getPdlDescriptionFile());
+					logger.error("Problems reading the PDL description file: "+ configBean.getPdlDescriptionFile());
 				}
 				
 				Utilities.getInstance().setService(service);
@@ -301,7 +303,7 @@ public class ValidationPDLClientActivity extends
 						outputs.put(OUT_REPORT, simpleRef2);
 						callback.receiveResult(outputs, new int[0]);
 					}else{
-						callback.fail("Invalid values for the input parameters, check the restrictions");
+						logger.error("Invalid values for the input parameters, check the restrictions");
 					}
 					
 				}
@@ -333,21 +335,26 @@ public class ValidationPDLClientActivity extends
 					URI uri = new URI(pdlDescriptionFile);
 					service = (Service) u.unmarshal(uri.toURL());
 				} catch (URISyntaxException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					logger.error("File does not exist or invalid URI for the PDL description file.");
 					throw new ActivityConfigurationException("File does not exist or invalid URI for the PDL description file.");
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//e.printStackTrace();
+					logger.error("File does not exist or invalid URI for the PDL description file.");
 					throw new ActivityConfigurationException("File does not exist or invalid URL for the PDL description file.");
 				} catch (IllegalArgumentException e) {
-		            e.printStackTrace();
+		            //e.printStackTrace();
+					logger.error("File does not exist or invalid URI for the PDL description file.");
 		            throw new ActivityConfigurationException("File does not exist or invalid URL for the PDL description file.");
 		        }
 			}
 			
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error("buildService could not create a jaxbContext.");
+			throw new ActivityConfigurationException("buildService could not create a jaxbContext.");
 		}
 		return service;
 	}

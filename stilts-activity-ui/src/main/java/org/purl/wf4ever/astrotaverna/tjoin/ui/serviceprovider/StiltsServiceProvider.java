@@ -119,6 +119,11 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		service13.setDescription("Check Template filler");
 		results.add(service13);
 		
+		ValidationPDLClientServiceDesc service14 = new ValidationPDLClientServiceDesc();
+		service14.setPdlDescriptionFile("http://www.exampleuri.com/pdldescriptionfile.xml");
+		service14.setDescription("Validate inputs with pdl-description");
+		results.add(service14);
+		
 		//Put here additional descriptions for other services
 		//............
 		//............

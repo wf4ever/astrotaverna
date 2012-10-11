@@ -52,17 +52,17 @@ public class ValidationPDLClientActivityTest {
 	}
 	
 	//this method is invoked before each test method
-	@Ignore
+	
 	@Before
 	public void makeConfigBean() throws Exception {
 		configBean = new ValidationPDLClientActivityConfigurationBean();
-		
-		configBean.setPdlDescriptionFile("/home/julian/otherworkspaces/pdlworkspace/testPDLcmdLineTool/PDL-Description.xml");
-
+		//configBean.setPdlDescriptionFile("/home/julian/otherworkspaces/pdlworkspace/testPDLcmdLineTool/PDL-Description.xml");
+		activity = new ValidationPDLClientActivity();
 	}
 
-	@Ignore
-	@Test(expected = ActivityConfigurationException.class)
+
+	//unexisting file path: it does't fails (see reconfigure method)
+	@Test()
 	public void invalidConfiguration() throws ActivityConfigurationException {
 		ValidationPDLClientActivityConfigurationBean invalidBean = new ValidationPDLClientActivityConfigurationBean();
 		invalidBean.setPdlDescriptionFile("/home/PDL-Description.xml");
@@ -71,10 +71,29 @@ public class ValidationPDLClientActivityTest {
 	}
 	
 	
+	@Test
+	public void runWithInvalidConfig() throws Exception {
+		
+		configBean.setPdlDescriptionFile(" ");
+		activity.configure(configBean);
 
-	//this test is valid only with the right folders
+		Map<String, Object> inputs = new HashMap<String, Object>();
+	
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
 
-	@Ignore
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(activity, inputs, expectedOutputTypes);
+
+		assertEquals("Unexpected outputs", 1, outputs.size());
+		assertEquals("Not valid", outputs.get(OUT_REPORT));
+		
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
+
+	
 	@Test
 	public void executeAsynchValid() throws Exception {
 		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");
@@ -118,9 +137,10 @@ public class ValidationPDLClientActivityTest {
 		//		.get("moreOutputs"));
 
 	}
-	
-	@Ignore
-	@Test(expected = Exception.class)
+
+
+	//test with not valid input: the float is 1/12.0 instead of 1/15.0
+	@Test(expected = java.lang.RuntimeException.class)
 	public void executeAsynchŃotValid() throws Exception {
 		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");
 	    String pdlContent = MyUtils.convertStreamToString(is);
@@ -129,7 +149,7 @@ public class ValidationPDLClientActivityTest {
 		activity.configure(configBean);
 
 		Map<String, Object> inputs = new HashMap<String, Object>();
-		Float value = new Float(1/12.0);
+		Float value = new Float(1/12.0);  
 		inputs.put("Ne", value.toString());
 		inputs.put("Si", value.toString());
 		inputs.put("Mg", value.toString());
@@ -157,17 +177,24 @@ public class ValidationPDLClientActivityTest {
 				activity, inputs, expectedOutputTypes);
 
 		assertEquals("Unexpected outputs", 1, outputs.size());
-		assertEquals("Valid", outputs.get(OUT_REPORT));
+		assertEquals("With error", outputs.get(OUT_REPORT));
 
 	}
 	
-	@Ignore
+	
+	
 	@Test
 	public void reConfiguredActivity() throws Exception {
 		
 		
 		assertEquals("Unexpected inputs", 0, activity.getInputPorts().size());
 		assertEquals("Unexpected outputs", 0, activity.getOutputPorts().size());
+		
+		configBean.setPdlDescriptionFile("");
+		activity.configure(configBean);
+		
+		assertEquals("Unexpected inputs", 0, activity.getInputPorts().size());
+		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
 		
 		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");
 	    String pdlContent = MyUtils.convertStreamToString(is);
@@ -183,6 +210,8 @@ public class ValidationPDLClientActivityTest {
 		assertEquals("Unexpected inputs", 16, activity.getInputPorts().size());
 		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
 		Iterator<ActivityInputPort> it = activity.getInputPorts().iterator();
+		
+		
 	}
 	
 	
