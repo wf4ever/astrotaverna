@@ -1,19 +1,24 @@
 package org.purl.wf4ever.astrotaverna.tjoin.ui.config;
 
 import java.awt.GridLayout;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
-import javax.swing.JComboBox;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 
+import net.ivoa.parameter.model.Service;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ActivityConfigurationPanel;
+import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.purl.wf4ever.astrotaverna.pdl.ValidationPDLClientActivity;
 import org.purl.wf4ever.astrotaverna.pdl.ValidationPDLClientActivityConfigurationBean;
-import org.purl.wf4ever.astrotaverna.view.votable.VOTableRenderer;
+
 
 @SuppressWarnings("serial")
 public class ValidationPDLClientConfigurationPanel
@@ -60,12 +65,17 @@ public class ValidationPDLClientConfigurationPanel
 		
 		String errorMessage=null;
 		
-		String  tinput = urlField.getText();
-				
+		String  urlInput = urlField.getText();
+		
+		try {
+			URI uri = new URI(urlInput);
+		} catch (Exception e) {
+			errorMessage = "Invalid URI for the PDL description file";
+		} 
 		
 		if (errorMessage!=null){
 			JOptionPane.showMessageDialog(this, errorMessage,
-					"Invalid configuration", JOptionPane.ERROR_MESSAGE);
+					"Invalid URI", JOptionPane.ERROR_MESSAGE);
 			// Not valid, return false
 			return false;
 		}
@@ -88,12 +98,12 @@ public class ValidationPDLClientConfigurationPanel
 	 */
 	@Override
 	public boolean isConfigurationChanged() {
-		String originalTypeOfInput = configBean.getTypeOfInput();
+		String originalURL = configBean.getPdlDescriptionFile();
 		//String originalTypeOfFilter = configBean.getTypeOfFilter();
 		// true (changed) unless all fields match the originals
 		
-		return ! (originalTypeOfInput.equals((String)typeOfInput.getSelectedItem())
-				/*&& originalTypeOfFilter.equals((String)typeOfFilter.getSelectedItem())*/ );
+		return ! (originalURL.compareTo(urlField.getText())==0);
+				/*&& originalTypeOfFilter.equals((String)typeOfFilter.getSelectedItem())*/ 
 	}
 
 	/**
@@ -105,8 +115,8 @@ public class ValidationPDLClientConfigurationPanel
 		configBean = new ValidationPDLClientActivityConfigurationBean();
 		
 		// FIXME: Update bean fields from your UI elements
-		configBean.setTypeOfInput((String)typeOfInput.getSelectedItem());
-		//configBean.setTypeOfFilter((String)typeOfFilter.getSelectedItem());
+		configBean.setPdlDescriptionFile(urlField.getText());
+
 		
 	}
 
@@ -119,8 +129,7 @@ public class ValidationPDLClientConfigurationPanel
 		configBean = activity.getConfiguration();
 		
 		// FIXME: Update UI elements from your bean fields
-		typeOfInput.setSelectedItem(configBean.getTypeOfInput());
-		//typeOfFilter.setSelectedItem(configBean.getTypeOfFilter());
+		urlField.setText(configBean.getPdlDescriptionFile());
 
 	}
 }

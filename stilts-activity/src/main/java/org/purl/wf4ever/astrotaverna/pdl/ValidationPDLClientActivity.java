@@ -223,90 +223,94 @@ public class ValidationPDLClientActivity extends
 			public void run() {
 				boolean callbackfails=false;
 				
+				InvocationContext context = callback
+						.getContext();
+				ReferenceService referenceService = context
+						.getReferenceService();
+				
 				try {
-					service = buildService(configBean.getPdlDescriptionFile());
-				} catch (ActivityConfigurationException e) {
-					// TODO Auto-generated catch block
-					logger.error("Problems reading the PDL description file: "+ configBean.getPdlDescriptionFile());
-				}
-				
-				Utilities.getInstance().setService(service);
-				Utilities.getInstance().setMapper(new UserMapper());
-				
-				gp = new GroupProcessor(service);
-				gp.process();
-				
-				if(areMandatoryInputsNotNull()){
-				
-					InvocationContext context = callback
-							.getContext();
-					ReferenceService referenceService = context
-							.getReferenceService();
-					
-					// Resolve inputs
-					List<GroupHandlerHelper> groupsHandler = gp.getGroupsHandler();
-					for(GroupHandlerHelper ghh : groupsHandler){
-						List<SingleParameter> paramsList = ghh.getSingleParamIntoThisGroup();
-						if(paramsList!=null && paramsList.size()>0)
-							for(SingleParameter param : paramsList){
-								//dimension?
-								int dimension= getDimension(param);
-								//if depth is 0 && dimension==1 then generalParamList only has one element
-								if(dimension==1){
-									String value = (String) referenceService.renderIdentifier(inputs.get(param.getName()), 
-											String.class, context);
-									// put every input in the Mapper
-									List<GeneralParameter> generalParamList = new ArrayList<GeneralParameter>();
-									GeneralParameter gp = new GeneralParameter(value, 
-											param.getParameterType().toString(), param.getName(),
-											new GeneralParameterVisitor());
-									generalParamList.add(gp);
-									
-									Utilities.getInstance().getMapper().getMap()
-									  .put(param.getName(), generalParamList);
-								}else{
-									//if depth is 1 then generalParamList has several elements
-									//and input port gets a list
-									List<String> values = (List<String>) referenceService.renderIdentifier(inputs.get(param.getName()), 
-											String.class, context);
-									//TODO
-									//check if values has the size than it is said in dimension??
-									
-									List<GeneralParameter> generalParamList = new ArrayList<GeneralParameter>();
-									for(String value : values){
+					try{
+						service = buildService(configBean.getPdlDescriptionFile());
+
+						Utilities.getInstance().setService(service);
+						Utilities.getInstance().setMapper(new UserMapper());
+						
+						gp = new GroupProcessor(service);
+						gp.process();
+					}catch (ActivityConfigurationException e) {
+						// TODO Auto-generated catch block
+						callback.fail("Make sure that the service configuration has an url that points to a valid pdl description file");
+						callbackfails = true;
+					}
+					if(!callbackfails && areMandatoryInputsNotNull()){
+						// Resolve inputs
+						List<GroupHandlerHelper> groupsHandler = gp.getGroupsHandler();
+						for(GroupHandlerHelper ghh : groupsHandler){
+							List<SingleParameter> paramsList = ghh.getSingleParamIntoThisGroup();
+							if(paramsList!=null && paramsList.size()>0)
+								for(SingleParameter param : paramsList){
+									//dimension?
+									int dimension= getDimension(param);
+									//if depth is 0 && dimension==1 then generalParamList only has one element
+									if(dimension==1){
+										String value = (String) referenceService.renderIdentifier(inputs.get(param.getName()), 
+												String.class, context);
 										// put every input in the Mapper
-										
+										List<GeneralParameter> generalParamList = new ArrayList<GeneralParameter>();
 										GeneralParameter gp = new GeneralParameter(value, 
 												param.getParameterType().toString(), param.getName(),
 												new GeneralParameterVisitor());
 										generalParamList.add(gp);
-									}
-									Utilities.getInstance().getMapper().getMap()
-									  .put(param.getName(), generalParamList);
-								}
-						}//end for(List<SingleParameter> list : paramsLists){
-					}
 										
-					//end of reading inputs
-					
-					
-					//gp.process(); //OPTIONAL???
-					//checkInfo();
-					PDLServiceValidation pdlServiceValidation = new PDLServiceValidation(gp);
-					
-					//System.out.println("******is valid service???:  "+ pdlServiceValidation.isValid());
-					//System.out.println("status:  "+ pdlServiceValidation.getStatus());
-					
-					if(!callbackfails && pdlServiceValidation.isValid()){
-						Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-						T2Reference simpleRef2 = referenceService.register(valid,0, true, context); 
-						outputs.put(OUT_REPORT, simpleRef2);
-						callback.receiveResult(outputs, new int[0]);
-					}else{
-						logger.error("Invalid values for the input parameters, check the restrictions");
+										Utilities.getInstance().getMapper().getMap()
+										  .put(param.getName(), generalParamList);
+									}else{
+										//if depth is 1 then generalParamList has several elements
+										//and input port gets a list
+										List<String> values = (List<String>) referenceService.renderIdentifier(inputs.get(param.getName()), 
+												String.class, context);
+										//TODO
+										//check if values has the size than it is said in dimension??
+										
+										List<GeneralParameter> generalParamList = new ArrayList<GeneralParameter>();
+										for(String value : values){
+											// put every input in the Mapper
+											
+											GeneralParameter gp = new GeneralParameter(value, 
+													param.getParameterType().toString(), param.getName(),
+													new GeneralParameterVisitor());
+											generalParamList.add(gp);
+										}
+										Utilities.getInstance().getMapper().getMap()
+										  .put(param.getName(), generalParamList);
+									}
+							}//end for(List<SingleParameter> list : paramsLists){
+						}
+											
+						//end of reading inputs
+						
+						
+						//gp.process(); //OPTIONAL???
+						//checkInfo();
+						PDLServiceValidation pdlServiceValidation = new PDLServiceValidation(gp);
+						
+						//System.out.println("******is valid service???:  "+ pdlServiceValidation.isValid());
+						//System.out.println("status:  "+ pdlServiceValidation.getStatus());
+						
+						if(!callbackfails && pdlServiceValidation.isValid()){
+							Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
+							T2Reference simpleRef2 = referenceService.register(valid,0, true, context); 
+							outputs.put(OUT_REPORT, simpleRef2);
+							callback.receiveResult(outputs, new int[0]);
+						}else{
+							logger.error("Invalid values for the input parameters, check the restrictions");
+						}
+						
 					}
-					
-				}
+				} catch (NullPointerException e) {
+					// TODO Auto-generated catch block
+					logger.error("Problems in the run method. Is it correct the pdl-description file url: "+ configBean.getPdlDescriptionFile());
+				} 
 			}
 		});
 	}

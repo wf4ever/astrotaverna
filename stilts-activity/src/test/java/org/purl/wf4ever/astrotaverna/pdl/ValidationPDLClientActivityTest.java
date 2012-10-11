@@ -61,7 +61,7 @@ public class ValidationPDLClientActivityTest {
 	}
 
 
-	//unexisting file path: it does't fails (see reconfigure method)
+	//unexisting file path: it does't fails (see reconfigure method) or launch exceptions if it is not run
 	@Test()
 	public void invalidConfiguration() throws ActivityConfigurationException {
 		ValidationPDLClientActivityConfigurationBean invalidBean = new ValidationPDLClientActivityConfigurationBean();
@@ -70,8 +70,8 @@ public class ValidationPDLClientActivityTest {
 		activity.configure(invalidBean);
 	}
 	
-	
-	@Test
+	//if there is not config file, there is no inputs: it has to fail
+	@Test(expected = java.lang.RuntimeException.class)
 	public void runWithInvalidConfig() throws Exception {
 		
 		configBean.setPdlDescriptionFile(" ");
