@@ -304,12 +304,17 @@ public class ValidationPDLClientActivity extends
 							callback.receiveResult(outputs, new int[0]);
 						}else{
 							logger.error("Invalid values for the input parameters, check the restrictions");
+							callback.fail("Invalid values for the input parameters, check the restrictions");
 						}
 						
+					}else{
+						if(callbackfails==false)
+							callback.fail("Mandatory inputs are null");
 					}
 				} catch (NullPointerException e) {
 					// TODO Auto-generated catch block
 					logger.error("Problems in the run method. Is it correct the pdl-description file url: "+ configBean.getPdlDescriptionFile());
+					callback.fail("Problems in the run method. Is it correct the pdl-description file url: "+ configBean.getPdlDescriptionFile());
 				} 
 			}
 		});
