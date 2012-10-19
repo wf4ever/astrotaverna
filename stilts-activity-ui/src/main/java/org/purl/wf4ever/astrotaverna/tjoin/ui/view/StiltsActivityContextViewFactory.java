@@ -6,10 +6,22 @@ import java.util.List;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualViewFactory;
 
-import org.purl.wf4ever.astrotaverna.pdl.ValidationPDLClientActivity;
 import org.purl.wf4ever.astrotaverna.tcat.TcatActivity;
 import org.purl.wf4ever.astrotaverna.tcat.TcatListActivity;
 import org.purl.wf4ever.astrotaverna.tjoin.TjoinActivity;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.view.AddColumnByExpressionContextualView;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.view.AddSkyCoordsContextualView;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.view.CheckTemplateFillerContextualView;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.view.CoordTransformationContextualView;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.view.FormatConversionContextualView;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.view.GetListFromColumnContextualView;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.view.ResolveCoordsContextualView;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.view.SelectColumnsContextualView;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.view.SelectRowsContextualView;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.view.StiltsContextualView;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.view.TcatContextualView;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.view.TcatListContextualView;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.view.TemplateFillerContextualView;
 import org.purl.wf4ever.astrotaverna.tpipe.AddColumnByExpressionActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.AddSkyCoordsActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.CoordTransformationActivity;
@@ -53,9 +65,7 @@ public class StiltsActivityContextViewFactory implements
 			return true;
 		else if(selection instanceof CheckTemplateFillerActivity)
 			return true;
-		else if(selection instanceof ValidationPDLClientActivity)
-			return true;
-		else
+		else 
 			return false;
 		
 	}
@@ -113,10 +123,7 @@ public class StiltsActivityContextViewFactory implements
 		return Arrays.<ContextualView>asList(new CheckTemplateFillerContextualView(selection));
 	}
 	
-	public List<ContextualView> getViews(ValidationPDLClientActivity selection) {
-		return Arrays.<ContextualView>asList(new ValidationPDLClientContextualView(selection));
-	}
-	
+		
 	@Override
 	public List<ContextualView> getViews(Object arg0) {
 		// TODO Auto-generated method stub
@@ -146,9 +153,7 @@ public class StiltsActivityContextViewFactory implements
 			return getViews((TemplateFillerActivity) arg0);
 		else if(arg0 instanceof CheckTemplateFillerActivity)
 			return getViews((CheckTemplateFillerActivity) arg0);
-		else if(arg0 instanceof ValidationPDLClientActivity)
-			return getViews((ValidationPDLClientActivity) arg0);
-		else
+		else 
 			return null;
 	}
 	

@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Service xmlns="http://www.ivoa.net/xml/Parameter/v0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ivoa.net/xml/Parameter/v0.1 PDL-V1.0.xsd">
+    <ServiceId>Lerma-Opacity-Service</ServiceId>
+    <ServiceName>Lerma-Opacity-Service</ServiceName>
+    <Description>The Opacity Project Tables Service</Description>
+    <Parameters>
+        <parameter>
+            <Name>email</Name>
+            <ParameterType>string</ParameterType>
+            <SkossConcept>SKOS_MAIL</SkossConcept>
+            <Unit>e-mail</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>C</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>C_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>N</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>N_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>O</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>O_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>Ne</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>Ne_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>Na</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>Na_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>Mg</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>Mg_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>Al</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>Al_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>Si</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>Si_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>S</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>Si_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>Ar</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>Ar_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>Ca</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>Ca_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>Cr</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>Cr_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>Mn</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>Mn_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>Fe</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>Fe_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+        <parameter>
+            <Name>Ni</Name>
+            <ParameterType>real</ParameterType>
+            <SkossConcept>Ni_Abundance</SkossConcept>
+            <Unit>number</Unit>
+            <Dimension xsi:type="AtomicConstantExpression" ConstantType="integer">
+                <Constant>1</Constant>
+            </Dimension>
+        </parameter>
+    </Parameters>
+    <Inputs>
+        <Name>inputs</Name>
+        <ParameterRef ParameterName="email"/>
+        <ParameterRef ParameterName="C"/>
+        <ParameterRef ParameterName="N"/>
+        <ParameterRef ParameterName="O"/>
+        <ParameterRef ParameterName="Ne"/>
+        <ParameterRef ParameterName="Na"/>
+        <ParameterRef ParameterName="Mg"/>
+        <ParameterRef ParameterName="Al"/>
+        <ParameterRef ParameterName="Si"/>
+        <ParameterRef ParameterName="S"/>
+        <ParameterRef ParameterName="Ar"/>
+        <ParameterRef ParameterName="Ca"/>
+        <ParameterRef ParameterName="Cr"/>
+        <ParameterRef ParameterName="Mn"/>
+        <ParameterRef ParameterName="Fe"/>
+        <ParameterRef ParameterName="Ni"/>
+        <ConstraintOnGroup>
+            <ConditionalStatement xsi:type="AlwaysConditionalStatement">
+                <comment>The sum of abundances must be equal to 1</comment>
+                <always>
+                    <Criterion xsi:type="Criterion">
+                        <Expression xsi:type="AtomicParameterExpression">
+                            <parameterRef ParameterName="C"/>
+                        </Expression>
+                        <ConditionType xsi:type="DefaultValue">
+                            <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+<Constant>0.246052</Constant>
+                            </Value>
+                        </ConditionType>
+                        <LogicalConnector xsi:type="And">
+                            <Criterion xsi:type="Criterion">
+<Expression xsi:type="AtomicParameterExpression">
+    <parameterRef ParameterName="N"/>
+</Expression>
+<ConditionType xsi:type="DefaultValue">
+    <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+        <Constant>0.061805</Constant>
+    </Value>
+</ConditionType>
+<LogicalConnector xsi:type="And">
+    <Criterion xsi:type="Criterion">
+        <Expression xsi:type="AtomicParameterExpression">
+            <parameterRef ParameterName="O"/>
+        </Expression>
+        <ConditionType xsi:type="DefaultValue">
+            <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+                <Constant>0.502374</Constant>
+            </Value>
+        </ConditionType>
+        <LogicalConnector xsi:type="And">
+            <Criterion xsi:type="Criterion">
+                <Expression xsi:type="AtomicParameterExpression">
+                    <parameterRef ParameterName="Ne"/>
+                </Expression>
+                <ConditionType xsi:type="DefaultValue">
+                    <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+                        <Constant>0.089336</Constant>
+                    </Value>
+                </ConditionType>
+                <LogicalConnector xsi:type="And">
+                    <Criterion xsi:type="Criterion">
+                        <Expression xsi:type="AtomicParameterExpression">
+                            <parameterRef ParameterName="Na"/>
+                        </Expression>
+                        <ConditionType xsi:type="DefaultValue">
+                            <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+<Constant>0.001589</Constant>
+                            </Value>
+                        </ConditionType>
+                        <LogicalConnector xsi:type="And">
+                            <Criterion xsi:type="Criterion">
+<Expression xsi:type="AtomicParameterExpression">
+    <parameterRef ParameterName="Mg"/>
+</Expression>
+<ConditionType xsi:type="DefaultValue">
+    <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+        <Constant>0.028251</Constant>
+    </Value>
+</ConditionType>
+<LogicalConnector xsi:type="And">
+    <Criterion xsi:type="Criterion">
+        <Expression xsi:type="AtomicParameterExpression">
+            <parameterRef ParameterName="Al"/>
+        </Expression>
+        <ConditionType xsi:type="DefaultValue">
+            <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+                <Constant>0.002296</Constant>
+            </Value>
+        </ConditionType>
+        <LogicalConnector xsi:type="And">
+            <Criterion xsi:type="Criterion">
+                <Expression xsi:type="AtomicParameterExpression">
+                    <parameterRef ParameterName="Si"/>
+                </Expression>
+                <ConditionType xsi:type="DefaultValue">
+                    <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+                        <Constant>0.026979</Constant>
+                    </Value>
+                </ConditionType>
+                <LogicalConnector xsi:type="And">
+                    <Criterion xsi:type="Criterion">
+                        <Expression xsi:type="AtomicParameterExpression">
+                            <parameterRef ParameterName="S"/>
+                        </Expression>
+                        <ConditionType xsi:type="DefaultValue">
+                            <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+<Constant>0.012047</Constant>
+                            </Value>
+                        </ConditionType>
+                        <LogicalConnector xsi:type="And">
+                            <Criterion xsi:type="Criterion">
+<Expression xsi:type="AtomicParameterExpression">
+    <parameterRef ParameterName="Ar"/>
+</Expression>
+<ConditionType xsi:type="DefaultValue">
+    <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+        <Constant>0.002008</Constant>
+    </Value>
+</ConditionType>
+<LogicalConnector xsi:type="And">
+    <Criterion xsi:type="Criterion">
+        <Expression xsi:type="AtomicParameterExpression">
+            <parameterRef ParameterName="Ca"/>
+        </Expression>
+        <ConditionType xsi:type="DefaultValue">
+            <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+                <Constant>0.001764</Constant>
+            </Value>
+        </ConditionType>
+        <LogicalConnector xsi:type="And">
+            <Criterion xsi:type="Criterion">
+                <Expression xsi:type="AtomicParameterExpression">
+                    <parameterRef ParameterName="Cr"/>
+                </Expression>
+                <ConditionType xsi:type="DefaultValue">
+                    <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+                        <Constant>0.000429</Constant>
+                    </Value>
+                </ConditionType>
+                <LogicalConnector xsi:type="And">
+                    <Criterion xsi:type="Criterion">
+                        <Expression xsi:type="AtomicParameterExpression">
+                            <parameterRef ParameterName="Mn"/>
+                        </Expression>
+                        <ConditionType xsi:type="DefaultValue">
+                            <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+<Constant>0.000252</Constant>
+                            </Value>
+                        </ConditionType>
+                        <LogicalConnector xsi:type="And">
+                            <Criterion xsi:type="Criterion">
+<Expression xsi:type="AtomicParameterExpression">
+    <parameterRef ParameterName="Fe"/>
+</Expression>
+<ConditionType xsi:type="DefaultValue">
+    <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+        <Constant>0.023498</Constant>
+    </Value>
+</ConditionType>
+<LogicalConnector xsi:type="And">
+    <Criterion xsi:type="Criterion">
+        <Expression xsi:type="AtomicParameterExpression">
+            <parameterRef ParameterName="Ni"/>
+        </Expression>
+        <ConditionType xsi:type="DefaultValue">
+            <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+                <Constant>0.001321</Constant>
+            </Value>
+        </ConditionType>
+        <LogicalConnector xsi:type="And">
+            <Criterion xsi:type="Criterion">
+                <Expression xsi:type="AtomicParameterExpression">
+                    <parameterRef ParameterName="C"/>
+                    <Operation operationType="PLUS">
+                        <expression xsi:type="AtomicParameterExpression">
+                            <parameterRef ParameterName="N"/>
+                            <Operation operationType="PLUS">
+<expression xsi:type="AtomicParameterExpression">
+    <parameterRef ParameterName="O"/>
+    <Operation operationType="PLUS">
+        <expression xsi:type="AtomicParameterExpression">
+            <parameterRef ParameterName="Ne"/>
+            <Operation operationType="PLUS">
+                <expression xsi:type="AtomicParameterExpression">
+                    <parameterRef ParameterName="Na"/>
+                    <Operation operationType="PLUS">
+                        <expression xsi:type="AtomicParameterExpression">
+                            <parameterRef ParameterName="Mg"/>
+                            <Operation operationType="PLUS">
+<expression xsi:type="AtomicParameterExpression">
+    <parameterRef ParameterName="Al"/>
+    <Operation operationType="PLUS">
+        <expression xsi:type="AtomicParameterExpression">
+            <parameterRef ParameterName="Si"/>
+            <Operation operationType="PLUS">
+                <expression xsi:type="AtomicParameterExpression">
+                    <parameterRef ParameterName="S"/>
+                    <Operation operationType="PLUS">
+                        <expression xsi:type="AtomicParameterExpression">
+                            <parameterRef ParameterName="Ar"/>
+                            <Operation operationType="PLUS">
+<expression xsi:type="AtomicParameterExpression">
+    <parameterRef ParameterName="Ca"/>
+    <Operation operationType="PLUS">
+        <expression xsi:type="AtomicParameterExpression">
+            <parameterRef ParameterName="Cr"/>
+            <Operation operationType="PLUS">
+                <expression xsi:type="AtomicParameterExpression">
+                    <parameterRef ParameterName="Mn"/>
+                    <Operation operationType="PLUS">
+                        <expression xsi:type="AtomicParameterExpression">
+                            <parameterRef ParameterName="Fe"/>
+                            <Operation operationType="PLUS">
+<expression xsi:type="AtomicParameterExpression">
+    <parameterRef ParameterName="Ni"/>
+</expression>
+                            </Operation>
+                        </expression>
+                    </Operation>
+                </expression>
+            </Operation>
+        </expression>
+    </Operation>
+</expression>
+                            </Operation>
+                        </expression>
+                    </Operation>
+                </expression>
+            </Operation>
+        </expression>
+    </Operation>
+</expression>
+                            </Operation>
+                        </expression>
+                    </Operation>
+                </expression>
+            </Operation>
+        </expression>
+    </Operation>
+</expression>
+                            </Operation>
+                        </expression>
+                    </Operation>
+                </Expression>
+                <ConditionType xsi:type="BelongToSet">
+                    <Value xsi:type="AtomicConstantExpression" ConstantType="real">
+                        <Constant>1</Constant>
+                    </Value>
+                </ConditionType>
+            </Criterion>
+        </LogicalConnector>
+    </Criterion>
+</LogicalConnector>
+                            </Criterion>
+                        </LogicalConnector>
+                    </Criterion>
+                </LogicalConnector>
+            </Criterion>
+        </LogicalConnector>
+    </Criterion>
+</LogicalConnector>
+                            </Criterion>
+                        </LogicalConnector>
+                    </Criterion>
+                </LogicalConnector>
+            </Criterion>
+        </LogicalConnector>
+    </Criterion>
+</LogicalConnector>
+                            </Criterion>
+                        </LogicalConnector>
+                    </Criterion>
+                </LogicalConnector>
+            </Criterion>
+        </LogicalConnector>
+    </Criterion>
+</LogicalConnector>
+                            </Criterion>
+                        </LogicalConnector>
+                    </Criterion>
+                </always>
+            </ConditionalStatement>
+        </ConstraintOnGroup>
+    </Inputs>
+    <Outputs>
+        <Name>outputs</Name>
+    </Outputs>
+</Service>

@@ -6,6 +6,21 @@ import java.util.List;
 
 import javax.swing.Icon;
 
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.AddColumnByExpressionServiceDesc;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.AddSkyCoordsServiceDesc;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.CheckTemplateFillerServiceDesc;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.CoordTransformationServiceDesc;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.FormatConversionServiceDesc;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.GetListFromColumnServiceDesc;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.ResolveCoordsServiceDesc;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.SelectColumnsServiceDesc;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.SelectRowsServiceDesc;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.StiltsServiceDesc;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.StiltsServiceIcon;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.TcatListServiceDesc;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.TcatServiceDesc;
+import org.purl.wf4ever.astrotaverna.tjoin.ui.serviceprovider.TemplateFillerServiceDesc;
+
 import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescriptionProvider;
 
@@ -119,10 +134,7 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		service13.setDescription("Check Template filler");
 		results.add(service13);
 		
-		ValidationPDLClientServiceDesc service14 = new ValidationPDLClientServiceDesc();
-		service14.setPdlDescriptionFile("http://www.exampleuri.com/pdldescriptionfile.xml");
-		service14.setDescription("Validate inputs with pdl-description");
-		results.add(service14);
+		
 		
 		//Put here additional descriptions for other services
 		//............

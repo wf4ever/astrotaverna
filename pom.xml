@@ -141,6 +141,8 @@
     <module>votable-renderer</module>
     <module>astrotaverna-utils</module>
     <module>file-reference-builder</module>
+    <module>PDL-activity</module>
+    <module>PDL-activity-ui</module>
   </modules>
   <scm>
   	<url>https://github.com/wf4ever/astrotaverna</url>
