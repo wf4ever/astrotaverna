@@ -29,12 +29,14 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- removing PDL from astrotaverna -->
+		<!--
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>PDL-activity-ui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+		-->
 		<!-- Workbench runtime for testing from IDE, remove if not using TavernaWorkbenchWithExamplePlugin.main() -->
 		<dependency>
 			<groupId>net.sf.taverna.t2.taverna-workbench</groupId>
@@ -125,14 +127,11 @@
 					<artifactId>perspective-myexperiment</artifactId>
 				</exclusion>
 				<!-- Taverna use a different version than pdl-param, exclusion in test workbench to avoid conflict -->
+				<!-- Comment slf4j-api for removing PDL.  Uncomment if PDL is again in astrotaverna to avoid conflicts-->
+				<!-- 
 				<exclusion>
 					<artifactId>slf4j-api</artifactId>
 					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<!-- 
-				<exclusion>
-					<groupId>${project.groupId}</groupId>
-					<artifactId>PDL-activity-ui</artifactId>
 				</exclusion>
 				-->
 			</exclusions>
