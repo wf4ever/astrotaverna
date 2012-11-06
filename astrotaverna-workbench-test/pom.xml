@@ -34,7 +34,7 @@
 			<artifactId>PDL-activity-ui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		
 		<!-- Workbench runtime for testing from IDE, remove if not using TavernaWorkbenchWithExamplePlugin.main() -->
 		<dependency>
 			<groupId>net.sf.taverna.t2.taverna-workbench</groupId>
@@ -129,6 +129,12 @@
 					<artifactId>slf4j-api</artifactId>
 					<groupId>org.slf4j</groupId>
 				</exclusion>
+				<!-- 
+				<exclusion>
+					<groupId>${project.groupId}</groupId>
+					<artifactId>PDL-activity-ui</artifactId>
+				</exclusion>
+				-->
 			</exclusions>
 		</dependency>
 
