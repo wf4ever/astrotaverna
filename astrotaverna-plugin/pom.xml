@@ -46,12 +46,14 @@
 			<artifactId>votable-renderer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- Comment for removing PDL from astrotaverna -->
+		<!-- 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>PDL-activity-ui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+		 -->
 		
 	</dependencies>
 </project>
