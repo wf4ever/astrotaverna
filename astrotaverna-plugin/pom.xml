@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.purl.wf4ever.astrotaverna</groupId>
 		<artifactId>astrotaverna</artifactId>
-		<version>1.02-SNAPSHOT</version>
+		<version>1.02</version>
 	</parent>
 	<artifactId>astrotaverna-plugin</artifactId>
 	<packaging>taverna-plugin</packaging>
