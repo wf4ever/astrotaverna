@@ -39,7 +39,7 @@ public class ValidationPDLClientContextualView extends ContextualView {
 		description.setColumns(30);
 		description.setLineWrap(true);
 		description.setText("The tool has to be configured with a pdl-description file using the " +
-				"configure service option. The tool will have as much inputs as described in the" +
+				"configure service option. The tool will have as much inputs as described in the " +
 				"pdl file. If the inputs are valid acording to the pdl-desciption file then the " +
 				"tool returns 'valid' but in not it fails.");
 
@@ -55,7 +55,7 @@ public class ValidationPDLClientContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Cat two tables";
+		return "PDL service validation";
 	}
 
 	/**

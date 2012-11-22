@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,9 +36,9 @@ import org.purl.wf4ever.astrotaverna.utils.MyUtils;
 //https://github.com/cmzwolf/OnlineCodeDaemon/blob/master/src/net/ivoa/oc/daemon/jobProcessor/JobProcessor.java
 
 
-public class ValidationPDLClientActivityTest {
+public class PDLServiceActivityTest {
 
-	private ValidationPDLClientActivityConfigurationBean configBean;
+	private PDLServiceActivityConfigurationBean configBean;
 
 	//these variables must be the same than the ones defined in the activity class
 	private static final String IN_FIRST_INPUT = "votable1";
@@ -46,7 +47,7 @@ public class ValidationPDLClientActivityTest {
 	private static final String OUT_SIMPLE_OUTPUT = "outputFileOut";
 	private static final String OUT_REPORT = "report";
 	
-	private ValidationPDLClientActivity activity = new ValidationPDLClientActivity();
+	private PDLServiceActivity activity = new PDLServiceActivity();
 
 	@Ignore("Not ready to run")
 	@BeforeClass
@@ -64,18 +65,17 @@ public class ValidationPDLClientActivityTest {
 	
 	@Before
 	public void makeConfigBean() throws Exception {
-		configBean = new ValidationPDLClientActivityConfigurationBean();
+		configBean = new PDLServiceActivityConfigurationBean();
 		//configBean.setPdlDescriptionFile("/home/julian/otherworkspaces/pdlworkspace/testPDLcmdLineTool/PDL-Description.xml");
-		activity = new ValidationPDLClientActivity();
+		activity = new PDLServiceActivity();
 	}
 
 
-	//unexisting file path: it does't fails (see reconfigure method) or launch exceptions if it is not run
+	//it doesn't throw a exception because they have to be captured in the activity
 	@Test()
-	public void invalidConfiguration() throws ActivityConfigurationException {
-		ValidationPDLClientActivityConfigurationBean invalidBean = new ValidationPDLClientActivityConfigurationBean();
-		invalidBean.setPdlDescriptionFile("/home/PDL-Description.xml");
-		// Should throw ActivityConfigurationException
+	public void invalidConfiguration() throws ActivityConfigurationException{
+		PDLServiceActivityConfigurationBean invalidBean = new PDLServiceActivityConfigurationBean();
+		invalidBean.setPdlDescriptionFile("home/PDL-Description.xml");
 		activity.configure(invalidBean);
 	}
 	
@@ -102,6 +102,51 @@ public class ValidationPDLClientActivityTest {
 
 	}
 
+
+
+	//test with not valid input: the float is 1/12.0 instead of 1/15.0
+	@Test(expected = java.lang.RuntimeException.class)
+	public void executeAsynchŃotValid() throws Exception {
+		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");
+	    String pdlContent = MyUtils.convertStreamToString(is);
+	    File tmpFile = MyUtils.writeStringAsTmpFile(pdlContent);
+		configBean.setPdlDescriptionFile(tmpFile.getAbsolutePath());
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		Float value = new Float(1/12.0);  
+		inputs.put("Ne", value.toString());
+		inputs.put("Si", value.toString());
+		inputs.put("Mg", value.toString());
+		inputs.put("Cr", value.toString());
+		inputs.put("Na", value.toString());
+		inputs.put("Ar", value.toString());
+		inputs.put("Al", value.toString());
+		inputs.put("Ca", value.toString());
+		inputs.put("Fe", value.toString());
+		inputs.put("C", value.toString());
+		inputs.put("N", value.toString());
+		inputs.put("S", value.toString());
+		inputs.put("Mn", value.toString());
+		inputs.put("O", value.toString());
+		inputs.put("Ni", value.toString());
+		inputs.put("email", "email@iaa.es");
+		
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		assertEquals("Unexpected outputs", 1, outputs.size());
+		assertEquals("With error", outputs.get(OUT_REPORT));
+
+	}
+	
+	//THIS IS USING LOCAL FILES
 	@Ignore
 	@Test
 	public void executeAsynchValid() throws Exception {
@@ -150,51 +195,9 @@ public class ValidationPDLClientActivityTest {
 
 	}
 
-
-	//test with not valid input: the float is 1/12.0 instead of 1/15.0
-	@Test(expected = java.lang.RuntimeException.class)
-	public void executeAsynchŃotValid() throws Exception {
-		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");
-	    String pdlContent = MyUtils.convertStreamToString(is);
-	    File tmpFile = MyUtils.writeStringAsTmpFile(pdlContent);
-		configBean.setPdlDescriptionFile(tmpFile.getAbsolutePath());
-		activity.configure(configBean);
-
-		Map<String, Object> inputs = new HashMap<String, Object>();
-		Float value = new Float(1/12.0);  
-		inputs.put("Ne", value.toString());
-		inputs.put("Si", value.toString());
-		inputs.put("Mg", value.toString());
-		inputs.put("Cr", value.toString());
-		inputs.put("Na", value.toString());
-		inputs.put("Ar", value.toString());
-		inputs.put("Al", value.toString());
-		inputs.put("Ca", value.toString());
-		inputs.put("Fe", value.toString());
-		inputs.put("C", value.toString());
-		inputs.put("N", value.toString());
-		inputs.put("S", value.toString());
-		inputs.put("Mn", value.toString());
-		inputs.put("O", value.toString());
-		inputs.put("Ni", value.toString());
-		inputs.put("email", "email@iaa.es");
-		
-		
-
-		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
-		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
-		expectedOutputTypes.put(OUT_REPORT, String.class);
-
-		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
-				activity, inputs, expectedOutputTypes);
-
-		assertEquals("Unexpected outputs", 1, outputs.size());
-		assertEquals("With error", outputs.get(OUT_REPORT));
-
-	}
 	
-	
-	@Ignore
+	//THIS IS USING LOCAL FILES
+	//@Ignore
 	@Test
 	public void reConfiguredActivity() throws Exception {
 		
@@ -212,8 +215,8 @@ public class ValidationPDLClientActivityTest {
 	    String pdlContent = MyUtils.convertStreamToString(is);
 	    File tmpFile = MyUtils.writeStringAsTmpFile(pdlContent);
 		configBean.setPdlDescriptionFile(tmpFile.getAbsolutePath());
-		activity.configure(configBean);
 		
+		activity.configure(configBean);
 		assertEquals("Unexpected inputs", 16, activity.getInputPorts().size());
 		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
 
@@ -223,7 +226,12 @@ public class ValidationPDLClientActivityTest {
 		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
 		Iterator<ActivityInputPort> it = activity.getInputPorts().iterator();
 		
-		
+		//configBean.setPdlDescriptionFile("http://pdl-calc.obspm.fr:8081/broadening/pdlDescription/PDL-Description.xml");
+		configBean.setPdlDescriptionFile("/home/julian/Documents/wf4ever/pdl/wf/PDL-Description-broadening.xml");
+		activity.configure(configBean);
+		System.out.println("----------- "+activity.getInputPorts().size());
+		assertEquals("Unexpected inputs", 5, activity.getInputPorts().size());
+		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
 	}
 	
 	

@@ -1,29 +1,64 @@
-package org.purl.wf4ever.astrotaverna.tjoin.ui.view;
+package org.purl.wf4ever.astrotaverna.pdl.ui.view;
 
 import java.awt.Frame;
+import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
+//import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
+import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivity;
 
-import org.purl.wf4ever.astrotaverna.tpipe.ResolveCoordsActivity;
-import org.purl.wf4ever.astrotaverna.tpipe.ResolveCoordsActivityConfigurationBean;
-import org.purl.wf4ever.astrotaverna.tjoin.ui.config.ResolveCoordsConfigureAction;
-import org.purl.wf4ever.astrotaverna.tjoin.ui.config.StiltsConfigureAction;
+import net.ivoa.parameter.model.SingleParameter;
+import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
+import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityInputPort;
+
+
+//import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivityConfigurationBean;
+
 
 
 @SuppressWarnings("serial")
-public class ResolveCoordsContextualView extends ContextualView {
-	private final ResolveCoordsActivity activity;
+public class PDLInputPortContextualView extends ContextualView {
+	private final PDLServiceActivity activity;
+	private final ActivityInputPort inputPort;
+	private String paramDesc;
+	//private final String defaultValue;
+	private final String paramName;
+	
 	private JTextArea description;
 	private javax.swing.JScrollPane jScrollPane1;
+	
+	
 
-	public ResolveCoordsContextualView(ResolveCoordsActivity activity) {
+	public PDLInputPortContextualView(ActivityInputPort inputPort, PDLServiceActivity activity) {
+		this.inputPort = inputPort;	
 		this.activity = activity;
+		
+		SingleParameter param = activity.getHashParameters().get(inputPort.getName());
+		
+		
+		paramDesc ="";
+		if(param.getDependency()!=null)
+			paramDesc+="The parameter is "+ param.getDependency()+".\n";
+		if(param.getParameterType()!=null)
+			paramDesc += "Type: "+ param.getParameterType().toString()+".\n";
+		if(param.getPrecision()!=null)
+			paramDesc += "Precision: " + param.getPrecision()+".\n";
+		if(param.getUCD()!=null)
+			paramDesc += "UCD: "+ param.getUCD()+"\n";
+		if(param.getUType()!=null)
+			paramDesc += "UType: "+ param.getUType()+"\n";
+		if(param.getSkossConcept()!=null)
+			paramDesc += "SKOS: " + param.getSkossConcept()+"\n";
+		if(param.getUnit()!=null)
+			paramDesc += "Unit: " + param.getUnit();
+
+		//defaultValue = "";
+		paramName = param.getName();
+		
 		initView(); //this method will call the getMainFrame()
 	}
 
@@ -38,13 +73,8 @@ public class ResolveCoordsContextualView extends ContextualView {
 		description.setEditable(false);
 		description.setColumns(30);
 		description.setLineWrap(true);
-		description.setText("The service adds two columns (RA and DEC) by resolving the position. It needs " +
-				"a column that contains the object name. The object name may be referenced by the column name or" +
-				"the column index ($1, $2, $3, ...). " +
-				"Using the configure service option you can choose between direct votable input, " +
-				"a URL or a File. If the input is a file path then the output is a File path whereas the output " +
-				"is a string with the votable in the remaining cases. ");
-		
+		description.setText(paramDesc);
+
 		jScrollPane1.setViewportView(description);
 		jPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 		
@@ -57,7 +87,7 @@ public class ResolveCoordsContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Resolve coordinates";
+		return "Name of the contextual view .....";
 	}
 
 	/**
@@ -72,7 +102,8 @@ public class ResolveCoordsContextualView extends ContextualView {
 		// TODO: Might also show extra service information looked
 		// up dynamically from endpoint/registry
 		
-		
+		//IMPLEMENT THIS METHOD: IF THE CONFIGURATIO CHANGES, IT MIGHT BE A DIFFERENT PDL DESCRIPTION
+		//-----------------------------------------
 	}
 
 	/**
@@ -89,7 +120,8 @@ public class ResolveCoordsContextualView extends ContextualView {
 	//the section.
 	@Override
 	public Action getConfigureAction(final Frame owner) {
-		return new ResolveCoordsConfigureAction(activity, owner);
+		//return new PDLServiceConfigureAction(activity, owner);
+		return null;
 	}
 
 }

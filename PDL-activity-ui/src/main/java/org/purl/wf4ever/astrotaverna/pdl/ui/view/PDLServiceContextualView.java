@@ -1,28 +1,28 @@
-package org.purl.wf4ever.astrotaverna.tjoin.ui.view;
+package org.purl.wf4ever.astrotaverna.pdl.ui.view;
 
 import java.awt.Frame;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
+//import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 
-import org.purl.wf4ever.astrotaverna.tpipe.ResolveCoordsActivity;
-import org.purl.wf4ever.astrotaverna.tpipe.ResolveCoordsActivityConfigurationBean;
-import org.purl.wf4ever.astrotaverna.tjoin.ui.config.ResolveCoordsConfigureAction;
-import org.purl.wf4ever.astrotaverna.tjoin.ui.config.StiltsConfigureAction;
+import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivity;
+//import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivityConfigurationBean;
+import org.purl.wf4ever.astrotaverna.pdl.ui.config.PDLServiceConfigureAction;
+
 
 
 @SuppressWarnings("serial")
-public class ResolveCoordsContextualView extends ContextualView {
-	private final ResolveCoordsActivity activity;
+public class PDLServiceContextualView extends ContextualView {
+	private final PDLServiceActivity activity;
 	private JTextArea description;
 	private javax.swing.JScrollPane jScrollPane1;
 
-	public ResolveCoordsContextualView(ResolveCoordsActivity activity) {
+	public PDLServiceContextualView(PDLServiceActivity activity) {
 		this.activity = activity;
 		initView(); //this method will call the getMainFrame()
 	}
@@ -38,13 +38,10 @@ public class ResolveCoordsContextualView extends ContextualView {
 		description.setEditable(false);
 		description.setColumns(30);
 		description.setLineWrap(true);
-		description.setText("The service adds two columns (RA and DEC) by resolving the position. It needs " +
-				"a column that contains the object name. The object name may be referenced by the column name or" +
-				"the column index ($1, $2, $3, ...). " +
-				"Using the configure service option you can choose between direct votable input, " +
-				"a URL or a File. If the input is a file path then the output is a File path whereas the output " +
-				"is a string with the votable in the remaining cases. ");
-		
+		description.setText("Import PDL service by providing a pdl-description file using the " +
+				"configure service option. The tool will have as much inputs and outputs as described in the" +
+				"pdl file. If the service is asynchronous it, it waits until the service is finished.");
+
 		jScrollPane1.setViewportView(description);
 		jPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 		
@@ -57,7 +54,7 @@ public class ResolveCoordsContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Resolve coordinates";
+		return "Import PDL service";
 	}
 
 	/**
@@ -89,7 +86,7 @@ public class ResolveCoordsContextualView extends ContextualView {
 	//the section.
 	@Override
 	public Action getConfigureAction(final Frame owner) {
-		return new ResolveCoordsConfigureAction(activity, owner);
+		return new PDLServiceConfigureAction(activity, owner);
 	}
 
 }

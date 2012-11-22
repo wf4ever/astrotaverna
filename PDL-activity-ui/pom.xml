@@ -37,5 +37,20 @@
 			<version>${t2.ui.impl.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>net.sf.taverna.t2.ui-api</groupId>
+			<artifactId>file-api</artifactId>
+			<version>${t2.ui.impl.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.taverna.t2.core</groupId>
+			<artifactId>workflowmodel-api</artifactId>
+			<version>${t2.ui.impl.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.taverna.t2.core</groupId>
+			<artifactId>workflowmodel-impl</artifactId>
+			<version>${t2.ui.impl.version}</version>
+		</dependency>
 	</dependencies>
 </project>

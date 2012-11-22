@@ -49,6 +49,11 @@ public class PDLServiceProvider implements ServiceDescriptionProvider {
 		service1.setDescription("Validate inputs with pdl-description");
 		results.add(service1);
 		
+		PDLService_ServiceDesc service2 = new PDLService_ServiceDesc();
+		service2.setPdlDescriptionFile("http://www.exampleuri.com/pdldescriptionfile.xml");
+		service2.setDescription("Import PDL service (Beta)");
+		results.add(service2);
+		
 		//Put here additional descriptions for other services
 		//............
 		//............
