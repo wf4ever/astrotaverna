@@ -1,6 +1,7 @@
 package org.purl.wf4ever.astrotaverna.pdl.ui.view;
 
 import java.awt.Frame;
+import java.util.HashMap;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -29,18 +30,34 @@ public class PDLServiceContextualView extends ContextualView {
 
 	@Override
 	public JComponent getMainFrame() {
+		String serviceDescription;
 		JPanel jPanel = new JPanel();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		description = new JTextArea();
 		
 		jPanel.setLayout(new java.awt.BorderLayout());
 		
+		serviceDescription = activity.getServiceDescription();
+		if(serviceDescription==null)
+			serviceDescription="";
+		else
+			serviceDescription+="\n";
+		
+		HashMap<String,String> restrictions = activity.getRestrictionsOnGroups();
+		if(restrictions!=null)
+			for(String key: restrictions.keySet()){
+				serviceDescription+="Restrictions on parameter group (" + key +"):\n";
+				serviceDescription+=restrictions.get(key);
+			}
+		
 		description.setEditable(false);
 		description.setColumns(30);
 		description.setLineWrap(true);
-		description.setText("Import PDL service by providing a pdl-description file using the " +
-				"configure service option. The tool will have as much inputs and outputs as described in the" +
-				"pdl file. If the service is asynchronous it, it waits until the service is finished.");
+		description.setText(serviceDescription);
+		//description.setText("Import PDL service by providing a pdl-description file using the " +
+		//		"configure service option. The tool will have as much inputs and outputs as described in the" +
+		//		"pdl file. If the service is asynchronous it, it waits until the service is finished.");
+		
 
 		jScrollPane1.setViewportView(description);
 		jPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -54,7 +71,7 @@ public class PDLServiceContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Import PDL service";
+		return "PDL service";
 	}
 
 	/**

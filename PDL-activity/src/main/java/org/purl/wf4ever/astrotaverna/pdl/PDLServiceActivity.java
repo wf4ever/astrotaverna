@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 //comment from terminal
 import org.apache.log4j.Logger;
+import org.springframework.beans.NullValueInNestedPathException;
 
 
 
@@ -23,6 +25,10 @@ import CommonsObjects.GeneralParameter;
 //import uk.ac.starlink.ttools.Stilts;
 import visitors.GeneralParameterVisitor;
 
+import net.ivoa.parameter.model.ConditionalStatement;
+import net.ivoa.parameter.model.ConstraintOnGroup;
+import net.ivoa.parameter.model.ParameterGroup;
+import net.ivoa.parameter.model.ParameterReference;
 import net.ivoa.parameter.model.Service;
 import net.ivoa.parameter.model.SingleParameter;
 import net.ivoa.pdl.interpreter.expression.ExpressionParserFactory;
@@ -56,6 +62,8 @@ public class PDLServiceActivity extends
 	private PDLServiceActivityConfigurationBean configBean;
 	
 	private HashMap<String, SingleParameter> hashParameters;
+	private HashMap<String, String> restrictionsOnGroups;
+	private String serviceDescription;
 	
 	//pdl specific objects
 	final public String complete = "To complete";
@@ -67,10 +75,7 @@ public class PDLServiceActivity extends
 			throws ActivityConfigurationException {
 
 		// Any pre-config sanity checks
-		//if (!configBean.getTablefile1().exists()) {
-		//	throw new ActivityConfigurationException(
-		//			"Input table file 1 doesn't exist");
-		//}
+
 		
 		//this method controls if the input is valid
 		
@@ -90,11 +95,13 @@ public class PDLServiceActivity extends
 	}
 
 	protected void configurePorts() throws ActivityConfigurationException {
-		GroupProcessor gp;
+		//GroupProcessor gp;
 		Service service;
 		//ArrayList<List<SingleParameter>> paramsLists;
 		//HashMap<String, Integer> dimensions;
 		
+		removeInputs();
+		removeOutputs();
 		
 		try{
 			service = buildService(configBean.getPdlDescriptionFile());
@@ -102,11 +109,53 @@ public class PDLServiceActivity extends
 			Utilities.getInstance().setMapper(new UserMapper());
 			// In case we are being reconfigured - remove existing ports first
 			// to avoid duplicates
-			removeInputs();
-			removeOutputs();
-	
-			// FIXME: Replace with your input and output port definitions
 			
+	
+			//service.getInputs().getConstraintOnGroup().getConditionalStatement().
+			List<SingleParameter> serviceParameters = service.getParameters().getParameter();
+			
+			List<ParameterReference> inputParamRefs = getParameterRefeferences(service.getInputs());
+			List<ParameterReference> outputParamRefs = getParameterRefeferences(service.getOutputs());
+			
+			ArrayList<SingleParameter> inputParameters = getSubsetOfSingleParameter(serviceParameters, inputParamRefs);
+			ArrayList<SingleParameter> outputParameters = getSubsetOfSingleParameter(serviceParameters, outputParamRefs);
+			
+			//Input ports
+			hashParameters = new HashMap();
+			for(SingleParameter param: inputParameters){
+				addInput(param.getName(), 0, true, null, String.class);
+				hashParameters.put(param.getName(), param);
+			}
+			
+			//Output ports
+			for(SingleParameter param: outputParameters){
+				// Single value output port (depth 0)
+				addOutput(param.getName(), 0);
+				hashParameters.put(param.getName(), param);
+			}
+			
+			//This port is for testing
+			// Single value output port (depth 0)
+			addOutput(OUT_REPORT, 0);
+			
+			
+			
+			//restrictions 
+			 HashMap<String, String> inputRestrictions = getRestrictionsOnGroup(service.getInputs());
+			 HashMap<String, String> outputRestrictions = getRestrictionsOnGroup(service.getOutputs());
+			 restrictionsOnGroups = new HashMap<String,String>();
+			 if(inputRestrictions!=null){
+				 restrictionsOnGroups.putAll(inputRestrictions);
+			 }
+			 if(outputRestrictions!=null){
+				 restrictionsOnGroups.putAll(outputRestrictions);
+			 }
+			 
+			 serviceDescription = service.getDescription();
+			
+			// FIXME: Replace with your input and output port definitions
+			/*
+			//The following commented code is a not efficient way to extract the inputParameters
 			gp = new GroupProcessor(service);
 			//System.out.println(service.getInputs().getParameterRef().get(0).getParameterName());
 			gp.process();
@@ -138,12 +187,12 @@ public class PDLServiceActivity extends
 					//	//dimensions.put(param.getName(), new Integer(0));
 					//}
 					hashParameters.put(param.getName(), param);
-										
 				}
 				//if(paramsList!=null && paramsLists.size()>0)
 				//	paramsLists.add(paramsList);
 					
 			}
+			*/
 		}catch(ActivityConfigurationException ex){
 			logger.warn("unexisting or invalid pdl description file: the service will not have inports");
 		}
@@ -151,13 +200,114 @@ public class PDLServiceActivity extends
 		// Single value output port (depth 0)
 		//addOutput(OUT_SIMPLE_OUTPUT, 0);
 		// Single value output port (depth 0)
-		addOutput(OUT_REPORT, 0);
+		//addOutput(OUT_REPORT, 0);
 
+	}
+	
+	/**
+	 * It returns a list of the ParameterReference objets contained in group and all its subgroups
+	 * @param group 
+	 * @return List of ParameterReference Objects in the group and the subgroups
+	 */
+	private List<ParameterReference> getParameterRefeferences(ParameterGroup group){
+		
+		List<ParameterReference> list =  group.getParameterRef();
+		
+		if(group.getParameterGroup()!=null)
+			for(ParameterGroup subgroup: group.getParameterGroup()){
+				List<ParameterReference> list2 = getParameterRefeferences(subgroup);
+				if(list2!=null)
+					list.addAll(list2);
+			}
+		if(list == null)
+			list = new ArrayList<ParameterReference>();
+		
+		return list;
+	}
+	
+	/**
+	 * It receives a list of SingleParameter and return the sublist corresponding with the selection.
+	 * @param set List of SingleParameter objects
+	 * @param selection List of SingleParameter references that must be included in the subset
+	 * @return subset of SingleParameter containing the selection
+	 */
+	private ArrayList<SingleParameter> getSubsetOfSingleParameter (List<SingleParameter> set, List<ParameterReference> selection){
+		ArrayList<SingleParameter> subset = new ArrayList<SingleParameter>();
+		if(selection!=null && set !=null)
+			for(ParameterReference ref: selection){
+				boolean found = false;				
+				Iterator<SingleParameter> it = set.iterator(); 
+				while(it.hasNext() && !found){
+					SingleParameter param = it.next();
+					if(param.getName().compareTo(ref.getParameterName())==0){
+						found = true;
+						subset.add(param);
+					}
+				}
+			}
+		
+		return subset;
+	}
+	
+	/**
+	 * It receives a group and return a hashMap with 1) a list of comma separated parameter names and 2) a description 
+	 * of a conditionalStatement that affects to the previous parameters.
+	 * It returns the restrictions for the group and the subgroups.
+	 * @param group ParameterGroup
+	 * @return restrictions for each set of parameters
+	 */
+	private HashMap<String, String> getRestrictionsOnGroup(ParameterGroup group){
+		
+		HashMap<String, String> restrictions = new HashMap();
+
+		List<ParameterReference> paramList =  group.getParameterRef();
+		
+		ConstraintOnGroup constraint = group.getConstraintOnGroup();
+		if(paramList != null && constraint != null)
+			if(constraint.getConditionalStatement() != null){
+				String paramListString = "";
+				Iterator<ParameterReference> it = paramList.iterator();
+				while(it.hasNext()){
+					paramListString += it.next().getParameterName();
+					if(it.hasNext())
+						paramListString += ", ";
+				} 
+				 
+				String comments="";	
+				int i=1;
+				for(ConditionalStatement stmt: constraint.getConditionalStatement()){									
+					if(stmt.getComment()!=null && !stmt.getComment().isEmpty()){
+						comments +=i+") "+stmt.getComment()+"\n";
+						i++;
+					}
+				}
+				if(!comments.isEmpty())
+					restrictions.put(paramListString, comments);
+			}
+		
+		if(group.getParameterGroup()!=null)
+			for(ParameterGroup subgroup: group.getParameterGroup()){
+				HashMap<String, String> list2 = getRestrictionsOnGroup(subgroup);
+				if(list2!=null)
+					restrictions.putAll(list2);
+			}
+
+		return restrictions;
 	}
 	
 	public HashMap<String, SingleParameter> getHashParameters() {
 		return hashParameters;
 	}
+
+	public HashMap<String, String> getRestrictionsOnGroups() {
+		return restrictionsOnGroups;
+	}
+
+
+	public String getServiceDescription() {
+		return serviceDescription;
+	}
+
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -233,7 +383,7 @@ public class PDLServiceActivity extends
 				else
 					return 1;
 			}
-			
+			/*
 			public void run4TestNullInputs() {
 				boolean callbackfails=false;
 				
@@ -272,7 +422,7 @@ public class PDLServiceActivity extends
 				outputs.put(OUT_REPORT, simpleRef2);
 				callback.receiveResult(outputs, new int[0]);
 			}
-			
+			*/
 			
 			public void run() {
 				boolean callbackfails=false;
@@ -293,7 +443,8 @@ public class PDLServiceActivity extends
 						gp.process();
 					}catch (ActivityConfigurationException e) {
 						// TODO Auto-generated catch block
-						callback.fail("Make sure that the service configuration has an url that points to a valid pdl description file");
+						callback.fail("Make sure that the service configuration has an url that points to a valid pdl description file"+"\n"+e.getMessage());
+						logger.error("Make sure that the service configuration has an url that points to a valid pdl description file"+"\n"+e.getMessage());
 						callbackfails = true;
 					}
 					if(!callbackfails && areMandatoryInputsNotNull()){
@@ -369,8 +520,8 @@ public class PDLServiceActivity extends
 					}
 				} catch (NullPointerException e) {
 					// TODO Auto-generated catch block
-					logger.error("Problems in the run method. Is it correct the pdl-description file url: "+ configBean.getPdlDescriptionFile());
-					callback.fail("Problems in the run method. Is it correct the pdl-description file url: "+ configBean.getPdlDescriptionFile());
+					logger.error("Problems in the run method. Is it correct the pdl-description file url: "+ configBean.getPdlDescriptionFile()+". "+e.getMessage());
+					callback.fail("Problems in the run method. Is it correct the pdl-description file url: "+ configBean.getPdlDescriptionFile()+"\n"+e.getMessage());
 				} 
 			}
 			
@@ -402,26 +553,26 @@ public class PDLServiceActivity extends
 					service = (Service) u.unmarshal(uri.toURL());
 				} catch (URISyntaxException e) {
 					//e.printStackTrace();
-					logger.error("File does not exist or invalid URI for the PDL description file.");
-					throw new ActivityConfigurationException("File does not exist or invalid URI for the PDL description file.");
+					logger.error("File does not exist or invalid URI for the PDL description file. "+e.getMessage());
+					throw new ActivityConfigurationException("File does not exist or invalid URI for the PDL description file.\n"+e.getMessage());
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
 					//e.printStackTrace();
-					logger.error("File does not exist or invalid URI for the PDL description file.");
-					throw new ActivityConfigurationException("File does not exist or invalid URL for the PDL description file.");
+					logger.error("File does not exist or invalid URI for the PDL description file. "+e.getMessage());
+					throw new ActivityConfigurationException("File does not exist or invalid URL for the PDL description file.\n"+e.getMessage());
 				} catch (IllegalArgumentException e) {
 		            //e.printStackTrace();
-					logger.error("File does not exist or invalid URI for the PDL description file.");
-		            throw new ActivityConfigurationException("File does not exist or invalid URL for the PDL description file.");
+					logger.error("File does not exist or invalid URI for the PDL description file."+e.getMessage());
+		            throw new ActivityConfigurationException("File does not exist or invalid URL for the PDL description file.\n"+e.getMessage());
 		        }
 			}
 			
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
-			logger.error("buildService could not create a jaxbContext.");
+			logger.error("buildService could not create a jaxbContext. "+e.getMessage());
 			e.printStackTrace();
-			throw new ActivityConfigurationException("buildService could not create a jaxbContext.");
+			throw new ActivityConfigurationException("buildService could not create a jaxbContext.\n"+e.getMessage());
 		}
 		return service;
 	}

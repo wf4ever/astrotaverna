@@ -209,7 +209,7 @@ public class PDLServiceActivityTest {
 		activity.configure(configBean);
 		
 		assertEquals("Unexpected inputs", 0, activity.getInputPorts().size());
-		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
+		assertEquals("Unexpected outputs", 0, activity.getOutputPorts().size());
 		
 		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");
 	    String pdlContent = MyUtils.convertStreamToString(is);
@@ -229,7 +229,8 @@ public class PDLServiceActivityTest {
 		//configBean.setPdlDescriptionFile("http://pdl-calc.obspm.fr:8081/broadening/pdlDescription/PDL-Description.xml");
 		configBean.setPdlDescriptionFile("/home/julian/Documents/wf4ever/pdl/wf/PDL-Description-broadening.xml");
 		activity.configure(configBean);
-		System.out.println("----------- "+activity.getInputPorts().size());
+		//System.out.println("----------- "+activity.getInputPorts().size());
+		//System.out.println(activity.getRestrictionsOnGroups());
 		assertEquals("Unexpected inputs", 5, activity.getInputPorts().size());
 		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
 	}

@@ -51,7 +51,7 @@ public class PDLService_ServiceDesc extends ServiceDescription<PDLServiceActivit
 	 */
 	@Override
 	public String getName() {
-		return "Import PDL service";//exampleString;
+		return "PDL service";//exampleString;
 	}
 
 	/**
