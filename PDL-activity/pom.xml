@@ -39,5 +39,6 @@
 			<artifactId>stilts-activity</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
 	</dependencies>
 </project>

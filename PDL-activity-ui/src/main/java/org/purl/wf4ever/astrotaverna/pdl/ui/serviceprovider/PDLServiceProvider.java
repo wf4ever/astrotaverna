@@ -17,7 +17,7 @@ public class PDLServiceProvider implements ServiceDescriptionProvider {
 	//OJO!!!!!!!!!!!!!!!!!!!!
 	//write down a real URI
 	private static final URI providerId = URI
-		.create("http://www.iaa.es/service-provider/tjoin");
+		.create("http://www.iaa.es/service-provider/pdl");
 	
 	/**
 	 * Do the actual search for services. Return using the callBack parameter.

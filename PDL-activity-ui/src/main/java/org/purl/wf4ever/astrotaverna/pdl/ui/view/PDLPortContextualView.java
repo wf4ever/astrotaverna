@@ -14,6 +14,7 @@ import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivity;
 import net.ivoa.parameter.model.SingleParameter;
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityInputPort;
+import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityOutputPort;
 
 
 //import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivityConfigurationBean;
@@ -21,9 +22,9 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityInputPort;
 
 
 @SuppressWarnings("serial")
-public class PDLInputPortContextualView extends ContextualView {
-	private final PDLServiceActivity activity;
-	private final ActivityInputPort inputPort;
+public class PDLPortContextualView extends ContextualView {
+	//private final PDLServiceActivity activity;
+	//private final ActivityInputPort inputPort;
 	private String paramDesc;
 	//private final String defaultValue;
 	private final String paramName;
@@ -33,11 +34,40 @@ public class PDLInputPortContextualView extends ContextualView {
 	
 	
 
-	public PDLInputPortContextualView(ActivityInputPort inputPort, PDLServiceActivity activity) {
-		this.inputPort = inputPort;	
-		this.activity = activity;
+	public PDLPortContextualView(ActivityInputPort inputPort, PDLServiceActivity activity) {
+		//this.inputPort = inputPort;	
+		//this.activity = activity;
 		
 		SingleParameter param = activity.getHashParameters().get(inputPort.getName());
+		
+		
+		paramDesc ="";
+		if(param.getDependency()!=null)
+			paramDesc+="The parameter is "+ param.getDependency()+".\n";
+		if(param.getParameterType()!=null)
+			paramDesc += "Type: "+ param.getParameterType().toString()+".\n";
+		if(param.getPrecision()!=null)
+			paramDesc += "Precision: " + param.getPrecision()+".\n";
+		if(param.getUCD()!=null)
+			paramDesc += "UCD: "+ param.getUCD()+"\n";
+		if(param.getUType()!=null)
+			paramDesc += "UType: "+ param.getUType()+"\n";
+		if(param.getSkossConcept()!=null)
+			paramDesc += "SKOS: " + param.getSkossConcept()+"\n";
+		if(param.getUnit()!=null)
+			paramDesc += "Unit: " + param.getUnit();
+
+		//defaultValue = "";
+		paramName = param.getName();
+		
+		initView(); //this method will call the getMainFrame()
+	}
+	
+	public PDLPortContextualView(ActivityOutputPort outputPort, PDLServiceActivity activity) {
+		//this.inputPort = inputPort;	
+		//this.activity = activity;
+		
+		SingleParameter param = activity.getHashParameters().get(outputPort.getName());
 		
 		
 		paramDesc ="";
@@ -87,7 +117,7 @@ public class PDLInputPortContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Name of the contextual view .....";
+		return "Port: "+ paramName;
 	}
 
 	/**
