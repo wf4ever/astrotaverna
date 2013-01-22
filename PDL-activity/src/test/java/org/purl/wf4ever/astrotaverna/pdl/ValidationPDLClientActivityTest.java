@@ -153,7 +153,7 @@ public class ValidationPDLClientActivityTest {
 
 	//test with not valid input: the float is 1/12.0 instead of 1/15.0
 	@Test(expected = java.lang.RuntimeException.class)
-	public void executeAsynchŃotValid() throws Exception {
+	public void executeAsynchNotValid() throws Exception {
 		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");
 	    String pdlContent = MyUtils.convertStreamToString(is);
 	    File tmpFile = MyUtils.writeStringAsTmpFile(pdlContent);
