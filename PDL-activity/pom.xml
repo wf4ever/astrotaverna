@@ -30,6 +30,11 @@
 		</dependency>
 		-->
 		<dependency>
+			<groupId>net.sf.taverna.t2.activities</groupId>
+			<artifactId>rest-activity</artifactId>
+			<version>${t2.activities.version}</version>
+			</dependency>
+		<dependency>
 			<groupId>net.ivoa.parameter</groupId>
 			<artifactId>param-model</artifactId>
 			<version>0.0.2-utillities-thread-safe</version>		
@@ -39,6 +44,6 @@
 			<artifactId>stilts-activity</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 	</dependencies>
 </project>

@@ -197,6 +197,37 @@ public class PDLServiceActivityTest {
 
 	}
 
+	@Test
+	public void executeBroadeningService() throws Exception {
+		String serviceURL = "http://pdl-calc.obspm.fr:8081/broadening/pdlDescription/PDL-Description.xml";
+			    
+		configBean.setPdlDescriptionFile(serviceURL);
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		Float value = new Float(2/3.0);
+		inputs.put("Density", value.toString());
+		inputs.put("InitialLevel", "1");
+		inputs.put("FinalLevel", "3");
+		inputs.put("Temperature", "15");
+		inputs.put("mail", "jgarrido@iaa.es");
+		
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		assertEquals("Unexpected outputs", 1, outputs.size());
+		assertEquals("Valid", outputs.get(OUT_REPORT));
+		
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
 	
 	//THIS IS USING LOCAL FILES
 	@Ignore

@@ -16,9 +16,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 //comment from terminal
 import org.apache.log4j.Logger;
-import org.springframework.beans.NullValueInNestedPathException;
-
-
 
 import CommonsObjects.GeneralParameter;
 

@@ -1,8 +1,12 @@
 package org.purl.wf4ever.astrotaverna.pdl;
 
 import java.io.File;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Map;
 //import java.net.URI;
+
 
 /**
  * Activity Configuration bean
@@ -33,6 +37,26 @@ public class PDLServiceActivityConfigurationBean implements Serializable {
 	
 	private String pdlDescriptionFile;
 	
+	// only need to store the configuration of inputs and outputs, as all of them are dynamic;
+	// only inputs that constitute components of URL signature are to be stored
+	private Map<String, Class<?>> activityInputs;
+	private Map<String, Class<?>> activityOutputs;
+	
+	public void setActivityInputs(Map<String, Class<?>> activityInputs) {
+		this.activityInputs = activityInputs;
+	}
+
+	public Map<String, Class<?>> getActivityInputs() {
+		return activityInputs;
+	}
+	
+	public void setActivityOutputs(Map<String, Class<?>> activityOutputs) {
+		this.activityOutputs = activityOutputs;
+	}
+
+	public Map<String, Class<?>> getActivityOutputs() {
+		return activityOutputs;
+	}
 
 	public String getPdlDescriptionFile() {
 		return pdlDescriptionFile;
@@ -41,5 +65,7 @@ public class PDLServiceActivityConfigurationBean implements Serializable {
 	public void setPdlDescriptionFile(String pdlDescriptionFile) {
 		this.pdlDescriptionFile = pdlDescriptionFile;
 	}
+	
+	
 
 }
