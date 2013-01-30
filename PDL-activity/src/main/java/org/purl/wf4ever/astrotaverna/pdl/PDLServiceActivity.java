@@ -57,7 +57,7 @@ public class PDLServiceActivity extends
 	private static final String OUT_REPORT = "report";
 	
 	private PDLServiceActivityConfigurationBean configBean;
-	PDLServiceController pdlcontroller;
+	
 	
 //	private HashMap<String, SingleParameter> hashParameters;
 //	private HashMap<String, String> restrictionsOnGroups;
@@ -94,9 +94,11 @@ public class PDLServiceActivity extends
 
 	protected void configurePorts() throws ActivityConfigurationException {
 		//GroupProcessor gp;
-		Service service;
+//		Service service;
 		//ArrayList<List<SingleParameter>> paramsLists;
 		//HashMap<String, Integer> dimensions;
+		
+		PDLServiceController pdlcontroller;
 		
 		removeInputs();
 		removeOutputs();
@@ -236,28 +238,33 @@ public class PDLServiceActivity extends
 		// from thread pool and return asynchronously
 		callback.requestRun(new Runnable() {
 		
-			GroupProcessor gp;
-			Service service;
+//			GroupProcessor gp;
+//			Service service;
+			
+			PDLServiceController pdlcontroller;
+			
 			//ArrayList<List<SingleParameter>> paramsLists;
 			//HashMap<String, Integer> dimensions;
 			
 			/*
 			 * Check if the mandatory inputs are not null
 			 */
-			public boolean areMandatoryInputsNotNull(){
+			public boolean areMandatoryInputsNotNull(){                  
 				boolean validStatus = true;
+            
 				try{
-					List<GroupHandlerHelper> groupsHandler = gp.getGroupsHandler();
-					for(GroupHandlerHelper ghh : groupsHandler){
-						List<SingleParameter> paramsList = ghh.getSingleParamIntoThisGroup();
-						for(SingleParameter param: paramsList){
-							if(inputs.get(param.getName())==null)
-								//if no dependency defined --> false
-								//if no optional --> false
-								if(!(param.getDependency()!=null && param.getDependency().compareTo("optional")==0))
-									validStatus = false;
-						}
+//					List<GroupHandlerHelper> groupsHandler = gp.getGroupsHandler();
+//					for(GroupHandlerHelper ghh : groupsHandler){
+//						List<SingleParameter> paramsList = ghh.getSingleParamIntoThisGroup();
+					List<SingleParameter> paramsList = pdlcontroller.getSingleParametersOnGroups();
+					for(SingleParameter param: paramsList){
+						if(inputs.get(param.getName())==null)
+							//if no dependency defined --> false
+							//if no optional --> false
+							if(!(param.getDependency()!=null && param.getDependency().compareTo("optional")==0))
+								validStatus = false;
 					}
+//					}
 				}catch(Exception ex){validStatus = false;}
 				
 				return validStatus;
@@ -282,26 +289,7 @@ public class PDLServiceActivity extends
 			
 			
 			
-			/*
-			 * The dimension is the size of the array. minimun size is 1
-			 */
-			private int getDimension(SingleParameter param){
-				int dimension = -1;
-				if(param.getDimension()!=null){
-					try{
-						String value = ExpressionParserFactory.getInstance()
-						   .buildParser(param.getDimension()).parse().get(0).getValue();
-						dimension = new Integer(value).intValue();
-					} catch (Exception ex){
-						logger.error("I couln't read the dimension value for "+ param.getName());
-						dimension = -1;
-					}
-				}
-				if(dimension > 1 )
-					return dimension;
-				else
-					return 1;
-			}
+			
 			/*
 			public void run4TestNullInputs() {
 				boolean callbackfails=false;
@@ -353,13 +341,15 @@ public class PDLServiceActivity extends
 				
 				try {
 					try{
-						service = buildService(configBean.getPdlDescriptionFile());
-
-						Utilities.getInstance().setService(service);
-						Utilities.getInstance().setMapper(new UserMapper());
-						
-						gp = new GroupProcessor(service);
-						gp.process();
+						pdlcontroller = new PDLServiceController (configBean);
+						pdlcontroller.prepareProcess();
+//						service = buildService(configBean.getPdlDescriptionFile());
+//
+//						Utilities.getInstance().setService(service);
+//						Utilities.getInstance().setMapper(new UserMapper());
+//						
+//						gp = new GroupProcessor(service);
+//						gp.process();
 					}catch (ActivityConfigurationException e) {
 						// TODO Auto-generated catch block
 						callback.fail("Make sure that the service configuration has an url that points to a valid pdl description file"+"\n"+e.getMessage());
@@ -367,6 +357,9 @@ public class PDLServiceActivity extends
 						callbackfails = true;
 					}
 					if(!callbackfails && areMandatoryInputsNotNull()){
+						
+						GroupProcessor gp = pdlcontroller.getGroupProcessor();  
+						
 						// Resolve inputs
 						List<GroupHandlerHelper> groupsHandler = gp.getGroupsHandler();
 						for(GroupHandlerHelper ghh : groupsHandler){
@@ -375,17 +368,17 @@ public class PDLServiceActivity extends
 								for(SingleParameter param : paramsList){
 									if(inputs.get(param.getName())!=null){
 										//dimension?
-										int dimension= getDimension(param);
+										int dimension= PDLServiceController.getDimension(param);
 										//if depth is 0 && dimension==1 then generalParamList only has one element
 										if(dimension==1){
 											String value = (String) referenceService.renderIdentifier(inputs.get(param.getName()), 
 													String.class, context);
 											// put every input in the Mapper
 											List<GeneralParameter> generalParamList = new ArrayList<GeneralParameter>();
-											GeneralParameter gp = new GeneralParameter(value, 
+											GeneralParameter gparam = new GeneralParameter(value, 
 													param.getParameterType().toString(), param.getName(),
 													new GeneralParameterVisitor());
-											generalParamList.add(gp);
+											generalParamList.add(gparam);
 											
 											Utilities.getInstance().getMapper().getMap()
 											  .put(param.getName(), generalParamList);
@@ -401,10 +394,10 @@ public class PDLServiceActivity extends
 											for(String value : values){
 												// put every input in the Mapper
 												
-												GeneralParameter gp = new GeneralParameter(value, 
+												GeneralParameter gparam = new GeneralParameter(value, 
 														param.getParameterType().toString(), param.getName(),
 														new GeneralParameterVisitor());
-												generalParamList.add(gp);
+												generalParamList.add(gparam);
 											}
 											Utilities.getInstance().getMapper().getMap()
 											  .put(param.getName(), generalParamList);
@@ -425,7 +418,7 @@ public class PDLServiceActivity extends
 						
 						if(!callbackfails && pdlServiceValidation.isValid()){
 							Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-							T2Reference simpleRef2 = referenceService.register(valid,0, true, context); 
+							T2Reference simpleRef2 = referenceService.register(pdlcontroller.getValidStatus(),0, true, context); 
 							outputs.put(OUT_REPORT, simpleRef2);
 							callback.receiveResult(outputs, new int[0]);
 						}else{

@@ -222,7 +222,7 @@ public class PDLServiceActivityTest {
 				activity, inputs, expectedOutputTypes);
 
 		assertEquals("Unexpected outputs", 1, outputs.size());
-		assertEquals("Valid", outputs.get(OUT_REPORT));
+		assertEquals(PDLServiceController.getValidStatus(), outputs.get(OUT_REPORT));
 		
 		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
 		//		.get("moreOutputs"));

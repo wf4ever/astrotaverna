@@ -19,6 +19,9 @@ import net.ivoa.parameter.model.ParameterGroup;
 import net.ivoa.parameter.model.ParameterReference;
 import net.ivoa.parameter.model.Service;
 import net.ivoa.parameter.model.SingleParameter;
+import net.ivoa.pdl.interpreter.expression.ExpressionParserFactory;
+import net.ivoa.pdl.interpreter.groupInterpreter.GroupHandlerHelper;
+import net.ivoa.pdl.interpreter.groupInterpreter.GroupProcessor;
 import net.ivoa.pdl.interpreter.utilities.UserMapper;
 import net.ivoa.pdl.interpreter.utilities.Utilities;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
@@ -38,6 +41,7 @@ public class PDLServiceController {
 	
 	private PDLServiceActivityConfigurationBean configBean;
 	private Service service;
+	private GroupProcessor gp;
 	
 	private HashMap<String, SingleParameter> hashParameters;
 	private HashMap<String, SingleParameter> hashInputParameters;
@@ -46,9 +50,9 @@ public class PDLServiceController {
 	private String serviceDescription;
 	
 	//pdl specific objects
-	final public String complete = "To complete";
-	final public String error = "With error";
-	final public String valid = "Valid";
+	final private String complete = "To complete";
+	final private String error = "With error";
+	final private static String valid = "Valid";
 	
 	
 	
@@ -151,6 +155,19 @@ public class PDLServiceController {
 			restrictionsOnGroups.putAll(outputRestrictions);
 		}
 	}
+	
+	public void prepareProcess() throws ActivityConfigurationException{
+		if(service == null){
+			service = buildService(configBean.getPdlDescriptionFile());
+			Utilities.getInstance().setService(service);
+			Utilities.getInstance().setMapper(new UserMapper());
+			serviceDescription = service.getDescription();
+		}
+		gp = new GroupProcessor(service);
+		gp.process();
+	}
+	
+	
 	/**
 	 * It returns a list of the ParameterReference objets contained in group and all its subgroups
 	 * @param group 
@@ -268,7 +285,30 @@ public class PDLServiceController {
 		return this.configBean;
 	}
 
+	public GroupProcessor getGroupProcessor(){
+		return this.gp;
+	}
 	
+	public static String getValidStatus(){
+		return valid;
+	}
+	
+	/**
+	 * Collect the single parameters on the different groups and return 
+	 * a list will all of them. It previously requires to run prepareProcess method. 
+	 * @return A list of singleParameter in the groups. 
+	 */
+	public List<SingleParameter> getSingleParametersOnGroups() {
+		List<SingleParameter> paramsList = new ArrayList<SingleParameter>();
+		List<GroupHandlerHelper> groupsHandler = gp.getGroupsHandler();
+		
+		for(GroupHandlerHelper ghh : groupsHandler){
+			List<SingleParameter> paramsListOnGroup = ghh.getSingleParamIntoThisGroup();
+			paramsList.addAll(paramsListOnGroup);
+		}
+		
+		return paramsList;
+	}
 	
 	
 	
@@ -310,6 +350,27 @@ public class PDLServiceController {
 			throw new ActivityConfigurationException("buildService could not create a jaxbContext.\n"+e.getMessage());
 		}
 		return service;
+	}
+	
+	/*
+	 * The dimension is the size of the array. minimun size is 1
+	 */
+	public static int getDimension(SingleParameter param){
+		int dimension = -1;
+		if(param.getDimension()!=null){
+			try{
+				String value = ExpressionParserFactory.getInstance()
+				   .buildParser(param.getDimension()).parse().get(0).getValue();
+				dimension = new Integer(value).intValue();
+			} catch (Exception ex){
+				logger.error("I couln't read the dimension value for "+ param.getName());
+				dimension = -1;
+			}
+		}
+		if(dimension > 1 )
+			return dimension;
+		else
+			return 1;
 	}
 	
 
