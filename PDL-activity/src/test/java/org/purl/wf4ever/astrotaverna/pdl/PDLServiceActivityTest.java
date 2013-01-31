@@ -46,6 +46,7 @@ public class PDLServiceActivityTest {
 	private static final String IN_OUTPUT_TABLE_NAME = "outputFileNameIn";
 	private static final String OUT_SIMPLE_OUTPUT = "outputFileOut";
 	private static final String OUT_REPORT = "report";
+	private static final String RESPONSE_BODY = "response_body";
 	
 	private PDLServiceActivity activity = new PDLServiceActivity();
 
@@ -212,16 +213,17 @@ public class PDLServiceActivityTest {
 		inputs.put("Temperature", "15");
 		inputs.put("mail", "jgarrido@iaa.es");
 		
-		
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
 		expectedOutputTypes.put(OUT_REPORT, String.class);
+		expectedOutputTypes.put(RESPONSE_BODY, String.class);
+		
 
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
 				activity, inputs, expectedOutputTypes);
 
-		assertEquals("Unexpected outputs", 1, outputs.size());
+		assertEquals("Unexpected outputs", 2, outputs.size());
 		assertEquals(PDLServiceController.getValidStatus(), outputs.get(OUT_REPORT));
 		
 		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs

@@ -38,7 +38,7 @@ public class PDLPortContextualView extends ContextualView {
 		//this.inputPort = inputPort;	
 		//this.activity = activity;
 		
-		SingleParameter param = activity.getHashParameters().get(inputPort.getName());
+		SingleParameter param = activity.getHashAllParameters().get(inputPort.getName());
 		
 		
 		paramDesc ="";
@@ -67,7 +67,7 @@ public class PDLPortContextualView extends ContextualView {
 		//this.inputPort = inputPort;	
 		//this.activity = activity;
 		
-		SingleParameter param = activity.getHashParameters().get(outputPort.getName());
+		SingleParameter param = activity.getHashAllParameters().get(outputPort.getName());
 		
 		
 		paramDesc ="";

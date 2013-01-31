@@ -58,7 +58,7 @@ public class PDLServiceContextualView extends ContextualView {
 		//		"configure service option. The tool will have as much inputs and outputs as described in the" +
 		//		"pdl file. If the service is asynchronous it, it waits until the service is finished.");
 		
-
+		
 		jScrollPane1.setViewportView(description);
 		jPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 		

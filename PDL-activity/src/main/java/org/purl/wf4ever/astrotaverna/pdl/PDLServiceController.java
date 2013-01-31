@@ -260,7 +260,7 @@ public class PDLServiceController {
 	}
 	
 	
-	public HashMap<String, SingleParameter> getHashParameters() {
+	public HashMap<String, SingleParameter> getHashAllParameters() {
 		return hashParameters;
 	}
 

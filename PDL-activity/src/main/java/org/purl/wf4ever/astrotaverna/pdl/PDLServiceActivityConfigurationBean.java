@@ -39,9 +39,10 @@ public class PDLServiceActivityConfigurationBean implements Serializable {
 	
 	// only need to store the configuration of inputs and outputs, as all of them are dynamic;
 	// only inputs that constitute components of URL signature are to be stored
-	private Map<String, Class<?>> activityInputs;
-	private Map<String, Class<?>> activityOutputs;
+	//private Map<String, Class<?>> activityInputs;
+	//private Map<String, Class<?>> activityOutputs;
 	
+	/*
 	public void setActivityInputs(Map<String, Class<?>> activityInputs) {
 		this.activityInputs = activityInputs;
 	}
@@ -57,6 +58,7 @@ public class PDLServiceActivityConfigurationBean implements Serializable {
 	public Map<String, Class<?>> getActivityOutputs() {
 		return activityOutputs;
 	}
+	*/
 
 	public String getPdlDescriptionFile() {
 		return pdlDescriptionFile;

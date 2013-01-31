@@ -55,12 +55,13 @@ public class PDLServiceActivity extends
 	
 	//private static final String OUT_SIMPLE_OUTPUT = "outputFileOut";
 	private static final String OUT_REPORT = "report";
+	private static final String RESPONSE_BODY = "response_body";
 	
 	private PDLServiceActivityConfigurationBean configBean;
 	
 	
-//	private HashMap<String, SingleParameter> hashParameters;
-//	private HashMap<String, String> restrictionsOnGroups;
+	private HashMap<String, SingleParameter> hashAllParameters;
+	private HashMap<String, String> restrictionsOnGroups;
 	private String serviceDescription;
 	
 	//pdl specific objects
@@ -106,7 +107,9 @@ public class PDLServiceActivity extends
 		try{
 			pdlcontroller = new PDLServiceController (this.configBean);
 			pdlcontroller.prepareHashParametersInputs();
+			hashAllParameters = pdlcontroller.getHashAllParameters();
 			pdlcontroller.prepareRestrictions();
+			restrictionsOnGroups = pdlcontroller.getRestrictionsOnGroups();
 			serviceDescription = pdlcontroller.getServiceDescription();
 			
 //			service = buildService(configBean.getPdlDescriptionFile());
@@ -342,7 +345,12 @@ public class PDLServiceActivity extends
 				try {
 					try{
 						pdlcontroller = new PDLServiceController (configBean);
+						pdlcontroller.prepareHashParametersInputs();
+						hashAllParameters = pdlcontroller.getHashAllParameters();
+						pdlcontroller.prepareRestrictions();
+						restrictionsOnGroups = pdlcontroller.getRestrictionsOnGroups();
 						pdlcontroller.prepareProcess();
+						serviceDescription = pdlcontroller.getServiceDescription();
 //						service = buildService(configBean.getPdlDescriptionFile());
 //
 //						Utilities.getInstance().setService(service);
@@ -407,19 +415,29 @@ public class PDLServiceActivity extends
 						}
 											
 						//end of reading inputs
-						
-						
-						//gp.process(); //OPTIONAL???
 						//checkInfo();
+						//Input values VALIDATION
 						PDLServiceValidation pdlServiceValidation = new PDLServiceValidation(gp);
+						
+						// CALL THE SERVICE
+						//create a rest activity
+						MyDefaultServiceCaller caller = new MyDefaultServiceCaller();
+						
+						String serviceResult = caller.callService();
+						//example call: http://www.vm-calc-lerma02.com:8081/broadening?mail=jgarrido@iaa.es&InitialLevel=1&FinalLevel=3&Temperature=15&Density=0.6666667
+						
 						
 						//System.out.println("******is valid service???:  "+ pdlServiceValidation.isValid());
 						//System.out.println("status:  "+ pdlServiceValidation.getStatus());
 						
 						if(!callbackfails && pdlServiceValidation.isValid()){
 							Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-							T2Reference simpleRef2 = referenceService.register(pdlcontroller.getValidStatus(),0, true, context); 
+							//validation results
+							T2Reference simpleRef2 = referenceService.register(PDLServiceController.getValidStatus(),0, true, context); 
 							outputs.put(OUT_REPORT, simpleRef2);
+							//response body
+							simpleRef2 = referenceService.register(serviceResult,0, true, context); 
+							outputs.put(RESPONSE_BODY, simpleRef2);
 							callback.receiveResult(outputs, new int[0]);
 						}else{
 							logger.error("Invalid values for the input parameters, check the restrictions");
@@ -432,8 +450,8 @@ public class PDLServiceActivity extends
 					}
 				} catch (NullPointerException e) {
 					// TODO Auto-generated catch block
-					logger.error("Problems in the run method. Is it correct the pdl-description file url: "+ configBean.getPdlDescriptionFile()+". "+e.getMessage());
-					callback.fail("Problems in the run method. Is it correct the pdl-description file url: "+ configBean.getPdlDescriptionFile()+"\n"+e.getMessage());
+					logger.error("Problems in the run method. Is it correct the pdl-description file url?: "+ configBean.getPdlDescriptionFile()+". "+e.getMessage());
+					callback.fail("Problems in the run method. Is it correct the pdl-description file url?: "+ configBean.getPdlDescriptionFile()+"\n"+e.getMessage());
 				} 
 			}
 			
@@ -446,6 +464,21 @@ public class PDLServiceActivity extends
 	}
 
 
+	public String getServiceDescription() {
+		return serviceDescription;
+	}
+	
+	public HashMap<String, SingleParameter> getHashAllParameters(){
+		return this.hashAllParameters;
+	}
+	
+	/**
+	 * 
+	 * @return It returns a hash with the restrictions in natural language for each group
+	 */
+	public HashMap<String, String> getRestrictionsOnGroups(){
+		return this.restrictionsOnGroups;
+	}
 
 	
 }
