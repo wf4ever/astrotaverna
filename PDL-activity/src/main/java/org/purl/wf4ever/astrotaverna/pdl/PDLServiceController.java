@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -24,9 +25,15 @@ import net.ivoa.pdl.interpreter.groupInterpreter.GroupHandlerHelper;
 import net.ivoa.pdl.interpreter.groupInterpreter.GroupProcessor;
 import net.ivoa.pdl.interpreter.utilities.UserMapper;
 import net.ivoa.pdl.interpreter.utilities.Utilities;
+import net.sf.taverna.t2.invocation.InvocationContext;
+import net.sf.taverna.t2.reference.ReferenceService;
+import net.sf.taverna.t2.reference.T2Reference;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
 
 import org.apache.log4j.Logger;
+
+import visitors.GeneralParameterVisitor;
+import CommonsObjects.GeneralParameter;
 
 public class PDLServiceController {
 	
@@ -373,5 +380,60 @@ public class PDLServiceController {
 			return 1;
 	}
 	
+	/**
+	 * This method updates UserParameter object considering the following taverna activity inputs. 
+	 * @param inputs
+	 * @throws ActivityConfigurationException 
+	 */
+	public void updateUserMapperWithInputs(HashMap inputValuesMap) throws ActivityConfigurationException{
+		if(gp==null)
+			this.prepareProcess();
+		List<GroupHandlerHelper> groupsHandler = gp.getGroupsHandler();
+		for(GroupHandlerHelper ghh : groupsHandler){
+			List<SingleParameter> paramsList = ghh.getSingleParamIntoThisGroup();
+			if(paramsList!=null && paramsList.size()>0)
+				for(SingleParameter param : paramsList){
+					if(inputValuesMap.get(param.getName())!=null){
+						//dimension?
+						int dimension= PDLServiceController.getDimension(param);
+						//if depth is 0 && dimension==1 then generalParamList only has one element
+						if(dimension==1){
+							//String value = (String) referenceService.renderIdentifier(inputs.get(param.getName()), 
+							//		String.class, context);
+							String value = (String) inputValuesMap.get(param.getName());
+							// put every input in the Mapper
+							List<GeneralParameter> generalParamList = new ArrayList<GeneralParameter>();
+							GeneralParameter gparam = new GeneralParameter(value, 
+									param.getParameterType().toString(), param.getName(),
+									new GeneralParameterVisitor());
+							generalParamList.add(gparam);
+							
+							Utilities.getInstance().getMapper().getMap()
+							  .put(param.getName(), generalParamList);
+						}else{
+							//if depth is 1 then generalParamList has several elements
+							//and input port gets a list
+							//List<String> values = (List<String>) referenceService.renderIdentifier(inputs.get(param.getName()), 
+							//		String.class, context);
+							List<String> values = (List<String>) inputValuesMap.get(param.getName());
+							//TODO
+							//check if values has the size than it is said in dimension??
+							
+							List<GeneralParameter> generalParamList = new ArrayList<GeneralParameter>();
+							for(String value : values){
+								// put every input in the Mapper
+								
+								GeneralParameter gparam = new GeneralParameter(value, 
+										param.getParameterType().toString(), param.getName(),
+										new GeneralParameterVisitor());
+								generalParamList.add(gparam);
+							}
+							Utilities.getInstance().getMapper().getMap()
+							  .put(param.getName(), generalParamList);
+						}
+					} // end if(inputs.get(param.getName())!=null){
+			}//end for(List<SingleParameter> list : paramsLists){
+		}
+	}
 
 }

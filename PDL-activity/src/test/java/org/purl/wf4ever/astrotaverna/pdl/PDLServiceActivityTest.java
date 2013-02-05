@@ -198,6 +198,7 @@ public class PDLServiceActivityTest {
 
 	}
 
+	@Ignore
 	@Test
 	public void executeBroadeningService() throws Exception {
 		String serviceURL = "http://pdl-calc.obspm.fr:8081/broadening/pdlDescription/PDL-Description.xml";
@@ -212,6 +213,49 @@ public class PDLServiceActivityTest {
 		inputs.put("FinalLevel", "3");
 		inputs.put("Temperature", "15");
 		inputs.put("mail", "jgarrido@iaa.es");
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+		expectedOutputTypes.put(RESPONSE_BODY, String.class);
+		
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		assertEquals("Unexpected outputs", 2, outputs.size());
+		assertEquals(PDLServiceController.getValidStatus(), outputs.get(OUT_REPORT));
+		
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
+	
+	
+	@Test
+	public void executeMontageTavernaEntryPointService() throws Exception {
+		String serviceURL = "http://pdl-calc.obspm.fr:8081/montage/pdlDescription/PDL-Description.xml";
+			    
+		configBean.setPdlDescriptionFile(serviceURL);
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		Float value = new Float(2/3.0);
+		inputs.put("NAXIS1", "2259");
+		inputs.put("NAXIS2", "2199");
+		inputs.put("CTYPE1", "RA---TAN");
+		inputs.put("CTYPE2", "DEC--TAN");
+		inputs.put("CRVAL1", "210.835222357");
+		inputs.put("CRVAL2", "54.367562188");
+		inputs.put("CDELT1", "-0.000277780");
+		inputs.put("CDELT2", "0.000277780");
+		inputs.put("CRPIX1", "1130");
+		inputs.put("CRPIX2", "1100");
+		inputs.put("CROTA2", "-0.052834593"); //orig value: -0.052834592
+		inputs.put("EQUINOX", "2000");
+		inputs.put("ImageLocation", "SampleLocation");
+		inputs.put("mail", "tetrarquis@gmail.com");
 		
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();

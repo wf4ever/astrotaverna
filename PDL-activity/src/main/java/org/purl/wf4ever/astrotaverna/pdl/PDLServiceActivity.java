@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,6 +17,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 //comment from terminal
 import org.apache.log4j.Logger;
+
 
 import CommonsObjects.GeneralParameter;
 
@@ -334,6 +336,35 @@ public class PDLServiceActivity extends
 			}
 			*/
 			
+			/**
+			 * It processes the inputs from the taverna activity and returns a hashMap with the paris <name, value>
+			 * @param inputs
+			 * @param context
+			 * @param referenceService
+			 * @return
+			 */
+			private HashMap getInputsMap(final Map<String, T2Reference> inputs, InvocationContext context, ReferenceService referenceService) throws InvalidParameterException{
+				HashMap resultMap = new HashMap();
+				if(pdlcontroller!=null){
+					
+					HashMap<String, SingleParameter> inputSingleParameterMap = pdlcontroller.getHashInputParameters();
+				
+					for(Map.Entry<String, SingleParameter> entry: inputSingleParameterMap.entrySet()){
+						int dimension = PDLServiceController.getDimension(entry.getValue());
+						if(dimension==1){
+							String value = (String) referenceService.renderIdentifier(inputs.get(entry.getValue().getName()), 
+									String.class, context);
+							resultMap.put(entry.getValue().getName(), value);
+						}else{
+							List<String> values = (List<String>) referenceService.renderIdentifier(inputs.get(entry.getValue().getName()), 
+									String.class, context);
+							resultMap.put(entry.getValue().getName(), values);
+						}					
+					}
+				}
+				return resultMap;
+			}
+			
 			public void run() {
 				boolean callbackfails=false;
 				
@@ -369,50 +400,9 @@ public class PDLServiceActivity extends
 						GroupProcessor gp = pdlcontroller.getGroupProcessor();  
 						
 						// Resolve inputs
-						List<GroupHandlerHelper> groupsHandler = gp.getGroupsHandler();
-						for(GroupHandlerHelper ghh : groupsHandler){
-							List<SingleParameter> paramsList = ghh.getSingleParamIntoThisGroup();
-							if(paramsList!=null && paramsList.size()>0)
-								for(SingleParameter param : paramsList){
-									if(inputs.get(param.getName())!=null){
-										//dimension?
-										int dimension= PDLServiceController.getDimension(param);
-										//if depth is 0 && dimension==1 then generalParamList only has one element
-										if(dimension==1){
-											String value = (String) referenceService.renderIdentifier(inputs.get(param.getName()), 
-													String.class, context);
-											// put every input in the Mapper
-											List<GeneralParameter> generalParamList = new ArrayList<GeneralParameter>();
-											GeneralParameter gparam = new GeneralParameter(value, 
-													param.getParameterType().toString(), param.getName(),
-													new GeneralParameterVisitor());
-											generalParamList.add(gparam);
-											
-											Utilities.getInstance().getMapper().getMap()
-											  .put(param.getName(), generalParamList);
-										}else{
-											//if depth is 1 then generalParamList has several elements
-											//and input port gets a list
-											List<String> values = (List<String>) referenceService.renderIdentifier(inputs.get(param.getName()), 
-													String.class, context);
-											//TODO
-											//check if values has the size than it is said in dimension??
-											
-											List<GeneralParameter> generalParamList = new ArrayList<GeneralParameter>();
-											for(String value : values){
-												// put every input in the Mapper
-												
-												GeneralParameter gparam = new GeneralParameter(value, 
-														param.getParameterType().toString(), param.getName(),
-														new GeneralParameterVisitor());
-												generalParamList.add(gparam);
-											}
-											Utilities.getInstance().getMapper().getMap()
-											  .put(param.getName(), generalParamList);
-										}
-									} // end if(inputs.get(param.getName())!=null){
-							}//end for(List<SingleParameter> list : paramsLists){
-						}
+						HashMap inputValuesMap = getInputsMap(inputs, context, referenceService);
+						
+						pdlcontroller.updateUserMapperWithInputs(inputValuesMap);
 											
 						//end of reading inputs
 						//checkInfo();
@@ -420,15 +410,36 @@ public class PDLServiceActivity extends
 						PDLServiceValidation pdlServiceValidation = new PDLServiceValidation(gp);
 						
 						// CALL THE SERVICE
-						//create a rest activity
 						MyDefaultServiceCaller caller = new MyDefaultServiceCaller();
 						
-						String serviceResult = caller.callService();
-						//example call: http://www.vm-calc-lerma02.com:8081/broadening?mail=jgarrido@iaa.es&InitialLevel=1&FinalLevel=3&Temperature=15&Density=0.6666667
+						//example call: http://pdl-calc.obspm.fr:8081/montage/TavernaCodeFrontal?mail=tetrarquis@gmail.com&NAXIS1=2259&NAXIS2=2199&CTYPE1=RA---TAN&CTYPE2=DEC--TAN&CRVAL1=210.835222357&CRVAL2=54.367562188&CRPIX1=1130&CRPIX2=1100&CDELT1=-0.000277780&CDELT2=0.000277780&CROTA2=-0.052834593&ImageLocation=SampleLocation&EQUINOX=2000
+						String serviceResult; 
+						//serviceResult = caller.callService();
+						//System.out.println("Service response body:\n");
+						//System.out.println(serviceResult);
 						
+						serviceResult = 
+"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?> " +
+"<JobsList> " +
+"    <ServiceName>http://pdl-calc.obspm.fr:8081/montage/</ServiceName> " +
+"    <List> " +
+"        <JobId>3</JobId> " +
+"        <UserId>7</UserId> " +
+"    </List> " +
+"</JobsList>";
+						String jobInfo;
+						String jobId="3";
+						String userId="7";
+						jobInfo = caller.getJobInfo(jobId, userId);
+						System.out.println(jobInfo);
 						
 						//System.out.println("******is valid service???:  "+ pdlServiceValidation.isValid());
 						//System.out.println("status:  "+ pdlServiceValidation.getStatus());
+						
+						
+						// TODO Update outputs in mapper and validate
+						
+						
 						
 						if(!callbackfails && pdlServiceValidation.isValid()){
 							Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
@@ -448,10 +459,17 @@ public class PDLServiceActivity extends
 						if(callbackfails==false)
 							callback.fail("Mandatory inputs are null");
 					}
+				} catch (InvalidParameterException e){
+					logger.error("Invalid parameter error: "+"\n"+e.getMessage());
+					callback.fail("Invalid parameter error: "+"\n"+e.getMessage());
 				} catch (NullPointerException e) {
 					// TODO Auto-generated catch block
 					logger.error("Problems in the run method. Is it correct the pdl-description file url?: "+ configBean.getPdlDescriptionFile()+". "+e.getMessage());
 					callback.fail("Problems in the run method. Is it correct the pdl-description file url?: "+ configBean.getPdlDescriptionFile()+"\n"+e.getMessage());
+				} catch (ActivityConfigurationException e) {
+					// TODO Auto-generated catch block
+					logger.error("Make sure that the service configuration has an url that points to a valid pdl description file"+"\n"+e.getMessage());
+					callback.fail("Make sure that the service configuration has an url that points to a valid pdl description file"+"\n"+e.getMessage());
 				} 
 			}
 			

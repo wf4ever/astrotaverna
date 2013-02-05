@@ -59,7 +59,11 @@ public class PDLServiceValidation {
 			Utilities.getInstance().callService();
 	}
 	
-	
+	/**
+	 * For an alternative way of querying the errors see method getSummaryOfErrorPerJob 
+	 * in https://github.com/cmzwolf/OnlineCodeDaemon/blob/master/src/net/ivoa/oc/daemon/pdlverification/PDLverifier.java
+	 * @return
+	 */
 	private List<String> getInfosOnGroups() {
 		List<String> toReturn = new ArrayList<String>();
 
