@@ -1,6 +1,7 @@
 package org.purl.wf4ever.astrotaverna.pdl;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,8 +16,10 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.ParserConfigurationException;
 //comment from terminal
 import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
 
 
 import CommonsObjects.GeneralParameter;
@@ -367,11 +370,28 @@ public class PDLServiceActivity extends
 			
 			public void run() {
 				boolean callbackfails=false;
-				
+				String serviceResult; 
+				String jobInfo;
+				String jobId;
+				String userId;
+							
 				InvocationContext context = callback
 						.getContext();
 				ReferenceService referenceService = context
 						.getReferenceService();
+				
+				GroupProcessor gp;
+				
+				
+				serviceResult = 
+						"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?> " +
+						"<JobsList> " +
+						"    <ServiceName>http://pdl-calc.obspm.fr:8081/montage/</ServiceName> " +
+						"    <List> " +
+						"        <JobId>3</JobId> " +
+						"        <UserId>7</UserId> " +
+						"    </List> " +
+						"</JobsList>";
 				
 				try {
 					try{
@@ -396,49 +416,70 @@ public class PDLServiceActivity extends
 						callbackfails = true;
 					}
 					if(!callbackfails && areMandatoryInputsNotNull()){
+						HashMap inputValuesMap;
+						PDLServiceValidation pdlServiceValidation;
+						MyDefaultServiceCaller caller;
+						JobsList jobsList;
+						JobResult jobResult;
 						
-						GroupProcessor gp = pdlcontroller.getGroupProcessor();  
+						gp = pdlcontroller.getGroupProcessor();  
 						
 						// Resolve inputs
-						HashMap inputValuesMap = getInputsMap(inputs, context, referenceService);
+						inputValuesMap = getInputsMap(inputs, context, referenceService);
 						
 						pdlcontroller.updateUserMapperWithInputs(inputValuesMap);
 											
 						//end of reading inputs
 						//checkInfo();
 						//Input values VALIDATION
-						PDLServiceValidation pdlServiceValidation = new PDLServiceValidation(gp);
-						
+						pdlServiceValidation = new PDLServiceValidation(gp);
+										
 						// CALL THE SERVICE
-						MyDefaultServiceCaller caller = new MyDefaultServiceCaller();
+						caller = new MyDefaultServiceCaller();
 						
-						//example call: http://pdl-calc.obspm.fr:8081/montage/TavernaCodeFrontal?mail=tetrarquis@gmail.com&NAXIS1=2259&NAXIS2=2199&CTYPE1=RA---TAN&CTYPE2=DEC--TAN&CRVAL1=210.835222357&CRVAL2=54.367562188&CRPIX1=1130&CRPIX2=1100&CDELT1=-0.000277780&CDELT2=0.000277780&CROTA2=-0.052834593&ImageLocation=SampleLocation&EQUINOX=2000
-						String serviceResult; 
-						//serviceResult = caller.callService();
-						//System.out.println("Service response body:\n");
-						//System.out.println(serviceResult);
-						
-						serviceResult = 
-"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?> " +
-"<JobsList> " +
-"    <ServiceName>http://pdl-calc.obspm.fr:8081/montage/</ServiceName> " +
-"    <List> " +
-"        <JobId>3</JobId> " +
-"        <UserId>7</UserId> " +
-"    </List> " +
-"</JobsList>";
-						String jobInfo;
-						String jobId="3";
-						String userId="7";
-						jobInfo = caller.getJobInfo(jobId, userId);
-						System.out.println(jobInfo);
-						
-						//System.out.println("******is valid service???:  "+ pdlServiceValidation.isValid());
-						//System.out.println("status:  "+ pdlServiceValidation.getStatus());
-						
-						
-						// TODO Update outputs in mapper and validate
-						
+						//if the input parameters are valid
+						if(pdlServiceValidation.isValid()){
+							//example call: http://pdl-calc.obspm.fr:8081/montage/TavernaCodeFrontal?mail=tetrarquis@gmail.com&NAXIS1=2259&NAXIS2=2199&CTYPE1=RA---TAN&CTYPE2=DEC--TAN&CRVAL1=210.835222357&CRVAL2=54.367562188&CRPIX1=1130&CRPIX2=1100&CDELT1=-0.000277780&CDELT2=0.000277780&CROTA2=-0.052834593&ImageLocation=SampleLocation&EQUINOX=2000
+							
+							//create a job
+							//serviceResult = caller.callService();
+							//System.out.println("Service response body:\n");
+							//System.out.println(serviceResult);
+							
+							
+							
+							jobsList = new JobsList();
+							jobsList.parseXML(serviceResult);
+							if(!jobsList.getJobs().isEmpty()){
+								jobId = jobsList.getJobs().get(0).getJobId();
+								userId = jobsList.getJobs().get(0).getUserId();
+								
+								jobInfo = caller.getJobInfo(jobId, userId);
+								
+								//System.out.println(jobInfo);
+								jobResult = new JobResult();
+								
+								jobResult.parseXML(jobInfo);
+								//System.out.println("JobPhase: "+ jobResult.getJobPhase()+ " jobID: "+jobResult.getJobId());
+								//System.out.println("JobInputs: "+jobResult.getInputParams().toString());
+								//System.out.println("JobOutputs: "+jobResult.getOutputParams());
+								
+								
+								//System.out.println("******is valid service???:  "+ pdlServiceValidation.isValid());
+								//System.out.println("status:  "+ pdlServiceValidation.getStatus());
+								
+								
+								// TODO Update outputs in mapper and validate
+							}else{
+								callbackfails = true;
+								callback.fail("Job info couldn't be parsed.");
+							}
+						}else{
+							callbackfails = true;
+							logger.error("Error in the input parameters: \n");
+							callback.fail("Error in the input parameters: \n");
+							
+						}
 						
 						
 						if(!callbackfails && pdlServiceValidation.isValid()){
@@ -456,20 +497,32 @@ public class PDLServiceActivity extends
 						}
 						
 					}else{
-						if(callbackfails==false)
+						if(callbackfails==false){
+							logger.error("Mandatory inputs are null");
 							callback.fail("Mandatory inputs are null");
+						}
 					}
 				} catch (InvalidParameterException e){
 					logger.error("Invalid parameter error: "+"\n"+e.getMessage());
 					callback.fail("Invalid parameter error: "+"\n"+e.getMessage());
 				} catch (NullPointerException e) {
-					// TODO Auto-generated catch block
 					logger.error("Problems in the run method. Is it correct the pdl-description file url?: "+ configBean.getPdlDescriptionFile()+". "+e.getMessage());
 					callback.fail("Problems in the run method. Is it correct the pdl-description file url?: "+ configBean.getPdlDescriptionFile()+"\n"+e.getMessage());
 				} catch (ActivityConfigurationException e) {
-					// TODO Auto-generated catch block
 					logger.error("Make sure that the service configuration has an url that points to a valid pdl description file"+"\n"+e.getMessage());
 					callback.fail("Make sure that the service configuration has an url that points to a valid pdl description file"+"\n"+e.getMessage());
+				} catch (MalformedURLException e){
+					logger.error(e.getMessage());
+					callback.fail(e.getMessage());
+				} catch (ParserConfigurationException e) {
+					logger.error("Problems parsing the resulting xml document: "+"\n"+e.getMessage());
+					callback.fail("Problems parsing the resulting xml document: "+"\n"+e.getMessage());
+				} catch (SAXException e) {
+					logger.error("Problems parsing the resulting xml document: "+"\n"+e.getMessage());
+					callback.fail("Problems parsing the resulting xml document: "+"\n"+e.getMessage());
+				} catch (IOException e) {
+					logger.error("Problems receiving results or parsing the resulting xml document: "+"\n"+e.getMessage());
+					callback.fail("Problems receiving results or parsing the resulting xml document: "+"\n"+e.getMessage());
 				} 
 			}
 			
