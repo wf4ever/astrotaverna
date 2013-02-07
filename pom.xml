@@ -133,8 +133,8 @@
     <module>astrotaverna-voservices</module>
     <module>astrotaverna-plugin</module>
     <module>astrotaverna-vo-repository</module>
-    <module>coordinatestool-activity</module>
-    <module>coordinatestool-activity-ui</module>
+    <!-- <module>coordinatestool-activity</module>
+    <module>coordinatestool-activity-ui</module>-->
     <module>astrotaverna-workbench-test</module>
     <module>stilts-activity</module>
     <module>stilts-activity-ui</module>

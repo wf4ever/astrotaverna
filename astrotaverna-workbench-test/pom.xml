@@ -13,11 +13,13 @@
 			<artifactId>astrotaverna-voservices</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>coordinatestool-activity-ui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>stilts-activity-ui</artifactId>
