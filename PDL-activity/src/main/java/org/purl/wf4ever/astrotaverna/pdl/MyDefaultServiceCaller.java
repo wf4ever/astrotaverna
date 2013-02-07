@@ -53,7 +53,7 @@ public class MyDefaultServiceCaller {
 				// TODO: do nothing
 			}
 		}
-		System.out.println("Call service: " + serviceUrl);
+		//System.out.println("Call service: " + serviceUrl);
 		logger.info("Call Service: " + serviceUrl);
 
 		BufferedReader bufferedReader = new BufferedReader(
@@ -75,7 +75,7 @@ public class MyDefaultServiceCaller {
 	public String getJobInfo(String jobId, String userId) throws MalformedURLException, IOException {
 		String serviceUrl = Utilities.getInstance().getService().getServiceId()
 				+ "?";
-		System.out.println("service from utitlites: "+ serviceUrl);
+		
 		serviceUrl = serviceUrl.replaceAll("/OnlineCode", "/TavernaJobInfo");
 		//serviceUrl = "http://pdl-calc.obspm.fr:8081/montage/TavernaCodeFrontal?";
 		
@@ -91,7 +91,7 @@ public class MyDefaultServiceCaller {
 			serviceUrl = serviceUrl + "jobId="+jobId+"&userId="+userId;
 		}
 
-		System.out.println("Get result from: " + serviceUrl);
+		//System.out.println("Get result from: " + serviceUrl);
 			
 		BufferedReader bufferedReader = new BufferedReader(
 				new InputStreamReader(new URL(serviceUrl).openConnection()

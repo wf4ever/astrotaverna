@@ -42,23 +42,24 @@ public class PDLPortContextualView extends ContextualView {
 		
 		
 		paramDesc ="";
-		if(param.getDependency()!=null)
-			paramDesc+="The parameter is "+ param.getDependency()+".\n";
-		if(param.getParameterType()!=null)
-			paramDesc += "Type: "+ param.getParameterType().toString()+".\n";
-		if(param.getPrecision()!=null)
-			paramDesc += "Precision: " + param.getPrecision()+".\n";
-		if(param.getUCD()!=null)
-			paramDesc += "UCD: "+ param.getUCD()+"\n";
-		if(param.getUType()!=null)
-			paramDesc += "UType: "+ param.getUType()+"\n";
-		if(param.getSkossConcept()!=null)
-			paramDesc += "SKOS: " + param.getSkossConcept()+"\n";
-		if(param.getUnit()!=null)
-			paramDesc += "Unit: " + param.getUnit();
+		paramName = inputPort.getName();
+		if(param!=null){
+			if(param.getDependency()!=null)
+				paramDesc+="The parameter is "+ param.getDependency()+".\n";
+			if(param.getParameterType()!=null)
+				paramDesc += "Type: "+ param.getParameterType().toString()+".\n";
+			//if(param.getPrecision()!=null)
+			//	paramDesc += "Precision: " + param.getPrecision().toString()+".\n";
+			if(param.getUCD()!=null)
+				paramDesc += "UCD: "+ param.getUCD()+"\n";
+			if(param.getUType()!=null)
+				paramDesc += "UType: "+ param.getUType()+"\n";
+			if(param.getSkossConcept()!=null)
+				paramDesc += "SKOS: " + param.getSkossConcept()+"\n";
+			if(param.getUnit()!=null)
+				paramDesc += "Unit: " + param.getUnit();
 
-		//defaultValue = "";
-		paramName = param.getName();
+		}
 		
 		initView(); //this method will call the getMainFrame()
 	}
@@ -71,23 +72,23 @@ public class PDLPortContextualView extends ContextualView {
 		
 		
 		paramDesc ="";
-		if(param.getDependency()!=null)
-			paramDesc+="The parameter is "+ param.getDependency()+".\n";
-		if(param.getParameterType()!=null)
-			paramDesc += "Type: "+ param.getParameterType().toString()+".\n";
-		if(param.getPrecision()!=null)
-			paramDesc += "Precision: " + param.getPrecision()+".\n";
-		if(param.getUCD()!=null)
-			paramDesc += "UCD: "+ param.getUCD()+"\n";
-		if(param.getUType()!=null)
-			paramDesc += "UType: "+ param.getUType()+"\n";
-		if(param.getSkossConcept()!=null)
-			paramDesc += "SKOS: " + param.getSkossConcept()+"\n";
-		if(param.getUnit()!=null)
-			paramDesc += "Unit: " + param.getUnit();
-
-		//defaultValue = "";
-		paramName = param.getName();
+		paramName = outputPort.getName();
+		if(param!=null){
+			if(param.getDependency()!=null)
+				paramDesc+="The parameter is "+ param.getDependency()+".\n";
+			if(param.getParameterType()!=null)
+				paramDesc += "Type: "+ param.getParameterType().toString()+".\n";
+			//if(param.getPrecision()!=null)
+			//	paramDesc += "Precision: " + param.getPrecision().toString()+".\n";
+			if(param.getUCD()!=null)
+				paramDesc += "UCD: "+ param.getUCD()+"\n";
+			if(param.getUType()!=null)
+				paramDesc += "UType: "+ param.getUType()+"\n";
+			if(param.getSkossConcept()!=null)
+				paramDesc += "SKOS: " + param.getSkossConcept()+"\n";
+			if(param.getUnit()!=null)
+				paramDesc += "Unit: " + param.getUnit();
+		}
 		
 		initView(); //this method will call the getMainFrame()
 	}

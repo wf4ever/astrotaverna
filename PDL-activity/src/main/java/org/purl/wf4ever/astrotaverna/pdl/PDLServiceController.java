@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -20,6 +21,7 @@ import net.ivoa.parameter.model.ParameterGroup;
 import net.ivoa.parameter.model.ParameterReference;
 import net.ivoa.parameter.model.Service;
 import net.ivoa.parameter.model.SingleParameter;
+import net.ivoa.pdl.interpreter.conditionalStatement.StatementHelperContainer;
 import net.ivoa.pdl.interpreter.expression.ExpressionParserFactory;
 import net.ivoa.pdl.interpreter.groupInterpreter.GroupHandlerHelper;
 import net.ivoa.pdl.interpreter.groupInterpreter.GroupProcessor;
@@ -60,6 +62,8 @@ public class PDLServiceController {
 	final private String complete = "To complete";
 	final private String error = "With error";
 	final private static String valid = "Valid";
+	final private static String pending = "pending";
+	final private static String finished = "finished";
 	
 	
 	
@@ -338,7 +342,6 @@ public class PDLServiceController {
 					logger.error("File does not exist or invalid URI for the PDL description file. "+e.getMessage());
 					throw new ActivityConfigurationException("File does not exist or invalid URI for the PDL description file.\n"+e.getMessage());
 				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
 					//e.printStackTrace();
 					logger.error("File does not exist or invalid URI for the PDL description file. "+e.getMessage());
 					throw new ActivityConfigurationException("File does not exist or invalid URL for the PDL description file.\n"+e.getMessage());
@@ -350,7 +353,6 @@ public class PDLServiceController {
 			}
 			
 		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
 			//e.printStackTrace();
 			logger.error("buildService could not create a jaxbContext. "+e.getMessage());
 			e.printStackTrace();
@@ -436,4 +438,90 @@ public class PDLServiceController {
 		}
 	}
 
+	public static String getPendingStatus() {
+		return pending;
+	}
+
+	public static String getFinishedStatus() {
+		return finished;
+	}
+
+	/**
+	 * Get a ErrorSummary with the restrictions that are violated. 
+	 * @return
+	 * @throws ActivityConfigurationException
+	 */
+	private ErrorSummary getSummaryOfErrorPerJob() throws ActivityConfigurationException {
+		if(gp==null)
+			prepareProcess();
+		
+		List<GroupHandlerHelper> handler = gp.getGroupsHandler();
+		
+		ErrorSummary errorOnThisJob = new ErrorSummary();
+		
+		Map<String, List<StatementHelperContainer>> errorsPerGroup = new HashMap<String, List<StatementHelperContainer>>();
+		
+		// Loop for every group
+		for (int i = 0; i < handler.size(); i++) {
+			String currentGroupName = handler.get(i).getGroupName();
+			Boolean isGroupInError = false;
+			List<StatementHelperContainer> statementInErrorInThisGroup = new ArrayList<StatementHelperContainer>();
+			// Loop for every statement in the current group
+			if (null != handler.get(i).getStatementHelperList()) {
+				for (StatementHelperContainer currentStatement : handler.get(i)
+						.getStatementHelperList()) {
+					if (currentStatement.isStatementSwitched()) {
+						if (null != currentStatement.isStatementValid()) {
+						
+							isGroupInError = isGroupInError
+									|| !currentStatement.isStatementValid();
+							
+							if (!currentStatement.isStatementValid()) {
+								statementInErrorInThisGroup
+								.add(currentStatement);
+							}
+						}
+					
+					}
+				}
+				// The group is in error if at least one of statement is in
+				// error
+				if (isGroupInError) {
+					errorOnThisJob.setHasJobError(true);
+				}
+			}
+			errorsPerGroup.put(currentGroupName, statementInErrorInThisGroup);
+		}
+		errorOnThisJob.setErrorsPerGroup(errorsPerGroup);
+		return errorOnThisJob;
+	}
+	
+	/**
+	 * Get a list of the restrictions that have been violated. This method  
+	 * @return a list of errors
+	 * @throws ActivityConfigurationException 
+	 */
+	public List<String> buildErrorsList() throws ActivityConfigurationException {
+	
+		ErrorSummary errorsOnThisJob = getSummaryOfErrorPerJob();
+		
+		if (errorsOnThisJob.getHasJobError()) {
+		
+			List<String> toReturn = new ArrayList<String>();
+			
+			for (Entry<String, List<StatementHelperContainer>> entry : errorsOnThisJob.getErrorsPerGroup().entrySet()) {
+				for (int i = 0; i < entry.getValue().size(); i++) {
+					String tempString = "Error on group " + entry.getKey()
+						+ ": the constraint '+"
+						+ entry.getValue().get(i).getStatementComment()
+						+ "' is violated";
+					toReturn.add(tempString);
+				}
+			}
+			return toReturn;
+		} else {
+			return null;
+		}
+	}
+	
 }

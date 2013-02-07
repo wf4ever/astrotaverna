@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -59,7 +60,7 @@ public class PDLServiceActivity extends
 	private static Logger logger = Logger.getLogger(PDLServiceActivity.class);
 	
 	//private static final String OUT_SIMPLE_OUTPUT = "outputFileOut";
-	private static final String OUT_REPORT = "report";
+	private static final String OUT_REPORT = "status";
 	private static final String RESPONSE_BODY = "response_body";
 	
 	private PDLServiceActivityConfigurationBean configBean;
@@ -148,7 +149,9 @@ public class PDLServiceActivity extends
 				addOutput(paramName, 0);
 			}
 			addOutput(OUT_REPORT, 0);
+			addOutput(RESPONSE_BODY, 0); 
 			
+			/*
 //			for(SingleParameter param: inputParameters){
 //				addInput(param.getName(), 0, true, null, String.class);
 //				hashParameters.put(param.getName(), param);
@@ -181,8 +184,8 @@ public class PDLServiceActivity extends
 //			 
 //			 serviceDescription = service.getDescription();
 			
-			// FIXME: Replace with your input and output port definitions
-			/*
+			// Replace with your input and output port definitions
+			
 			//The following commented code is a not efficient way to extract the inputParameters
 			gp = new GroupProcessor(service);
 			//System.out.println(service.getInputs().getParameterRef().get(0).getParameterName());
@@ -319,7 +322,6 @@ public class PDLServiceActivity extends
 					gp = new GroupProcessor(service);
 					gp.process();
 				}catch (ActivityConfigurationException e) {
-					// TODO Auto-generated catch block
 					callback.fail("Make sure that the service configuration has an url that points to a valid pdl description file");
 					callbackfails = true;
 				}
@@ -371,7 +373,7 @@ public class PDLServiceActivity extends
 			public void run() {
 				boolean callbackfails=false;
 				String serviceResult; 
-				String jobInfo;
+				String jobInfo = "";
 				String jobId;
 				String userId;
 							
@@ -410,7 +412,6 @@ public class PDLServiceActivity extends
 //						gp = new GroupProcessor(service);
 //						gp.process();
 					}catch (ActivityConfigurationException e) {
-						// TODO Auto-generated catch block
 						callback.fail("Make sure that the service configuration has an url that points to a valid pdl description file"+"\n"+e.getMessage());
 						logger.error("Make sure that the service configuration has an url that points to a valid pdl description file"+"\n"+e.getMessage());
 						callbackfails = true;
@@ -420,7 +421,9 @@ public class PDLServiceActivity extends
 						PDLServiceValidation pdlServiceValidation;
 						MyDefaultServiceCaller caller;
 						JobsList jobsList;
-						JobResult jobResult;
+						JobResult jobResult = null;
+						HashMap<String, SingleParameter> outputPDLParamMap;
+						HashMap<String, String> jobResultsMap;
 						
 						gp = pdlcontroller.getGroupProcessor();  
 						
@@ -442,9 +445,9 @@ public class PDLServiceActivity extends
 							//example call: http://pdl-calc.obspm.fr:8081/montage/TavernaCodeFrontal?mail=tetrarquis@gmail.com&NAXIS1=2259&NAXIS2=2199&CTYPE1=RA---TAN&CTYPE2=DEC--TAN&CRVAL1=210.835222357&CRVAL2=54.367562188&CRPIX1=1130&CRPIX2=1100&CDELT1=-0.000277780&CDELT2=0.000277780&CROTA2=-0.052834593&ImageLocation=SampleLocation&EQUINOX=2000
 							
 							//create a job
+							//TODO uncomment calling the service
 							//serviceResult = caller.callService();
-							//System.out.println("Service response body:\n");
-							//System.out.println(serviceResult);
+
 							
 							
 							
@@ -454,42 +457,64 @@ public class PDLServiceActivity extends
 								jobId = jobsList.getJobs().get(0).getJobId();
 								userId = jobsList.getJobs().get(0).getUserId();
 								
+								//http://pdl-calc.obspm.fr:8081/montage/TavernaJobInfo?mail=tetrarquis@gmail.com&jobId=3&userId=7
 								jobInfo = caller.getJobInfo(jobId, userId);
-								
-								//System.out.println(jobInfo);
+
 								jobResult = new JobResult();
 								
 								jobResult.parseXML(jobInfo);
-								//System.out.println("JobPhase: "+ jobResult.getJobPhase()+ " jobID: "+jobResult.getJobId());
-								//System.out.println("JobInputs: "+jobResult.getInputParams().toString());
 								//System.out.println("JobOutputs: "+jobResult.getOutputParams());
 								
 								
-								//System.out.println("******is valid service???:  "+ pdlServiceValidation.isValid());
-								//System.out.println("status:  "+ pdlServiceValidation.getStatus());
-								
-								
 								// TODO Update outputs in mapper and validate
+								
+								
 							}else{
 								callbackfails = true;
 								callback.fail("Job info couldn't be parsed.");
 							}
 						}else{
+							//if validation fails
 							callbackfails = true;
-							logger.error("Error in the input parameters: \n");
-							callback.fail("Error in the input parameters: \n");
-							
+							List<String> errorList = pdlcontroller.buildErrorsList();
+							if(errorList!=null && errorList.size()>0){
+								logger.error(errorList.toString());
+								callback.fail(errorList.toString());
+							}else{
+								logger.error("Error in the input parameters: \n");
+								callback.fail("Error in the input parameters: \n");
+							}
 						}
 						
 						
 						if(!callbackfails && pdlServiceValidation.isValid()){
 							Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-							//validation results
-							T2Reference simpleRef2 = referenceService.register(PDLServiceController.getValidStatus(),0, true, context); 
+							//phase for the service:
+							T2Reference simpleRef2 = referenceService.register(jobResult.getJobPhase(),0, true, context); 
 							outputs.put(OUT_REPORT, simpleRef2);
 							//response body
-							simpleRef2 = referenceService.register(serviceResult,0, true, context); 
+							simpleRef2 = referenceService.register(jobInfo,0, true, context); 
 							outputs.put(RESPONSE_BODY, simpleRef2);
+							
+							
+							//TODO include outputs from the service
+							outputPDLParamMap = pdlcontroller.getHashOutputParameters();
+							jobResultsMap = jobResult.getOutputParams();
+							//if there is sth to compare
+							if(outputPDLParamMap!=null && jobResultsMap!=null){
+								for(Entry<String, String> entry : jobResultsMap.entrySet()){
+									simpleRef2 = referenceService.register(entry.getValue(),0, true, context); 
+									outputs.put(entry.getKey(), simpleRef2);
+									if(outputPDLParamMap.get(entry.getKey())==null){
+										logger.warn(entry.getKey() + " is not in the PDL description file");
+									}
+								}
+								
+							}else{
+								logger.warn("Number of output in pdl description file doesn't match with the results provided by the user");
+							}
+							
+							
 							callback.receiveResult(outputs, new int[0]);
 						}else{
 							logger.error("Invalid values for the input parameters, check the restrictions");

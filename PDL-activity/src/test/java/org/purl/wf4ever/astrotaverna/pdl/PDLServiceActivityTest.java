@@ -45,7 +45,7 @@ public class PDLServiceActivityTest {
 	private static final String IN_SECOND_INPUT = "votable2";
 	private static final String IN_OUTPUT_TABLE_NAME = "outputFileNameIn";
 	private static final String OUT_SIMPLE_OUTPUT = "outputFileOut";
-	private static final String OUT_REPORT = "report";
+	private static final String OUT_REPORT = "status";
 	private static final String RESPONSE_BODY = "response_body";
 	
 	private PDLServiceActivity activity = new PDLServiceActivity();
@@ -268,7 +268,8 @@ public class PDLServiceActivityTest {
 				activity, inputs, expectedOutputTypes);
 
 		assertEquals("Unexpected outputs", 2, outputs.size());
-		assertEquals(PDLServiceController.getValidStatus(), outputs.get(OUT_REPORT));
+		assertTrue("Invalid or error status", PDLServiceController.getPendingStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0 
+				                  || PDLServiceController.getFinishedStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0);
 		
 		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
 		//		.get("moreOutputs"));
