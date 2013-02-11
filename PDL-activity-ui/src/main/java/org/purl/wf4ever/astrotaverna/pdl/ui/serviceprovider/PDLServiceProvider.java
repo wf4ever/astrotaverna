@@ -29,20 +29,7 @@ public class PDLServiceProvider implements ServiceDescriptionProvider {
 		// callBack.status("Resolving example services");
 
 		List<ServiceDescription> results = new ArrayList<ServiceDescription>();
-
-		// FIXME: Implement the actual service search/lookup instead
-		// of dummy for-loop
-		//for (int i = 1; i <= 5; i++) {
-		//	StiltsServiceDesc service = new StiltsServiceDesc();
-		//	// Populate the service description bean
-		//	service.setExampleString("Example " + i);
-		//	service.setExampleUri(URI.create("http://localhost:8192/service"));
-
-		//	// Optional: set description
-		//	service.setDescription("Service example number " + i);
-		//	results.add(service);
-		//}
-		
+	
 		
 		ValidationPDLClientServiceDesc service1 = new ValidationPDLClientServiceDesc();
 		service1.setPdlDescriptionFile("http://www.exampleuri.com/pdldescriptionfile.xml");
@@ -68,6 +55,15 @@ public class PDLServiceProvider implements ServiceDescriptionProvider {
 		// No more results will be coming
 		callBack.finished();
 	}
+	/*
+	@SuppressWarnings("unchecked")
+	public static ServiceDescription getPDLService_ServiceDescription() {
+		PDLService_ServiceDesc service2 = new PDLService_ServiceDesc();
+		service2.setPdlDescriptionFile("http://www.exampleuri.com/pdldescriptionfile.xml");
+		service2.setDescription("Import PDL service (Beta)");
+		return service2;
+	}
+	*/
 
 	/**
 	 * Icon for service provider

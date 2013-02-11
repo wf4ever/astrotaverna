@@ -53,6 +53,21 @@
 			<artifactId>workflowmodel-impl</artifactId>
 			<version>${t2.ui.impl.version}</version>
 		</dependency>
-		
+		<!-- Added by JGS for opening dialog when add artifact from the service panel -->
+		<dependency>
+			<groupId>net.sf.taverna.t2.ui-impl</groupId>
+			<artifactId>contextual-views-impl</artifactId>
+			<version>${t2.ui.impl.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.taverna.t2.ui-components</groupId>
+			<artifactId>graph-view</artifactId>
+			<version>${t2.ui.components.version}</version>
+		</dependency>	
+		<dependency>
+			<groupId>net.sf.taverna.t2.ui-components</groupId>
+			<artifactId>workflow-view</artifactId>
+			<version>${t2.ui.components.version}</version>
+		</dependency>
 	</dependencies>
 </project>

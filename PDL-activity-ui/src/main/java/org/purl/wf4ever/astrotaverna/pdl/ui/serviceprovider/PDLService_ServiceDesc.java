@@ -78,6 +78,15 @@ public class PDLService_ServiceDesc extends ServiceDescription<PDLServiceActivit
 		//return Arrays.<Object>asList(exampleString, exampleUri);
 		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
 	}
+	
+	/**
+	 * This method makes that the configuration panel appears when you add the service
+	 * from the service panel to the workflow design area
+	 */
+	@Override
+	public boolean isTemplateService() {
+		return true;
+	}
 
 	
 	// FIXME: Replace example fields and getters/setters with any required
