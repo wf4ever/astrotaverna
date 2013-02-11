@@ -1,2 +1,3 @@
 org.purl.wf4ever.astrotaverna.pdl.ValidationPDLClientHealthChecker
+org.purl.wf4ever.astrotaverna.pdl.PDLServiceParameterHealthChecker
 org.purl.wf4ever.astrotaverna.pdl.PDLServiceHealthChecker
