@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import net.ivoa.parameter.model.Expression;
 import net.ivoa.parameter.model.SingleParameter;
 import net.sf.taverna.t2.visit.VisitReport;
 import net.sf.taverna.t2.visit.VisitReport.Status;
@@ -43,6 +44,7 @@ public class PDLServiceParameterHealthChecker implements
 
 	private static Logger logger = Logger.getLogger(PDLServiceParameterHealthChecker.class);
 	
+	
 	public boolean canVisit(Object obj) {
 		// Return True if we can visit the object. We could do
 		// deeper (but not time consuming) checks here, for instance
@@ -71,7 +73,11 @@ public class PDLServiceParameterHealthChecker implements
 			Map<String, SingleParameter> paramMap = activity.getSingleParametersForInputPorts();
 			Processor p = (Processor) VisitReport.findAncestor(ancestry, Processor.class);
 			Dataflow d = (Dataflow) VisitReport.findAncestor(ancestry, Dataflow.class);
-					
+				//System.err.println("----------------------------");
+				//System.err.println("Activity: "+ activity.getClass().getName());
+				//System.err.println("processor: "+ p.getLocalName());
+				//System.err.println("Dataflow: "+ d.getLocalName());
+			
 			for(Entry<String, SingleParameter> entry : paramMap.entrySet()){
 				String name;
 				SingleParameter param;
@@ -82,6 +88,7 @@ public class PDLServiceParameterHealthChecker implements
 				param = entry.getValue();
 				
 				aip = Tools.getActivityInputPort((Activity<?>) activity, entry.getKey());
+				
 				if (aip == null) {
 					continue;
 				}
@@ -90,11 +97,12 @@ public class PDLServiceParameterHealthChecker implements
 				if (pip == null) {
 					continue;
 				}
-				for (Datalink dl : d.getLinks()) {
-	
+				
+				for (Datalink dl : d.getLinks()) {					
 					if (dl.getSink().equals(pip)) {
+							//System.err.println("param: " + name + ". Link:" + dl.getSink().getName() + ". Source: "+ dl.getSource().getName() + " Source class: "+dl.getSource().getClass());
 						Port source = dl.getSource();
-						Set<VisitReport> subReports = checkSource(source, d, (Activity) activity, aip);
+						Set<VisitReport> subReports = checkSource(source, d, (Activity) activity, aip, param);
 						for (VisitReport vr : subReports) {
 						    vr.setProperty("activity", activity);
 						    vr.setProperty("sinkPort", pip);
@@ -122,39 +130,112 @@ public class PDLServiceParameterHealthChecker implements
 	}
 
 	//InputPortTypeDescriptorActivity
-	private Set<VisitReport> checkSource(Port source, Dataflow d, Activity o, ActivityInputPort aip) {
+	private Set<VisitReport> checkSource(Port source, Dataflow d, Activity o, ActivityInputPort aip, SingleParameter sinkParam) {
 		Set<VisitReport> reports = new HashSet<VisitReport>();
 		if (source instanceof ProcessorPort) {
 			ProcessorPort processorPort = (ProcessorPort) source;
 			Processor sourceProcessor = processorPort.getProcessor();
 			Activity sourceActivity = sourceProcessor.getActivityList().get(0);
-			if (!(sourceActivity instanceof InputPortSingleParameterActivity)) {
+			//if it is a PDLService
+			if (sourceActivity instanceof InputPortSingleParameterActivity) {
+				//System.err.println("\t La actividad de origen SI es también una PDLServiceActivity");
+				Map<String, SingleParameter> paramSourceActivity = sourceActivity.getOutputPortMapping();
+				String sourceName = sourceProcessor.getLocalName();
+				SingleParameter sourceParam = paramSourceActivity.get(sourceName);
+				String description = "";
+				//compare with the SingleParameter from the inputPort
+				if(sourceParam != null){
+					int error = PDLServiceParameterHealthCheck.NO_ERROR;
+					if(sourceParam.getParameterType() != sinkParam.getParameterType()){
+						error = error | PDLServiceParameterHealthCheck.TYPE_ERROR;
+					}
+					//Expression exp = sourceParam.getPrecision(); //how to evaluate expressions???
+					//error = error | PDLServiceParameterHealthCheck.PRECISION_ERROR;
+					if(sourceParam.getUType().compareTo(sinkParam.getUType())!=0){
+						error = error | PDLServiceParameterHealthCheck.UTYPE_ERROR;
+					}
+					if(sourceParam.getSkossConcept().compareTo(sinkParam.getSkossConcept())!=0){
+						error = error | PDLServiceParameterHealthCheck.SKOS_ERROR;
+					}
+					if(areUCDsequals(sourceParam.getUCD(), sinkParam.getUCD())){
+						error = error | PDLServiceParameterHealthCheck.UCD_ERROR;
+					}
+					if(sourceParam.getUnit().compareTo(sinkParam.getUnit())!=0){
+						error = error | PDLServiceParameterHealthCheck.UNIT_ERROR;
+					}
+					
+					VisitReport newReport;
+					
+					//VisitReport newReport = new VisitReport(HealthCheck.getInstance(), o, "Source of " + aip.getName()+ ". Metadata doesn't match", HealthCheck.NO_PROBLEM, Status.OK);
+					if(error > 0 )
+						newReport = new VisitReport(PDLServiceParameterHealthCheck.getInstance(), o, "Source of " + aip.getName()+ ". Metadata doesn't match", error, Status.WARNING);
+					else
+						newReport = new VisitReport(PDLServiceParameterHealthCheck.getInstance(), o, "Source of " + aip.getName()+ ".", error, Status.OK);
+					
+					newReport.setProperty("sinkPortName", aip.getName());
+					newReport.setProperty("sourceName", sourceProcessor.getLocalName());
+					newReport.setProperty("isProcessorSource", "true");
+				}
+			}else{
+				//System.err.println("\t La actividad de origen NO es una PDLServiceActivity");
 				//VisitReport newReport = new VisitReport(HealthCheck.getInstance(), o, "Source of " + aip.getName(), HealthCheck.DATATYPE_SOURCE, Status.WARNING);
-				VisitReport newReport = new VisitReport(HealthCheck.getInstance(), o, "Source of " + aip.getName(), HealthCheck.NO_PROBLEM, Status.WARNING);
+				//VisitReport newReport = new VisitReport(HealthCheck.getInstance(), o, "Source of " + aip.getName(), HealthCheck.NO_PROBLEM, Status.WARNING);
+				VisitReport newReport = new VisitReport(PDLServiceParameterHealthCheck.getInstance(), o, "Source of " + aip.getName(), PDLServiceParameterHealthCheck.NO_ERROR, Status.WARNING);
 				newReport.setProperty("sinkPortName", aip.getName());
 				newReport.setProperty("sourceName", sourceProcessor.getLocalName());
 				newReport.setProperty("isProcessorSource", "true");
-				reports.add(newReport);
+				reports.add(newReport);			
 			}
 		} else if (source instanceof MergeOutputPort) {
 			Merge merge = ((MergePort) source).getMerge();
 			for (MergeInputPort mip : merge.getInputPorts()) {
 				for (Datalink dl : d.getLinks()) {
 					if (dl.getSink().equals(mip)) {
-						reports.addAll(checkSource(dl.getSource(), d, o, aip));
+						reports.addAll(checkSource(dl.getSource(), d, o, aip, sinkParam));
 					}
 				}
-				
 			}
 		} else /* if (source instanceof DataflowInputPort) */  {
 			//VisitReport newReport = new VisitReport(HealthCheck.getInstance(), o, "Source of " + aip.getName(), HealthCheck.DATATYPE_SOURCE, Status.WARNING);
-			VisitReport newReport = new VisitReport(HealthCheck.getInstance(), o, "Source of " + aip.getName(), HealthCheck.UNKNOWN_OPERATION, Status.WARNING);
+			VisitReport newReport = new VisitReport(HealthCheck.getInstance(), o, "Source of " + aip.getName(), HealthCheck.NO_PROBLEM, Status.WARNING);
 			newReport.setProperty("sinkPortName", aip.getName());
 			newReport.setProperty("sourceName", source.getName());
 			newReport.setProperty("isProcessorSource", "false");
 			reports.add(newReport);
 		} 
 		return reports;
+	}
+	
+	/**
+	 * Compare to UCDs. It splits the UCDs by ';' so they might be in different order. 
+	 * @param cad1
+	 * @param cad2
+	 * @return
+	 */
+	private boolean areUCDsequals(String cad1, String cad2){
+		boolean equals = true;
+		
+		String[] array1 = cad1.trim().split(";");
+		String[] array2 = cad2.trim().split(";");
+		
+		if(array1== null && array2 == null)
+			return true;
+		if(array1.length == 0 && array2.length == 0)
+			return true;
+		
+		equals = true;
+		for(int i = 0; i<array1.length && equals; i++){
+			boolean found = false;
+			for(int j = 0; j<array2.length && !found; j++){
+				if(array1[i].compareTo(array2[j])==0)
+					found = true;
+			}
+			if(!found)
+				equals = false;
+		}
+		
+		return equals;
+		
 	}
 
 }
