@@ -28,23 +28,88 @@ public class PDLServiceParameterHealthCheckVisitExplainer implements VisitExplai
 		return (vk instanceof PDLServiceParameterHealthCheck);
 	}
 
+	/**
+	   * This class only handles {@link VisitReport} instances that are of
+	   * {@link PDLServiceParameterHealthCheck} kind. Therefore, decisions on
+	   * the explanations / solutions are made solely by visit result IDs.
+	   */
 	@Override
 	public JComponent getExplanation(VisitReport vr) {
-		// TODO Auto-generated method stub
+		int resultId = vr.getResultId();
 		String explanation = "";
-		explanation = "puedo explicarlo";
+		//explanation = "puedo explicarlo";
+		
+		if(resultId == NO_ERROR){
+			explanation = "No problem found.\n";
+		}
+		if((resultId & PRECISION_ERROR) == PRECISION_ERROR){
+			explanation = explanation + "Precision metadata don't match in the sink and source ports.\n";
+		}
+		if((resultId & TYPE_ERROR) == TYPE_ERROR){
+			explanation = explanation + "Types don't match in the sink and source ports.\n";
+		}
+		if((resultId & UTYPE_ERROR) == UTYPE_ERROR){
+			explanation = explanation + "UTypes don't match in the sink and source ports.\n";
+		}
+		if((resultId & UCD_ERROR) == UCD_ERROR){
+			explanation = explanation + "UCDs don't match in the sink and source ports.\n";
+		}
+		if((resultId & UNIT_ERROR) == UNIT_ERROR){
+			explanation = explanation + "Units don't match in the sink and source ports.\n";
+		}
+		if((resultId & SKOS_ERROR) == SKOS_ERROR){
+			explanation = explanation + "SKOS concepts don't match in the sink and source ports.\n";
+		}
+		if(resultId == UNKNOWN){
+			explanation = explanation + "Unknown issue - no expalanation available.\n";
+		}  		        
+		
 		return new ReadOnlyTextArea(explanation);
 	}
 
+	/**
+	   * This class only handles {@link VisitReport} instances that are of
+	   * {@link PDLServiceParameterHealthCheck} kind. Therefore, decisions on
+	   * the explanations / solutions are made solely by visit result IDs.
+	   */
 	@Override
 	public JComponent getSolution(VisitReport vr) {
 		// TODO Auto-generated method stub
 		int resultId = vr.getResultId();
 	    String explanation = null;
 	    boolean includeConfigButton = false;
+	    //explanation = "puedo solucinarlo";
 	    
-	    explanation = "puedo solucionarlo";
+	    if(resultId == NO_ERROR){
+			explanation = "No change necessary.\n";
+	    }else{
+	    	if((resultId & PRECISION_ERROR) == PRECISION_ERROR)
+	    		explanation = explanation + "Check the sink activity requires more precession that the source provides.\n";
+			
+	    	if((resultId & TYPE_ERROR) == TYPE_ERROR)
+				explanation = explanation + "Check the types and consider using a beanshell for small transformations.\n";
+			
+			if((resultId & UTYPE_ERROR) == UTYPE_ERROR)
+				explanation = explanation + "Check if source and sink ports corresponds to the same concept in a VO datamodel or if they are equivalent.\n";
+			
+			if((resultId & UCD_ERROR) == UCD_ERROR)
+				explanation = explanation + "Check if source and sink ports correspond to equivalent concepts (UCDs).\n";
+			
+			if((resultId & UNIT_ERROR) == UNIT_ERROR)
+				explanation = explanation + "Chekc if you need a conversion factor between source and sink or if they are not compatible.\n";
+			
+			if((resultId & SKOS_ERROR) == SKOS_ERROR)
+				explanation = explanation + "Check if source and sink ports are represented by equivalent concepts.\n";
+	    }
+		if(resultId == UNKNOWN)
+			explanation = explanation + "Unknown issue - no solution available\n";
+		
 	    
+		return new ReadOnlyTextArea(explanation);
+		
+		//I can use the next code for being able to open the config activity dialog from a buttom. 
+		//this code has dependencies
+		/*
 	    JPanel jpSolution = new JPanel();
 	    jpSolution.setLayout(new BoxLayout(jpSolution, BoxLayout.Y_AXIS));
 	    
@@ -65,7 +130,7 @@ public class PDLServiceParameterHealthCheckVisitExplainer implements VisitExplai
 	    
 	    
 	    return (jpSolution);
-	    
+	    */
 	}
 	
 	
