@@ -466,6 +466,14 @@ public class PDLServiceActivity extends
 								jobResult.parseXML(jobInfo);
 								//System.out.println("JobOutputs: "+jobResult.getOutputParams());
 								
+								//if there is an error or it is aborted, the activity fails
+								if(jobResult.getJobPhase()!=null)
+									if(jobResult.getJobPhase().toLowerCase().compareTo(PDLServiceController.getErrorStatus())==0
+											|| jobResult.getJobPhase().toLowerCase().compareTo(PDLServiceController.getAbortedStatus())==0){
+										callbackfails = true;
+										logger.error("The service returned "+jobResult.getJobPhase()+": "+caller.latestInvokedURL());
+										callback.fail("The service returned "+jobResult.getJobPhase()+": "+caller.latestInvokedURL());
+									}
 								
 								// TODO Update outputs in mapper and validate
 								

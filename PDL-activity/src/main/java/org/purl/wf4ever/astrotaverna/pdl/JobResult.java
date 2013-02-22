@@ -19,7 +19,7 @@ import org.xml.sax.SAXException;
 
 public class JobResult {
 
-	String jobPhase;
+	String jobPhase="unknown";
 	String demandDate;
 	
 	HashMap<String, String> inputParams;

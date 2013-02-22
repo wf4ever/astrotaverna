@@ -24,9 +24,10 @@ public class MyDefaultServiceCaller {
 	private static Logger logger = Logger.getLogger(MyDefaultServiceCaller.class);
 	private String response;
 	private String jobInfo;
+	private String serviceUrl;
 	
 	public String callService(HashMap<String, SingleParameter> paramMap) throws MalformedURLException, IOException {
-		String serviceUrl = Utilities.getInstance().getService().getServiceId()
+		serviceUrl = Utilities.getInstance().getService().getServiceId()
 				+ "?";
 		serviceUrl = serviceUrl.replaceAll("/OnlineCode", "/TavernaCodeFrontal");
 
@@ -49,7 +50,7 @@ public class MyDefaultServiceCaller {
 				//	System.out.println();
 				GeneralParameter gn = gplist.get(0);
                 String paramValue = Utilities.getInstance().getuserProvidedValuesForParameter(p).get(0).getValue();
-                System.out.println(" -- value: " + paramValue);
+                //System.out.println(" -- value: " + paramValue);
                 if (p.getParameterType().equals(ParameterType.STRING)) {
                         paramValue = URLEncoder.encode(paramValue, "UTF-8");
                 }
@@ -88,7 +89,7 @@ public class MyDefaultServiceCaller {
 	}
 	
 	public String getJobInfo(String jobId, String userId) throws MalformedURLException, IOException {
-		String serviceUrl = Utilities.getInstance().getService().getServiceId()
+		serviceUrl = Utilities.getInstance().getService().getServiceId()
 				+ "?";
 		
 		serviceUrl = serviceUrl.replaceAll("/OnlineCode", "/TavernaJobInfo");
@@ -134,6 +135,10 @@ public class MyDefaultServiceCaller {
 		}
 		bufferedReader.close();
 		return sb.toString();
+	}
+	
+	public String latestInvokedURL(){
+		return serviceUrl;
 	}
 
 }

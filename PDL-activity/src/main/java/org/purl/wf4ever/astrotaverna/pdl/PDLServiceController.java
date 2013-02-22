@@ -60,10 +60,15 @@ public class PDLServiceController {
 	
 	//pdl specific objects
 	final private String complete = "To complete";
-	final private String error = "With error";
+	//final private String error = "With error";
 	final private static String valid = "Valid";
 	final private static String pending = "pending";
 	final private static String finished = "finished";
+	final private static String aborted = "aborted";
+	final private static String error = "error";
+	final private static String running = "running";
+	final private static String completed = "COMPLETED";
+	final private static String executing = "EXECUTING";
 	
 	
 	
@@ -304,6 +309,18 @@ public class PDLServiceController {
 		return valid;
 	}
 	
+	public static String getRunningStatus(){
+		return running;
+	}
+	
+	public static String getCompletedStatus(){
+		return completed;
+	}
+	
+	public static String getExecutingStatus(){
+		return executing;
+	}
+	
 	/**
 	 * Collect the single parameters on the different groups and return 
 	 * a list will all of them. It previously requires to run prepareProcess method. 
@@ -444,6 +461,14 @@ public class PDLServiceController {
 
 	public static String getFinishedStatus() {
 		return finished;
+	}
+	
+	public static String getErrorStatus(){
+		return error;
+	}
+	
+	public static String getAbortedStatus(){
+		return aborted;
 	}
 
 	/**
