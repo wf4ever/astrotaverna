@@ -246,7 +246,7 @@ public class PDLServiceActivityTest {
 		inputs.put("NAXIS2", "2199");
 		inputs.put("CTYPE1", "RA---TAN");
 		inputs.put("CTYPE2", "DEC--TAN");
-		inputs.put("CRVAL1", "210.835222357");
+		inputs.put("CRVAL1", "210.835222358");
 		inputs.put("CRVAL2", "54.367562188");
 		inputs.put("CDELT1", "-0.000277780");
 		inputs.put("CDELT2", "0.000277780");
