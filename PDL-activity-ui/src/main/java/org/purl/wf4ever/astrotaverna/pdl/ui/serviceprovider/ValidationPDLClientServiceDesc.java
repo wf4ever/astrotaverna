@@ -76,7 +76,7 @@ public class ValidationPDLClientServiceDesc extends ServiceDescription<Validatio
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("PDL", "astro-iaa", this.getName());
 	}
 
 	
