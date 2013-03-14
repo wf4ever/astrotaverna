@@ -58,7 +58,7 @@
 		
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>aladin-activity-ui</artifactId>
+			<artifactId>Image-activity-ui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		

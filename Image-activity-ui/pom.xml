@@ -7,13 +7,13 @@
 		<version>1.03-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>aladin-activity-ui</artifactId>
-	<name>aladin utilities suite UI bindings</name>
+	<artifactId>Image-activity-ui</artifactId>
+	<name>Image utilities suite UI bindings</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>aladin-activity</artifactId>
+			<artifactId>Image-activity</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

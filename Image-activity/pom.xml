@@ -7,7 +7,7 @@
 		<version>1.03-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>aladin-activity</artifactId>
+	<artifactId>Image-activity</artifactId>
 	<name>Aladin utilities suite activity</name>
 
 	<dependencies>
