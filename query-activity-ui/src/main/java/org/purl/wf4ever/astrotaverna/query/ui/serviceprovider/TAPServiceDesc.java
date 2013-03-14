@@ -62,7 +62,7 @@ public class TAPServiceDesc extends ServiceDescription<RESTActivityConfiguration
 	 */
 	@Override
 	public String getName() {
-		return "TAP query";//exampleString;
+		return "Access TAP VOService";//exampleString;
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class TAPServiceDesc extends ServiceDescription<RESTActivityConfiguration
 		//return Arrays.asList("Stilts -" + exampleUri);
 		//return Arrays.asList("Stilts" + this.getName());
 		//return Arrays.asList("Astro local services", "Stilts");
-		return Arrays.asList("Astro tools");
+		return Arrays.asList("Astro tools", "Services");
 	}
 
 	/**
