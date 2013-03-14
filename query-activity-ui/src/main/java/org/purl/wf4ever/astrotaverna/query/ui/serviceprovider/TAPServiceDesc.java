@@ -1,4 +1,4 @@
-package org.purl.wf4ever.astrotaverna.pdl.ui.serviceprovider;
+package org.purl.wf4ever.astrotaverna.query.ui.serviceprovider;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -6,23 +6,23 @@ import java.util.List;
 
 import javax.swing.Icon;
 
+
+
+import net.sf.taverna.t2.activities.rest.RESTActivity;
 import net.sf.taverna.t2.activities.rest.RESTActivityConfigurationBean;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.workflowmodel.processor.activity.Activity;
 
-import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivity;
-import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivityConfigurationBean;
-import org.purl.wf4ever.astrotaverna.pdl.ui.serviceprovider.PDLServiceIcon;
 
-public class PDLService_ServiceDesc extends ServiceDescription<PDLServiceActivityConfigurationBean> {
+public class TAPServiceDesc extends ServiceDescription<RESTActivityConfigurationBean> {
 
 	/**
 	 * The subclass of Activity which should be instantiated when adding a service
 	 * for this description 
 	 */
 	@Override
-	public Class<? extends Activity<PDLServiceActivityConfigurationBean>> getActivityClass() {
-		return PDLServiceActivity.class;
+	public Class<? extends Activity<RESTActivityConfigurationBean>> getActivityClass() {
+		return RESTActivity.class;
 	} 
 
 	/**
@@ -32,10 +32,20 @@ public class PDLService_ServiceDesc extends ServiceDescription<PDLServiceActivit
 	 * 
 	 */
 	@Override
-	public PDLServiceActivityConfigurationBean getActivityConfiguration() {
-		PDLServiceActivityConfigurationBean bean = new PDLServiceActivityConfigurationBean();
-		bean.setPdlDescriptionFile("http://www.exampleuri.com/pdldescriptionfile.xml");
-		return bean;
+	public RESTActivityConfigurationBean getActivityConfiguration() {
+		////RESTActivityConfigurationBean bean = new RESTActivityConfigurationBean();
+		//RESTActivityConfigurationBean bean = RESTActivityConfigurationBean.getDefaultInstance();
+		////bean.setType();
+		//return bean;
+		RESTActivityConfigurationBean configurationBean = RESTActivityConfigurationBean
+				.getDefaultInstance();
+		configurationBean.setUrlSignature("http://www.exampleuri.com/TAP/sync?&REQUEST=doQuery&LANG=ADQL&QUERY={QUERY}");
+		//cone search
+		//configurationBean.setUrlSignature("http://www.exampleuri.com/TAP/sync&RA={RA}&DEC={DEC}&SR={SR}");
+		//http://vizier.u-strasbg.fr/viz-bin/votable/-A?-source=J/A+A/545/A15&RA={RA}&DEC={DEC}&SR=0%2C1
+		configurationBean
+				.setAcceptsHeaderValue("application/x-votable+xml, text/xml;content=x-votable, text/xml;votable;q=0.7,  application/xml;q=0.5, text/xml;q=0.6");
+		return configurationBean;
 	}
 
 	/**
@@ -43,7 +53,7 @@ public class PDLService_ServiceDesc extends ServiceDescription<PDLServiceActivit
 	 */
 	@Override
 	public Icon getIcon() {
-		return PDLServiceIcon.getIcon();
+		return VOQueryServiceIcon.getIcon();
 	}
 
 	/**
@@ -52,7 +62,7 @@ public class PDLService_ServiceDesc extends ServiceDescription<PDLServiceActivit
 	 */
 	@Override
 	public String getName() {
-		return "PDL service";//exampleString;
+		return "TAP query";//exampleString;
 	}
 
 	/**
@@ -77,8 +87,13 @@ public class PDLService_ServiceDesc extends ServiceDescription<PDLServiceActivit
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("PDL", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("Query", "astro-iaa", this.getName());
 	}
+
+	
+	// FIXME: Replace example fields and getters/setters with any required
+	// and optional fields. (All fields are searchable in the Service palette,
+	// for instance try a search for exampleString:3)
 	
 	/**
 	 * This method makes that the configuration panel appears when you add the service
@@ -88,52 +103,25 @@ public class PDLService_ServiceDesc extends ServiceDescription<PDLServiceActivit
 	public boolean isTemplateService() {
 		return true;
 	}
-
 	
-	// FIXME: Replace example fields and getters/setters with any required
-	// and optional fields. (All fields are searchable in the Service palette,
-	// for instance try a search for exampleString:3)
-	
-	
-	private String pdlDescriptionFile;
-
-
-	public String getPdlDescriptionFile() {
-		return pdlDescriptionFile;
-	}
-
-	public void setPdlDescriptionFile(String pdlDescriptionFile) {
-		this.pdlDescriptionFile = pdlDescriptionFile;
-	}
-	
-
-
 	/*
-	public String getTypeOfFilter() {
-		return typeOfFilter;
+	public void setUrlSignature(String urlSignature) {
+		this.urlSignature = urlSignature;
 	}
 
-	public void setTypeOfFilter(String typeOfFilter) {
-		this.typeOfFilter = typeOfFilter;
+	public void setAccessURL(String accessURL) {
+		this.accessURL = accessURL;
 	}
+	
+	public String getUrlSignature() {
+		return urlSignature;
+	}
+	
+	public String getAccessURL() {
+		return accessURL;
+	}
+
+	private String urlSignature;
+	private String accessURL;
 	*/
-
-	
-	//private String exampleString;
-	//private URI exampleUri;
-	
-	//public String getExampleString() {
-	//	return exampleString;
-	//}
-	//public URI getExampleUri() {
-	//	return exampleUri;
-	//}
-	//public void setExampleString(String exampleString) {
-	//	this.exampleString = exampleString;
-	//}
-	//public void setExampleUri(URI exampleUri) {
-	//	this.exampleUri = exampleUri;
-	//}
-
-
 }

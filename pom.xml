@@ -146,6 +146,8 @@
     <module>PDL-activity-ui</module>
     <module>aladin-activity</module>
     <module>aladin-activity-ui</module>
+    <module>query-activity</module>
+    <module>query-activity-ui</module>
   </modules>
   <scm>
   	<url>https://github.com/wf4ever/astrotaverna</url>
