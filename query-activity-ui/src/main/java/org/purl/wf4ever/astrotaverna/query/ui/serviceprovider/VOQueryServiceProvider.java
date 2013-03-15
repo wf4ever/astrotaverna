@@ -43,9 +43,21 @@ public class VOQueryServiceProvider implements ServiceDescriptionProvider {
 		//	results.add(service);
 		//}
 		
-		TAPServiceDesc serviceDesc = new TAPServiceDesc();
+		TAPServiceDesc service1 = new TAPServiceDesc();
 				
-		results.add(serviceDesc);
+		results.add(service1);
+		
+		SIAServiceDesc service2 = new SIAServiceDesc();
+		
+		results.add(service2);
+		
+		SSAServiceDesc service3 = new SSAServiceDesc();
+		
+		results.add(service3);
+		
+		ConeSearchServiceDesc service4 = new ConeSearchServiceDesc();
+		
+		results.add(service4);
 		
 
 		

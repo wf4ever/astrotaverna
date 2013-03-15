@@ -146,7 +146,6 @@
     <module>PDL-activity-ui</module>
     <module>Image-activity</module>
     <module>Image-activity-ui</module>
-    <module>query-activity</module>
     <module>query-activity-ui</module>
   </modules>
   <scm>
