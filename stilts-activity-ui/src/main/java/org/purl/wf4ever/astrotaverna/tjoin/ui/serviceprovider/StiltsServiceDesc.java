@@ -51,6 +51,10 @@ public class StiltsServiceDesc extends ServiceDescription<TjoinActivityConfigura
 	 */
 	@Override
 	public String getName() {
+		return "Add joined table";//exampleString;
+	}
+	
+	public String getIdName() {
 		return "tjoin";//exampleString;
 	}
 
@@ -76,7 +80,7 @@ public class StiltsServiceDesc extends ServiceDescription<TjoinActivityConfigura
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("stilts", "astro-iaa", this.getIdName());
 	}
 
 	

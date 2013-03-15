@@ -51,6 +51,10 @@ public class CoordTransformationServiceDesc extends ServiceDescription<CoordTran
 	 */
 	@Override
 	public String getName() {
+		return "Coordinates units conversion in VOTable";//exampleString;
+	}
+	
+	public String getIdName() {
 		return "Coordinates transformation";//exampleString;
 	}
 
@@ -76,7 +80,7 @@ public class CoordTransformationServiceDesc extends ServiceDescription<CoordTran
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("stilts", "astro-iaa", this.getIdName());
 	}
 
 	

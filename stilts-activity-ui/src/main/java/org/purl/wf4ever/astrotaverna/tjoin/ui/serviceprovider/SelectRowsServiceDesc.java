@@ -51,6 +51,10 @@ public class SelectRowsServiceDesc extends ServiceDescription<SelectRowsActivity
 	 */
 	@Override
 	public String getName() {
+		return "Select rows from VOTable";//exampleString;
+	}
+	
+	public String getIdName() {
 		return "Select Rows";//exampleString;
 	}
 
@@ -76,7 +80,7 @@ public class SelectRowsServiceDesc extends ServiceDescription<SelectRowsActivity
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("stilts", "astro-iaa", this.getIdName());
 	}
 
 	

@@ -50,6 +50,10 @@ public class TemplateFillerServiceDesc extends ServiceDescription<TemplateFiller
 	 */
 	@Override
 	public String getName() {
+		return "Fill template from VOTable";//exampleString;
+	}
+	
+	public String getIdName() {
 		return "Template filler";//exampleString;
 	}
 
@@ -75,7 +79,7 @@ public class TemplateFillerServiceDesc extends ServiceDescription<TemplateFiller
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("stilts", "astro-iaa", this.getIdName());
 	}
 
 	

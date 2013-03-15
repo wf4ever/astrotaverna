@@ -52,6 +52,10 @@ public class AddSkyCoordsServiceDesc extends ServiceDescription<AddSkyCoordsActi
 	 */
 	@Override
 	public String getName() {
+		return "Coordinates reference system trasnformation in VOTable";//exampleString;
+	}
+	
+	public String getIdName() {
 		return "Add sky coordinates";//exampleString;
 	}
 
@@ -77,7 +81,7 @@ public class AddSkyCoordsServiceDesc extends ServiceDescription<AddSkyCoordsActi
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("stilts", "astro-iaa", this.getIdName());
 	}
 
 	

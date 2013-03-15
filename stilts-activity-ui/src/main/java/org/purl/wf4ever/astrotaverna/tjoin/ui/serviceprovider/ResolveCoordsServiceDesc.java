@@ -50,6 +50,10 @@ public class ResolveCoordsServiceDesc extends ServiceDescription<ResolveCoordsAc
 	 */
 	@Override
 	public String getName() {
+		return "Coordinates resolver";//exampleString;
+	}
+	
+	public String getIdName() {
 		return "Resolve coordinates";//exampleString;
 	}
 
@@ -75,7 +79,7 @@ public class ResolveCoordsServiceDesc extends ServiceDescription<ResolveCoordsAc
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("stilts", "astro-iaa", this.getIdName());
 	}
 
 	

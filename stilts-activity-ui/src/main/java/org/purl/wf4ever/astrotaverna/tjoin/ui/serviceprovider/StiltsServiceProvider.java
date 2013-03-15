@@ -57,7 +57,7 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		
 		StiltsServiceDesc service = new StiltsServiceDesc();
 		service.setTypeOFInput("String");
-		service.setDescription("Join between tables");
+		service.setDescription("Joins two VOTables with the same number of rows");
 		
 		results.add(service);
 		
@@ -65,73 +65,71 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		SelectColumnsServiceDesc service2 = new SelectColumnsServiceDesc();
 		service2.setTypeOfInput("String");
 		service2.setTypeOfFilter("Column names");
-		service2.setDescription("Columns selection in a table");
+		//service2.setDescription("Columns selection in a table");
 		
 		results.add(service2);
 		
 		SelectRowsServiceDesc service3 = new SelectRowsServiceDesc();
 		service3.setTypeOfInput("String");
 		//service3.setTypeOfFilter("Column names");
-		service3.setDescription("Rows selection in a table");
+		//service3.setDescription("Rows selection in a table");
 		
 		results.add(service3);
 		
 		CoordTransformationServiceDesc service4 = new CoordTransformationServiceDesc();
 		service4.setTypeOfInput("String");
-		//service3.setTypeOfFilter("Column names");
-		service4.setDescription("Coordenates transformation in a table");
+		//service4.setDescription("Coordenates transformation in a table");
 		
 		results.add(service4);
 		
 		FormatConversionServiceDesc service5 = new FormatConversionServiceDesc();
 		service5.setTypeOfInput("String");
 		//service3.setTypeOfFilter("Column names");
-		service5.setDescription("Table format conversion");
+		//service5.setDescription("Table format conversion");
 		
 		results.add(service5);
 		
 		AddColumnByExpressionServiceDesc service6 = new AddColumnByExpressionServiceDesc();
 		service6.setTypeOfInput("String");
 		//service3.setTypeOfFilter("Column names");
-		service6.setDescription("Add column using a expression");
+		service6.setDescription("Adds column to VOTable using a expression");
 		
 		results.add(service6);
 		
 		AddSkyCoordsServiceDesc service7 = new AddSkyCoordsServiceDesc();
 		service7.setTypeOfInput("String");
-		//service3.setTypeOfFilter("Column names");
-		service7.setDescription("Add sky coordinates");
+		//service7.setDescription("Add sky coordinates");
 		
 		results.add(service7);
 		
 		ResolveCoordsServiceDesc service8 = new ResolveCoordsServiceDesc();
 		service8.setTypeOfInput("String");
-		service8.setDescription("Resolve object coordinates");
+		service8.setDescription("Resolve coordinates from name in VOTable");
 		results.add(service8);
 		
 		TcatServiceDesc service9 = new TcatServiceDesc();
 		service9.setTypeOfInput("String");
-		service9.setDescription("Cat two tables");
+		service9.setDescription("Concats two VOTables with same number of cols");
 		results.add(service9);
 		
 		TcatListServiceDesc service10 = new TcatListServiceDesc();
 		service10.setTypeOfInput("String");
-		service10.setDescription("Cat a list of tables");
+		service10.setDescription("Concats n VOTables with same number of cols");
 		results.add(service10);
 		
 		GetListFromColumnServiceDesc service11 = new GetListFromColumnServiceDesc();
 		service11.setTypeOfInput("String");
-		service11.setDescription("Get list from column in a votable");
+		//service11.setDescription("Get list from column in a votable");
 		results.add(service11);
 		
 		TemplateFillerServiceDesc service12 = new TemplateFillerServiceDesc();
 		service12.setTypeOfInput("String");
-		service12.setDescription("Template filler from a votable");
+		//service12.setDescription("Template filler from a votable");
 		results.add(service12);
 		
 		CheckTemplateFillerServiceDesc service13 = new CheckTemplateFillerServiceDesc();
 		service13.setTypeOfInput("String");
-		service13.setDescription("Check Template filler");
+		//service13.setDescription("Check Template filler");
 		results.add(service13);
 		
 		

@@ -51,9 +51,13 @@ public class TcatServiceDesc extends ServiceDescription<TcatActivityConfiguratio
 	 */
 	@Override
 	public String getName() {
-		return "Cat tables";//exampleString;
+		return "Add concat table";//exampleString;
 	}
 
+	public String getIdName() {
+		return "Cat tables";//exampleString;
+	}
+	
 	/**
 	 * The path to this service description in the service palette. Folders
 	 * will be created for each element of the returned path.
@@ -76,7 +80,7 @@ public class TcatServiceDesc extends ServiceDescription<TcatActivityConfiguratio
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("stilts", "astro-iaa", this.getIdName());
 	}
 
 	

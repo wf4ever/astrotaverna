@@ -52,7 +52,7 @@ public class AladinScriptServiceDesc extends ServiceDescription<AladinScriptActi
 	 */
 	@Override
 	public String getName() {
-		return "Aladin script";//exampleString;
+		return "Use Aladin scripts";//exampleString;
 	}
 
 	/**

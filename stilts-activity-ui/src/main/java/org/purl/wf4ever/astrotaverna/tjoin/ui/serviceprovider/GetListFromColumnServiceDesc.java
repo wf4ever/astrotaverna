@@ -50,6 +50,10 @@ public class GetListFromColumnServiceDesc extends ServiceDescription<GetListFrom
 	 */
 	@Override
 	public String getName() {
+		return "Select columns from VOTable into a list";//exampleString;
+	}
+	
+	public String getIdName() {
 		return "List from column";//exampleString;
 	}
 
@@ -75,7 +79,7 @@ public class GetListFromColumnServiceDesc extends ServiceDescription<GetListFrom
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("stilts", "astro-iaa", this.getIdName());
 	}
 
 	

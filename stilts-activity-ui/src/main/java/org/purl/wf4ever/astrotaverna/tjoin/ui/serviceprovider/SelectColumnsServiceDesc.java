@@ -51,6 +51,10 @@ public class SelectColumnsServiceDesc extends ServiceDescription<SelectColumnsAc
 	 */
 	@Override
 	public String getName() {
+		return "Select columns from VOTable";//exampleString;
+	}
+	
+	public String getIdName() {
 		return "Select columns";//exampleString;
 	}
 
@@ -76,7 +80,7 @@ public class SelectColumnsServiceDesc extends ServiceDescription<SelectColumnsAc
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("stilts", "astro-iaa", this.getIdName());
 	}
 
 	

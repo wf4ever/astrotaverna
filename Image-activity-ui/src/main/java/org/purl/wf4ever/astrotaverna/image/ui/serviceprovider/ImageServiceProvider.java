@@ -44,7 +44,7 @@ public class ImageServiceProvider implements ServiceDescriptionProvider {
 		
 		AladinScriptServiceDesc service = new AladinScriptServiceDesc();
 		service.setTypeOfInput("String");
-		service.setDescription("Aladin script");
+		//service.setDescription("Aladin script");
 		
 		results.add(service);
 		

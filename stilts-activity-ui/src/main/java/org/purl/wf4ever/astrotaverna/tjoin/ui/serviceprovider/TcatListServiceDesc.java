@@ -51,6 +51,10 @@ public class TcatListServiceDesc extends ServiceDescription<TcatListActivityConf
 	 */
 	@Override
 	public String getName() {
+		return "Add n concat tables";//exampleString;
+	}
+	
+	public String getIdName() {
 		return "Cat n-tables";//exampleString;
 	}
 
@@ -76,7 +80,7 @@ public class TcatListServiceDesc extends ServiceDescription<TcatListActivityConf
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("stilts", "astro-iaa", this.getIdName());
 	}
 
 	

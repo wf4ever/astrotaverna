@@ -50,6 +50,10 @@ public class CheckTemplateFillerServiceDesc extends ServiceDescription<CheckTemp
 	 */
 	@Override
 	public String getName() {
+		return "Fill template validation";//exampleString;
+	}
+	
+	public String getIdName() {
 		return "Check template filler";//exampleString;
 	}
 
@@ -75,7 +79,7 @@ public class CheckTemplateFillerServiceDesc extends ServiceDescription<CheckTemp
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("stilts", "astro-iaa", this.getIdName());
 	}
 
 	

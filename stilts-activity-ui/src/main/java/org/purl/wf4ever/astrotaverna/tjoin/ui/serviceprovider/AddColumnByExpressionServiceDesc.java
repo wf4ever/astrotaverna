@@ -53,6 +53,10 @@ public class AddColumnByExpressionServiceDesc extends ServiceDescription<AddColu
 	public String getName() {
 		return "Add Column";//exampleString;
 	}
+	
+	public String getIdName() {
+		return "Add column";//exampleString;
+	}
 
 	/**
 	 * The path to this service description in the service palette. Folders
@@ -76,7 +80,7 @@ public class AddColumnByExpressionServiceDesc extends ServiceDescription<AddColu
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("stilts", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("stilts", "astro-iaa", this.getIdName());
 	}
 
 	
