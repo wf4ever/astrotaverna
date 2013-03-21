@@ -16,6 +16,9 @@ public class AladinInvoker {
 	private String error_out;
 	private int option;
 	
+	public static final String GUI = "gui";
+	public static final String NOGUI = "nogui";
+	
 	public AladinInvoker(){
 	
 	}
@@ -24,13 +27,14 @@ public class AladinInvoker {
 		option = opt;
 	}
 		
-	public void runScript(String script) throws InterruptedException, IOException{
-		String[] args = new String[2];
-		
-		args[0]="-nogui";
-		args[1] = "script="+script;
-		
-		ProcessBuilder builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "script="+script); 
+	public void runScript(String script, String gui) throws InterruptedException, IOException{
+		ProcessBuilder builder;
+		if(AladinInvoker.GUI.compareTo(gui)!=0){
+			builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "script="+script);
+		}else{
+			///Users/julian/Documents/wf4ever/aladin/
+			builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "script="+script);
+		}
 		
 		Map<String, String> environ = builder.environment();
 
@@ -67,13 +71,16 @@ public class AladinInvoker {
 		return error_out;
 	}
 
-	public void runScriptURL(String url) throws InterruptedException, IOException{
-		String[] args = new String[2];
+	public void runScriptURL(String url, String gui) throws InterruptedException, IOException{
+		ProcessBuilder builder;
+		if(AladinInvoker.GUI.compareTo(gui)!=0){
 		
-		args[0]="-nogui";
-		args[1] = "-scriptfile="+url;
-		
-		ProcessBuilder builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "-scriptfile="+url); 
+			//ProcessBuilder builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "-scriptfile="+url); 
+			builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "-scriptfile="+url);
+		}else{
+			///Users/julian/Documents/wf4ever/aladin/
+			builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-scriptfile="+url);
+		}
 		
 		Map<String, String> environ = builder.environment();
 
@@ -102,20 +109,20 @@ public class AladinInvoker {
 	public void run() throws IOException{
 		try {		
 			if(option == 1){
-				String example2 = "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/example & tests/m1.jpg; quit";
+				String example2 = "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit";
 				System.out.println("Starting option 1");
-				runScript(example2);				
+				runScript(example2, "gui");				
 				System.out.println("Ending option 1");
 			}else if(option ==2){
 				String scriptpath = "/Users/julian/workspaces/aladinTest_ws/myAladin/myTestSRC/iaa/amiga/aladin/resources/examplescript.ajs";
 				String scriptURL = "file:///Users/julian/workspaces/aladinTest_ws/myAladin/myTestSRC/iaa/amiga/aladin/resources/examplescript.ajs";
 				System.out.println("Starting option 2");
-				runScriptURL(scriptpath);
+				runScriptURL(scriptpath, "nogui");
 				System.out.println("Ending option 2");
 			}else if(option == 3){
 				String scriptMacro ="macro /Users/julian/workspaces/aladinTest_ws/myAladin/myTestSRC/iaa/amiga/aladin/resources/Aladin_workflow_script.ajs /Users/julian/workspaces/aladinTest_ws/myAladin/myTestSRC/iaa/amiga/aladin/resources/Aladin_workflow_params.txt";
 				System.out.println("Starting option 3");
-				runScript(scriptMacro);
+				runScript(scriptMacro, "nogui");
 				System.out.println("Ending option 3");
 			}
 		} catch (InterruptedException e) {

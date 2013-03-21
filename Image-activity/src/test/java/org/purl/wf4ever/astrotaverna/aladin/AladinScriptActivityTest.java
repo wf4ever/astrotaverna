@@ -28,6 +28,7 @@ public class AladinScriptActivityTest {
 	private static final String FIRST_INPUT = "Script";
 	private static final String OUT_STD_OUTPUT = "STD_OUTPUT";
 	private static final String OUT_ERROR = "ERROR_OUTPUT";
+	private static final String VO_TABLE = "VOTable";
 	
 	private AladinScriptActivity activity = new AladinScriptActivity();
 
@@ -49,6 +50,7 @@ public class AladinScriptActivityTest {
 	public void makeConfigBean() throws Exception {
 		configBean = new AladinScriptActivityConfigurationBean();	
 		configBean.setTypeOfInput("File");
+		configBean.setTypeOfMode("nogui");
 		
 	}
 
@@ -70,10 +72,11 @@ public class AladinScriptActivityTest {
 
 	//this test is valid only with the right folders
 	
-	@Ignore
+	
 	@Test
 	public void executeAsynch() throws Exception {
 		configBean.setTypeOfInput("URL");
+		configBean.setTypeOfMode("nogui");
 		activity.configure(configBean);
 
 		Map<String, Object> inputs = new HashMap<String, Object>();
@@ -86,11 +89,12 @@ public class AladinScriptActivityTest {
 		//expectedOutputTypes.put("moreOutputs", String.class);
 		expectedOutputTypes.put(OUT_STD_OUTPUT, String.class);
 		expectedOutputTypes.put(OUT_ERROR, String.class);
-
+		expectedOutputTypes.put(VO_TABLE, String.class);
+		
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
 				activity, inputs, expectedOutputTypes);
 
-		assertEquals("Unexpected outputs", 2, outputs.size());
+		assertEquals("Unexpected outputs", outputs.size(), 3);
 		assertEquals("", outputs.get(OUT_STD_OUTPUT));
 		assertEquals("", outputs.get(OUT_ERROR));
 		
@@ -99,14 +103,15 @@ public class AladinScriptActivityTest {
 
 	}
 
-	@Ignore
+	
 	@Test
 	public void executeAsynchWithStrings() throws Exception {
 		configBean.setTypeOfInput("String");
+		configBean.setTypeOfMode("nogui");
 		activity.configure(configBean);
 
 		Map<String, Object> inputs = new HashMap<String, Object>();
-		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/example & tests/m1.jpg; quit");
+		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit");
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
@@ -126,10 +131,11 @@ public class AladinScriptActivityTest {
 	@Test
 	public void executeAsynchWithStringsAndNonExistingGalaxy() throws Exception {
 		configBean.setTypeOfInput("String");
+		configBean.setTypeOfMode("nogui");
 		activity.configure(configBean);
 
 		Map<String, Object> inputs = new HashMap<String, Object>();
-		inputs.put(FIRST_INPUT, "get aladin(J,FITS) thisgalaxaydoesnotexist ;\n save /Users/julian/Documents/wf4ever/aladin/example & tests/m1.jpg; quit");
+		inputs.put(FIRST_INPUT, "get aladin(J,FITS) thisgalaxaydoesnotexist ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit");
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
@@ -141,8 +147,7 @@ public class AladinScriptActivityTest {
 				activity, inputs, expectedOutputTypes);
 
 		assertEquals("Unexpected outputs", 2, outputs.size());
-
-		assertTrue(!((String)outputs.get(OUT_STD_OUTPUT)).isEmpty());
+		//assertTrue(!((String)outputs.get(OUT_STD_OUTPUT)).isEmpty());
 		assertTrue(!((String)outputs.get(OUT_ERROR)).isEmpty());
 		
 		
@@ -163,14 +168,14 @@ public class AladinScriptActivityTest {
 		//	System.out.print(activ.getName()+", ");
 		//}
 		assertEquals("Unexpected inputs", 1, activity.getInputPorts().size());
-		assertEquals("Unexpected outputs", 2, activity.getOutputPorts().size());
+		assertEquals("Unexpected outputs", 3, activity.getOutputPorts().size());
 	
 		
 		
 		activity.configure(configBean);
 		// Should not change on reconfigure
 		assertEquals("Unexpected inputs", 1, activity.getInputPorts().size());
-		assertEquals("Unexpected outputs", 2, activity.getOutputPorts().size());
+		assertEquals("Unexpected outputs", 3, activity.getOutputPorts().size());
 	}
 
 	

@@ -34,6 +34,7 @@ public class AladinScriptServiceDesc extends ServiceDescription<AladinScriptActi
 	public AladinScriptActivityConfigurationBean getActivityConfiguration() {
 		AladinScriptActivityConfigurationBean bean = new AladinScriptActivityConfigurationBean();
 		bean.setTypeOfInput("String");
+		bean.setTypeOfMode("nogui");
 		//bean.setTypeOfFilter("Column names");
 		return bean;
 	}
@@ -87,11 +88,20 @@ public class AladinScriptServiceDesc extends ServiceDescription<AladinScriptActi
 	
 	
 	private String typeOfInput;
+	private String typeOfMode;
 	
 	//private String typeOfFilter;
 
 	public String getTypeOfInput() {
 		return typeOfInput;
+	}
+
+	public String getTypeOfMode() {
+		return typeOfMode;
+	}
+
+	public void setTypeOfMode(String typeOfMode) {
+		this.typeOfMode = typeOfMode;
 	}
 
 	public void setTypeOfInput(String typeOfInput) {

@@ -32,6 +32,7 @@ public class AladinScriptActivityConfigurationBean implements Serializable {
 	// TODO: Remove the example fields and getters/setters and add your own	
 	
 	private String typeOfInput;
+	private String typeOfMode;
 	
 
 	public String getTypeOfInput() {
@@ -43,7 +44,13 @@ public class AladinScriptActivityConfigurationBean implements Serializable {
 	}
 
 	
+	public String getTypeOfMode() {
+		return typeOfMode;
+	}
 
+	public void setTypeOfMode(String typeOfProcess) {
+		this.typeOfMode = typeOfProcess;
+	}
 	
 
 }

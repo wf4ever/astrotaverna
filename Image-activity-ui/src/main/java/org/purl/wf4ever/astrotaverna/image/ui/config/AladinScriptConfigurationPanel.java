@@ -29,9 +29,11 @@ public class AladinScriptConfigurationPanel
 	private AladinScriptActivityConfigurationBean configBean;
 	
 	String[] inputTypesStrings = {"File", "URL", "String"};
+	String[] ModeTypesStrings = {"nogui", "gui"};
 	//String[] filterTypesStrings = {"Column names", "UCDs"};
 	
 	private JComboBox  typeOfInput;
+	private JComboBox  typeOfMode;
 	//private JComboBox typeOfFilter;
 
 
@@ -50,6 +52,13 @@ public class AladinScriptConfigurationPanel
 		typeOfInput = new JComboBox(inputTypesStrings);
 		add(typeOfInput);
 		labelString.setLabelFor(typeOfInput);
+		typeOfInput.setSelectedIndex(1);
+		
+		labelString = new JLabel("Mode:");
+		add(labelString);
+		typeOfMode = new JComboBox(ModeTypesStrings);
+		add(typeOfMode);
+		labelString.setLabelFor(typeOfMode);
 		typeOfInput.setSelectedIndex(1);
 		
 		//labelString = new JLabel("Filter type:");
@@ -79,6 +88,15 @@ public class AladinScriptConfigurationPanel
 			//"Invalid input type
 
 			errorMessage = "Valid inputs: file, url or string.";
+			
+		}
+		
+		tinput = (String)typeOfMode.getSelectedItem();
+		if(!(      tinput.compareTo("nogui")==0
+				|| tinput.compareTo("gui")==0)){
+			//"Invalid input type
+
+			errorMessage = "Valid modes: nogui or gui.";
 			
 		}
 		
@@ -116,11 +134,12 @@ public class AladinScriptConfigurationPanel
 	@Override
 	public boolean isConfigurationChanged() {
 		String originalTypeOfInput = configBean.getTypeOfInput();
+		String originalTypeOfMode = configBean.getTypeOfMode();
 		//String originalTypeOfFilter = configBean.getTypeOfFilter();
 		// true (changed) unless all fields match the originals
 		
 		return ! (originalTypeOfInput.equals((String)typeOfInput.getSelectedItem())
-				/*&& originalTypeOfFilter.equals((String)typeOfFilter.getSelectedItem())*/ );
+				&& originalTypeOfMode.equals((String)typeOfMode.getSelectedItem()) );
 	}
 
 	/**
@@ -134,7 +153,7 @@ public class AladinScriptConfigurationPanel
 		// FIXME: Update bean fields from your UI elements
 		configBean.setTypeOfInput((String)typeOfInput.getSelectedItem());
 		//configBean.setTypeOfFilter((String)typeOfFilter.getSelectedItem());
-		
+		configBean.setTypeOfMode((String)typeOfMode.getSelectedItem());
 	}
 
 	/**

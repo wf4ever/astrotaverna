@@ -2,8 +2,10 @@ package org.purl.wf4ever.astrotaverna.aladin;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +17,9 @@ import net.sf.taverna.t2.invocation.InvocationContext;
 import net.sf.taverna.t2.reference.ReferenceService;
 import net.sf.taverna.t2.reference.T2Reference;
 
+import net.sf.taverna.t2.visit.VisitReport;
+import net.sf.taverna.t2.visit.VisitReport.Status;
+import net.sf.taverna.t2.workflowmodel.health.HealthCheck;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AbstractAsynchronousActivity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivity;
@@ -39,6 +44,7 @@ public class AladinScriptActivity extends
 
 	private static final String OUT_STD_OUTPUT = "STD_OUTPUT";
 	private static final String OUT_ERROR = "ERROR_OUTPUT";
+	private static final String VO_TABLE = "VOTable";
 	
 	private AladinScriptActivityConfigurationBean configBean;
 
@@ -55,6 +61,12 @@ public class AladinScriptActivity extends
 				|| configBean.getTypeOfInput().compareTo("String")==0)){
 			throw new ActivityConfigurationException(
 					"Invalid input type for the tables");
+		}
+		
+		if(!(      configBean.getTypeOfMode().compareTo("gui")==0
+				|| configBean.getTypeOfMode().compareTo("nogui")==0)){
+			throw new ActivityConfigurationException(
+					"Invalid type of process.");
 		}
 		
 		
@@ -90,6 +102,7 @@ public class AladinScriptActivity extends
 		addOutput(OUT_STD_OUTPUT, 0);
 		// Single value output port (depth 0)
 		addOutput(OUT_ERROR, 0);
+		addOutput(VO_TABLE, 0);
 
 	}
 	
@@ -174,13 +187,28 @@ public class AladinScriptActivity extends
 					if(!callbackfails){
 
 						AladinInvoker invoker = new AladinInvoker();
+						ArrayList<String> results = new ArrayList<String>();
+						String table="";
 						try{
+							AladinScriptParser parser = new AladinScriptParser();
+							if(isScriptURL){
+								invoker.runScriptURL(input, configBean.getTypeOfMode());
+								if(configBean.getTypeOfInput().compareTo("URL")==0)
+									results = parser.parseURL(input);
+								else
+									results = parser.parseFile(input);
 							
-							if(isScriptURL)
-								invoker.runScriptURL(input);
-							else
-								invoker.runScript(input);
+							}else{
+								invoker.runScript(input, configBean.getTypeOfMode());
+								results = parser.parseScript(input);
+							}
 							
+							table = parser.getVOTable(results);
+							
+						}catch(MalformedURLException ex){
+							callback.fail("There was a problem running Aladin", ex);
+							logger.error("There was a problem running Aladin"+"\n"+ex.getMessage());
+							callbackfails = true;
 						}catch(InterruptedException ex){
 							callback.fail("There was a problem running Aladin", ex);
 							logger.error("There was a problem running Aladin"+"\n"+ex.getMessage());
@@ -198,16 +226,19 @@ public class AladinScriptActivity extends
 							
 							String std = "";
 							String err = "";
+							
 							if(invoker.getError_out()!=null)
 								err = invoker.getError_out();
 							if(invoker.getStd_out()!=null)
 								std = invoker.getStd_out();
-											
+								
 							T2Reference simpleRef = referenceService.register(std, 0, true, context);
 							outputs.put(OUT_STD_OUTPUT, simpleRef);
 							T2Reference simpleRef2 = referenceService.register(err,0, true, context); 
 							outputs.put(OUT_ERROR, simpleRef2);
-			
+							T2Reference simpleRef3 = referenceService.register(table,0, true, context); 
+							outputs.put(VO_TABLE, simpleRef3);
+							
 							// For list outputs, only need to register the top level list
 							//List<String> moreValues = new ArrayList<String>();
 							//moreValues.add("Value 1");

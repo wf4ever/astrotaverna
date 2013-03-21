@@ -65,10 +65,18 @@ public class AladinScriptActivityHealthChecker implements
 					Status.WARNING));
 		}
 		
+		if(!(      config.getTypeOfMode().compareTo("gui")==0
+				|| config.getTypeOfMode().compareTo("nogui")==0)){
+			subReports.add(new VisitReport(HealthCheck.getInstance(), activity,
+					"Invalid running mode.", HealthCheck.INVALID_CONFIGURATION,
+					Status.WARNING));
+		}
+		
+		
 		// The default explanation here will be used if the subreports list is
 		// empty
 		return new VisitReport(HealthCheck.getInstance(), activity,
-				"Stilts service OK", HealthCheck.NO_PROBLEM, subReports);
+				"Aladin service OK", HealthCheck.NO_PROBLEM, subReports);
 	}
 
 }
