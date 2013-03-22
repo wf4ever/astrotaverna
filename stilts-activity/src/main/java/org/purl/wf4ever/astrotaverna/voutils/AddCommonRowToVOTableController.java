@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 
 import org.apache.log4j.Logger;
 
@@ -16,8 +17,6 @@ import uk.ac.starlink.table.StarTableWriter;
 import uk.ac.starlink.table.TableFormatException;
 
 public class AddCommonRowToVOTableController {
-	private String rowVOTablePath;
-	private String mainVOTablePath;
 	private StarTable mainVOTable;
 	private StarTable rowVOTable;
 	
@@ -25,16 +24,14 @@ public class AddCommonRowToVOTableController {
 	
 	private static Logger logger = Logger.getLogger(AddCommonRowToVOTableController.class);
 	
-	public AddCommonRowToVOTableController (String rowVOTablePath, String mainVOTablePathj) throws TableFormatException, IOException{
+	public AddCommonRowToVOTableController (File rowVOTableFile, File mainVOTableFile) throws TableFormatException, IOException{
 		long colrowcount, rowrowcount, rownumber_main;
 		RowListStarTable commonRowTable;
 		JoinStarTable joinTable;
-		this.rowVOTablePath = rowVOTablePath;
-		this.mainVOTablePath = mainVOTablePath;
 		
 		
-		mainVOTable = loadVOTable(this.mainVOTablePath);
-		rowVOTable = loadVOTable(this.rowVOTablePath);
+		mainVOTable = loadVOTable(mainVOTableFile);
+		rowVOTable = loadVOTable(rowVOTableFile);
 		
 		if(mainVOTable !=null && rowVOTable !=null){
 			colrowcount = rowVOTable.getRowCount();
@@ -73,6 +70,51 @@ public class AddCommonRowToVOTableController {
 		
 	}
 	
+	public AddCommonRowToVOTableController (URI rowVOTableURI, URI mainVOTableURI) throws TableFormatException, IOException{
+		long colrowcount, rowrowcount, rownumber_main;
+		RowListStarTable commonRowTable;
+		JoinStarTable joinTable;
+		
+		
+		mainVOTable = loadVOTable(mainVOTableURI);
+		rowVOTable = loadVOTable(rowVOTableURI);
+		
+		if(mainVOTable !=null && rowVOTable !=null){
+			colrowcount = rowVOTable.getRowCount();
+			rowrowcount = rowVOTable.getRowCount();
+			rownumber_main = mainVOTable.getRowCount();
+			result = mainVOTable;
+			if(colrowcount > 0 && rowrowcount >0){
+				try {
+					//get the row
+					Object[] row = rowVOTable.getRow(0);
+					
+					//build the aux table
+					commonRowTable = new RowListStarTable(rowVOTable);
+					for(long i = 0; i<rownumber_main; i++){
+						commonRowTable.addRow(row);
+					}
+					
+					//join both tables
+					if(commonRowTable.getRowCount() == mainVOTable.getRowCount()){
+						StarTable [] tables = new StarTable[2];
+						tables[0] = mainVOTable;
+						tables[1] = commonRowTable;
+						
+						joinTable = new JoinStarTable(tables);
+						if(joinTable !=null)
+							result = joinTable;
+						
+					}
+					
+				} catch (IOException e) {
+					logger.warn("The table didn't have elements.\n " + e.getMessage(), e);
+				}
+			}
+		}
+		
+	}
+	
 	public StarTable getJoinTable(){
 		return result;
 	}
@@ -95,11 +137,21 @@ public class AddCommonRowToVOTableController {
         sto.writeStarTable( table, out, outputHandler );
     }
 	
+	/*
 	private StarTable loadVOTable(String path) throws TableFormatException, IOException{
 		return new StarTableFactory().makeStarTable(path, "votable" );
 	}
 	
 	public StarTable loadVOTable( File source ) throws IOException {
+	    return new StarTableFactory().makeStarTable( source.toString(), "votable" );
+	}
+	*/
+	
+	public StarTable loadVOTable( File source ) throws IOException {
+	    return new StarTableFactory().makeStarTable( source.toString(), "votable" );
+	}
+	
+	public StarTable loadVOTable( URI source ) throws IOException {
 	    return new StarTableFactory().makeStarTable( source.toString(), "votable" );
 	}
 }

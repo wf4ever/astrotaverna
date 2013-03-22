@@ -46,15 +46,14 @@ public class AddCommonRowToVOTableControlllerTest {
 		File file = File.createTempFile("astro", null);
 		
 		File tmpInFile = MyUtils.writeStringAsTmpFile(shortTable);
-		//tmpInFile.deleteOnExit();
+		tmpInFile.deleteOnExit();
 		String shortPath = tmpInFile.getAbsolutePath();
 		
 		File tmpInFile2 = MyUtils.writeStringAsTmpFile(mainTable);
-		//tmpInFile2.deleteOnExit();
-		String mainPath = tmpInFile.toString();//.getAbsolutePath();
-System.out.println("Path short: "+tmpInFile.getAbsolutePath());
-System.out.println("Path main: "+tmpInFile2.getAbsolutePath());
-		controller = new AddCommonRowToVOTableController(shortPath, mainPath);
+		tmpInFile2.deleteOnExit();
+		String mainPath = tmpInFile.toString();
+		//controller = new AddCommonRowToVOTableController(shortPath, mainPath);
+		controller = new AddCommonRowToVOTableController(tmpInFile, tmpInFile2);
 		file.deleteOnExit();
 		controller.writeJoinTable(file);
 		

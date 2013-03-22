@@ -29,6 +29,7 @@ import org.purl.wf4ever.astrotaverna.tpipe.FormatConversionActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.ResolveCoordsActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.SelectColumnsActivity;
 import org.purl.wf4ever.astrotaverna.tpipe.SelectRowsActivity;
+import org.purl.wf4ever.astrotaverna.voutils.AddCommonRowToVOTableActivity;
 import org.purl.wf4ever.astrotaverna.voutils.CheckTemplateFillerActivity;
 import org.purl.wf4ever.astrotaverna.voutils.GetListFromColumnActivity;
 import org.purl.wf4ever.astrotaverna.voutils.TemplateFillerActivity;
@@ -64,6 +65,8 @@ public class StiltsActivityContextViewFactory implements
 		else if(selection instanceof TemplateFillerActivity)
 			return true;
 		else if(selection instanceof CheckTemplateFillerActivity)
+			return true;
+		else if(selection instanceof AddCommonRowToVOTableActivity)
 			return true;
 		else 
 			return false;
@@ -123,6 +126,10 @@ public class StiltsActivityContextViewFactory implements
 		return Arrays.<ContextualView>asList(new CheckTemplateFillerContextualView(selection));
 	}
 	
+	public List<ContextualView> getViews(AddCommonRowToVOTableActivity selection) {
+		return Arrays.<ContextualView>asList(new AddCommonRowToVOTableContextualView(selection));
+	}
+	
 		
 	@Override
 	public List<ContextualView> getViews(Object arg0) {
@@ -153,6 +160,8 @@ public class StiltsActivityContextViewFactory implements
 			return getViews((TemplateFillerActivity) arg0);
 		else if(arg0 instanceof CheckTemplateFillerActivity)
 			return getViews((CheckTemplateFillerActivity) arg0);
+		else if(arg0 instanceof AddCommonRowToVOTableActivity)
+			return getViews((AddCommonRowToVOTableActivity) arg0);
 		else 
 			return null;
 	}

@@ -132,6 +132,11 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		//service13.setDescription("Check Template filler");
 		results.add(service13);
 		
+		AddCommonRowToVOTableServiceDesc service14 = new AddCommonRowToVOTableServiceDesc();
+		service14.setTypeOfInput("String");
+		service14.setDescription("Add a row to each row of another table");
+		//service13.setDescription("Check Template filler");
+		results.add(service14);
 		
 		
 		//Put here additional descriptions for other services

@@ -11,3 +11,4 @@ org.purl.wf4ever.astrotaverna.tjoin.ui.menu.TcatListConfigureMenuAction
 org.purl.wf4ever.astrotaverna.tjoin.ui.menu.GetListFromColumnConfigureMenuAction
 org.purl.wf4ever.astrotaverna.tjoin.ui.menu.TemplateFillerConfigureMenuAction
 org.purl.wf4ever.astrotaverna.tjoin.ui.menu.CheckTemplateFillerConfigureMenuAction
+org.purl.wf4ever.astrotaverna.tjoin.ui.menu.AddCommonRowToVOTableConfigureMenuAction

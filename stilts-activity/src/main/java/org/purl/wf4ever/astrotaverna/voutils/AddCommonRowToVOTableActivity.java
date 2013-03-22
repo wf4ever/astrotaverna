@@ -6,16 +6,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.List;
 import java.util.Map;
-
-import org.purl.wf4ever.astrotaverna.voutils.AddCommonRowToVOTableActivityConfigurationBean;
+import org.apache.log4j.Logger;
+//comment from terminal
 import org.purl.wf4ever.astrotaverna.utils.MyUtils;
+import org.purl.wf4ever.astrotaverna.utils.NoExitSecurityManager;
 
-import uk.ac.starlink.table.ColumnInfo;
-import uk.ac.starlink.table.RowSequence;
-import uk.ac.starlink.table.StarTable;
-import uk.ac.starlink.table.StarTableFactory;
+import uk.ac.starlink.table.TableFormatException;
+import uk.ac.starlink.ttools.Stilts;
 
 import net.sf.taverna.t2.invocation.InvocationContext;
 import net.sf.taverna.t2.reference.ReferenceService;
@@ -25,11 +24,6 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationE
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCallback;
 
-/**
- * 
- * @author Julian Garrido
- * @since    20 Mar 2013
- */
 public class AddCommonRowToVOTableActivity extends
 		AbstractAsynchronousActivity<AddCommonRowToVOTableActivityConfigurationBean>
 		implements AsynchronousActivity<AddCommonRowToVOTableActivityConfigurationBean> {
@@ -39,15 +33,17 @@ public class AddCommonRowToVOTableActivity extends
 	 * would not apply if port names are looked up dynamically from the service
 	 * operation, like done for WSDL services.
 	 */
-	private static final String IN_FIRST_INPUT_TABLE = "voTable";
-	private static final String IN_FILTER = "ColumnName";
-	//private static final String IN_OUTPUT_TABLE_NAME = "outputFileNameIn";
-
-	private static final String OUT_SIMPLE_OUTPUT = "list";
+	private static final String IN_FIRST_INPUT = "commonRowVOTable";
+	private static final String IN_SECOND_INPUT = "mainVOTable";
+	private static final String IN_OUTPUT_TABLE_NAME = "outputFileNameIn";
+	
+	private static final String OUT_SIMPLE_OUTPUT = "VOTable";
 	private static final String OUT_REPORT = "report";
 	
 	private AddCommonRowToVOTableActivityConfigurationBean configBean;
 
+	private static Logger logger = Logger.getLogger(AddCommonRowToVOTableActivity.class);
+	
 	@Override
 	public void configure(AddCommonRowToVOTableActivityConfigurationBean configBean)
 			throws ActivityConfigurationException {
@@ -64,12 +60,6 @@ public class AddCommonRowToVOTableActivity extends
 			throw new ActivityConfigurationException(
 					"Invalid input type for the tables");
 		}
-		
-		/*if(!(      configBean.getTypeOfFilter().compareTo("Column names")==0 
-				|| configBean.getTypeOfFilter().compareTo("UCDs")==0)){
-			throw new ActivityConfigurationException(
-					"Invalid filter type for the tables");
-		}*/
 		
 		// Store for getConfiguration(), but you could also make
 		// getConfiguration() return a new bean from other sources
@@ -93,27 +83,19 @@ public class AddCommonRowToVOTableActivity extends
 		removeOutputs();
 
 		// FIXME: Replace with your input and output port definitions
-
+		
 		// Hard coded input port, expecting a single String
 		//File name for the Input tables
-		addInput(IN_FIRST_INPUT_TABLE, 0, true, null, String.class);
-		addInput(IN_FILTER, 0, true, null, String.class);
+		addInput(IN_FIRST_INPUT, 0, true, null, String.class);
+		addInput(IN_SECOND_INPUT, 0, true, null, String.class);
 		
-		
-		//if(configBean.getTypeOfInput().compareTo("File")==0){
-		//	addInput(IN_OUTPUT_TABLE_NAME, 0, true, null, String.class);
-		//}
-		
-
-		// Optional ports depending on configuration
-		//if (configBean.getExampleString().equals("specialCase")) {
-		//	// depth 1, ie. list of binary byte[] arrays
-		//	addInput(IN_EXTRA_DATA, 1, true, null, byte[].class);
-		//	addOutput(OUT_REPORT, 0);
-		//}
+		//File name for the output table
+		if(configBean.getTypeOfInput().compareTo("File")==0){
+			addInput(IN_OUTPUT_TABLE_NAME, 0, true, null, String.class);
+		}
 		
 		// Single value output port (depth 0)
-		addOutput(OUT_SIMPLE_OUTPUT, 1);
+		addOutput(OUT_SIMPLE_OUTPUT, 0);
 		// Single value output port (depth 0)
 		addOutput(OUT_REPORT, 0);
 
@@ -133,69 +115,77 @@ public class AddCommonRowToVOTableActivity extends
 			public boolean areMandatoryInputsNotNull(){
 				boolean validStatus = true;
 				try{
-					if(inputs.get(IN_FIRST_INPUT_TABLE)==null
-							|| inputs.get(IN_FILTER)==null)
+					if(inputs.get(IN_FIRST_INPUT)==null
+							|| inputs.get(IN_SECOND_INPUT)==null)
 						validStatus = false;
-					//else if(configBean.getTypeOfInput().compareTo("File")==0 
-					//		&& inputs.get(IN_OUTPUT_TABLE_NAME)==null)
-					//	validStatus = false;
+					else if(configBean.getTypeOfInput().compareTo("File")==0 
+							&& inputs.get(IN_OUTPUT_TABLE_NAME)==null)
+						validStatus = false;
 				}catch(Exception ex){validStatus = false;}
 				
 				return validStatus;
 			}
 			
 			public void run() {
-				
 				boolean callbackfails=false;
-				File tmpInFile = null;
-				File tmpOutFile = null;
+				File firstFile = null;
+				File secondFile = null;
+				File outputFile = null;
+				URI firstURI = null;
+				URI secondURI = null;
 				
 				if(areMandatoryInputsNotNull()){
-					InvocationContext context = callback.getContext();
-					ReferenceService referenceService = context.getReferenceService();
+				
+					InvocationContext context = callback
+							.getContext();
+					ReferenceService referenceService = context
+							.getReferenceService();
 					// Resolve inputs 				
-					String inputTable = (String) referenceService.renderIdentifier(inputs.get(IN_FIRST_INPUT_TABLE), String.class, context);
-					String filter = (String) referenceService.renderIdentifier(inputs.get(IN_FILTER), String.class, context);
-					StarTable table = null;
-					ArrayList list = new ArrayList();
+					String firstInput = (String) referenceService.renderIdentifier(inputs.get(IN_FIRST_INPUT), 
+							String.class, context);
+					String secondInput = (String) referenceService.renderIdentifier(inputs.get(IN_SECOND_INPUT), 
+							String.class, context);
 					
-					//String lastInput = (String) referenceService.renderIdentifier(inputs.get(IN_OUTPUT_TABLE_NAME), 
-					//		String.class, context);
-	
 					boolean optionalPorts = configBean.getTypeOfInput().compareTo("File")==0;
 					
-					//String outputTableName = null;
-					//if(optionalPorts && inputs.containsKey(IN_OUTPUT_TABLE_NAME)){ //configBean.getNumberOfTables()==3
-					//	outputTableName = (String) referenceService.renderIdentifier(inputs.get(IN_OUTPUT_TABLE_NAME), 
-					//			String.class, context);
-					//}
+					String outputTableName = null;
+					if(optionalPorts && inputs.containsKey(IN_OUTPUT_TABLE_NAME)){ //configBean.getNumberOfTables()==3
+						outputTableName = (String) referenceService.renderIdentifier(inputs.get(IN_OUTPUT_TABLE_NAME), 
+								String.class, context);
+					}
 	
 					
+					
 					if(configBean.getTypeOfInput().compareTo("File")==0){
-						File file = new File(inputTable);
-						if(!file.exists()){
-							callback.fail("Input table file does not exist: "+ inputTable,new IOException());
+						firstFile = new File(firstInput);
+						if(!firstFile.exists()){
+							callback.fail("Input table file does not exist: "+ firstInput,new IOException());
 							callbackfails = true;
-						}else{
-							try{
-								table = loadVOTable(file);
-							}catch (IOException ex) {
-								callback.fail("Invalid service call while reading the table", ex);
-								callbackfails = true;
-							}							
 						}
-						
+						secondFile = new File(secondInput);
+						if(!secondFile.exists()){
+							callback.fail("Input table file does not exist: "+ secondInput,new IOException());
+							callbackfails = true;
+						}
+						outputFile = new File(outputTableName);
+						if(!outputFile.exists()){
+							callback.fail("Output table file could not be created: "+ outputTableName,new IOException());
+							callbackfails = true;
+						}
 					}
+					
 					
 					if(configBean.getTypeOfInput().compareTo("URL")==0){
 						try {
-							URI exampleUri = new URI(inputTable);
-							table = loadVOTable(exampleUri);
+							firstURI = new URI(firstInput);
 						} catch (URISyntaxException e) {
-							callback.fail("Invalid URL: "+ inputTable,e);
+							callback.fail("Invalid URL: "+ firstInput,e);
 							callbackfails = true;
-						}catch (IOException e) {
-							callback.fail("Invalid service call while reading the table", e);
+						}
+						try {
+							secondURI = new URI(secondInput);
+						} catch (URISyntaxException e) {
+							callback.fail("Invalid URL: "+ secondInput,e);
 							callbackfails = true;
 						}
 					}
@@ -204,38 +194,33 @@ public class AddCommonRowToVOTableActivity extends
 					//prepare tmp input files if needed
 					if(configBean.getTypeOfInput().compareTo("String")==0){
 						try{
-							tmpInFile = MyUtils.writeStringAsTmpFile(inputTable);
-							tmpInFile.deleteOnExit();
-							inputTable = tmpInFile.getAbsolutePath();
-							try{
-								table = loadVOTable(tmpInFile);
-								
-							}catch (IOException ex) {
-								callback.fail("Invalid service call while reading the table", ex);
-								callbackfails = true;
-							}	
+							firstFile = MyUtils.writeStringAsTmpFile(firstInput);
+							firstFile.deleteOnExit();
+							firstInput = firstFile.getAbsolutePath();
+							
+							secondFile = MyUtils.writeStringAsTmpFile(secondInput);
+							secondFile.deleteOnExit();
+							secondInput = secondFile.getAbsolutePath();
 						}catch(Exception ex){
 							callback.fail("It wasn't possible to create a temporary file",ex);
 							callbackfails = true;
 						}
 					}
 					
-					if(table ==null)
-						callbackfails = true;
 					//prepare tmp output files if needed
-					/*if(configBean.getTypeOfInput().compareTo("String")==0
+					if(configBean.getTypeOfInput().compareTo("String")==0
 							|| configBean.getTypeOfInput().compareTo("URL")==0){
 						try{
-							tmpOutFile = File.createTempFile("astro", null);
-							tmpOutFile.deleteOnExit();
-							outputTableName = tmpOutFile.getAbsolutePath();
+							outputFile = File.createTempFile("astro", null);
+							outputFile.deleteOnExit();
+							outputTableName = outputFile.getAbsolutePath();
 						}catch(Exception ex){
 							callback.fail("It wasn't possible to create a temporary file",ex);
 							callbackfails = true;
 						}
 					}
-					*/
 					
+				
 					// Support our configuration-dependendent input
 					//boolean optionalPorts = configBean.getExampleString().equals("specialCase"); 
 					
@@ -259,75 +244,85 @@ public class AddCommonRowToVOTableActivity extends
 	//				}
 					
 					//Performing the work: Stilts functinalities
-					
-					
+					String [] parameters;
 					
 					if(!callbackfails){
 						
-					   //get the column info
-					   int nCol = table.getColumnCount();
-					   int columnId = -1;
-					   boolean found = false;
-					   for(int i =0; i< nCol && !found; i++){
-						   ColumnInfo colInfo = table.getColumnInfo(i);
-						   if(colInfo.getName().compareTo(filter)==0){
-							   found = true;
-							   columnId = i;
-						   }
-					   }
-					   
-					   if(columnId !=-1){
-						   RowSequence rseq;
-							try {
-								rseq = table.getRowSequence();
-								while ( rseq.next() ) {
-									Object cell = rseq.getCell(columnId);
-									list.add(cell);
+						AddCommonRowToVOTableController controller;
+						
+						try {
+							if(configBean.getTypeOfInput().compareTo("String")==0
+									|| configBean.getTypeOfInput().compareTo("File")==0){
+								controller = new AddCommonRowToVOTableController(firstFile, secondFile);
+								controller.writeJoinTable(outputFile);
+							}else{
+								if(configBean.getTypeOfInput().compareTo("URL")==0){
+									controller = new AddCommonRowToVOTableController(firstURI, secondURI);
+									controller.writeJoinTable(outputFile);
+								}else{
+									callbackfails=true;
+									logger.error("Invalid type of input at "+ this.getClass().getName());
+									callback.fail("Invalid type of input");
 								}
-								rseq.close();
-							} catch (IOException e) {
-								callbackfails = true;
 							}
+						} catch (TableFormatException e) {
+							callbackfails=true;
+							logger.error("Invalid type of input at "+ this.getClass().getName()+". "+e.getMessage());
+							callback.fail("Invalid type of input: "+ e.getMessage());
+						} catch (IOException e) {
+							callbackfails=true;
+							logger.error("Invalid type of input at "+ this.getClass().getName()+". "+e.getMessage());
+							callback.fail("Invalid type of input: "+ e.getMessage());
+						}
+						
+												
+						if(!callbackfails){
+							// Register outputs
+							Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
+							String simpleValue = "";// //Name of the output file or result
+							String simpleoutput = "valid";
 							
+							if(optionalPorts){ //case File
+								simpleValue = outputTableName;
+							}else if(configBean.getTypeOfInput().compareTo("URL")==0
+										|| configBean.getTypeOfInput().compareTo("String")==0){
+						
+								try{
+									simpleValue = MyUtils.readFileAsString(outputFile.getAbsolutePath());
+								}catch (Exception ex){
+									callback.fail("It wasn't possible to read the result. ", ex);
+									callbackfails = true;
+								}
+							}
 							if(!callbackfails){
-								// Register outputs
-								Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-								String simpleoutput = "simple-report";
-								
-
-									T2Reference simpleRef = referenceService.register(list, 1, true, context);
-									outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
-									T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
-									outputs.put(OUT_REPORT, simpleRef2);
-					
-									// For list outputs, only need to register the top level list
-									//List<String> moreValues = new ArrayList<String>();
-									//moreValues.add("Value 1");
-									//moreValues.add("Value 2");
-									//T2Reference moreRef = referenceService.register(moreValues, 1, true, context);
-									//outputs.put(OUT_MORE_OUTPUTS, moreRef);
-					
-									//if (optionalPorts) {
-									//	// Populate our optional output port					
-									//	// NOTE: Need to return output values for all defined output ports
-									//	String report = "Everything OK";
-									//	outputs.put(OUT_REPORT, referenceService.register(report,
-									//			0, true, context));
-									//}
-									
-									// return map of output data, with empty index array as this is
-									// the only and final result (this index parameter is used if
-									// pipelining output)
-									callback.receiveResult(outputs, new int[0]);
-							}
-							
-					   }
-					}
-				}else{ //End if isthereMandatoryInputs
-					callback.fail("Mandatory inputs doesn't have any value");
-					callbackfails = true;
-				}
+								T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
+								outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
+								T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
+								outputs.put(OUT_REPORT, simpleRef2);
 				
+								// For list outputs, only need to register the top level list
+								//List<String> moreValues = new ArrayList<String>();
+								//moreValues.add("Value 1");
+								//moreValues.add("Value 2");
+								//T2Reference moreRef = referenceService.register(moreValues, 1, true, context);
+								//outputs.put(OUT_MORE_OUTPUTS, moreRef);
+				
+								//if (optionalPorts) {
+								//	// Populate our optional output port					
+								//	// NOTE: Need to return output values for all defined output ports
+								//	String report = "Everything OK";
+								//	outputs.put(OUT_REPORT, referenceService.register(report,
+								//			0, true, context));
+								//}
+								
+								// return map of output data, with empty index array as this is
+								// the only and final result (this index parameter is used if
+								// pipelining output)
+								callback.receiveResult(outputs, new int[0]);
+							}
+						}
+					}
+				}
 			}
 		});
 	}
@@ -337,11 +332,4 @@ public class AddCommonRowToVOTableActivity extends
 		return this.configBean;
 	}
 
-	public StarTable loadVOTable( File source ) throws IOException {
-	    return new StarTableFactory().makeStarTable( source.toString(), "votable" );
-	}
-	
-	public StarTable loadVOTable( URI source ) throws IOException {
-	    return new StarTableFactory().makeStarTable( source.toString(), "votable" );
-	}
 }
