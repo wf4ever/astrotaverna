@@ -1,4 +1,5 @@
 org.purl.wf4ever.astrotaverna.tjoin.TjoinActivityHealthChecker
+org.purl.wf4ever.astrotaverna.tjoin.CrossMatch2ActivityHealthChecker
 org.purl.wf4ever.astrotaverna.tpipe.SelectColumnsActivityHealthChecker
 org.purl.wf4ever.astrotaverna.tpipe.SelectRowsActivityHealthChecker
 org.purl.wf4ever.astrotaverna.tpipe.CoordTransformationActivityHealthChecker
