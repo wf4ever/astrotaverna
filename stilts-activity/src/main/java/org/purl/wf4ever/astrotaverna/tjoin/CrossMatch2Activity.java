@@ -204,9 +204,9 @@ public class CrossMatch2Activity extends
 					
 					//if(configBean.getMatchCriteria().compareTo("exact")!=0 && inputs.get(IN_TUNING)==null)
 					//	validStatus = false;
-					//if(configBean.getMatchCriteria().compareTo("exact")!=0 && inputs.get(IN_PARAMS)==null)
-					//	validStatus = false;
-					//IN_IREF is AN OPTIONAL PARAMETER
+					if(configBean.getMatchCriteria().compareTo("exact")!=0 && inputs.get(IN_PARAMS)==null)
+						validStatus = false;
+					
 				}catch(Exception ex){validStatus = false;}
 				
 				return validStatus;
@@ -256,7 +256,7 @@ public class CrossMatch2Activity extends
 					}
 					
 					if(configBean.getMatchCriteria().compareTo("exact")!=0){
-						exactmatcher = true;
+						
 						
 						if(inputs.get(IN_PARAMS)!=null)
 							params = (String) referenceService.renderIdentifier(inputs.get(IN_PARAMS), 
@@ -268,6 +268,8 @@ public class CrossMatch2Activity extends
 									String.class, context);
 						if(tuning == null )
 							tuning = "";
+					}else{
+						exactmatcher = true;
 					}
 					
 					if(configBean.getShowScoreCol()){
@@ -381,72 +383,67 @@ public class CrossMatch2Activity extends
 						int currentParam=0;
 						int paramNumber = 0;
 						/*
-						stilts <stilts-flags> tmatchn nin=<count> ifmtN=<in-format> inN=<tableN>
-                        icmdN=<cmds> ocmd=<cmds>
-                        omode=<out-mode> <mode-args> out=<out-table>
-                        ofmt=<out-format> multimode=pairs|group
-                        iref=<table-index> matcher=<matcher-name>
-                        params=<match-params> tuning=<tuning-params>
-                        valuesN=<expr-list>
-                        joinN=default|match|nomatch|always
-                        fixcols=none|dups|all suffixN=<label>
-                        progress=none|log|profile
+						   stilts <stilts-flags> tmatch2 ifmt1=<in-format> ifmt2=<in-format>
+                                 icmd1=<cmds> icmd2=<cmds> ocmd=<cmds>
+                                 omode=<out-mode> <mode-args> out=<out-table>
+                                 ofmt=<out-format> matcher=<matcher-name>
+                                 values1=<expr-list> values2=<expr-list>
+                                 params=<match-params> tuning=<tuning-params>
+                                 join=1and2|1or2|all1|all2|1not2|2not1|1xor2
+                                 find=all|best|best1|best2
+                                 fixcols=none|dups|all suffix1=<label>
+                                 suffix2=<label> scorecol=<col-name>
+                                 progress=none|log|profile
+                                 [in1=]<table1> [in2=]<table2>
                         */
-						//mandatory inputs
+
 						
 						//set up parameters 
-						parametersList.add("tmatchn");
-						parametersList.add("nin=" + numTables);
+						parametersList.add("tmatch2");
+						parametersList.add("in1="+tables.get(0));
+						parametersList.add("in2="+tables.get(1));
+						
+						parametersList.add("values2="+values2);
+						parametersList.add("values1="+values1);
+						
 						//input format is not fixed --> auto mode
 						//parameters[currentParam] = "omode=out"; currentParam++; default is out
 						parametersList.add("out="+outputTableName);
 						parametersList.add("ofmt=votable");
-						parametersList.add("multimode="+configBean.getMultimode());
-						
-						if(pairmode)
-							parametersList.add("iref="+iref);
 						
 						if(!othermatcher)
 							parametersList.add("matcher="+configBean.getMatchCriteria());
 						else
 							parametersList.add("matcher="+combinedMatcher);
 						
-						for(int i = 1; i< values1.size(); i++)
-							parametersList.add("values"+i+"="+values1.get(i));
+						
+						
 						
 						if(!exactmatcher){
 							if(inputs.get(IN_PARAMS)!=null)
-								parametersList.add("params="+params);
+								parametersList.add("params='"+params+"'");
 							if(inputs.get(IN_TUNING)!=null)
-								parametersList.add("tuning="+tuning);
-							
+								parametersList.add("tuning='"+tuning+"'");
 						}
 						
-						//------------------------------------------------------------------------------------------------
-						//------------------------------------------------------------------------------------------------
-						//------------------------------------------------------------------------------------------------
-						//------------------------------------------------------------------------------------------------
-						//------------------------------------------------------------------------------------------------
-						//------------------------------------------------------------------------------------------------
-						//THIS CODE IS NOT FINISHED --> YOU SHOULD CONTINUE HERE
-						//CREATING THE PARAMETERS FOR THE MAIN METHOD 
-						//------------------------------------------------------------------------------------------------
-						//------------------------------------------------------------------------------------------------
-						//------------------------------------------------------------------------------------------------
-						//------------------------------------------------------------------------------------------------
-						//------------------------------------------------------------------------------------------------
-						//------------------------------------------------------------------------------------------------
+						parametersList.add("join="+configBean.getJoin());
+						parametersList.add("find="+configBean.getFind());
+						parametersList.add("fixcols="+configBean.getFixcols());
+						if(scorecolispresent)
+							parametersList.add("scorecol="+scoreCol);
 						
-						//parameters[2] = "in="+MyUtils.toSpacedString(firstInput); currentParam++;
-						
-						
-						parameters = (String[]) parametersList.toArray();
+						//Object [] objects = parametersList.toArray();
+						//parameters = (String []) parametersList.toArray();
 		
+						parameters = new String[parametersList.size()];
+						parametersList.toArray(parameters);
+						
 						SecurityManager securityBackup = System.getSecurityManager();
 						System.setSecurityManager(new NoExitSecurityManager());
 						
 						try{
 							System.setProperty("votable.strict", "false");
+							//System.out.println(MyUtils.toSpacedString(parameters));
 							Stilts.main(parameters);
 						}catch(SecurityException ex){
 							callback.fail("Invalid service call: check the input parameters", ex);
@@ -456,28 +453,30 @@ public class CrossMatch2Activity extends
 						System.setSecurityManager(securityBackup);
 						
 					
+						//iF()
+						
 						if(!callbackfails){
 							// Register outputs
 							Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-							String simpleValue = "";// //Name of the output file or result
-							String simpleoutput = "simple-report";
+							String resultValue = "";// //Name of the output file or result
+							String reportOutput = MyUtils.toSpacedString(parameters);
 							
 							if(optionalFilePorts){ //case File
-								simpleValue = outputTableName;
+								resultValue = outputTableName;
 							}else if(configBean.getTypeOfInput().compareTo("URL")==0
 										|| configBean.getTypeOfInput().compareTo("String")==0){
 						
 								try{
-									simpleValue = MyUtils.readFileAsString(tmpOutFile.getAbsolutePath());
+									resultValue = MyUtils.readFileAsString(tmpOutFile.getAbsolutePath());
 								}catch (Exception ex){
 									callback.fail("It wasn't possible to read the result from a temporary file", ex);
 									callbackfails = true;
 								}
 							}
 							if(!callbackfails){
-								T2Reference simpleRef = referenceService.register(simpleValue, 0, true, context);
+								T2Reference simpleRef = referenceService.register(resultValue, 0, true, context);
 								outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
-								T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
+								T2Reference simpleRef2 = referenceService.register(reportOutput,0, true, context); 
 								outputs.put(OUT_REPORT, simpleRef2);
 				
 								// For list outputs, only need to register the top level list
