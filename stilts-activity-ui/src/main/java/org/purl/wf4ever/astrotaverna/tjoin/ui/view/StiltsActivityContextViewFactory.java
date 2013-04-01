@@ -8,6 +8,7 @@ import net.sf.taverna.t2.workbench.ui.views.contextualviews.activity.ContextualV
 
 import org.purl.wf4ever.astrotaverna.tcat.TcatActivity;
 import org.purl.wf4ever.astrotaverna.tcat.TcatListActivity;
+import org.purl.wf4ever.astrotaverna.tjoin.CrossMatch2Activity;
 import org.purl.wf4ever.astrotaverna.tjoin.TjoinActivity;
 import org.purl.wf4ever.astrotaverna.tjoin.ui.view.AddColumnByExpressionContextualView;
 import org.purl.wf4ever.astrotaverna.tjoin.ui.view.AddSkyCoordsContextualView;
@@ -67,6 +68,8 @@ public class StiltsActivityContextViewFactory implements
 		else if(selection instanceof CheckTemplateFillerActivity)
 			return true;
 		else if(selection instanceof AddCommonRowToVOTableActivity)
+			return true;
+		else if(selection instanceof CrossMatch2Activity)
 			return true;
 		else 
 			return false;
@@ -130,7 +133,10 @@ public class StiltsActivityContextViewFactory implements
 		return Arrays.<ContextualView>asList(new AddCommonRowToVOTableContextualView(selection));
 	}
 	
-		
+	public List<ContextualView> getViews(CrossMatch2Activity selection) {
+		return Arrays.<ContextualView>asList(new CrossMatch2ContextualView(selection));
+	}
+	
 	@Override
 	public List<ContextualView> getViews(Object arg0) {
 		// TODO Auto-generated method stub
@@ -162,6 +168,8 @@ public class StiltsActivityContextViewFactory implements
 			return getViews((CheckTemplateFillerActivity) arg0);
 		else if(arg0 instanceof AddCommonRowToVOTableActivity)
 			return getViews((AddCommonRowToVOTableActivity) arg0);
+		else if(arg0 instanceof CrossMatch2Activity)
+			return getViews((CrossMatch2Activity) arg0);
 		else 
 			return null;
 	}

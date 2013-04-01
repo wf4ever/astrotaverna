@@ -151,8 +151,7 @@ public class CrossMatch2ActivityTest {
 				activity, inputs, expectedOutputTypes);
 
 				
-		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
-		//		.get("moreOutputs"));
+		
 
 	}
 

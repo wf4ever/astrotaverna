@@ -138,6 +138,11 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		//service13.setDescription("Check Template filler");
 		results.add(service14);
 		
+		CrossMatch2ServiceDesc service15 = new CrossMatch2ServiceDesc();
+		service14.setTypeOfInput("String");
+		service14.setDescription("Crossmatching");
+		//service13.setDescription("Check Template filler");
+		results.add(service15);
 		
 		//Put here additional descriptions for other services
 		//............
