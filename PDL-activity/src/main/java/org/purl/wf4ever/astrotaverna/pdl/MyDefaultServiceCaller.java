@@ -1,5 +1,6 @@
 package org.purl.wf4ever.astrotaverna.pdl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +10,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import org.apache.log4j.Logger;
+
+import CommonsObjects.GeneralParameter;
+
 
 import net.ivoa.parameter.model.ParameterType;
 import net.ivoa.parameter.model.SingleParameter;
@@ -20,40 +24,52 @@ public class MyDefaultServiceCaller {
 	private static Logger logger = Logger.getLogger(MyDefaultServiceCaller.class);
 	private String response;
 	private String jobInfo;
+	private String serviceUrl;
 	
-	public String callService() throws MalformedURLException, IOException {
-		String serviceUrl = Utilities.getInstance().getService().getServiceId()
+	public String callService(HashMap<String, SingleParameter> paramMap) throws MalformedURLException, IOException {
+		serviceUrl = Utilities.getInstance().getService().getServiceId()
 				+ "?";
-		serviceUrl = serviceUrl.replaceAll("/OnlineCode", "TavernaCodeFrontal");
-		//serviceUrl = "http://pdl-calc.obspm.fr:8081/montage/TavernaCodeFrontal?";
-		
-		List<SingleParameter> paramList = Utilities.getInstance().getService()
-				.getParameters().getParameter();
-		
-		for (int i = 0; i < paramList.size(); i++) {
+		serviceUrl = serviceUrl.replaceAll("/OnlineCode", "/TavernaCodeFrontal");
+
+		String paramName="";
+		boolean firstParam = true;
+		System.out.println();
+		for(String key : paramMap.keySet()){
 			try{
-			
-				SingleParameter p = paramList.get(i);
+				SingleParameter p = paramMap.get(key);
+				//SingleParameter p = paramList.get(i);
 				String character = "";
-				if (i > 0) {
+				if (!firstParam) {
 					character = "&";
 				}
 
-				String paramName = p.getName();
-                String paramValue = Utilities.getInstance()
-                                .getuserProvidedValuesForParameter(p).get(0).getValue();
+				paramName = p.getName();
+				System.out.print("name: "+ paramName);
+				List<GeneralParameter> gplist = Utilities.getInstance().getuserProvidedValuesForParameter(p);
+				//if(gplist.size()>0)
+				//	System.out.println();
+				GeneralParameter gn = gplist.get(0);
+                String paramValue = Utilities.getInstance().getuserProvidedValuesForParameter(p).get(0).getValue();
+                //System.out.println(" -- value: " + paramValue);
                 if (p.getParameterType().equals(ParameterType.STRING)) {
                         paramValue = URLEncoder.encode(paramValue, "UTF-8");
                 }
 
                 serviceUrl = serviceUrl + character + paramName + "="
                                 + paramValue;
-
+                
+                if(firstParam){
+                	firstParam=false;
+                }
+                
 			}catch (Exception e) {
-				// TODO: do nothing
+				System.out.println("Unexpected exception building the url for the parameter "+paramName);
+				logger.info("Unexpected exception building the url: " + serviceUrl);
+				e.printStackTrace();
 			}
 		}
-		//System.out.println("Call service: " + serviceUrl);
+		
+		System.out.println("Call service: " + serviceUrl);
 		logger.info("Call Service: " + serviceUrl);
 
 		BufferedReader bufferedReader = new BufferedReader(
@@ -73,15 +89,13 @@ public class MyDefaultServiceCaller {
 	}
 	
 	public String getJobInfo(String jobId, String userId) throws MalformedURLException, IOException {
-		String serviceUrl = Utilities.getInstance().getService().getServiceId()
+		serviceUrl = Utilities.getInstance().getService().getServiceId()
 				+ "?";
 		
 		serviceUrl = serviceUrl.replaceAll("/OnlineCode", "/TavernaJobInfo");
 		//serviceUrl = "http://pdl-calc.obspm.fr:8081/montage/TavernaCodeFrontal?";
 		
 		
-		List<SingleParameter> paramList = Utilities.getInstance().getService()
-				.getParameters().getParameter();
 		
 		String mail = Utilities.getInstance().getuserProvidedValuesForParame("mail").get(0).getValue();
 		
@@ -91,7 +105,7 @@ public class MyDefaultServiceCaller {
 			serviceUrl = serviceUrl + "jobId="+jobId+"&userId="+userId;
 		}
 
-		//System.out.println("Get result from: " + serviceUrl);
+		System.out.println("Get result from: " + serviceUrl);
 			
 		BufferedReader bufferedReader = new BufferedReader(
 				new InputStreamReader(new URL(serviceUrl).openConnection()
@@ -121,6 +135,10 @@ public class MyDefaultServiceCaller {
 		}
 		bufferedReader.close();
 		return sb.toString();
+	}
+	
+	public String latestInvokedURL(){
+		return serviceUrl;
 	}
 
 }

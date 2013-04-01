@@ -281,6 +281,9 @@ public class PDLServiceActivity extends
 				return validStatus;
 			}
 			
+			/*
+			 * This method will fail because output parameters have no value before the service is invoked.
+			 */
 			private void checkInfo(){
 				List<SingleParameter> paramList = Utilities.getInstance().getService()
 						.getParameters().getParameter();
@@ -433,23 +436,21 @@ public class PDLServiceActivity extends
 						pdlcontroller.updateUserMapperWithInputs(inputValuesMap);
 											
 						//end of reading inputs
-						//checkInfo();
+
 						//Input values VALIDATION
 						pdlServiceValidation = new PDLServiceValidation(gp);
 										
 						// CALL THE SERVICE
-						caller = new MyDefaultServiceCaller();
-						
+						caller = new MyDefaultServiceCaller();				
 						//if the input parameters are valid
 						if(pdlServiceValidation.isValid()){
 							//example call: http://pdl-calc.obspm.fr:8081/montage/TavernaCodeFrontal?mail=tetrarquis@gmail.com&NAXIS1=2259&NAXIS2=2199&CTYPE1=RA---TAN&CTYPE2=DEC--TAN&CRVAL1=210.835222357&CRVAL2=54.367562188&CRPIX1=1130&CRPIX2=1100&CDELT1=-0.000277780&CDELT2=0.000277780&CROTA2=-0.052834593&ImageLocation=SampleLocation&EQUINOX=2000
+							//get singleparameters
+							HashMap<String, SingleParameter> inputSingleParams = pdlcontroller.getHashInputParameters();
 							
 							//create a job
 							//TODO uncomment calling the service
-							//serviceResult = caller.callService();
-
-							
-							
+							serviceResult = caller.callService(inputSingleParams);
 							
 							jobsList = new JobsList();
 							jobsList.parseXML(serviceResult);
@@ -465,6 +466,14 @@ public class PDLServiceActivity extends
 								jobResult.parseXML(jobInfo);
 								//System.out.println("JobOutputs: "+jobResult.getOutputParams());
 								
+								//if there is an error or it is aborted, the activity fails
+								if(jobResult.getJobPhase()!=null)
+									if(jobResult.getJobPhase().toLowerCase().compareTo(PDLServiceController.getErrorStatus())==0
+											|| jobResult.getJobPhase().toLowerCase().compareTo(PDLServiceController.getAbortedStatus())==0){
+										callbackfails = true;
+										logger.error("The service returned "+jobResult.getJobPhase()+": "+caller.latestInvokedURL());
+										callback.fail("The service returned "+jobResult.getJobPhase()+": "+caller.latestInvokedURL());
+									}
 								
 								// TODO Update outputs in mapper and validate
 								
