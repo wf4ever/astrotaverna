@@ -73,6 +73,8 @@ public class AladinScriptActivityTest {
 	//this test is valid only with the right folders
 	
 	
+	//It is based in local files
+	@Ignore
 	@Test
 	public void executeAsynch() throws Exception {
 		configBean.setTypeOfInput("URL");
@@ -103,7 +105,8 @@ public class AladinScriptActivityTest {
 
 	}
 
-	
+	//It is based in local files
+	@Ignore
 	@Test
 	public void executeAsynchWithStrings() throws Exception {
 		configBean.setTypeOfInput("String");
@@ -128,6 +131,8 @@ public class AladinScriptActivityTest {
 		
 	}
 	
+	//It is based in local files
+	@Ignore
 	@Test
 	public void executeAsynchWithStringsAndNonExistingGalaxy() throws Exception {
 		configBean.setTypeOfInput("String");
