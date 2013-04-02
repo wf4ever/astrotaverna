@@ -3,11 +3,12 @@
   <groupId>org.purl.wf4ever.astrotaverna</groupId>
   <artifactId>file-reference-builder</artifactId>
   <versioning>
-    <release>1.02</release>
+    <release>1.03</release>
     <versions>
       <version>1.01</version>
       <version>1.02</version>
+      <version>1.03</version>
     </versions>
-    <lastUpdated>20121106100415</lastUpdated>
+    <lastUpdated>20130402080723</lastUpdated>
   </versioning>
 </metadata>

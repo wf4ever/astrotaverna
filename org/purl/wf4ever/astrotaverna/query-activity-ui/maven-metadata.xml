@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.purl.wf4ever.astrotaverna</groupId>
+  <artifactId>query-activity-ui</artifactId>
+  <versioning>
+    <release>1.03</release>
+    <versions>
+      <version>1.03</version>
+    </versions>
+    <lastUpdated>20130402080834</lastUpdated>
+  </versioning>
+</metadata>
