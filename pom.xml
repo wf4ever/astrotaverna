@@ -118,14 +118,14 @@
 		<repository>
 			<id>astrotaverna</id>
 			<name>AstroTaverna repository</name>
-            <!--<url>file:///${user.home}/src/astrotaverna-gh/</url>-->
-            <url>file:///${user.home}/git/repository/astrotaverna-gh/</url>
+            <url>file:///${user.home}/src/astrotaverna-gh/</url>
+            <!-- <url>file:///${user.home}/git/repository/astrotaverna-gh/</url> -->
 		</repository>
 		<snapshotRepository>
 			<id>astrotaverna</id>
 			<name>AstroTaverna repository</name>
-            <!--<url>file:///${user.home}/src/astrotaverna-gh/</url>-->
-            <url>file:///${user.home}/git/repository/astrotaverna-gh/</url>
+            <url>file:///${user.home}/src/astrotaverna-gh/</url>
+            <!-- <url>file:///${user.home}/git/repository/astrotaverna-gh/</url> -->
 		</snapshotRepository>
 	</distributionManagement>
 
