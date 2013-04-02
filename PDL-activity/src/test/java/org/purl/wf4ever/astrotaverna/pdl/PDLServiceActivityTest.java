@@ -107,7 +107,7 @@ public class PDLServiceActivityTest {
 
 	//test with not valid input: the float is 1/12.0 instead of 1/15.0
 	//¿PQ LANZA ESTE UNA EXCEPCION?
-	@Ignore
+	
 	@Test(expected = java.lang.RuntimeException.class)
 	public void executeAsynchNotValid() throws Exception {
 		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");

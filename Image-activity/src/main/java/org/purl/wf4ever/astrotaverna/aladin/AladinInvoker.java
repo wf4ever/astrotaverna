@@ -30,10 +30,12 @@ public class AladinInvoker {
 	public void runScript(String script, String gui) throws InterruptedException, IOException{
 		ProcessBuilder builder;
 		if(AladinInvoker.GUI.compareTo(gui)!=0){
-			builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "script="+script);
+			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "script="+script);
+			builder = new ProcessBuilder("java", "-jar", "/Applications/Aladin.app/Contents/Resources/Java/Aladin.jar", "-nogui", "script="+script);
 		}else{
 			///Users/julian/Documents/wf4ever/aladin/
-			builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "script="+script);
+			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "script="+script);
+			builder = new ProcessBuilder("java", "-jar", "/Applications/Aladin.app/Contents/Resources/Java/Aladin.jar", "script="+script);
 		}
 		
 		Map<String, String> environ = builder.environment();
@@ -76,10 +78,12 @@ public class AladinInvoker {
 		if(AladinInvoker.GUI.compareTo(gui)!=0){
 		
 			//ProcessBuilder builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "-scriptfile="+url); 
-			builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "-scriptfile="+url);
+			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "-scriptfile="+url);
+			builder = new ProcessBuilder("java", "-jar", "/Applications/Aladin.app/Contents/Resources/Java/Aladin.jar", "-nogui", "-scriptfile="+url);
 		}else{
 			///Users/julian/Documents/wf4ever/aladin/
-			builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-scriptfile="+url);
+			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-scriptfile="+url);
+			builder = new ProcessBuilder("java", "-jar", "/Applications/Aladin.app/Contents/Resources/Java/Aladin.jar", "-scriptfile="+url);
 		}
 		
 		Map<String, String> environ = builder.environment();
