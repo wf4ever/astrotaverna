@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.purl.wf4ever.astrotaverna</groupId>
 		<artifactId>astrotaverna</artifactId>
-		<version>1.03-SNAPSHOT</version>
+		<version>1.03</version>
 	</parent>
 	<artifactId>astrotaverna-voservices</artifactId>
 	<name>Astro Taverna VO services perspective</name>
