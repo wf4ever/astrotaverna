@@ -1,0 +1,18 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>astrotaverna</artifactId>
+    <groupId>org.purl.wf4ever.astrotaverna</groupId>
+    <version>1.06</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <artifactId>astrotaverna-utils</artifactId>
+  <name>Astro Taverna utillities</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>log4j</groupId>
+  		<artifactId>log4j</artifactId>
+  		<version>1.2.14</version>
+  	</dependency>
+  </dependencies>
+</project>
