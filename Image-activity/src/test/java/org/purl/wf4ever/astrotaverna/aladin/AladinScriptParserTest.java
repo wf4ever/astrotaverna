@@ -34,15 +34,18 @@ public class AladinScriptParserTest {
 	@Test
 	public void parseSaveScript(){
 		//String script = "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit";
-		String script = "get aladin(J,FITS) m1 ;\n save -png -jpg /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg -lk; save m1.eps ; quit";
+		String script = "get aladin(J,FITS) m1 ;\n save -png -jpg /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg -lk; backup /users/juan\\juan.aj; save m1.eps ; quit";
 		//String script = "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/exampletests/m1.jpg; quit";
 		//String script = "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/example&tests/m1.jpg; quit";
 		ArrayList<String> list = parser.parseScript(script);
 
-		assertEquals("Unexpected number of elemens", list.size(), 2);
+		System.out.println(list.toString());
+		
+		assertEquals("Unexpected number of elemens", 3, list.size());
 		if(list.size()>1){
 			assertEquals("Unexpected filename", "/Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg", list.get(0));
-			assertEquals("Unexpected filename", "m1.eps", list.get(1));
+			assertEquals("Unexpected filename", "/users/juan\\juan.aj", list.get(1));
+			assertEquals("Unexpected filename", "m1.eps", list.get(2));
 		}
 	}
 	
@@ -72,7 +75,7 @@ public class AladinScriptParserTest {
 	public void parseURLScript() throws Exception {
 		ArrayList<String> list = parser.parseURL("http://cdsweb.u-strasbg.fr/~allen/CDS_Tutorial/attachments/Arp_script.ajs");
 		
-		assertEquals("Unexpected number of elemens", 1,  list.size());
+		assertEquals("Unexpected number of elemens", 2,  list.size());
 		if(list.size()>0){
 			assertEquals("Unexpected filename", "/Users/allen/Desktop/Arp/Arp-$2_chart.png", list.get(0));
 		}	}
