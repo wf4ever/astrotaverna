@@ -8,12 +8,18 @@ import java.util.Map;
 
 import org.purl.wf4ever.astrotaverna.utils.StreamReaderAsync;
 
-
+/**
+ * It runs Aladin scripts and macros. By the time being, Aladin.jar has to be 
+ * in an specific folder: This issue should be resolved. 
+ * @author Julian Garrido
+ * @date 10/04/2013
+ *
+ */
 public class AladinInvoker {
 
 	private String script;
-	private String std_out;
-	private String error_out;
+	private String std_out="";
+	private String error_out="";
 	private int option;
 	
 	public static final String GUI = "gui";
@@ -38,27 +44,27 @@ public class AladinInvoker {
 			builder = new ProcessBuilder("java", "-jar", "/Applications/Aladin.app/Contents/Resources/Java/Aladin.jar", "script="+script);
 		}
 		
-		Map<String, String> environ = builder.environment();
+		//Map<String, String> environ = builder.environment();
 
 	    Process process;
 
 		    
-			process = builder.start();
-			
-		    InputStream is = process.getInputStream();		    
-		    StreamReaderAsync outputReader = new StreamReaderAsync(is, "OUTPUT");
-		    
-		    InputStream eis = process.getErrorStream();
-		    StreamReaderAsync errorReader = new StreamReaderAsync(eis, "ERROR");
-		    
-		    //start the threads
-		    outputReader.start();
-		    errorReader.start();
-		    
-		    int exitValue = process.waitFor();
-		    
-		    this.error_out = errorReader.getResult();
-		    this.std_out = outputReader.getResult();
+		process = builder.start();
+		
+	    InputStream is = process.getInputStream();		    
+	    StreamReaderAsync outputReader = new StreamReaderAsync(is, "OUTPUT");
+	    
+	    InputStream eis = process.getErrorStream();
+	    StreamReaderAsync errorReader = new StreamReaderAsync(eis, "ERROR");
+	    
+	    //start the threads
+	    outputReader.start();
+	    errorReader.start();
+	    
+	    int exitValue = process.waitFor();
+	    
+	    this.error_out = errorReader.getResult();
+	    this.std_out = outputReader.getResult();
 		    
 
 		
@@ -86,27 +92,34 @@ public class AladinInvoker {
 			builder = new ProcessBuilder("java", "-jar", "/Applications/Aladin.app/Contents/Resources/Java/Aladin.jar", "-scriptfile="+url);
 		}
 		
-		Map<String, String> environ = builder.environment();
+		//Map<String, String> environ = builder.environment();
 
 	    Process process;
 
-			process = builder.start();
-		
-		    InputStream is = process.getInputStream();		    
-		    StreamReaderAsync outputReader = new StreamReaderAsync(is, "OUTPUT");
-		    
-		    InputStream eis = process.getErrorStream();
-		    StreamReaderAsync errorReader = new StreamReaderAsync(eis, "ERROR");
-		    
-		    //start the threads
-		    outputReader.start();
-		    errorReader.start();
-		    
-		    int exitValue = process.waitFor();
-		    
-		    this.error_out = errorReader.getResult();
-		    this.std_out = outputReader.getResult();
+		process = builder.start();
+	
+	    InputStream is = process.getInputStream();		    
+	    StreamReaderAsync outputReader = new StreamReaderAsync(is, "OUTPUT");
+	    
+	    InputStream eis = process.getErrorStream();
+	    StreamReaderAsync errorReader = new StreamReaderAsync(eis, "ERROR");
+	    
+	    //start the threads
+	    outputReader.start();
+	    errorReader.start();
+	    
+	    int exitValue = process.waitFor();
+	    
+	    this.error_out = errorReader.getResult();
+	    this.std_out = outputReader.getResult();
 		    		
+	}
+	
+	public void runMacro(String scriptURL, String parametersURL, String gui) throws InterruptedException, IOException{
+		
+		String macroScript = "macro "+ scriptURL + " " + parametersURL; 
+		runScript(macroScript, gui);
+		
 	}
 	
 
@@ -128,6 +141,10 @@ public class AladinInvoker {
 				System.out.println("Starting option 3");
 				runScript(scriptMacro, "nogui");
 				System.out.println("Ending option 3");
+			}else if(option == 4){
+				System.out.println("Starting option 4");
+				runMacro("/Users/julian/workspaces/aladinTest_ws/myAladin/myTestSRC/iaa/amiga/aladin/resources/Aladin_workflow_script.ajs", "/Users/julian/workspaces/aladinTest_ws/myAladin/myTestSRC/iaa/amiga/aladin/resources/Aladin_workflow_params.txt", "nogui");
+				System.out.println("Ending option 5");
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -142,15 +159,15 @@ public class AladinInvoker {
 	 */
 	public static void main(String[] args) throws IOException {
 
-		
+		AladinInvoker invoker4 = new AladinInvoker(4);
 		AladinInvoker invoker3 = new AladinInvoker(3);
 		AladinInvoker invoker2 = new AladinInvoker(2);
 		AladinInvoker invoker1 = new AladinInvoker(1);
 		
-		invoker3.run();
 		invoker2.run();
 		invoker1.run();
-		
+		invoker3.run();
+		invoker4.run();
 		System.out.println("The end");
 	}
 
