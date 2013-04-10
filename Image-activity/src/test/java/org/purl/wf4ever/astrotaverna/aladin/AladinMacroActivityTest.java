@@ -27,6 +27,7 @@ public class AladinMacroActivityTest {
 	
 	private static final String FIRST_INPUT = "script";
 	private static final String SECOND_INPUT = "parameters";
+
 	private static final String OUT_STD_OUTPUT = "STD_OUTPUT";
 	private static final String OUT_ERROR = "ERROR_OUTPUT";
 	private static final String VO_TABLE = "VOTable";
@@ -75,7 +76,7 @@ public class AladinMacroActivityTest {
 	
 	
 	//It is based in local files
-	//@Ignore
+	@Ignore
 	@Test
 	public void executeAsynch() throws Exception {
 		configBean.setTypeOfInput("URL");
@@ -90,6 +91,37 @@ public class AladinMacroActivityTest {
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
 		//expectedOutputTypes.put("moreOutputs", String.class);
+		expectedOutputTypes.put(OUT_STD_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_ERROR, String.class);
+		expectedOutputTypes.put(VO_TABLE, String.class);
+		
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		assertEquals("Unexpected outputs", outputs.size(), 3);
+		assertEquals("", outputs.get(OUT_STD_OUTPUT));
+		assertEquals("", outputs.get(OUT_ERROR));
+		
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
+	
+	//based on lacal files (on ubuntu)
+	@Ignore
+	@Test
+	public void executeAsynchOnUbuntu() throws Exception {
+		configBean.setTypeOfInput("URL");
+		configBean.setTypeOfMode("nogui");
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		
+		inputs.put(FIRST_INPUT, "file:///home/julian/Documentos/wf4ever/aladin/Aladin_workflow_script.ajs");
+		inputs.put(SECOND_INPUT, "file:///home/julian/Documentos/wf4ever/aladin/Aladin_workflow_params.txt");
+		
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+
 		expectedOutputTypes.put(OUT_STD_OUTPUT, String.class);
 		expectedOutputTypes.put(OUT_ERROR, String.class);
 		expectedOutputTypes.put(VO_TABLE, String.class);

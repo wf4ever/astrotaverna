@@ -115,6 +115,7 @@ public class AladinScriptActivityTest {
 
 		Map<String, Object> inputs = new HashMap<String, Object>();
 		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit");
+		
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
@@ -130,6 +131,34 @@ public class AladinScriptActivityTest {
 		assertEquals("", outputs.get(OUT_ERROR));
 		
 	}
+	
+	//It is based in local files (ubuntu)
+	@Ignore
+	@Test
+	public void executeAsynchWithStringsInUbuntu() throws Exception {
+		configBean.setTypeOfInput("String");
+		configBean.setTypeOfMode("nogui");
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save /home/julian/Documentos/wf4ever/aladin/m1_.jpg; quit");
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put("simpleOutput", String.class);
+		//expectedOutputTypes.put("moreOutputs", String.class);
+		expectedOutputTypes.put(OUT_STD_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_ERROR, String.class);
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		assertEquals("Unexpected outputs", 2, outputs.size());
+		assertEquals("", outputs.get(OUT_STD_OUTPUT));
+		assertEquals("", outputs.get(OUT_ERROR));
+		
+	}
+	
 	
 	//It is based in local files
 	@Ignore

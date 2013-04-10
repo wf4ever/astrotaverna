@@ -26,6 +26,16 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationE
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCallback;
 
+/*
+ * 
+ * Modificaciones hechas durante las pruebas que tienen que ser eliminadas:
+ * En la linea 247 invoker.runMacro es llamado con valores constantes para ubuntu. 
+ * En AladinInvoker se ha comentado las lineas que capturan la salida de error y estandar. En los metodos runScript y runScriptURL
+ * En AladinInvoker ALADINJAR se ha puesto para ubuntu.Y AladinMacroActivityTest tambien.
+ * Intentar hacer tests con un fichero macro mas sencillo. 
+ * java -jar Aladin.jar -nogui script="macro Aladin_workflow_script.ajs Aladin_workflow_params.txt"
+ */
+
 /**
  * Activity configuration bean
  * @author Julian Garrido
@@ -229,7 +239,19 @@ public class AladinMacroActivity extends
 						try{
 							AladinScriptParser parser = new AladinScriptParser();
 							//invoke considering temp files or original files
-							invoker.runMacro(firstPath, secondPath, configBean.getTypeOfMode());
+							System.out.println(firstPath);
+							System.out.println(secondPath);
+							System.out.println(configBean.getTypeOfMode());
+							
+							try{
+								//invoker.runMacro(firstPath, secondPath, configBean.getTypeOfMode());
+								invoker.runMacro("file:///home/julian/Documentos/wf4ever/aladin/Aladin_workflow_script.ajs", "file:///home/julian/Documentos/wf4ever/aladin/Aladin_workflow_params.txt", "nogui");
+							}catch(NullPointerException ex){
+								System.out.println("ERRORs from Aladin: "+ invoker.getError_out());
+								System.out.println("OUTPUT from Aladin: "+ invoker.getStd_out());
+								System.out.println("EXCEPTION: ");
+								ex.printStackTrace();
+							}
 							
 							if(configBean.getTypeOfInput().compareTo("URL")==0)
 								results = parser.parseURL(inputScript);

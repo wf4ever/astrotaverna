@@ -42,7 +42,6 @@ public class AladinMacroActivityConfigurationBean implements Serializable {
 	public void setTypeOfInput(String typeOfInput) {
 		this.typeOfInput = typeOfInput;
 	}
-
 	
 	public String getTypeOfMode() {
 		return typeOfMode;

@@ -25,6 +25,11 @@ public class AladinInvoker {
 	public static final String GUI = "gui";
 	public static final String NOGUI = "nogui";
 	
+	//private String Aladinjar = "/Applications/Aladin.app/Contents/Resources/Java/Aladin.jar";
+	//private String Aladinjar = "/Users/julian/Documents/wf4ever/aladin/Aladin.jar";
+	private String ALADINJAR = "/home/julian/Documentos/wf4ever/aladin/Aladin.jar";
+	
+	
 	public AladinInvoker(){
 	
 	}
@@ -37,11 +42,11 @@ public class AladinInvoker {
 		ProcessBuilder builder;
 		if(AladinInvoker.GUI.compareTo(gui)!=0){
 			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "script="+script);
-			builder = new ProcessBuilder("java", "-jar", "/Applications/Aladin.app/Contents/Resources/Java/Aladin.jar", "-nogui", "script="+script);
+			builder = new ProcessBuilder("java", "-jar", ALADINJAR, "-nogui", "script="+script);
 		}else{
 			///Users/julian/Documents/wf4ever/aladin/
 			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "script="+script);
-			builder = new ProcessBuilder("java", "-jar", "/Applications/Aladin.app/Contents/Resources/Java/Aladin.jar", "script="+script);
+			builder = new ProcessBuilder("java", "-jar", ALADINJAR, "script="+script);
 		}
 		
 		//Map<String, String> environ = builder.environment();
@@ -51,20 +56,20 @@ public class AladinInvoker {
 		    
 		process = builder.start();
 		
-	    InputStream is = process.getInputStream();		    
-	    StreamReaderAsync outputReader = new StreamReaderAsync(is, "OUTPUT");
+	    //InputStream is = process.getInputStream();		    
+	    //StreamReaderAsync outputReader = new StreamReaderAsync(is, "OUTPUT");
 	    
-	    InputStream eis = process.getErrorStream();
-	    StreamReaderAsync errorReader = new StreamReaderAsync(eis, "ERROR");
+	    //InputStream eis = process.getErrorStream();
+	    //StreamReaderAsync errorReader = new StreamReaderAsync(eis, "ERROR");
 	    
 	    //start the threads
-	    outputReader.start();
-	    errorReader.start();
+	    //outputReader.start();
+	    //errorReader.start();
 	    
 	    int exitValue = process.waitFor();
-	    
-	    this.error_out = errorReader.getResult();
-	    this.std_out = outputReader.getResult();
+
+	    //this.error_out = errorReader.getResult();
+	    //this.std_out = outputReader.getResult();
 		    
 
 		
@@ -85,33 +90,33 @@ public class AladinInvoker {
 		
 			//ProcessBuilder builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "-scriptfile="+url); 
 			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "-scriptfile="+url);
-			builder = new ProcessBuilder("java", "-jar", "/Applications/Aladin.app/Contents/Resources/Java/Aladin.jar", "-nogui", "-scriptfile="+url);
+			builder = new ProcessBuilder("java", "-jar", ALADINJAR, "-nogui", "-scriptfile="+url);
 		}else{
 			///Users/julian/Documents/wf4ever/aladin/
 			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-scriptfile="+url);
-			builder = new ProcessBuilder("java", "-jar", "/Applications/Aladin.app/Contents/Resources/Java/Aladin.jar", "-scriptfile="+url);
+			builder = new ProcessBuilder("java", "-jar", ALADINJAR, "-scriptfile="+url);
 		}
 		
-		//Map<String, String> environ = builder.environment();
+		////Map<String, String> environ = builder.environment();
 
 	    Process process;
 
 		process = builder.start();
 	
-	    InputStream is = process.getInputStream();		    
-	    StreamReaderAsync outputReader = new StreamReaderAsync(is, "OUTPUT");
+	    //InputStream is = process.getInputStream();		    
+	    //StreamReaderAsync outputReader = new StreamReaderAsync(is, "OUTPUT");
 	    
-	    InputStream eis = process.getErrorStream();
-	    StreamReaderAsync errorReader = new StreamReaderAsync(eis, "ERROR");
+	    //InputStream eis = process.getErrorStream();
+	    //StreamReaderAsync errorReader = new StreamReaderAsync(eis, "ERROR");
 	    
 	    //start the threads
-	    outputReader.start();
-	    errorReader.start();
+	    //outputReader.start();
+	    //errorReader.start();
 	    
 	    int exitValue = process.waitFor();
+	    //this.error_out = errorReader.getResult();
+	    //this.std_out = outputReader.getResult();
 	    
-	    this.error_out = errorReader.getResult();
-	    this.std_out = outputReader.getResult();
 		    		
 	}
 	
@@ -144,7 +149,16 @@ public class AladinInvoker {
 			}else if(option == 4){
 				System.out.println("Starting option 4");
 				runMacro("/Users/julian/workspaces/aladinTest_ws/myAladin/myTestSRC/iaa/amiga/aladin/resources/Aladin_workflow_script.ajs", "/Users/julian/workspaces/aladinTest_ws/myAladin/myTestSRC/iaa/amiga/aladin/resources/Aladin_workflow_params.txt", "nogui");
+				System.out.println("Ending option 4");
+			}else if(option == 5){
+				String example2 = "get aladin(J,FITS) m1 ;\n save /home/julian/Documentos/wf4ever/aladin/m1.jpg; quit";
+				System.out.println("Starting option 5");
+				runScript(example2, "gui");				
 				System.out.println("Ending option 5");
+			}else if(option == 6){
+				System.out.println("Starting option 6");
+				runMacro("file:///home/julian/Documentos/wf4ever/aladin/Aladin_workflow_script.ajs", "file:///home/julian/Documentos/wf4ever/aladin/Aladin_workflow_params.txt", "nogui");
+				System.out.println("Ending option 6");
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -163,11 +177,15 @@ public class AladinInvoker {
 		AladinInvoker invoker3 = new AladinInvoker(3);
 		AladinInvoker invoker2 = new AladinInvoker(2);
 		AladinInvoker invoker1 = new AladinInvoker(1);
+		AladinInvoker invoker5 = new AladinInvoker(5);
+		AladinInvoker invoker6 = new AladinInvoker(6);
 		
-		invoker2.run();
-		invoker1.run();
-		invoker3.run();
-		invoker4.run();
+		//invoker1.run();
+		//invoker2.run();
+		//invoker3.run();
+		//invoker4.run();
+		//invoker5.run();
+		invoker6.run();
 		System.out.println("The end");
 	}
 
