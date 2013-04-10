@@ -74,6 +74,17 @@ public class AladinScriptParser {
 									files.add(filename.trim());
 								}
 							}
+							
+							expression = "\\s*backup"+fileExpression;
+							pattern = Pattern.compile(expression);
+							matcher = pattern.matcher(command);
+							while(matcher.find()){
+								String filename = matcher.group(1);
+								if(filename!=null && filename.length()>0){
+									files.add(filename.trim());
+								}
+							}
+							
 							//export [-fmt] x filename
 							//export -ROI filename
 							//Example:
