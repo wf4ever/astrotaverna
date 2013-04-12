@@ -1,0 +1,49 @@
+#AJS
+# comming from http://cds.u-strasbg.fr/twikiAIDA/pub/EuroVOAIDA/VOSchool09/Gal2/Aladin_workflow_script.ajs
+# http://www.euro-vo.org/fc/workflows/BDs.html
+
+reset
+#just load some background images
+img_dss_B = get Aladin(DSS2, J) $2 $3 14'
+img_dss_R = get Aladin(DSS2, F) $2 $3 14'
+img_2mass_K = get Aladin(2MASS, K) $2 $3 14'
+
+# retrieve 2MASS and SDSS catalogues around target
+2mass = get VizieR(2MASS) $2 $3 14'
+sdss = get VizieR(II/282/sdss6) $2 $3 14'
+
+# wait for all data to be retrieved
+sync
+
+# perform cross-match of the two catalogues
+2massdss=xmatch 2mass sdss 4 bestmatch
+
+# create a filter selecting only SDSS stars
+# here we use the UCD src.class :
+# "when the value of the column described by the UCD src.class is equal to 6, draw it"
+filter stars_SDSS { $[src.class]==6 {draw} }
+
+# select all filtered objects
+select 2massdss
+#sync
+# create a plane named stars with these objects
+cplane stars
+
+pause 2
+
+# filter brown dwarf candidates
+filter Filter_candidates { ${umag_tab2}>22.0 &&  ${gmag_tab2}>22.2 && ${Jmag_tab1}-${Hmag_tab1}<0.3 && ${Hmag_tab1}-${Kmag_tab1}<0.3 {draw} }
+sync
+
+hide sdss 2mass 2massdss stars_SDSS
+
+# select candidates and export in  plane named "bd"
+select stars
+cplane bd
+
+# make rgb image
+color_view=RGB 2mass_K img_dss_R img_dss_B
+
+save $4
+
+ 

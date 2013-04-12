@@ -76,17 +76,22 @@ public class AladinMacroActivityTest {
 	
 	
 	//It is based in local files
+	//this test fails because the process that runs the script calls System.exit(1). I doesn't understand
+	//this method fails and not the executeInvoker(). is this a thread issue?
+	//TODO
 	@Ignore
 	@Test
 	public void executeAsynch() throws Exception {
-		configBean.setTypeOfInput("URL");
+		configBean.setTypeOfInput("File");
 		configBean.setTypeOfMode("nogui");
 		activity.configure(configBean);
 
 		Map<String, Object> inputs = new HashMap<String, Object>();
 		
-		inputs.put(FIRST_INPUT, "file:///Users/julian/workspaces/aladinTest_ws/myAladin/myTestSRC/iaa/amiga/aladin/resources/Aladin_workflow_script.ajs");
-		inputs.put(SECOND_INPUT, "file:///Users/julian/workspaces/aladinTest_ws/myAladin/myTestSRC/iaa/amiga/aladin/resources/Aladin_workflow_params.txt");
+		//inputs.put(FIRST_INPUT, "file:///Users/julian/src/astrotaverna/Image-activity/src/test/resources/Aladin_workflow_script.ajs");
+		//inputs.put(SECOND_INPUT, "file:///Users/julian/src/astrotaverna/Image-activity/src/test/resources/Aladin_workflow_params.txt");
+		inputs.put(FIRST_INPUT, "/Users/julian/src/astrotaverna/Image-activity/src/test/resources/Aladin_workflow_script.ajs");
+		inputs.put(SECOND_INPUT, "/Users/julian/src/astrotaverna/Image-activity/src/test/resources/Aladin_workflow_params.txt");
 		
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
@@ -94,9 +99,67 @@ public class AladinMacroActivityTest {
 		expectedOutputTypes.put(OUT_STD_OUTPUT, String.class);
 		expectedOutputTypes.put(OUT_ERROR, String.class);
 		expectedOutputTypes.put(VO_TABLE, String.class);
+		Map<String, Object> outputs = new HashMap<String, Object>();
+		try{
+			outputs = ActivityInvoker.invokeAsyncActivity(
+					activity, inputs, expectedOutputTypes);
+		}catch(SecurityException ex){
+			System.out.println("ERRORRR- invoking the activity at the test.");
+		}
+
+		assertEquals("Unexpected outputs", outputs.size(), 3);
+		assertEquals("", outputs.get(OUT_STD_OUTPUT));
+		assertEquals("", outputs.get(OUT_ERROR));
 		
-		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
-				activity, inputs, expectedOutputTypes);
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
+
+	//The process returns internaly 1 in a System.exit(), but it doesn't fail
+	@Ignore
+	@Test
+	public void executeInvoker() throws Exception {
+		
+		AladinInvoker invoker = new AladinInvoker ();
+		try{
+			invoker.runMacro("/Users/julian/src/astrotaverna/Image-activity/src/test/resources/Aladin_workflow_script.ajs", "/Users/julian/src/astrotaverna/Image-activity/src/test/resources/Aladin_workflow_params.txt", "nogui");
+		}catch(SecurityException ex){
+			System.out.println("ERRORRR- invoking the activity at the test.");
+		}
+
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
+	
+	//It is based in local files
+	//This test should finish without any error
+	@Ignore
+	@Test
+	public void executeAsynch_with_simple_script() throws Exception {
+		configBean.setTypeOfInput("File");
+		configBean.setTypeOfMode("nogui");
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+
+		inputs.put(FIRST_INPUT, "/Users/julian/src/astrotaverna/Image-activity/src/test/resources/Aladin_workflow_script_short.ajs");
+		inputs.put(SECOND_INPUT, "/Users/julian/src/astrotaverna/Image-activity/src/test/resources/Aladin_workflow_params.txt");
+		
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put("simpleOutput", String.class);
+		//expectedOutputTypes.put("moreOutputs", String.class);
+		expectedOutputTypes.put(OUT_STD_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_ERROR, String.class);
+		expectedOutputTypes.put(VO_TABLE, String.class);
+		Map<String, Object> outputs = new HashMap<String, Object>();
+		try{
+			outputs = ActivityInvoker.invokeAsyncActivity(
+					activity, inputs, expectedOutputTypes);
+		}catch(SecurityException ex){
+			System.out.println("ERRORRR- invoking the activity at the test.");
+		}
 
 		assertEquals("Unexpected outputs", outputs.size(), 3);
 		assertEquals("", outputs.get(OUT_STD_OUTPUT));

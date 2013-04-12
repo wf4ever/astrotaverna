@@ -1,0 +1,9 @@
+#AJS
+# comming from http://cds.u-strasbg.fr/twikiAIDA/pub/EuroVOAIDA/VOSchool09/Gal2/Aladin_workflow_script.ajs
+# http://www.euro-vo.org/fc/workflows/BDs.html
+
+get aladin(J,FITS) m2;
+
+save $4
+
+ 

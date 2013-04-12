@@ -1,0 +1,2 @@
+First	08 30 30	+01 30	/Users/julian/Documents/wf4ever/aladin/exampleTests/al_wf_first.jpg
+Another	15 03 10	+25 25 10	/Users/julian/Documents/wf4ever/aladin/exampleTests/al_wf_another.jpg

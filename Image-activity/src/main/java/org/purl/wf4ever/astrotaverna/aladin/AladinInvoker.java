@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+import org.purl.wf4ever.astrotaverna.utils.NoExitSecurityManager_;
 import org.purl.wf4ever.astrotaverna.utils.StreamReaderAsync;
 
 /**
@@ -17,7 +19,7 @@ import org.purl.wf4ever.astrotaverna.utils.StreamReaderAsync;
  */
 public class AladinInvoker {
 
-	private String script;
+	//private String script;
 	private String std_out="";
 	private String error_out="";
 	private int option;
@@ -25,10 +27,11 @@ public class AladinInvoker {
 	public static final String GUI = "gui";
 	public static final String NOGUI = "nogui";
 	
-	//private String Aladinjar = "/Applications/Aladin.app/Contents/Resources/Java/Aladin.jar";
+	private String ALADINJAR = "/Applications/Aladin.app/Contents/Resources/Java/Aladin.jar";
 	//private String Aladinjar = "/Users/julian/Documents/wf4ever/aladin/Aladin.jar";
-	private String ALADINJAR = "/home/julian/Documentos/wf4ever/aladin/Aladin.jar";
+	//private String ALADINJAR = "/home/julian/Documentos/wf4ever/aladin/Aladin.jar";
 	
+	private static Logger logger = Logger.getLogger(AladinInvoker.class);
 	
 	public AladinInvoker(){
 	
@@ -41,6 +44,7 @@ public class AladinInvoker {
 	public void runScript(String script, String gui) throws InterruptedException, IOException{
 		ProcessBuilder builder;
 		if(AladinInvoker.GUI.compareTo(gui)!=0){
+		    //System.out.println("java -jar " + ALADINJAR + " -nogui script="+script);
 			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "script="+script);
 			builder = new ProcessBuilder("java", "-jar", ALADINJAR, "-nogui", "script="+script);
 		}else{
@@ -52,26 +56,47 @@ public class AladinInvoker {
 		//Map<String, String> environ = builder.environment();
 
 	    Process process;
-
-		    
-		process = builder.start();
+	    SecurityManager securityBackup = System.getSecurityManager();
+		System.setSecurityManager(new NoExitSecurityManager_());
 		
-	    //InputStream is = process.getInputStream();		    
-	    //StreamReaderAsync outputReader = new StreamReaderAsync(is, "OUTPUT");
-	    
-	    //InputStream eis = process.getErrorStream();
-	    //StreamReaderAsync errorReader = new StreamReaderAsync(eis, "ERROR");
-	    
-	    //start the threads
-	    //outputReader.start();
-	    //errorReader.start();
-	    
-	    int exitValue = process.waitFor();
-
-	    //this.error_out = errorReader.getResult();
-	    //this.std_out = outputReader.getResult();
+		try{
 		    
-
+			process = builder.start();
+		    InputStream is = process.getInputStream();		    
+		    StreamReaderAsync outputReader = new StreamReaderAsync(is, "OUTPUT");
+		    
+		    InputStream eis = process.getErrorStream();
+		    StreamReaderAsync errorReader = new StreamReaderAsync(eis, "ERROR");
+		    
+		    //start the threads
+		    outputReader.start();
+		    errorReader.start();
+	    
+	    
+		    //System.out.println("Estoy antes del waitfor");
+		    int exitValue = process.waitFor();
+		    //System.out.println("Estoy despues del waitfor");
+		    
+		    //is.close();
+		    //eis.close();
+		    	        
+		    this.error_out = errorReader.getResult();
+		    this.std_out = outputReader.getResult();
+		   
+		    //System.out.println("exit value for the process: " + process.exitValue());
+		    process.destroy();
+		    
+		}catch(SecurityException ex){
+			System.out.println("Se ha ejecutado exit() en AladinInvoker");
+			logger.error("Se ha ejecutado exit() en AladinInvoker");
+		}
+		
+		System.setSecurityManager(securityBackup);
+	    
+		
+		    
+	    //System.out.println("ERROR: " + this.error_out);
+	    //System.out.println("STD: " + this.std_out);
 		
 		
 	}
@@ -103,19 +128,23 @@ public class AladinInvoker {
 
 		process = builder.start();
 	
-	    //InputStream is = process.getInputStream();		    
-	    //StreamReaderAsync outputReader = new StreamReaderAsync(is, "OUTPUT");
+	    InputStream is = process.getInputStream();		    
+	    StreamReaderAsync outputReader = new StreamReaderAsync(is, "OUTPUT");
 	    
-	    //InputStream eis = process.getErrorStream();
-	    //StreamReaderAsync errorReader = new StreamReaderAsync(eis, "ERROR");
+	    InputStream eis = process.getErrorStream();
+	    StreamReaderAsync errorReader = new StreamReaderAsync(eis, "ERROR");
 	    
 	    //start the threads
-	    //outputReader.start();
-	    //errorReader.start();
+	    outputReader.start();
+	    errorReader.start();
 	    
 	    int exitValue = process.waitFor();
-	    //this.error_out = errorReader.getResult();
-	    //this.std_out = outputReader.getResult();
+	    
+	    //is.close();
+	    //eis.close();
+	    
+	    this.error_out = errorReader.getResult();
+	    this.std_out = outputReader.getResult();
 	    
 		    		
 	}
@@ -123,6 +152,7 @@ public class AladinInvoker {
 	public void runMacro(String scriptURL, String parametersURL, String gui) throws InterruptedException, IOException{
 		
 		String macroScript = "macro "+ scriptURL + " " + parametersURL; 
+		System.out.println("Calling Aladin script: "+ macroScript);
 		runScript(macroScript, gui);
 		
 	}
@@ -148,7 +178,7 @@ public class AladinInvoker {
 				System.out.println("Ending option 3");
 			}else if(option == 4){
 				System.out.println("Starting option 4");
-				runMacro("/Users/julian/workspaces/aladinTest_ws/myAladin/myTestSRC/iaa/amiga/aladin/resources/Aladin_workflow_script.ajs", "/Users/julian/workspaces/aladinTest_ws/myAladin/myTestSRC/iaa/amiga/aladin/resources/Aladin_workflow_params.txt", "nogui");
+				runMacro("/Users/julian/src/astrotaverna/Image-activity/src/test/resources/Aladin_workflow_script.ajs", "/Users/julian/src/astrotaverna/Image-activity/src/test/resources/Aladin_workflow_params.txt", "nogui");
 				System.out.println("Ending option 4");
 			}else if(option == 5){
 				String example2 = "get aladin(J,FITS) m1 ;\n save /home/julian/Documentos/wf4ever/aladin/m1.jpg; quit";
@@ -183,9 +213,9 @@ public class AladinInvoker {
 		//invoker1.run();
 		//invoker2.run();
 		//invoker3.run();
-		//invoker4.run();
+		invoker4.run();
 		//invoker5.run();
-		invoker6.run();
+		//invoker6.run();
 		System.out.println("The end");
 	}
 
