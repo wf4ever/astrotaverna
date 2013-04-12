@@ -8,20 +8,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import org.purl.wf4ever.astrotaverna.aladin.AladinScriptActivity;
-import org.purl.wf4ever.astrotaverna.image.ui.config.AladinScriptConfigureAction;
+import org.purl.wf4ever.astrotaverna.aladin.AladinMacroActivity;
+import org.purl.wf4ever.astrotaverna.image.ui.config.AladinMacroConfigureAction;
 
 import net.sf.taverna.t2.workbench.ui.views.contextualviews.ContextualView;
 
 
 
 @SuppressWarnings("serial")
-public class AladinScriptContextualView extends ContextualView {
-	private final AladinScriptActivity activity;
+public class AladinMacroContextualView extends ContextualView {
+	private final AladinMacroActivity activity;
 	private JTextArea description;
 	private javax.swing.JScrollPane jScrollPane1;
 
-	public AladinScriptContextualView(AladinScriptActivity activity) {
+	public AladinMacroContextualView(AladinMacroActivity activity) {
 		this.activity = activity;
 		initView(); //this method will call the getMainFrame()
 	}
@@ -37,7 +37,7 @@ public class AladinScriptContextualView extends ContextualView {
 		description.setEditable(false);
 		description.setColumns(30);
 		description.setLineWrap(true);
-		description.setText("It executes an Aladin script. You may choose between direct input or file input and also you may see the Aladin window if you choose gui option");
+		description.setText("It executes an Aladin macro by receiving a macro and a parameters file. You may choose between direct input or file input and also you may see the Aladin window if you choose gui option");
 		
 		jScrollPane1.setViewportView(description);
 		jPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -51,7 +51,7 @@ public class AladinScriptContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Aladin script";
+		return "Aladin macro";
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class AladinScriptContextualView extends ContextualView {
 	//the section.
 	@Override
 	public Action getConfigureAction(final Frame owner) {
-		return new AladinScriptConfigureAction(activity, owner);
+		return new AladinMacroConfigureAction(activity, owner);
 	}
 
 }
