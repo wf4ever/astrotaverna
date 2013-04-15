@@ -49,7 +49,9 @@ public class VOServicesModel {
 	public List<URI> getEndpoints() {
 		return Arrays
 				.asList(VORepository.DEFAULT_ENDPOINT,
-						URI.create("http://nvo.stsci.edu/vor10/ristandardservice.asmx"));
+						URI.create("http://nvo.stsci.edu/vor10/ristandardservice.asmx"), 
+						URI.create("http://registry.astrogrid.org/astrogrid-registry/services/RegistryQueryv1_0"), 
+						URI.create("http://alt.registry.astrogrid.org/astrogrid-registry/services/RegistryQueryv1_0"));
 	}
 
 	public VORepository getRepository() {
