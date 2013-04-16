@@ -30,24 +30,28 @@ public class PDLServiceValidation {
 			status = valid;
 		}
 
-		if (!infosOnGroups.get(0).equalsIgnoreCase("")) {
+		//groups to complete
+		if (infosOnGroups.get(0) != null && !infosOnGroups.get(0).equalsIgnoreCase("")) {
 			status = complete;
 		}
 
-		if (!infosOnGroups.get(1).equalsIgnoreCase("")) {
+		//groups with errors
+		if (infosOnGroups.get(1) != null && !infosOnGroups.get(1).equalsIgnoreCase("")) {
 			status = error;
 		}
 
+		//groups valid
 		//if (!infosOnGroups.get(2).equalsIgnoreCase("")) {
 		//	status = valid;
 		//}
+
 		
 		return status;
 
 	}
 	
 	public boolean isValid(){
-		return this.validate().compareTo(valid)==0;
+		return valid.compareTo(this.validate())==0;
 	}
 	
 	public String getStatus(){
@@ -76,9 +80,10 @@ public class PDLServiceValidation {
 
 	private String buildStringFromList(List<String> list) {
 		String toReturn = "";
-		for (String temp : list) {
-			toReturn = toReturn + temp + "\n";
-		}
+		if(list != null)
+			for (String temp : list) {
+				toReturn = toReturn + temp + "\n";
+			}
 		return toReturn;
 	}
 

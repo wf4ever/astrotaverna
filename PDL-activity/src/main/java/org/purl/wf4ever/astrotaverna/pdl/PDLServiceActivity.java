@@ -490,8 +490,15 @@ public class PDLServiceActivity extends
 								logger.error(errorList.toString());
 								callback.fail(errorList.toString());
 							}else{
-								logger.error("Error in the input parameters: \n");
-								callback.fail("Error in the input parameters: \n");
+								//TODO here, I SHOULD CHECK IF THERE ARE TO COMPLETE CASES
+								errorList = pdlcontroller.buildErrorsList();
+								if(errorList!=null && errorList.size()>0){
+									logger.error(errorList.toString());
+									callback.fail(errorList.toString());
+								}else{
+									logger.error("Error in the input parameters: \n");
+									callback.fail("Error in the input parameters: \n");
+								}
 							}
 						}
 						
