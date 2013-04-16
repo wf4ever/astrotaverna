@@ -282,6 +282,84 @@ public class PDLServiceActivityTest {
 
 	}
 	
+	
+	@Test
+	public void executeParisDurhamTavernaEntryPointService() throws Exception {
+		String serviceURL = "http://pdl-calc.obspm.fr:8081/ParisDurham/pdlDescription/PDL-Description.xml";
+			    
+		configBean.setPdlDescriptionFile(serviceURL);
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		//Double value = new Double(0.00000000000001);
+		Double value = new Double(1.0E-15);
+		System.out.println("Float value: " + value.toString());
+		
+		//parameter group
+		inputs.put("NstepMax", "5000");
+		inputs.put("NstepW", "300");
+		inputs.put("NH2Lev", "12");
+		inputs.put("NH2Lines", "20");
+		inputs.put("iforH2", "2");
+		inputs.put("ikinH2", "2");
+		inputs.put("xll", "1");
+		inputs.put("epsV", value.toString());
+		inputs.put("TimeJ", "600");
+		//parameter group
+		//inputs.put("Zeta", "0,00000000000001");
+		inputs.put("Zeta", value.toString());
+		//parameter group
+		inputs.put("shockType", "J");
+		inputs.put("Nfluids", "1");
+		inputs.put("Bbeta", "1");
+		inputs.put("Vs", "200");
+		inputs.put("Vdi", "250");
+		inputs.put("OpH2", "100");
+		inputs.put("Ti", "400");
+		inputs.put("nHi", "1");
+		inputs.put("Tg", "220");
+		//parameter group
+		//inputs.put("SOS", "'CD'(cm-2)");
+		//inputs.put("LEOS", "'CD'(cm-2)");
+		//inputs.put("LIOS", "local'(erg/s/cm3)");
+		inputs.put("SOS", "CD");
+		inputs.put("LEOS", "CD");
+		inputs.put("LIOS", "local");
+		
+		//others
+		inputs.put("durationMax", "1000");
+		inputs.put("mail", "tetrarquis@gmail.com");
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+		expectedOutputTypes.put(RESPONSE_BODY, String.class);
+		
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		int expectedoutputs=2;
+		if(outputs.size()==3)
+			expectedoutputs=3;
+		assertEquals("Unexpected outputs", expectedoutputs, outputs.size());//only if the result
+		assertTrue("Invalid or error status", PDLServiceController.getPendingStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0 
+				                  || PDLServiceController.getFinishedStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0
+				                  || PDLServiceController.getCompletedStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0
+				                  || PDLServiceController.getRunningStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0
+				                  || PDLServiceController.getExecutingStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0);
+		
+		System.out.println("-------------------------------------");
+		System.out.println(outputs.get(RESPONSE_BODY));
+		System.out.println("-------------------------------------");
+		
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
+	
+	
 	//THIS IS USING LOCAL FILES
 	@Ignore
 	@Test

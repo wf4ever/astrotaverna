@@ -420,6 +420,7 @@ public class PDLServiceController {
 							//String value = (String) referenceService.renderIdentifier(inputs.get(param.getName()), 
 							//		String.class, context);
 							String value = (String) inputValuesMap.get(param.getName());
+							System.out.println(param.getName() + ", "+value+" ( "+ param.getParameterType().toString());
 							// put every input in the Mapper
 							List<GeneralParameter> generalParamList = new ArrayList<GeneralParameter>();
 							GeneralParameter gparam = new GeneralParameter(value, 
