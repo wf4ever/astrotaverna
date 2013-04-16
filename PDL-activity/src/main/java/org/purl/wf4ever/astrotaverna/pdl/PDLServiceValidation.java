@@ -32,6 +32,7 @@ public class PDLServiceValidation {
 
 		//groups to complete
 		if (infosOnGroups.get(0) != null && !infosOnGroups.get(0).equalsIgnoreCase("")) {
+System.out.println("Grupos a completar: "+infosOnGroups.get(0));
 			status = complete;
 		}
 
@@ -87,6 +88,12 @@ public class PDLServiceValidation {
 		return toReturn;
 	}
 
+	/**
+	 * This method is not useful since I had to comment the part where isGroupCompleted
+	 * could be set to false. This is because currentStatement.isStatementValid() return null
+	 * with some conditional statements (eg. if in1 is 'x' then in2 is 'y')
+	 * @return
+	 */
 	private List<String> getGroupsToComplete() {
 		List<GroupHandlerHelper> handler = this.groupProcessor
 				.getGroupsHandler();
@@ -99,14 +106,13 @@ public class PDLServiceValidation {
 			
 			// For every statement in the current group
 			if (null != handler.get(i).getStatementHelperList()) {
-				for (StatementHelperContainer currentStatement : handler.get(i)
-						.getStatementHelperList()) {
+				for (StatementHelperContainer currentStatement : handler.get(i).getStatementHelperList()) {
 					if (currentStatement.isStatementSwitched()) {
 						if (null != currentStatement.isStatementValid()) {
 							isGroupCompleted = isGroupCompleted && true;
-						} else {
-							isGroupCompleted = isGroupCompleted && false;
-						}
+						}// else {
+						//	isGroupCompleted = isGroupCompleted && false;
+						//}
 					}else{
 						//In the case where the statement is not switched
 						isGroupCompleted = isGroupCompleted && currentStatement.isStatementValid();
@@ -120,6 +126,10 @@ public class PDLServiceValidation {
 		return toReturn;
 	}
 
+	/**
+	 * I don't consider as invalid the case where a statement.isStatementValid() return null
+	 * @return
+	 */
 	private List<String> getGroupsValid() {
 		List<String> toReturn = new ArrayList<String>();
 
@@ -142,9 +152,9 @@ public class PDLServiceValidation {
 						if (null != currentStatement.isStatementValid()) {
 							isGroupValid = isGroupValid
 									&& currentStatement.isStatementValid();
-						} else {
-							isGroupValid = false;
-						}
+						}// else {
+						//	isGroupValid = false;
+						//}
 
 					}
 				}
@@ -158,6 +168,10 @@ public class PDLServiceValidation {
 		return toReturn;
 	}
 
+	/**
+	 * the case where statement.isStatementValue() returns null is not considered an error
+	 * @return
+	 */
 	private List<String> getGroupsWithError() {
 		List<GroupHandlerHelper> handler = this.groupProcessor
 				.getGroupsHandler();
@@ -173,7 +187,7 @@ public class PDLServiceValidation {
 				for (StatementHelperContainer currentStatement : handler.get(i)
 						.getStatementHelperList()) {
 					if (currentStatement.isStatementSwitched()) {
-						if (null != currentStatement.isStatementValid()) {
+						if (null != currentStatement.isStatementValid()){
 							isGroupInError = isGroupInError
 									|| !currentStatement.isStatementValid();
 						}

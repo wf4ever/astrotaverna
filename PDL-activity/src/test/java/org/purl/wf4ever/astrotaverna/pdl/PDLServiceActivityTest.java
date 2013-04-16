@@ -305,12 +305,15 @@ public class PDLServiceActivityTest {
 		inputs.put("xll", "1");
 		inputs.put("epsV", value.toString());
 		inputs.put("TimeJ", "600");
+		inputs.put("durationMax", "1000");
 		//parameter group
 		//inputs.put("Zeta", "0,00000000000001");
 		inputs.put("Zeta", value.toString());
 		//parameter group
-		inputs.put("shockType", "J");
-		inputs.put("Nfluids", "1");
+		//inputs.put("shockType", "J");
+		inputs.put("shockType", "C");
+		//inputs.put("Nfluids", "1");
+		inputs.put("Nfluids", "2");
 		inputs.put("Bbeta", "1");
 		inputs.put("Vs", "200");
 		inputs.put("Vdi", "250");
@@ -319,15 +322,11 @@ public class PDLServiceActivityTest {
 		inputs.put("nHi", "1");
 		inputs.put("Tg", "220");
 		//parameter group
-		//inputs.put("SOS", "'CD'(cm-2)");
-		//inputs.put("LEOS", "'CD'(cm-2)");
-		//inputs.put("LIOS", "local'(erg/s/cm3)");
 		inputs.put("SOS", "CD");
 		inputs.put("LEOS", "CD");
 		inputs.put("LIOS", "local");
 		
 		//others
-		inputs.put("durationMax", "1000");
 		inputs.put("mail", "tetrarquis@gmail.com");
 		
 
@@ -337,8 +336,7 @@ public class PDLServiceActivityTest {
 		expectedOutputTypes.put(RESPONSE_BODY, String.class);
 		
 
-		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
-				activity, inputs, expectedOutputTypes);
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(activity, inputs, expectedOutputTypes);
 
 		int expectedoutputs=2;
 		if(outputs.size()==3)
