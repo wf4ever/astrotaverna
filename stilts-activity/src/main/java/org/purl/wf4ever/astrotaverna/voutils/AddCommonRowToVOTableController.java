@@ -24,7 +24,7 @@ public class AddCommonRowToVOTableController {
 	
 	private static Logger logger = Logger.getLogger(AddCommonRowToVOTableController.class);
 	
-	public AddCommonRowToVOTableController (File rowVOTableFile, File mainVOTableFile) throws TableFormatException, IOException{
+	public AddCommonRowToVOTableController (File rowVOTableFile, File mainVOTableFile, boolean leftPosition) throws TableFormatException, IOException{
 		long colrowcount, rowrowcount, rownumber_main;
 		RowListStarTable commonRowTable;
 		JoinStarTable joinTable;
@@ -52,9 +52,13 @@ public class AddCommonRowToVOTableController {
 					//join both tables
 					if(commonRowTable.getRowCount() == mainVOTable.getRowCount()){
 						StarTable [] tables = new StarTable[2];
-						tables[0] = mainVOTable;
-						tables[1] = commonRowTable;
-						
+						if(leftPosition){
+							tables[0] = mainVOTable;
+							tables[1] = commonRowTable;
+						}else{
+							tables[1] = mainVOTable;
+							tables[0] = commonRowTable;
+						}
 						joinTable = new JoinStarTable(tables);
 						if(joinTable !=null)
 							result = joinTable;
@@ -70,7 +74,7 @@ public class AddCommonRowToVOTableController {
 		
 	}
 	
-	public AddCommonRowToVOTableController (URI rowVOTableURI, URI mainVOTableURI) throws TableFormatException, IOException{
+	public AddCommonRowToVOTableController (URI rowVOTableURI, URI mainVOTableURI, boolean leftPosition) throws TableFormatException, IOException{
 		long colrowcount, rowrowcount, rownumber_main;
 		RowListStarTable commonRowTable;
 		JoinStarTable joinTable;
@@ -98,8 +102,13 @@ public class AddCommonRowToVOTableController {
 					//join both tables
 					if(commonRowTable.getRowCount() == mainVOTable.getRowCount()){
 						StarTable [] tables = new StarTable[2];
-						tables[0] = mainVOTable;
-						tables[1] = commonRowTable;
+						if(leftPosition){
+							tables[0] = mainVOTable;
+							tables[1] = commonRowTable;
+						}else{
+							tables[1] = mainVOTable;
+							tables[0] = commonRowTable;
+						}
 						
 						joinTable = new JoinStarTable(tables);
 						if(joinTable !=null)

@@ -31,7 +31,8 @@ public class AddCommonRowToVOTableActivityConfigurationBean implements Serializa
 	
 	// TODO: Remove the example fields and getters/setters and add your own	
 	
-	private String typeOfInput;
+	private String typeOfInput = "String";
+	private String commonRowPosition = "Left";
 	
 	//private String typeOfFilter;
 
@@ -43,16 +44,18 @@ public class AddCommonRowToVOTableActivityConfigurationBean implements Serializa
 		this.typeOfInput = typeOfInput;
 	}
 
-	
-	/*
-	public String getTypeOfFilter() {
-		return typeOfFilter;
+	public String getCommonRowPosition() {
+		return commonRowPosition;
 	}
 
-	public void setTypeOfFilter(String typeOfFilter) {
-		this.typeOfFilter = typeOfFilter;
+	public void setCommonRowPosition(String commonRowPosition) {
+		this.commonRowPosition = commonRowPosition;
 	}
-	*/
+
+	
+	
+	
+	
 	
 
 }

@@ -53,7 +53,7 @@ public class AddCommonRowToVOTableControlllerTest {
 		tmpInFile2.deleteOnExit();
 		String mainPath = tmpInFile.toString();
 		//controller = new AddCommonRowToVOTableController(shortPath, mainPath);
-		controller = new AddCommonRowToVOTableController(tmpInFile, tmpInFile2);
+		controller = new AddCommonRowToVOTableController(tmpInFile, tmpInFile2, true);
 		file.deleteOnExit();
 		controller.writeJoinTable(file);
 		

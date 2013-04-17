@@ -12,3 +12,4 @@ org.purl.wf4ever.astrotaverna.tcat.TcatListActivityHealthChecker
 org.purl.wf4ever.astrotaverna.voutils.GetListFromColumnActivityHealthChecker
 org.purl.wf4ever.astrotaverna.voutils.TemplateFillerActivityHealthChecker
 org.purl.wf4ever.astrotaverna.voutils.CheckTemplateFillerActivityHealthChecker
+org.purl.wf4ever.astrotaverna.voutils.AddCommonRowToVOTableActivityHealthChecker

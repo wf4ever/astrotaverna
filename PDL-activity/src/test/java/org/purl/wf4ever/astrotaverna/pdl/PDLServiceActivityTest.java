@@ -294,7 +294,8 @@ public class PDLServiceActivityTest {
 		//Double value = new Double(0.00000000000001);
 		Double value = new Double(1.0E-15);
 		System.out.println("Float value: " + value.toString());
-		
+		//The service doesn't converge with the following set of parameters(commented)
+		/*
 		//parameter group
 		inputs.put("NstepMax", "5000");
 		inputs.put("NstepW", "300");
@@ -310,9 +311,7 @@ public class PDLServiceActivityTest {
 		//inputs.put("Zeta", "0,00000000000001");
 		inputs.put("Zeta", value.toString());
 		//parameter group
-		//inputs.put("shockType", "J");
 		inputs.put("shockType", "C");
-		//inputs.put("Nfluids", "1");
 		inputs.put("Nfluids", "2");
 		inputs.put("Bbeta", "1");
 		inputs.put("Vs", "200");
@@ -325,7 +324,38 @@ public class PDLServiceActivityTest {
 		inputs.put("SOS", "CD");
 		inputs.put("LEOS", "CD");
 		inputs.put("LIOS", "local");
-		
+		*/
+		//numerical parameters
+		inputs.put("NstepMax", "5000");//-
+		inputs.put("NstepW", "5");//-
+		inputs.put("NH2Lev", "150");//-
+		inputs.put("NH2Lines", "200");//-
+		inputs.put("iforH2", "1");//-
+		inputs.put("ikinH2", "2");//-
+		inputs.put("xll", "1.00E9");//-
+		inputs.put("epsV", "1.00E-8");//-
+		inputs.put("TimeJ", "2.00E10");//-
+		inputs.put("durationMax", "1.00E5");//-
+		//H_h2_flag --->BOTH
+		//Force_I_C --> 1: Force Ion Conservation
+		//parameter group
+		//inputs.put("Zeta", "0,00000000000001");
+		inputs.put("Zeta", "5.0E-17");//-
+		//shock parameters
+		inputs.put("shockType", "C");//-
+		inputs.put("Nfluids", "3");//-
+		inputs.put("Bbeta", "1.0");//-
+		inputs.put("Vs", "25.0");//-
+		inputs.put("Vdi", "1000.0");
+		inputs.put("OpH2", "3.0");//-
+		inputs.put("Ti", "10");//-
+		inputs.put("nHi", "10000.0");//-
+		inputs.put("Tg", "15");//-
+		//Cool_KN -> 1
+		//output specifications
+		inputs.put("SOS", "FD");//-
+		inputs.put("LEOS", "ln(N/g)");//-
+		inputs.put("LIOS", "local");//-
 		//others
 		inputs.put("mail", "tetrarquis@gmail.com");
 		

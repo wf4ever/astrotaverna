@@ -37,6 +37,7 @@ public class TemplateFillerActivityTest {
 	private static final String IN_SECOND_INPUT = "template";
 	private static final String IN_FILTER = "ColumnNameWithResultFileName";
 
+	private static final String OUT_LIST = "list";
 	private static final String OUT_REPORT = "report";
 	
 	private TemplateFillerActivity activity = new TemplateFillerActivity();
@@ -76,7 +77,7 @@ public class TemplateFillerActivityTest {
 	}
 	
 
-	//this test is valid only with the right folders
+	//this test is valid only with the right folders (ubuntu)
 	@Ignore
 	@Test
 	public void executeAsynch() throws Exception {
@@ -92,21 +93,60 @@ public class TemplateFillerActivityTest {
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		expectedOutputTypes.put(OUT_REPORT, String.class);
+		expectedOutputTypes.put(OUT_LIST, String.class);
 
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
 				activity, inputs, expectedOutputTypes);
 		
-		String report = "/home/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG0011_g.galfit\n" + //System.lineSeparator()+
-				"/home/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG0011_i.galfit\n" + //System.lineSeparator()+
-				"/home/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG0011_r.galfit\n"; // + System.lineSeparator();
-		assertEquals("Unexpected outputs", 1, outputs.size());
+		String report ="";
+		ArrayList<String> reportList = new ArrayList<String>();
+		reportList.add("/home/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG0011_g.galfit");
+		reportList.add("/home/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG0011_i.galfit");
+		reportList.add("/home/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG0011_r.galfit");
+		
+		assertEquals("Unexpected outputs", 2, outputs.size());
 		assertEquals(report, outputs.get(OUT_REPORT));
+		assertEquals(reportList, outputs.get(OUT_LIST));
 		
 		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
 		//		.get("moreOutputs"));
 
 	}
 	
+	//this test is valid only with the right folders (Mac folders)
+	
+	@Test
+	public void executeAsynchMac() throws Exception {
+		configBean.setTypeOfInput("File");
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		inputs.put(IN_FIRST_INPUT_TABLE, "/Users/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/mac_cat_sex_total_noback.xml");
+		inputs.put(IN_SECOND_INPUT, "/Users/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/galfit_template.txt");
+		inputs.put(IN_FILTER, "galfit");
+		
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+		expectedOutputTypes.put(OUT_LIST, String.class);
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+		//TODO there is sth wrong. it seems there is a maximum length somewhere and the string result is truncated.
+		String report = "";
+		ArrayList<String> reportList = new ArrayList<String>();
+		reportList.add("/Users/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG011_g.galfit");
+		reportList.add("/Users/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG011_i.galfit");
+		reportList.add("/Users/julian/Documents/wf4ever/showcase61.2goldenExampler/2GE/workflows/CIG011_r.galfit");
+		
+		assertEquals("Unexpected outputs", 2, outputs.size());
+		assertEquals(report, outputs.get(OUT_REPORT));
+		assertEquals(reportList, outputs.get(OUT_LIST));
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
 	
 	@Test(expected = RuntimeException.class)
 	public void executeAsynchWithNullInput() throws Exception {
@@ -121,9 +161,9 @@ public class TemplateFillerActivityTest {
 		
 		
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
-		//expectedOutputTypes.put("simpleOutput", String.class);
-		//expectedOutputTypes.put("moreOutputs", String.class);
-		expectedOutputTypes.put(OUT_REPORT, Float.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+		expectedOutputTypes.put(OUT_LIST, String.class);
+		//expectedOutputTypes.put(OUT_REPORT, Float.class);
 
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
 				activity, inputs, expectedOutputTypes);
@@ -147,7 +187,8 @@ public class TemplateFillerActivityTest {
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
 		//expectedOutputTypes.put("moreOutputs", String.class);
-		expectedOutputTypes.put(OUT_REPORT, Float.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+		expectedOutputTypes.put(OUT_LIST, String.class);
 
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
 				activity, inputs, expectedOutputTypes);
@@ -165,12 +206,12 @@ public class TemplateFillerActivityTest {
 		activity.configure(configBean);
 	
 		assertEquals("Unexpected inputs", 3, activity.getInputPorts().size());
-		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
+		assertEquals("Unexpected outputs", 2, activity.getOutputPorts().size());
 	
 		activity.configure(configBean);
 		// Should not change on reconfigure
 		assertEquals("Unexpected inputs", 3, activity.getInputPorts().size());
-		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
+		assertEquals("Unexpected outputs", 2, activity.getOutputPorts().size());
 	}
 
 	

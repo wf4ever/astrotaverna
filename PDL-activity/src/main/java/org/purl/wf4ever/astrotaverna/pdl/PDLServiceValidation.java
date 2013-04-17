@@ -32,7 +32,7 @@ public class PDLServiceValidation {
 
 		//groups to complete
 		if (infosOnGroups.get(0) != null && !infosOnGroups.get(0).equalsIgnoreCase("")) {
-System.out.println("Grupos a completar: "+infosOnGroups.get(0));
+//System.out.println("Grupos a completar: "+infosOnGroups.get(0));
 			status = complete;
 		}
 

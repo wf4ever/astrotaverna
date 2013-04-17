@@ -37,6 +37,7 @@ public class AddCommonRowToVOTableServiceDesc extends ServiceDescription<AddComm
 	public AddCommonRowToVOTableActivityConfigurationBean getActivityConfiguration() {
 		AddCommonRowToVOTableActivityConfigurationBean bean = new AddCommonRowToVOTableActivityConfigurationBean();
 		bean.setTypeOfInput("String");
+		bean.setCommonRowPosition("Left");
 		//bean.setTypeOfFilter("Column names");
 		return bean;
 	}
@@ -94,6 +95,7 @@ public class AddCommonRowToVOTableServiceDesc extends ServiceDescription<AddComm
 	
 	
 	private String typeOfInput;
+	private String commonRowPosition;
 	
 	//private String typeOfFilter;
 
@@ -105,6 +107,16 @@ public class AddCommonRowToVOTableServiceDesc extends ServiceDescription<AddComm
 		this.typeOfInput = typeOfInput;
 	}
 
+	public String getCommonRowPosition() {
+		return commonRowPosition;
+	}
+
+	public void setCommonRowPosition(String commonRowPosition) {
+		this.commonRowPosition = commonRowPosition;
+	}
+
+	
+	
 	/*
 	public String getTypeOfFilter() {
 		return typeOfFilter;

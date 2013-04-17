@@ -24,10 +24,10 @@ public class AddCommonRowToVOTableConfigurationPanel
 	private AddCommonRowToVOTableActivityConfigurationBean configBean;
 	
 	String[] inputTypesStrings = {"File", "URL", "String"};
-	//String[] filterTypesStrings = {"Column names", "UCDs"};
+	String[] commonRowPositionStrings = {"Left", "Right"};
 	
 	private JComboBox  typeOfInput;
-	//private JComboBox typeOfFilter;
+	private JComboBox commonRowPosition;
 
 
 	public AddCommonRowToVOTableConfigurationPanel(AddCommonRowToVOTableActivity activity) {
@@ -47,12 +47,12 @@ public class AddCommonRowToVOTableConfigurationPanel
 		labelString.setLabelFor(typeOfInput);
 		typeOfInput.setSelectedIndex(1);
 		
-		//labelString = new JLabel("Filter type:");
-		//add(labelString);
-		//typeOfFilter = new JComboBox(filterTypesStrings);
-		//add(typeOfFilter);
-		//labelString.setLabelFor(typeOfFilter);
-		//typeOfFilter.setSelectedIndex(1);
+		labelString = new JLabel("Common row position:");
+		add(labelString);
+		commonRowPosition = new JComboBox(commonRowPositionStrings);
+		add(commonRowPosition);
+		labelString.setLabelFor(commonRowPosition);
+		commonRowPosition.setSelectedIndex(1);
 
 			
 		// Populate fields from activity configuration bean
@@ -77,12 +77,12 @@ public class AddCommonRowToVOTableConfigurationPanel
 			
 		}
 		
-		//String  tfilter = (String)typeOfFilter.getSelectedItem();
-		//if(!(      tfilter.compareTo("Column names")==0
-		//		|| tfilter.compareTo("UCDs")==0)){
-		//	//"Invalid filter type
-		//	errorMessage = "Valid filters: 'Column names' or 'UCDs'.";
-		//}
+		String  tfilter = (String)commonRowPosition.getSelectedItem();
+		if(!(      tfilter.compareTo("Left")==0
+				|| tfilter.compareTo("Right")==0)){
+			
+			errorMessage = "Invalid position: Left or Right";
+		}
 		
 		
 		if (errorMessage!=null){
@@ -111,11 +111,11 @@ public class AddCommonRowToVOTableConfigurationPanel
 	@Override
 	public boolean isConfigurationChanged() {
 		String originalTypeOfInput = configBean.getTypeOfInput();
-		//String originalTypeOfFilter = configBean.getTypeOfFilter();
+		String originalPosition = configBean.getCommonRowPosition();
 		// true (changed) unless all fields match the originals
 		
-		return ! (originalTypeOfInput.equals((String)typeOfInput.getSelectedItem())
-				/*&& originalTypeOfFilter.equals((String)typeOfFilter.getSelectedItem())*/ );
+		return ! (originalTypeOfInput.compareTo((String)typeOfInput.getSelectedItem())==0
+				&& originalPosition.compareTo((String)commonRowPosition.getSelectedItem())==0 );
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class AddCommonRowToVOTableConfigurationPanel
 		
 		// FIXME: Update bean fields from your UI elements
 		configBean.setTypeOfInput((String)typeOfInput.getSelectedItem());
-		//configBean.setTypeOfFilter((String)typeOfFilter.getSelectedItem());
+		configBean.setCommonRowPosition((String)commonRowPosition.getSelectedItem());
 		
 	}
 
@@ -142,7 +142,7 @@ public class AddCommonRowToVOTableConfigurationPanel
 		
 		// FIXME: Update UI elements from your bean fields
 		typeOfInput.setSelectedItem(configBean.getTypeOfInput());
-		//typeOfFilter.setSelectedItem(configBean.getTypeOfFilter());
+		commonRowPosition.setSelectedItem(configBean.getCommonRowPosition());
 
 	}
 }

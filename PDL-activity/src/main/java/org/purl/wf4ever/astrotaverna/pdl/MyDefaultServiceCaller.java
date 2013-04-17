@@ -44,7 +44,7 @@ public class MyDefaultServiceCaller {
 				}
 
 				paramName = p.getName();
-				System.out.print("name: "+ paramName);
+				//System.out.print("name: "+ paramName);
 				List<GeneralParameter> gplist = Utilities.getInstance().getuserProvidedValuesForParameter(p);
 				//if(gplist.size()>0)
 				//	System.out.println();

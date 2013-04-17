@@ -19,6 +19,9 @@ import uk.ac.starlink.ttools.Stilts;
 import net.sf.taverna.t2.invocation.InvocationContext;
 import net.sf.taverna.t2.reference.ReferenceService;
 import net.sf.taverna.t2.reference.T2Reference;
+import net.sf.taverna.t2.visit.VisitReport;
+import net.sf.taverna.t2.visit.VisitReport.Status;
+import net.sf.taverna.t2.workflowmodel.health.HealthCheck;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AbstractAsynchronousActivity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivity;
@@ -57,8 +60,11 @@ public class AddCommonRowToVOTableActivity extends
 		if(!(      configBean.getTypeOfInput().compareTo("File")==0
 				|| configBean.getTypeOfInput().compareTo("URL")==0
 				|| configBean.getTypeOfInput().compareTo("String")==0)){
-			throw new ActivityConfigurationException(
-					"Invalid input type for the tables");
+			throw new ActivityConfigurationException("Invalid input type for the tables");
+		}
+		if(!(configBean.getCommonRowPosition().compareTo("Left")==0
+				|| configBean.getCommonRowPosition().compareTo("Right")==0)){
+			throw new ActivityConfigurationException("Invalid common row position.");
 		}
 		
 		// Store for getConfiguration(), but you could also make
@@ -133,6 +139,7 @@ public class AddCommonRowToVOTableActivity extends
 				File outputFile = null;
 				URI firstURI = null;
 				URI secondURI = null;
+				boolean leftPosition=true;
 				
 				if(areMandatoryInputsNotNull()){
 				
@@ -147,6 +154,8 @@ public class AddCommonRowToVOTableActivity extends
 							String.class, context);
 					
 					boolean optionalPorts = configBean.getTypeOfInput().compareTo("File")==0;
+					
+					leftPosition = configBean.getCommonRowPosition().compareTo("Left")==0;
 					
 					String outputTableName = null;
 					if(optionalPorts && inputs.containsKey(IN_OUTPUT_TABLE_NAME)){ //configBean.getNumberOfTables()==3
@@ -253,11 +262,11 @@ public class AddCommonRowToVOTableActivity extends
 						try {
 							if(configBean.getTypeOfInput().compareTo("String")==0
 									|| configBean.getTypeOfInput().compareTo("File")==0){
-								controller = new AddCommonRowToVOTableController(firstFile, secondFile);
+								controller = new AddCommonRowToVOTableController(firstFile, secondFile, leftPosition);
 								controller.writeJoinTable(outputFile);
 							}else{
 								if(configBean.getTypeOfInput().compareTo("URL")==0){
-									controller = new AddCommonRowToVOTableController(firstURI, secondURI);
+									controller = new AddCommonRowToVOTableController(firstURI, secondURI, leftPosition);
 									controller.writeJoinTable(outputFile);
 								}else{
 									callbackfails=true;

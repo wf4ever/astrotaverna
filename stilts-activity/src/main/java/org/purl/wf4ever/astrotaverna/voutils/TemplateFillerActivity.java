@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -45,7 +46,7 @@ public class TemplateFillerActivity extends
 	private static final String IN_FILTER = "ColumnNameWithResultFileName";
 	//private static final String IN_OUTPUT_TABLE_NAME = "outputFileNameIn";
 
-	//private static final String OUT_SIMPLE_OUTPUT = "list";
+	private static final String OUT_LIST = "list";
 	private static final String OUT_REPORT = "report";
 	
 	private TemplateFillerActivityConfigurationBean configBean;
@@ -115,8 +116,8 @@ public class TemplateFillerActivity extends
 		//	addOutput(OUT_REPORT, 0);
 		//}
 		
-		// Single value output port (depth 0)
-		//addOutput(OUT_SIMPLE_OUTPUT, 1);
+		// Single value output port (depth 1)
+		addOutput(OUT_LIST, 1);
 		// Single value output port (depth 0)
 		addOutput(OUT_REPORT, 0);
 
@@ -304,6 +305,7 @@ public class TemplateFillerActivity extends
 						}
 						
 					    try{
+					    	ArrayList<String> reportList = new ArrayList<String>();
 							String report = "";
 							RowSequence rseq = table.getRowSequence();
 					        while ( rseq.next() ) {
@@ -320,7 +322,8 @@ public class TemplateFillerActivity extends
 					        	//System.out.println("Config File: " +rseq.getCell(  (int) mapping.get(columnNameWithConfigFile)  ));
 					        	String fileName = (String) rseq.getCell(mapping.get(filter).intValue()  );
 					        	MyUtils.writeStringToAFile(fileName, template);
-					        	report += fileName + "\n";
+					        	//report += fileName + "\n";
+					        	reportList.add(fileName);
 					        }
 					        rseq.close();
 				        
@@ -330,8 +333,8 @@ public class TemplateFillerActivity extends
 								Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
 								String simpleoutput = report;//"simple-report";
 
-									//T2Reference simpleRef = referenceService.register(list, 1, true, context);
-									//outputs.put(OUT_SIMPLE_OUTPUT, simpleRef);
+									T2Reference simpleRef = referenceService.register(reportList, 1, true, context);
+									outputs.put(OUT_LIST, simpleRef);
 									T2Reference simpleRef2 = referenceService.register(simpleoutput,0, true, context); 
 									outputs.put(OUT_REPORT, simpleRef2);
 					
