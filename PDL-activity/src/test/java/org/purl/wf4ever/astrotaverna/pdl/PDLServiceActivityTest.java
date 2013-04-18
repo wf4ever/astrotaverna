@@ -47,6 +47,7 @@ public class PDLServiceActivityTest {
 	private static final String OUT_SIMPLE_OUTPUT = "outputFileOut";
 	private static final String OUT_REPORT = "status";
 	private static final String RESPONSE_BODY = "response_body";
+	private static final String DEFAULT_OUTPUT = "fileResult";
 	
 	private PDLServiceActivity activity = new PDLServiceActivity();
 
@@ -92,6 +93,8 @@ public class PDLServiceActivityTest {
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
 		expectedOutputTypes.put(OUT_REPORT, String.class);
+		expectedOutputTypes.put(RESPONSE_BODY, String.class);
+		expectedOutputTypes.put(DEFAULT_OUTPUT, String.class);
 
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(activity, inputs, expectedOutputTypes);
 
@@ -138,9 +141,10 @@ public class PDLServiceActivityTest {
 		
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
-		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(RESPONSE_BODY, String.class);
 		expectedOutputTypes.put(OUT_REPORT, String.class);
-
+		expectedOutputTypes.put(DEFAULT_OUTPUT, String.class);
+		
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
 				activity, inputs, expectedOutputTypes);
 
@@ -184,8 +188,9 @@ public class PDLServiceActivityTest {
 		
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
-		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(RESPONSE_BODY, String.class);
 		expectedOutputTypes.put(OUT_REPORT, String.class);
+		expectedOutputTypes.put(DEFAULT_OUTPUT, String.class);
 
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
 				activity, inputs, expectedOutputTypes);
@@ -219,6 +224,7 @@ public class PDLServiceActivityTest {
 		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
 		expectedOutputTypes.put(OUT_REPORT, String.class);
 		expectedOutputTypes.put(RESPONSE_BODY, String.class);
+		expectedOutputTypes.put(DEFAULT_OUTPUT, String.class);
 		
 
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
@@ -262,6 +268,7 @@ public class PDLServiceActivityTest {
 		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
 		expectedOutputTypes.put(OUT_REPORT, String.class);
 		expectedOutputTypes.put(RESPONSE_BODY, String.class);
+		expectedOutputTypes.put(DEFAULT_OUTPUT, String.class);
 		
 
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
@@ -364,13 +371,13 @@ public class PDLServiceActivityTest {
 		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
 		expectedOutputTypes.put(OUT_REPORT, String.class);
 		expectedOutputTypes.put(RESPONSE_BODY, String.class);
+		expectedOutputTypes.put(DEFAULT_OUTPUT, String.class);
 		
 
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(activity, inputs, expectedOutputTypes);
 
-		int expectedoutputs=2;
-		if(outputs.size()==3)
-			expectedoutputs=3;
+		int expectedoutputs=3;
+		
 		assertEquals("Unexpected outputs", expectedoutputs, outputs.size());//only if the result
 		assertTrue("Invalid or error status", PDLServiceController.getPendingStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0 
 				                  || PDLServiceController.getFinishedStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0
@@ -389,7 +396,7 @@ public class PDLServiceActivityTest {
 	
 	
 	//THIS IS USING LOCAL FILES
-	@Ignore
+	
 	@Test
 	public void reConfiguredActivity() throws Exception {
 		
@@ -416,12 +423,12 @@ public class PDLServiceActivityTest {
 		
 		activity.configure(configBean);
 		assertEquals("Unexpected inputs", 16, activity.getInputPorts().size());
-		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
+		assertEquals("Unexpected outputs", 3, activity.getOutputPorts().size());
 
 		activity.configure(configBean);
 		// Should not change on reconfigure
 		assertEquals("Unexpected inputs", 16, activity.getInputPorts().size());
-		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
+		assertEquals("Unexpected outputs", 3, activity.getOutputPorts().size());
 		Iterator<ActivityInputPort> it = activity.getInputPorts().iterator();
 		
 		/*

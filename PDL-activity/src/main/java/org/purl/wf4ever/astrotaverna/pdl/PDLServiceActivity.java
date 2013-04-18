@@ -62,6 +62,7 @@ public class PDLServiceActivity extends
 	//private static final String OUT_SIMPLE_OUTPUT = "outputFileOut";
 	private static final String OUT_REPORT = "status";
 	private static final String RESPONSE_BODY = "response_body";
+	private static final String DEFAULT_OUTPUT = "fileResult";
 	
 	private PDLServiceActivityConfigurationBean configBean;
 	
@@ -148,6 +149,8 @@ public class PDLServiceActivity extends
 			for(String paramName : outputSingleParams.keySet()){
 				addOutput(paramName, 0);
 			}
+			if(outputSingleParams==null || outputSingleParams.isEmpty())
+				addOutput(DEFAULT_OUTPUT,0);
 			addOutput(OUT_REPORT, 0);
 			addOutput(RESPONSE_BODY, 0); 
 			
@@ -379,6 +382,7 @@ public class PDLServiceActivity extends
 				String jobInfo = "";
 				String jobId;
 				String userId;
+				boolean inputsAreValid = false;
 							
 				InvocationContext context = callback
 						.getContext();
@@ -443,7 +447,8 @@ public class PDLServiceActivity extends
 						// CALL THE SERVICE
 						caller = new MyDefaultServiceCaller();				
 						//if the input parameters are valid
-						if(pdlServiceValidation.isValid()){
+						inputsAreValid = pdlServiceValidation.isValid();
+						if(inputsAreValid){
 							//example call: http://pdl-calc.obspm.fr:8081/montage/TavernaCodeFrontal?mail=tetrarquis@gmail.com&NAXIS1=2259&NAXIS2=2199&CTYPE1=RA---TAN&CTYPE2=DEC--TAN&CRVAL1=210.835222357&CRVAL2=54.367562188&CRPIX1=1130&CRPIX2=1100&CDELT1=-0.000277780&CDELT2=0.000277780&CROTA2=-0.052834593&ImageLocation=SampleLocation&EQUINOX=2000
 
 							List<String> errorList = pdlcontroller.buildErrorsList();
@@ -452,7 +457,7 @@ public class PDLServiceActivity extends
 								HashMap<String, SingleParameter> inputSingleParams = pdlcontroller.getHashInputParameters();
 								
 								//create a job
-								//TODO uncomment calling the service
+								
 								serviceResult = caller.callService(inputSingleParams);
 								
 								jobsList = new JobsList();
@@ -485,6 +490,7 @@ public class PDLServiceActivity extends
 									callback.fail("Job info couldn't be parsed.");
 								}
 							}else{
+								callbackfails = true;
 								logger.error(errorList.toString());
 								callback.fail(errorList.toString());
 							}
@@ -505,7 +511,8 @@ public class PDLServiceActivity extends
 						}
 						
 						if(!callbackfails)
-							if(pdlServiceValidation.isValid()){
+							//if(pdlServiceValidation.isValid()){
+							if(inputsAreValid){
 								Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
 								//phase for the service:
 								T2Reference simpleRef2 = referenceService.register(jobResult.getJobPhase(),0, true, context); 
@@ -520,11 +527,41 @@ public class PDLServiceActivity extends
 								jobResultsMap = jobResult.getOutputParams();
 								//if there is sth to compare
 								if(outputPDLParamMap!=null && jobResultsMap!=null){
-									for(Entry<String, String> entry : jobResultsMap.entrySet()){
-										simpleRef2 = referenceService.register(entry.getValue(),0, true, context); 
-										outputs.put(entry.getKey(), simpleRef2);
+									for(Entry<String, SingleParameter> entry : outputPDLParamMap.entrySet()){
+									//for(Entry<String, String> entry : jobResultsMap.entrySet()){
+										String name = entry.getValue().getName();
+										String value = jobResultsMap.get(name);
+										if(value==null)
+											value ="";
+										simpleRef2 = referenceService.register(value,0, true, context); 
+										outputs.put(name, simpleRef2);
 										if(outputPDLParamMap.get(entry.getKey())==null){
 											logger.warn(entry.getKey() + " is not in the PDL description file");
+										}
+									}
+									//if there is not output in the description file I assume that there will be one
+									if(outputPDLParamMap == null || outputPDLParamMap.isEmpty()){
+										
+										if(jobResultsMap != null && !jobResultsMap.isEmpty()){
+											//if there is only one I use the default port
+											if(jobResultsMap.size()==1)
+												for(Entry<String, String> entry : jobResultsMap.entrySet()){
+													simpleRef2 = referenceService.register(entry.getValue(),0, true, context); 
+													outputs.put(DEFAULT_OUTPUT, simpleRef2);
+
+												}
+											else{  //if there is more than one I use the default port for the first one and the real name for the rest
+												int count = 0;
+												for(Entry<String, String> entry : jobResultsMap.entrySet()){
+													simpleRef2 = referenceService.register(entry.getValue(),0, true, context); 
+													if(count == 0){
+														outputs.put(DEFAULT_OUTPUT, simpleRef2);
+														count ++;
+													}else{
+														outputs.put(entry.getKey(), simpleRef2);
+													}	
+												}
+											}
 										}
 									}
 									

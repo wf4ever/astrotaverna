@@ -52,9 +52,9 @@ public class PDLServiceController {
 	private Service service;
 	private GroupProcessor gp;
 	
-	private HashMap<String, SingleParameter> hashParameters;
-	private HashMap<String, SingleParameter> hashInputParameters;
-	private HashMap<String, SingleParameter> hashOutputParameters;
+	private HashMap<String, SingleParameter> hashParameters= new HashMap<String, SingleParameter>();
+	private HashMap<String, SingleParameter> hashInputParameters = new HashMap<String, SingleParameter>();
+	private HashMap<String, SingleParameter> hashOutputParameters = new HashMap<String, SingleParameter>();
 	private HashMap<String, String> restrictionsOnGroups;
 	private String serviceDescription;
 	
