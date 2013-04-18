@@ -378,7 +378,9 @@ public class PDLServiceActivityTest {
 
 		int expectedoutputs=3;
 		
+		
 		assertEquals("Unexpected outputs", expectedoutputs, outputs.size());//only if the result
+		
 		assertTrue("Invalid or error status", PDLServiceController.getPendingStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0 
 				                  || PDLServiceController.getFinishedStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0
 				                  || PDLServiceController.getCompletedStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0

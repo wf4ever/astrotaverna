@@ -539,18 +539,22 @@ public class PDLServiceActivity extends
 											logger.warn(entry.getKey() + " is not in the PDL description file");
 										}
 									}
+									
 									//if there is not output in the description file I assume that there will be one
 									if(outputPDLParamMap == null || outputPDLParamMap.isEmpty()){
 										
 										if(jobResultsMap != null && !jobResultsMap.isEmpty()){
 											//if there is only one I use the default port
-											if(jobResultsMap.size()==1)
+											if(jobResultsMap.size()==1){
 												for(Entry<String, String> entry : jobResultsMap.entrySet()){
-													simpleRef2 = referenceService.register(entry.getValue(),0, true, context); 
+													
+													simpleRef2 = referenceService.register(entry.getValue(),0, true, context);
+													System.out.println("result from xml: "+entry.getValue());
+													//simpleRef2 = referenceService.register("salida",0, true, context);
 													outputs.put(DEFAULT_OUTPUT, simpleRef2);
 
 												}
-											else{  //if there is more than one I use the default port for the first one and the real name for the rest
+											}else{  //if there is more than one I use the default port for the first one and the real name for the rest
 												int count = 0;
 												for(Entry<String, String> entry : jobResultsMap.entrySet()){
 													simpleRef2 = referenceService.register(entry.getValue(),0, true, context); 
@@ -564,6 +568,7 @@ public class PDLServiceActivity extends
 											}
 										}
 									}
+									
 									
 								}else{
 									logger.warn("Number of output in pdl description file doesn't match with the results provided by the user");
