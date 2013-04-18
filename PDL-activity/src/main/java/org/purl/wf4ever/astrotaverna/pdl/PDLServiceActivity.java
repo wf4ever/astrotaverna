@@ -542,17 +542,17 @@ public class PDLServiceActivity extends
 									
 									//if there is not output in the description file I assume that there will be one
 									if(outputPDLParamMap == null || outputPDLParamMap.isEmpty()){
-										
+										boolean sthInOutput = false;
 										if(jobResultsMap != null && !jobResultsMap.isEmpty()){
 											//if there is only one I use the default port
 											if(jobResultsMap.size()==1){
 												for(Entry<String, String> entry : jobResultsMap.entrySet()){
 													
 													simpleRef2 = referenceService.register(entry.getValue(),0, true, context);
-													System.out.println("result from xml: "+entry.getValue());
+													//System.out.println("result from xml: "+entry.getValue());
 													//simpleRef2 = referenceService.register("salida",0, true, context);
 													outputs.put(DEFAULT_OUTPUT, simpleRef2);
-
+													sthInOutput = true;
 												}
 											}else{  //if there is more than one I use the default port for the first one and the real name for the rest
 												int count = 0;
@@ -561,21 +561,29 @@ public class PDLServiceActivity extends
 													if(count == 0){
 														outputs.put(DEFAULT_OUTPUT, simpleRef2);
 														count ++;
+														sthInOutput = true;
 													}else{
 														outputs.put(entry.getKey(), simpleRef2);
 													}	
 												}
 											}
 										}
+										if(!sthInOutput){
+											simpleRef2 = referenceService.register("",0, true, context);
+											outputs.put(DEFAULT_OUTPUT, simpleRef2);
+										}
 									}
 									
 									
 								}else{
-									logger.warn("Number of output in pdl description file doesn't match with the results provided by the user");
+									//logger.warn("Number of output in pdl description file doesn't match with the results provided by the user");
+									logger.warn("outputPDLParamMap or jobResultsMap were null");
+									callback.fail("outputPDLParamMap or jobResultsMap were null");
+									callbackfails = true;
 								}
 								
-								
-								callback.receiveResult(outputs, new int[0]);
+								if(!callbackfails)
+									callback.receiveResult(outputs, new int[0]);
 							}else{
 								logger.error("Invalid values for the input parameters, check the restrictions");
 								callback.fail("Invalid values for the input parameters, check the restrictions");
