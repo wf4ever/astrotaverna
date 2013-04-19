@@ -114,7 +114,7 @@ public class TemplateFillerActivityTest {
 	}
 	
 	//this test is valid only with the right folders (Mac folders)
-	
+	@Ignore
 	@Test
 	public void executeAsynchMac() throws Exception {
 		configBean.setTypeOfInput("File");
