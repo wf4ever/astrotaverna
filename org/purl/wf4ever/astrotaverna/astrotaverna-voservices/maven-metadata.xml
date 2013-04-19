@@ -3,7 +3,7 @@
   <groupId>org.purl.wf4ever.astrotaverna</groupId>
   <artifactId>astrotaverna-voservices</artifactId>
   <versioning>
-    <release>1.06</release>
+    <release>1.07</release>
     <versions>
       <version>0.4</version>
       <version>0.5</version>
@@ -18,7 +18,8 @@
       <version>1.03</version>
       <version>1.05</version>
       <version>1.06</version>
+      <version>1.07</version>
     </versions>
-    <lastUpdated>20130404210042</lastUpdated>
+    <lastUpdated>20130419082118</lastUpdated>
   </versioning>
 </metadata>
