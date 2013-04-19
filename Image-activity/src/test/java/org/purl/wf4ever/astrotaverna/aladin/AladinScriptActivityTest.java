@@ -106,7 +106,7 @@ public class AladinScriptActivityTest {
 	}
 
 	//It is based in local files
-	
+	@Ignore
 	@Test
 	public void executeAsynchWithStrings() throws Exception {
 		configBean.setTypeOfInput("String");
