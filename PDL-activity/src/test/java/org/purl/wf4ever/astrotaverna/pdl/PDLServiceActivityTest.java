@@ -238,7 +238,8 @@ public class PDLServiceActivityTest {
 
 	}
 	
-	
+	//This test was for the service at Paris. Now It has been moved to IAA
+	@Ignore 
 	@Test
 	public void executeMontageTavernaEntryPointService() throws Exception {
 		String serviceURL = "http://pdl-calc.obspm.fr:8081/montage/pdlDescription/PDL-Description.xml";
@@ -289,7 +290,59 @@ public class PDLServiceActivityTest {
 
 	}
 	
+	@Test
+	public void executeIAAMontageTavernaEntryPointService() throws Exception {
+		String serviceURL = "http://dae81.iaa.es:8081/montage/pdlDescription/PDL-Description.xml";
+			    
+		configBean.setPdlDescriptionFile(serviceURL);
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		Float value = new Float(2/3.0);
+		inputs.put("NAXIS1", "2259");
+		inputs.put("NAXIS2", "2199");
+		inputs.put("CTYPE1", "RA---TAN");
+		inputs.put("CTYPE2", "DEC--TAN");
+		inputs.put("CRVAL1", "210.835222357");
+		inputs.put("CRVAL2", "54.367562188");
+		inputs.put("CDELT1", "-0.000277780");
+		inputs.put("CDELT2", "0.000277780");
+		inputs.put("CRPIX1", "1130");
+		inputs.put("CRPIX2", "1100");
+		inputs.put("CROTA2", "-0.052834593"); //orig value: -0.052834592
+		inputs.put("EQUINOX", "2000");
+		inputs.put("ImageLocation", "SampleLocation");
+		inputs.put("mail", "tetrarquis@gmail.com");
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+		expectedOutputTypes.put(RESPONSE_BODY, String.class);
+		expectedOutputTypes.put(DEFAULT_OUTPUT, String.class);
+		
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		int expectedoutputs=2;
+		if(outputs.size()==3)
+			expectedoutputs=3;
+		assertEquals("Unexpected outputs", expectedoutputs, outputs.size());//only if the result
+		assertTrue("Invalid or error status", PDLServiceController.getPendingStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0 
+				                  || PDLServiceController.getFinishedStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0
+				                  || PDLServiceController.getCompletedStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0
+				                  || PDLServiceController.getRunningStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0
+				                  || PDLServiceController.getExecutingStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0);
+		
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
 	
+	
+	//commented only to not overload the Paris Service
+	@Ignore
 	@Test
 	public void executeParisDurhamTavernaEntryPointService() throws Exception {
 		String serviceURL = "http://pdl-calc.obspm.fr:8081/ParisDurham/pdlDescription/PDL-Description.xml";
