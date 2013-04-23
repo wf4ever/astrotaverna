@@ -290,6 +290,7 @@ public class PDLServiceActivityTest {
 
 	}
 	
+	
 	@Test
 	public void executeIAAMontageTavernaEntryPointService() throws Exception {
 		String serviceURL = "http://dae81.iaa.es:8081/montage/pdlDescription/PDL-Description.xml";
@@ -305,14 +306,15 @@ public class PDLServiceActivityTest {
 		inputs.put("CTYPE2", "DEC--TAN");
 		inputs.put("CRVAL1", "210.835222357");
 		inputs.put("CRVAL2", "54.367562188");
-		inputs.put("CDELT1", "-0.000277780");
+		//inputs.put("CDELT1", "-0.000277780");
+		inputs.put("CDELT1", "-0.000279780");
 		inputs.put("CDELT2", "0.000277780");
 		inputs.put("CRPIX1", "1130");
 		inputs.put("CRPIX2", "1100");
 		inputs.put("CROTA2", "-0.052834593"); //orig value: -0.052834592
 		inputs.put("EQUINOX", "2000");
 		inputs.put("ImageLocation", "SampleLocation");
-		inputs.put("mail", "tetrarquis@gmail.com");
+		inputs.put("mail", "jgarrido@iaa.es");
 		
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
@@ -334,7 +336,7 @@ public class PDLServiceActivityTest {
 				                  || PDLServiceController.getCompletedStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0
 				                  || PDLServiceController.getRunningStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0
 				                  || PDLServiceController.getExecutingStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0);
-		
+		System.out.println("Status: "+ (String)outputs.get(OUT_REPORT));
 		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
 		//		.get("moreOutputs"));
 
