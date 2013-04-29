@@ -43,9 +43,8 @@ public class FormatConversionContextualView extends ContextualView {
 				"a URL or a File. If the input is a file path then the output is a File path whereas the output " +
 				"is a string with the votable in the remaining cases. \n" +
 				"Valid input formats are: fits, colfits, votable, ascii, csv, tst, ipac, wdc. \n" +
-				"Valid output formats are: fits-plus, fits-basic, colfits-plus, colfits-basic, votable-tabledata, " +
-				"votable-binary-inline, votable-binary-href, votable-fits-href, votable-fits-inline, ascii, " +
-				"text, csv, csv-noheader, tst, html, html-element, latex, latex-document, mirage.");
+				"Valid output formats are: fits, colfits, votable, ascii, csv, tst.");
+				
 		
 		jScrollPane1.setViewportView(description);
 		jPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);

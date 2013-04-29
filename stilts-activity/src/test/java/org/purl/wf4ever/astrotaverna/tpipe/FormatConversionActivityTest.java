@@ -119,7 +119,46 @@ public class FormatConversionActivityTest {
 
 	}
 
+	
+	@Test
+	public void executeAsynchOtherFormats() throws Exception {
+		configBean.setTypeOfInput("String");
+		//configBean.setTypeOfFilter("Column names");
+		activity.configure(configBean);
 
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		//inputs.put(IN_FIRST_INPUT_TABLE, resultFormatConversion);
+		//inputs.put(IN_FORMAT_INPUT_TABLE, "ascii");
+		//inputs.put(IN_FORMAT_OUTPUT_TABLE, "votable-tabledata");
+
+		inputs.put(IN_FIRST_INPUT_TABLE, MyUtils.getExampleVOtable());
+		inputs.put(IN_FORMAT_INPUT_TABLE, "votable");
+		inputs.put(IN_FORMAT_OUTPUT_TABLE, "wdc");
+		
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put("simpleOutput", String.class);
+		//expectedOutputTypes.put("moreOutputs", String.class);
+		expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		//String a = new String(resultFormatConversion.toCharArray());
+		//String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
+		//assertTrue("Wrong output : ", (a.length()>b.length()-6) && (a.length()<b.length()+6));
+		assertEquals("simple-report", outputs.get(OUT_REPORT));
+		
+		System.out.println((String)outputs.get(OUT_SIMPLE_OUTPUT));
+		
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
+
+	
 	@Test
 	public void executeAsynchString() throws Exception {
 		configBean.setTypeOfInput("String");
