@@ -133,7 +133,7 @@ public class FormatConversionActivityTest {
 
 		inputs.put(IN_FIRST_INPUT_TABLE, MyUtils.getExampleVOtable());
 		inputs.put(IN_FORMAT_INPUT_TABLE, "votable");
-		inputs.put(IN_FORMAT_OUTPUT_TABLE, "wdc");
+		inputs.put(IN_FORMAT_OUTPUT_TABLE, "csv");
 		
 		
 
