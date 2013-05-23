@@ -344,8 +344,10 @@ public class PDLServiceController {
 	private Service buildService(String pdlDescriptionFile) throws ActivityConfigurationException {
 		Service service = null;
 		try {
-			JAXBContext jaxbContext = JAXBContext
-					.newInstance("net.ivoa.parameter.model");
+			//JAXBContext jaxbContext = JAXBContext
+			//		.newInstance("net.ivoa.parameter.model");
+			ClassLoader c1 = net.ivoa.parameter.model.ObjectFactory.class.getClassLoader();
+			JAXBContext jaxbContext = JAXBContext.newInstance("net.ivoa.parameter.model", c1);
 			Unmarshaller u = jaxbContext.createUnmarshaller();
 			File file = new File(pdlDescriptionFile);
 			if(file.exists()){

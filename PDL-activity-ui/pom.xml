@@ -54,6 +54,8 @@
 			<version>${t2.ui.impl.version}</version>
 		</dependency>
 		<!-- Added by JGS for opening dialog when add artifact from the service panel -->
+		<!-- remove the next dependencies to avoid doubled icons bug -->
+		<!-- 
 		<dependency>
 			<groupId>net.sf.taverna.t2.ui-impl</groupId>
 			<artifactId>contextual-views-impl</artifactId>
@@ -69,5 +71,6 @@
 			<artifactId>workflow-view</artifactId>
 			<version>${t2.ui.components.version}</version>
 		</dependency>
+		-->
 	</dependencies>
 </project>

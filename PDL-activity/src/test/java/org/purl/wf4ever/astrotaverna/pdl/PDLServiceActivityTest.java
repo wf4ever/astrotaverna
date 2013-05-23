@@ -452,7 +452,6 @@ public class PDLServiceActivityTest {
 	}
 	
 	
-	//THIS IS USING LOCAL FILES
 	
 	@Test
 	public void reConfiguredActivity() throws Exception {
@@ -472,31 +471,24 @@ public class PDLServiceActivityTest {
 	    //String pdlContent = MyUtils.convertStreamToString(is);
 	    //File tmpFile = MyUtils.writeStringAsTmpFile(pdlContent);
 		//configBean.setPdlDescriptionFile(tmpFile.getAbsolutePath());
-		System.out.println(PDLServiceActivityTest.class.getResource("/PDL-descriptionTest.xml"));
-		System.out.println(PDLServiceActivityTest.class.getResource("org/purl/wf4ever/astrotaverna/pdl/PDL_DescriptionTest.xml"));
-		System.out.println(PDLServiceActivityTest.class.getResource("/org/purl/wf4ever/astrotaverna/pdl/PDL_DescriptionTest.xml"));
-		String pdlUrl = this.getClass().getResource("/org/purl/wf4ever/astrotaverna/pdl/PDL_DescriptionTest.xml").toExternalForm();
+		//System.out.println(PDLServiceActivityTest.class.getResource("/PDL-descriptionTest.xml"));
+		//System.out.println(PDLServiceActivityTest.class.getResource("org/purl/wf4ever/astrotaverna/pdl/PDL_DescriptionTest.xml"));
+		//System.out.println(PDLServiceActivityTest.class.getResource("/org/purl/wf4ever/astrotaverna/pdl/PDL_DescriptionTest.xml"));
+		//String pdlUrl = this.getClass().getResource("/org/purl/wf4ever/astrotaverna/pdl/PDL_DescriptionTest.xml").toExternalForm();
+		String pdlUrl = "http://dae81.iaa.es:8081/montage/pdlDescription/PDL-Description.xml";
 		configBean.setPdlDescriptionFile(pdlUrl);
 		
 		activity.configure(configBean);
-		assertEquals("Unexpected inputs", 16, activity.getInputPorts().size());
+		assertEquals("Unexpected inputs", 14, activity.getInputPorts().size());
 		assertEquals("Unexpected outputs", 3, activity.getOutputPorts().size());
 
 		activity.configure(configBean);
 		// Should not change on reconfigure
-		assertEquals("Unexpected inputs", 16, activity.getInputPorts().size());
+		assertEquals("Unexpected inputs", 14, activity.getInputPorts().size());
 		assertEquals("Unexpected outputs", 3, activity.getOutputPorts().size());
 		Iterator<ActivityInputPort> it = activity.getInputPorts().iterator();
 		
-		/*
-		//configBean.setPdlDescriptionFile("http://pdl-calc.obspm.fr:8081/broadening/pdlDescription/PDL-Description.xml");
-		configBean.setPdlDescriptionFile("/home/julian/Documents/wf4ever/pdl/wf/PDL-Description-broadening.xml");
-		activity.configure(configBean);
-		//System.out.println("----------- "+activity.getInputPorts().size());
-		//System.out.println(activity.getRestrictionsOnGroups());
-		assertEquals("Unexpected inputs", 5, activity.getInputPorts().size());
-		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
-		*/
+
 	}
 	
 	
