@@ -123,6 +123,99 @@ public class AladinScriptParser {
 		return files;
 	}
 	
+	public ArrayList<String> parseMacroScript (String script){
+		this.script = script;
+		String lines[] = script.split("\\r?\\n");
+		files = new ArrayList<String>();
+		if(lines!=null)
+			for(String line : lines){
+				//split by ;
+				String commands[] = line.split(";");
+				if(commands!=null)
+					for(String command : commands){
+						
+						//is it a comment?
+						command = command.trim();
+						//String fileExpression="(([a-zA-Z]+:)?[[a-zA-Z0-9_-]+|"+Pattern.quote("[.&\\/ %]*") +"]+)";
+						String fileExpression="(([a-zA-Z]+:)?\\\\?[[a-zA-Z0-9_-]+|"+Pattern.quote("[.&$\\/ %]*") +"]+)";
+						//String expression =".*save\\s+[-png|-PNG|-jpg|-JPG|-eps|-EPS|-l*k*]*\\s+"+fileExpression;
+						//fileExpression = "(.*)";
+						//String flags = Pattern.quote("(-png|-PNG|-jpg|-JPG|-eps|-EPS|-l*k*)*");
+						String expression ="";
+						
+						if(!command.startsWith("#")){
+							//save [-eps|-jpg[NN]|-png] [-lk] [WxH] [filename]
+							//Example:
+							//	save m1.eps
+							//	save -lk home\img.png
+							//	save -jpg97 300x300
+							
+							//expression = "\\s*save\\s+"+fileExpression;
+							expression = "\\s*save"+fileExpression;
+							Pattern pattern = Pattern.compile(expression);
+							Matcher matcher = pattern.matcher(command);
+							while(matcher.find()){
+								String filename = matcher.group(1);
+								if(filename!=null && filename.length()>0){
+									
+									filename = filename.replaceAll("\\s+(-png)[^a-zA-Z/\\-]*", " ");
+									filename = filename.replaceAll("\\s+(-jpg)[^a-zA-Z/\\-]*", " ");
+									filename = filename.replaceAll("\\s+(-eps)[^a-zA-Z/\\-]*", " ");
+									filename = filename.replaceAll("\\s+(-EPS)[^a-zA-Z/\\-]*", " ");
+									filename = filename.replaceAll("\\s+-([l|k|L|K]{0,2})[\\s|^a-zA-Z-]*", " ");
+									//filename = filename.replaceAll("[^a-zA-Z]*((-png)|(-jpg))[^a-zA-Z]*", " ");
+									files.add(filename.trim());
+								}
+							}
+							
+							expression = "\\s*backup"+fileExpression;
+							pattern = Pattern.compile(expression);
+							matcher = pattern.matcher(command);
+							while(matcher.find()){
+								String filename = matcher.group(1);
+								if(filename!=null && filename.length()>0){
+									files.add(filename.trim());
+								}
+							}
+							
+							//export [-fmt] x filename
+							//export -ROI filename
+							//Example:
+							//	export DSS1.V.SERC C:\DSS2image.fits
+							//	export -votable GSC1.2 /home/gsc1.2.dat
+							//	export RGBimg m1RGB.fits
+							expression = "\\s*export(.*)";//+fileExpression;
+							pattern = Pattern.compile(expression);
+							matcher = pattern.matcher(command);
+							while(matcher.find()){
+								String filename = matcher.group(1);
+								if(filename!=null && filename.length()>0){
+									/*
+									if(filename.matches("\\s+(RGBimg)[^a-zA-Z/\\-]*")){
+										filename = filename.replaceAll("\\s+(RGBimg)[^a-zA-Z/\\-]*", " ");
+									}
+									if(filename.matches("\\s+(-votable)[^a-zA-Z/\\-]*")){
+										filename.
+										filename = filename.replaceAll("\\s+(-votable)[^a-zA-Z/\\-]*", " ");
+									}
+									*/
+									String [] items = filename.split("\\s");
+									if(items!=null && items.length>0)
+									files.add(items[items.length-1].trim());
+								}
+							}
+							
+							
+							//backup filename
+							//Example:
+							//	backup /home/M1.aj
+						}
+					}
+			}
+		
+		return files;
+	}
+	
 	
 	public String getScript() {
 		return script;
