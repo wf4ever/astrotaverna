@@ -398,7 +398,7 @@ public class AladinScriptParser {
 		String body ="";
 		if(list.size()>0){
 			for (String item : list)
-				body = "  <TR><TD>"+item+"</TD></TR>\n";
+				body += "  <TR><TD>"+item+"</TD></TR>\n";
 		}else{
 			body = "  <TR><TD></TD></TR>";
 		}
