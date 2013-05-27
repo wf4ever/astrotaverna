@@ -4,8 +4,11 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,6 +18,8 @@ import java.util.regex.Pattern;
 public class AladinScriptParser {
 	private String script;
 	private String scriptURL;
+	private String params;
+	private String paramsURL;
 	
 	private ArrayList<String> files = new ArrayList<String>();
 	
@@ -123,7 +128,8 @@ public class AladinScriptParser {
 		return files;
 	}
 	
-	public ArrayList<String> parseMacroScript (String script){
+
+	public ArrayList<String> parseMacro (String script, String params){
 		this.script = script;
 		String lines[] = script.split("\\r?\\n");
 		files = new ArrayList<String>();
@@ -213,9 +219,121 @@ public class AladinScriptParser {
 					}
 			}
 		
+		ArrayList<ArrayList<String>> paramsLists = parseParams(params);
+		
+		files = replaceDolarsByValues(files, paramsLists);
+		//System.out.println(files);
 		return files;
 	}
 	
+	
+	public ArrayList<String> parseURLMacro(String url, String url_params) throws MalformedURLException, IOException{
+		script = getFileContentFromUrl(url);
+		params = getFileContentFromUrl(url_params);
+		parseMacro(script, params);
+		return files;
+	}
+	
+	public ArrayList<String> parseFileMacro(String file, String file_params) throws IOException{
+		script = readFileAsString(file);
+		params = readFileAsString(file_params);
+		parseMacro(script, params);
+		return files;
+	}
+	
+	/**
+	 * Get a list o param list from a tab separated values file. 
+	 * @param params
+	 * @return
+	 */
+	ArrayList<ArrayList<String>> parseParams(String params){
+		ArrayList<ArrayList<String>> paramsLists = new ArrayList<ArrayList<String>>();
+				
+		String[] lines = params.split(System.getProperty("line.separator"));
+		
+		for(String line: lines){
+			ArrayList<String> list = new ArrayList<String>();
+			String[] items = line.split("\t");
+			for(String item : items){
+				list.add(item);
+			}
+			paramsLists.add(list);
+		}
+		
+		return paramsLists;
+	}
+	
+	/**
+	 * Replace $x in files by its corresponding value in values array. 
+	 * $1 correspond with column 0, $2 with column 1, ...
+	 * @param files
+	 * @param values
+	 * @return
+	 */
+	public ArrayList<String> replaceDolarsByValues(ArrayList<String> files, ArrayList<ArrayList<String>> values){
+		ArrayList<String> extendedFiles = new ArrayList<String>();
+		
+		if(files!=null && files.size()>0 && values!=null && values.size()>0)
+			if(values.get(0)!=null && values.get(0).size()>0){
+				int size = values.get(0).size();
+				String [] dolars = new String[size];
+				for(int i = 0; i<size; i++)
+					dolars[i]=Pattern.quote("$")+(i+1);
+				for(ArrayList<String> list : values){
+					for(String file: files){
+						for(int i = 0; i<dolars.length; i++){
+							String dolar = dolars[i];
+							//if(file.indexOf(dolar)>-1)
+							file = file.replaceAll(dolar, list.get(i));
+						}
+						extendedFiles.add(file);
+					}
+				}
+			}
+		
+		return extendedFiles;
+	}
+	
+	//this code doesn't consider /t
+	//this code is not tested
+	ArrayList<ArrayList<String>> parseParamsWithTokenizer(String params){
+		ArrayList<ArrayList<String>> paramsLists = new ArrayList<ArrayList<String>>();
+		StreamTokenizer streamTokenizer = null;
+		ArrayList<String> list = new ArrayList<String>();
+		
+		StringReader reader = new StringReader(params);
+		
+		try {
+            
+            streamTokenizer = new StreamTokenizer(reader);
+            
+            while (streamTokenizer.nextToken() != StreamTokenizer.TT_EOF) {
+            	if (streamTokenizer.ttype != StreamTokenizer.TT_EOL){
+            		if(streamTokenizer.ttype == streamTokenizer.TT_WORD){
+	            		//System.out.println(streamTokenizer.sval+" --");
+	            		list.add(streamTokenizer.sval);
+            		}
+            		if(streamTokenizer.ttype == streamTokenizer.TT_NUMBER){
+	            		//System.out.println(streamTokenizer.nval+" ++");
+	            		list.add(String.valueOf(streamTokenizer.nval));
+            		}
+            	}else{
+            		//System.out.println("New line");
+            		paramsLists.add(list);
+            		list = new ArrayList<String>();
+            	}
+                    
+            }
+            
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+		
+		return paramsLists;
+	}
+
 	
 	public String getScript() {
 		return script;
