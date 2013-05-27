@@ -99,7 +99,7 @@ public class AladinScriptParserTest {
 	@Test
 	public void parseURLMacro() throws Exception {
 		String lsp = System.getProperty("line.separator");
-		System.out.println("----"+lsp+"---");
+		//System.out.println("----"+lsp+"---");
 		String params ="ab1	1	1.11	gh1	ih1" + lsp +
 				"ab2	2	1.22	gh2	ih2" + lsp +
 				"ab3	3	1.33	gh3	ih3";
