@@ -256,11 +256,11 @@ public class AladinMacroActivity extends
 							}
 							
 							if(configBean.getTypeOfInput().compareTo("URL")==0)
-								results = parser.parseURL(inputScript);
+								results = parser.parseURLMacro(inputScript, inputParams);
 							else if(configBean.getTypeOfInput().compareTo("File")==0)
-								results = parser.parseFile(inputScript);
+								results = parser.parseFileMacro(inputScript, inputParams);
 							else if(configBean.getTypeOfInput().compareTo("String")==0)
-								results = parser.parseScript(inputScript);
+								results = parser.parseMacro(inputScript, inputParams);
 							
 							
 							table = parser.getVOTable(results);
