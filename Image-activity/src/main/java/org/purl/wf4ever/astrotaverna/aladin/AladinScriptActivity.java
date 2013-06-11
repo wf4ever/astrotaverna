@@ -186,10 +186,11 @@ public class AladinScriptActivity extends
 					
 					if(!callbackfails){
 
-						AladinInvoker invoker = new AladinInvoker();
+						AladinInvoker invoker = null;
 						ArrayList<String> results = new ArrayList<String>();
 						String table="";
 						try{
+							invoker = new AladinInvoker();
 							AladinScriptParser parser = new AladinScriptParser();
 							if(isScriptURL){
 								invoker.runScriptURL(input, configBean.getTypeOfMode());

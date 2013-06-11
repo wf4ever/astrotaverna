@@ -1,14 +1,19 @@
 package org.purl.wf4ever.astrotaverna.aladin;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
 
+import net.sf.taverna.raven.prelauncher.ClassLocation;
+
 import org.apache.log4j.Logger;
 import org.purl.wf4ever.astrotaverna.utils.NoExitSecurityManager_;
 import org.purl.wf4ever.astrotaverna.utils.StreamReaderAsync;
+
+import cds.aladin.Aladin;
 
 /**
  * It runs Aladin scripts and macros. By the time being, Aladin.jar has to be 
@@ -33,12 +38,13 @@ public class AladinInvoker {
 	
 	private static Logger logger = Logger.getLogger(AladinInvoker.class);
 	
-	public AladinInvoker(){
-	
+	public AladinInvoker() throws IOException{
+		initAladinJar();
 	}
 	
-	public AladinInvoker(int opt ){
+	public AladinInvoker(int opt ) throws IOException{
 		option = opt;
+		initAladinJar();
 	}
 		
 	public void runScript(String script, String gui) throws InterruptedException, IOException{
@@ -149,6 +155,16 @@ public class AladinInvoker {
 		    		
 	}
 	
+	/**
+	 * Find the folder where Aladin.jar is and initialize ALADINJAR with the full path. 
+	 * @throws IOException 
+	 */
+	public void initAladinJar() throws IOException{
+		File file = ClassLocation.getClassLocationFile(Aladin.class);
+		this.ALADINJAR = file.getAbsolutePath();
+	}
+	
+	
 	public void runMacro(String scriptURL, String parametersURL, String gui) throws InterruptedException, IOException{
 		
 		String macroScript = "macro "+ scriptURL + " " + parametersURL; 
@@ -158,7 +174,7 @@ public class AladinInvoker {
 	}
 	
 
-	public void run() throws IOException{
+	protected void run() throws IOException{
 		try {		
 			if(option == 1){
 				String example2 = "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit";

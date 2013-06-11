@@ -232,10 +232,11 @@ public class AladinMacroActivity extends
 					
 					if(!callbackfails){
 
-						AladinInvoker invoker = new AladinInvoker(4);
+						AladinInvoker invoker = null;
 						ArrayList<String> results = new ArrayList<String>();
 						String table="";
 						try{
+							invoker = new AladinInvoker();
 							AladinScriptParser parser = new AladinScriptParser();
 							//invoke considering temp files or original files
 							//System.out.println(firstPath);
