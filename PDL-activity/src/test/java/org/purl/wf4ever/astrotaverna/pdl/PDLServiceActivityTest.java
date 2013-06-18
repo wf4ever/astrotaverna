@@ -342,6 +342,45 @@ public class PDLServiceActivityTest {
 
 	}
 	
+	@Test
+	public void executeVAMDCwithLocalPDLfile() throws Exception {
+		String serviceURL = "file:///Users/julian/Documents/Test_workflows/pdl/vamdc_pdl_description_v2.xml";
+			    
+		configBean.setPdlDescriptionFile(serviceURL);
+		activity.configure(configBean);
+
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		Float value = new Float(2/3.0);
+		inputs.put("AtomSymbol", "H");
+		
+		inputs.put("mail", "tetrarquis@gmail.com");
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put(OUT_SIMPLE_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_REPORT, String.class);
+		expectedOutputTypes.put(RESPONSE_BODY, String.class);
+		expectedOutputTypes.put(DEFAULT_OUTPUT, String.class);
+		
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		int expectedoutputs=2;
+		if(outputs.size()==3)
+			expectedoutputs=3;
+		assertEquals("Unexpected outputs", expectedoutputs, outputs.size());//only if the result
+		assertTrue("Invalid or error status", PDLServiceController.getPendingStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0 
+				                  || PDLServiceController.getFinishedStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0
+				                  || PDLServiceController.getCompletedStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0
+				                  || PDLServiceController.getRunningStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0
+				                  || PDLServiceController.getExecutingStatus().compareTo((String)outputs.get(OUT_REPORT)) ==0);
+		System.out.println("Status: "+ (String)outputs.get(OUT_REPORT));
+		//assertEquals(Arrays.asList("Value 1", "Value 2"), outputs
+		//		.get("moreOutputs"));
+
+	}
+	
 	
 	//commented only to not overload the Paris Service
 	@Ignore

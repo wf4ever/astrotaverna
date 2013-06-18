@@ -348,7 +348,8 @@ public class PDLServiceActivity extends
 			*/
 			
 			/**
-			 * It processes the inputs from the taverna activity and returns a hashMap with the paris <name, value>
+			 * It processes the inputs from the taverna activity and returns a hashMap with the pairs <name, value>
+			 * It only takes the inputs that are not null. It doesn't check if the inputs are or aren't mandatory
 			 * @param inputs
 			 * @param context
 			 * @param referenceService
@@ -359,18 +360,20 @@ public class PDLServiceActivity extends
 				if(pdlcontroller!=null){
 					
 					HashMap<String, SingleParameter> inputSingleParameterMap = pdlcontroller.getHashInputParameters();
-				
+					
 					for(Map.Entry<String, SingleParameter> entry: inputSingleParameterMap.entrySet()){
-						int dimension = PDLServiceController.getDimension(entry.getValue());
-						if(dimension==1){
-							String value = (String) referenceService.renderIdentifier(inputs.get(entry.getValue().getName()), 
-									String.class, context);
-							resultMap.put(entry.getValue().getName(), value);
-						}else{
-							List<String> values = (List<String>) referenceService.renderIdentifier(inputs.get(entry.getValue().getName()), 
-									String.class, context);
-							resultMap.put(entry.getValue().getName(), values);
-						}					
+						if(inputs.get(entry.getValue().getName()) != null){
+							int dimension = PDLServiceController.getDimension(entry.getValue());
+							if(dimension==1){
+								String value = (String) referenceService.renderIdentifier(inputs.get(entry.getValue().getName()), 
+										String.class, context);
+								resultMap.put(entry.getValue().getName(), value);
+							}else{
+								List<String> values = (List<String>) referenceService.renderIdentifier(inputs.get(entry.getValue().getName()), 
+										String.class, context);
+								resultMap.put(entry.getValue().getName(), values);
+							}
+						}
 					}
 				}
 				return resultMap;
