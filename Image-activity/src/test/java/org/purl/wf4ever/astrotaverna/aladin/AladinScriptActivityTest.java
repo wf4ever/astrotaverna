@@ -3,6 +3,7 @@ package org.purl.wf4ever.astrotaverna.aladin;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -105,16 +106,20 @@ public class AladinScriptActivityTest {
 
 	}
 
-	//It is based in local files
-	//@Ignore
+	//It is based in temp local files
 	@Test
 	public void executeAsynchWithStrings() throws Exception {
 		configBean.setTypeOfInput("String");
 		configBean.setTypeOfMode("nogui");
 		activity.configure(configBean);
 
+		String property = "java.io.tmpdir";
+		String tempDir = System.getProperty(property);
+		String path = tempDir + File.separator + "m1.jpg";
+		
 		Map<String, Object> inputs = new HashMap<String, Object>();
-		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit");
+		//inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit");
+		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save " + path + "; quit");
 		
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
@@ -132,16 +137,19 @@ public class AladinScriptActivityTest {
 		
 	}
 	
-	//It is based in local files (ubuntu)
-	@Ignore
+	//It is based in temp local files (ubuntu)
 	@Test
 	public void executeAsynchWithStringsInUbuntu() throws Exception {
 		configBean.setTypeOfInput("String");
 		configBean.setTypeOfMode("nogui");
 		activity.configure(configBean);
 
+		String property = "java.io.tmpdir";
+		String tempDir = System.getProperty(property);
+		String path = tempDir + File.separator + "m1_.jpg";
+		
 		Map<String, Object> inputs = new HashMap<String, Object>();
-		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save /home/julian/Documentos/wf4ever/aladin/m1_.jpg; quit");
+		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save " + path + "; quit");
 		
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
@@ -161,15 +169,18 @@ public class AladinScriptActivityTest {
 	
 	
 	//It is based in local files
-	@Ignore
 	@Test
 	public void executeAsynchWithStringsAndNonExistingGalaxy() throws Exception {
 		configBean.setTypeOfInput("String");
 		configBean.setTypeOfMode("nogui");
 		activity.configure(configBean);
 
+		String property = "java.io.tmpdir";
+		String tempDir = System.getProperty(property);
+		String path = tempDir + File.separator + "m1.jpg";
+		
 		Map<String, Object> inputs = new HashMap<String, Object>();
-		inputs.put(FIRST_INPUT, "get aladin(J,FITS) thisgalaxaydoesnotexist ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit");
+		inputs.put(FIRST_INPUT, "get aladin(J,FITS) thisgalaxaydoesnotexist ;\n save " + path + "; quit");
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
