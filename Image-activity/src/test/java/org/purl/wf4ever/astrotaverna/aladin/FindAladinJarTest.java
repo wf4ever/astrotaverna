@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import net.sf.taverna.raven.prelauncher.ClassLocation;
 import net.sf.taverna.t2.activities.testutils.ActivityInvoker;
+import net.sf.taverna.t2.annotation.AnnotationAssertion;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
 
 import org.junit.AfterClass;
@@ -40,9 +41,27 @@ public class FindAladinJarTest {
 	@Test
 	public void findAladin() throws IOException{
 		File file = ClassLocation.getClassLocationFile(Aladin.class);
+		System.out.println(file);
 		assertTrue(!file.getAbsolutePath().isEmpty());
-		assertTrue(file.getAbsolutePath().endsWith("Aladin.jar"));
-        //System.out.println(file);//ValueDifferentOf
+		assertTrue(file.getAbsolutePath().endsWith("Aladin-7.5.jar"));
+        
+        //System.out.println("--"+file.getAbsolutePath()+"--");
+	}
+	
+	@Test
+	public void findOtherClassAndBuildAladinPath() throws IOException{
+		File file = ClassLocation.getClassLocationFile(AnnotationAssertion.class);
+		System.out.println(file);
+		assertTrue(!file.getAbsolutePath().isEmpty());
+		assertTrue(file.getAbsolutePath().endsWith("workflowmodel-api-1.4.jar"));
+		String path = file.getAbsolutePath();
+		int position = path.indexOf("repository");
+//		System.out.println("net"+File.separator+"sf"+File.separator+"taverna"+File.separator+"core");
+		position = path.indexOf("net"+File.separator+"sf"+File.separator+"taverna"+File.separator+"t2"+File.separator+"core");
+		//System.out.println(position);
+		String ALADINJAR = path.substring(0, position);
+		ALADINJAR += "cds"+File.separator+"aladin"+File.separator+"Aladin"+File.separator+"7.5"+File.separator+"Aladin-7.5.jar";
+        System.out.println(ALADINJAR);
         //System.out.println("--"+file.getAbsolutePath()+"--");
 	}
 }
