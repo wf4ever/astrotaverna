@@ -77,6 +77,7 @@ public class PDLServiceHealthChecker implements
 					"Invalid service type.", HealthCheck.INVALID_CONFIGURATION,
 					Status.SEVERE));
 		}
+
 		// The default explanation here will be used if the subreports list is
 		// empty
 		return new VisitReport(HealthCheck.getInstance(), activity,
