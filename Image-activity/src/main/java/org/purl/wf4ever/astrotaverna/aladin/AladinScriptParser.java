@@ -129,10 +129,11 @@ public class AladinScriptParser {
 	}
 	
 
-	public ArrayList<String> parseMacro (String script, String params){
+	public ArrayList<ArrayList<String>> parseMacro (String script, String params){
 		this.script = script;
 		String lines[] = script.split("\\r?\\n");
 		files = new ArrayList<String>();
+		ArrayList<ArrayList<String>> result;
 		if(lines!=null)
 			for(String line : lines){
 				//split by ;
@@ -221,24 +222,24 @@ public class AladinScriptParser {
 		
 		ArrayList<ArrayList<String>> paramsLists = parseParams(params);
 		
-		files = replaceDolarsByValues(files, paramsLists);
+		result = replaceDolarsByValues(files, paramsLists);
 		//System.out.println(files);
-		return files;
+		return result;
 	}
 	
 	
-	public ArrayList<String> parseURLMacro(String url, String url_params) throws MalformedURLException, IOException{
+	public ArrayList<ArrayList<String>> parseURLMacro(String url, String url_params) throws MalformedURLException, IOException{
 		script = getFileContentFromUrl(url);
 		params = getFileContentFromUrl(url_params);
-		parseMacro(script, params);
-		return files;
+		ArrayList<ArrayList<String>> result = parseMacro(script, params);
+		return result;
 	}
 	
-	public ArrayList<String> parseFileMacro(String file, String file_params) throws IOException{
+	public ArrayList<ArrayList<String>> parseFileMacro(String file, String file_params) throws IOException{
 		script = readFileAsString(file);
 		params = readFileAsString(file_params);
-		parseMacro(script, params);
-		return files;
+		ArrayList<ArrayList<String>> result = parseMacro(script, params);
+		return result;
 	}
 	
 	/**
@@ -270,16 +271,20 @@ public class AladinScriptParser {
 	 * @param values
 	 * @return
 	 */
-	public ArrayList<String> replaceDolarsByValues(ArrayList<String> files, ArrayList<ArrayList<String>> values){
+	public ArrayList<ArrayList<String>> replaceDolarsByValues(ArrayList<String> files, ArrayList<ArrayList<String>> values){
+		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 		ArrayList<String> extendedFiles = new ArrayList<String>();
 		
 		if(files!=null && files.size()>0 && values!=null && values.size()>0)
 			if(values.get(0)!=null && values.get(0).size()>0){
 				int size = values.get(0).size();
 				String [] dolars = new String[size];
+				
 				for(int i = 0; i<size; i++)
 					dolars[i]=Pattern.quote("$")+(i+1);
+				
 				for(ArrayList<String> list : values){
+					extendedFiles = new ArrayList<String>();
 					for(String file: files){
 						for(int i = 0; i<dolars.length; i++){
 							String dolar = dolars[i];
@@ -288,10 +293,12 @@ public class AladinScriptParser {
 						}
 						extendedFiles.add(file);
 					}
+					result.add(extendedFiles);
 				}
+				
 			}
 		
-		return extendedFiles;
+		return result;
 	}
 	
 	//this code doesn't consider /t
@@ -370,7 +377,12 @@ public class AladinScriptParser {
 		return sb.toString();
 	}
 	
-	public String getVOTable(ArrayList<String> list){
+	/**
+	 * The method returns a VOTable with only one column
+	 * @param list
+	 * @return
+	 */
+	public String getOneColumnVOTable(ArrayList<String> list){
 		String votable="";
 		String header = "<?xml version='1.0'?>"
 				+ "<VOTABLE version=\"1.1\""
@@ -407,4 +419,72 @@ public class AladinScriptParser {
 		
 		return votable;
 	}
+	
+	/**
+	 * The method returns a VOTable with only one column
+	 * @param list
+	 * @return
+	 */
+	public String getMultiColumnVOTable(ArrayList<ArrayList<String>> list){
+		String votable="";
+		String body ="";
+		int numCols;
+		String fields ="";
+		
+		//column headers and body
+		if(!list.isEmpty()){
+			numCols = list.get(0).size();
+			for (int i = 0; i < numCols; i++){
+				fields += "<FIELD arraysize=\"*\" datatype=\"char\" name=\"col"+(i+1)+"\">\n"
+						+ "  <DESCRIPTION>results from aladin script</DESCRIPTION>\n"
+						+ "</FIELD>\n";  
+			}
+			for (ArrayList<String> row : list)
+				if(!row.isEmpty()){
+					body += "  <TR>";
+					for(String item: row)
+						body += "<TD>"+item+"</TD>";
+					body += "</TR>\n";
+				}
+		}else{
+			numCols = 1;
+			fields = "<FIELD arraysize=\"*\" datatype=\"char\" name=\"col1\">\n"
+			+ "  <DESCRIPTION>File results from aladin script</DESCRIPTION>\n"
+			+ "</FIELD>\n";
+			
+			body = "  <TR><TD></TD></TR>";
+		}
+		
+		String header = "<?xml version='1.0'?>"
+				+ "<VOTABLE version=\"1.1\""
+				+ " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
+				+ " xsi:schemaLocation=\"http://www.ivoa.net/xml/VOTable/v1.1 http://www.ivoa.net/xml/VOTable/v1.1\""
+				+ " xmlns=\"http://www.ivoa.net/xml/VOTable/v1.1\">"
+				+ "<!--"
+				+ " !  VOTable written by Astrotaverna"
+				+ " !-->"
+				+ "<RESOURCE>"
+				+ "<TABLE nrows=\""+list.size()+"\">"
+				+ "<DESCRIPTION>"
+				+ "Result "
+				+ "</DESCRIPTION>"
+				+ fields
+				+ "<DATA>"
+				+ "<TABLEDATA>";
+		
+		String footer =  "</TABLEDATA>"
+				+ "</DATA>"
+				+ "</TABLE>"
+				+ "</RESOURCE>"
+				+ "</VOTABLE>";
+		
+		
+		
+		
+		votable = header + body + footer;
+		
+		return votable;
+	}
+	
+	
 }

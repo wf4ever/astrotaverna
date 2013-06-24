@@ -204,7 +204,7 @@ public class AladinScriptActivity extends
 								results = parser.parseScript(input);
 							}
 							
-							table = parser.getVOTable(results);
+							table = parser.getOneColumnVOTable(results);
 							
 						}catch(MalformedURLException ex){
 							callback.fail("There was a problem running Aladin", ex);

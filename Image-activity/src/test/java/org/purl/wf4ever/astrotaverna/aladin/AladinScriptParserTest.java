@@ -105,16 +105,16 @@ public class AladinScriptParserTest {
 				"ab3	3	1.33	gh3	ih3";
 		File file = writeStringAsTmpFile(params);
 		
-		ArrayList<String> list = parser.parseURLMacro("http://cdsweb.u-strasbg.fr/~allen/CDS_Tutorial/attachments/Arp_script.ajs", file.toURI().toString());
+		ArrayList<ArrayList<String>> list = parser.parseURLMacro("http://cdsweb.u-strasbg.fr/~allen/CDS_Tutorial/attachments/Arp_script.ajs", file.toURI().toString());
 		
-		assertEquals("Unexpected number of elemens", 6,  list.size());
+		assertEquals("Unexpected number of elemens", 3,  list.size());
 		if(list.size()>0){
-			assertEquals("Unexpected filename", "/Users/allen/Desktop/Arp/Arp-1_chart.png", list.get(0));
-			assertEquals("Unexpected filename", "/Users/allen/Desktop/Arp/Arp-1_stack.aj", list.get(1));
-			assertEquals("Unexpected filename", "/Users/allen/Desktop/Arp/Arp-2_chart.png", list.get(2));
-			assertEquals("Unexpected filename", "/Users/allen/Desktop/Arp/Arp-2_stack.aj", list.get(3));
-			assertEquals("Unexpected filename", "/Users/allen/Desktop/Arp/Arp-3_chart.png", list.get(4));
-			assertEquals("Unexpected filename", "/Users/allen/Desktop/Arp/Arp-3_stack.aj", list.get(5));
+			assertEquals("Unexpected filename", "/Users/allen/Desktop/Arp/Arp-1_chart.png", list.get(0).get(0));
+			assertEquals("Unexpected filename", "/Users/allen/Desktop/Arp/Arp-1_stack.aj", list.get(0).get(1));
+			assertEquals("Unexpected filename", "/Users/allen/Desktop/Arp/Arp-2_chart.png", list.get(1).get(0));
+			assertEquals("Unexpected filename", "/Users/allen/Desktop/Arp/Arp-2_stack.aj", list.get(1).get(1));
+			assertEquals("Unexpected filename", "/Users/allen/Desktop/Arp/Arp-3_chart.png", list.get(2).get(0));
+			assertEquals("Unexpected filename", "/Users/allen/Desktop/Arp/Arp-3_stack.aj", list.get(2).get(1));
 		}		
 	}
 	
