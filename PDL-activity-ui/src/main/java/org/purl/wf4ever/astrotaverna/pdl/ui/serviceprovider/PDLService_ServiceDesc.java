@@ -35,6 +35,7 @@ public class PDLService_ServiceDesc extends ServiceDescription<PDLServiceActivit
 	public PDLServiceActivityConfigurationBean getActivityConfiguration() {
 		PDLServiceActivityConfigurationBean bean = new PDLServiceActivityConfigurationBean();
 		bean.setPdlDescriptionFile("http://www.exampleuri.com/pdldescriptionfile.xml");
+//		bean.setServiceType(bean.PDLSERVICE);
 		return bean;
 	}
 
