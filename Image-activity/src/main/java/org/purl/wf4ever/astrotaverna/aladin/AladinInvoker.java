@@ -18,6 +18,7 @@ import org.purl.wf4ever.astrotaverna.utils.StreamReaderAsync;
 
 //import cds.aladin.Aladin;
 
+
 /**
  * It runs Aladin scripts and macros. 
  * The version of Aladin is hard coded. At the time of this class the version is Aladin 7.5. 

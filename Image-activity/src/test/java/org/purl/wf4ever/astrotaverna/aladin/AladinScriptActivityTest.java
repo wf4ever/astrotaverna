@@ -17,6 +17,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import cds.aladin.Aladin;
+
 /** 
  * 
  * @author julian Garrido 
@@ -223,5 +225,11 @@ public class AladinScriptActivityTest {
 		assertEquals("Unexpected outputs", 3, activity.getOutputPorts().size());
 	}
 
+	@Test
+	public void instantiateAladinClass(){
+		Aladin aladin_object;
+		aladin_object = new Aladin();
+		aladin_object.stop();
+	}
 	
 }
