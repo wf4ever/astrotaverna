@@ -4,13 +4,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 
+import net.sf.taverna.raven.prelauncher.ClassLocation;
 import net.sf.taverna.t2.activities.testutils.ActivityInvoker;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -35,6 +38,7 @@ public class AladinScriptActivityTest {
 	
 	private AladinScriptActivity activity = new AladinScriptActivity();
 
+	private static Logger logger = Logger.getLogger(AladinScriptActivityTest.class);
 	
 	@Ignore("Not ready to run")
 	@BeforeClass
@@ -258,7 +262,20 @@ public class AladinScriptActivityTest {
 	}
 
 	@Test
-	public void instantiateAladinClass(){
+	public void instantiateAladinClass() throws IOException{
+		
+		File file;
+
+		file = ClassLocation.getClassLocationFile(Aladin.class);
+		System.out.println("ALADIN-----------------"+file.getAbsolutePath());
+		logger.warn("log ALADIN is in: "+ file.getAbsolutePath());
+		System.out.println("ALADIN PATH exists?????: " + file.exists());
+		logger.warn("log ALADIN PATH exists?????: " + file.exists());
+		
+		assertTrue(!file.getAbsolutePath().isEmpty());
+		assertTrue(file.getAbsolutePath().endsWith("Aladin-7.5.jar"));
+		
+		
 		Aladin aladin_object;
 		aladin_object = new Aladin();
 		aladin_object.stop();
