@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>cds.aladin</groupId>
+  <artifactId>Aladin</artifactId>
+  <versioning>
+    <release>7.5</release>
+    <versions>
+      <version>7.5</version>
+    </versions>
+    <lastUpdated>20130625075638</lastUpdated>
+  </versioning>
+</metadata>
