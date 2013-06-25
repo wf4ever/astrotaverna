@@ -266,11 +266,13 @@ public class AladinScriptActivityTest {
 		
 		File file;
 
-		file = ClassLocation.getClassLocationFile(Aladin.class);
-		System.out.println("ALADIN-----------------"+file.getAbsolutePath());
-		logger.warn("log ALADIN is in: "+ file.getAbsolutePath());
-		System.out.println("ALADIN PATH exists?????: " + file.exists());
+		file = ClassLocation.getClassLocationFile(Aladin.class);		
+		
 		logger.warn("log ALADIN PATH exists?????: " + file.exists());
+		logger.warn("log ALADIN is in: "+ file.getAbsolutePath());
+		
+		System.out.println("ALADIN PATH exists?????: " + file.exists());
+		System.out.println("ALADIN-----------------"+file.getAbsolutePath());
 		
 		assertTrue(!file.getAbsolutePath().isEmpty());
 		assertTrue(file.getAbsolutePath().endsWith("Aladin-7.5.jar"));
@@ -278,7 +280,7 @@ public class AladinScriptActivityTest {
 		
 		Aladin aladin_object;
 		aladin_object = new Aladin();
-		aladin_object.stop();
+		
 	}
 	
 }
