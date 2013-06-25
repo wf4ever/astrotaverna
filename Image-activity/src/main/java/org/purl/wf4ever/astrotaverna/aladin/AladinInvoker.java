@@ -1,13 +1,13 @@
 package org.purl.wf4ever.astrotaverna.aladin;
 
-import static org.junit.Assert.assertTrue;
+//import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedReader;
+//import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Map;
+//import java.io.InputStreamReader;
+//import java.util.Map;
 
 import net.sf.taverna.raven.prelauncher.ClassLocation;
 import net.sf.taverna.t2.annotation.AnnotationAssertion;
@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import org.purl.wf4ever.astrotaverna.utils.NoExitSecurityManager_;
 import org.purl.wf4ever.astrotaverna.utils.StreamReaderAsync;
 
-import cds.aladin.Aladin;
+//import cds.aladin.Aladin;
 
 /**
  * It runs Aladin scripts and macros. 
