@@ -22,5 +22,22 @@
 			<version>${t2.activities.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>cds.aladin</groupId>
+			<artifactId>Aladin</artifactId>
+			<version>7.5</version>
+			<!-- This exclusion is for testing if solve the signer information exception -->
+			<exclusions>
+		        <exclusion>  <!-- declare the exclusion here -->
+		          <groupId>uk.ac.starlink</groupId>
+		          <artifactId>stiltsAPI</artifactId>
+		        </exclusion>
+	      </exclusions> 
+		</dependency>
+        <dependency>
+            <groupId>net.sf.taverna.t2.infrastructure</groupId>
+            <artifactId>prelauncher</artifactId>
+            <version>${t2.infrastructure.version}</version>
+        </dependency>
 	</dependencies>
 </project>

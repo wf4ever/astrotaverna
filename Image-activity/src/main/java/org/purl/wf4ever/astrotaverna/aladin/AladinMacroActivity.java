@@ -232,10 +232,11 @@ public class AladinMacroActivity extends
 					
 					if(!callbackfails){
 
-						AladinInvoker invoker = new AladinInvoker(4);
-						ArrayList<String> results = new ArrayList<String>();
+						AladinInvoker invoker = null;
+						ArrayList<ArrayList<String>> results = new ArrayList<ArrayList<String>>();
 						String table="";
 						try{
+							invoker = new AladinInvoker();
 							AladinScriptParser parser = new AladinScriptParser();
 							//invoke considering temp files or original files
 							//System.out.println(firstPath);
@@ -252,18 +253,21 @@ public class AladinMacroActivity extends
 								System.out.println("ERRORs from Aladin: "+ invoker.getError_out());
 								System.out.println("OUTPUT from Aladin: "+ invoker.getStd_out());
 								System.out.println("EXCEPTION: ");
+								logger.error("Nullpointer exception from aladin");
+								callbackfails = true;
+								callback.fail("Error invoking Aladin");
 								ex.printStackTrace();
 							}
 							
 							if(configBean.getTypeOfInput().compareTo("URL")==0)
-								results = parser.parseURL(inputScript);
+								results = parser.parseURLMacro(inputScript, inputParams);
 							else if(configBean.getTypeOfInput().compareTo("File")==0)
-								results = parser.parseFile(inputScript);
+								results = parser.parseFileMacro(inputScript, inputParams);
 							else if(configBean.getTypeOfInput().compareTo("String")==0)
-								results = parser.parseScript(inputScript);
+								results = parser.parseMacro(inputScript, inputParams);
 							
 							
-							table = parser.getVOTable(results);
+							table = parser.getMultiColumnVOTable(results);
 							
 						}catch(MalformedURLException ex){
 							callback.fail("There was a problem running Aladin", ex);

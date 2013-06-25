@@ -250,6 +250,9 @@ public class PDLServiceActivity extends
 			final AsynchronousActivityCallback callback) {
 		// Don't execute service directly now, request to be run ask to be run
 		// from thread pool and return asynchronously
+		
+		final PDLServiceActivityConfigurationBean config = this.configBean;
+		
 		callback.requestRun(new Runnable() {
 		
 //			GroupProcessor gp;
@@ -276,11 +279,11 @@ public class PDLServiceActivity extends
 							//if no dependency defined --> false
 							//if no optional --> false
 							if(!(param.getDependency()!=null && param.getDependency().compareTo("optional")==0))
-								validStatus = false;
+								validStatus = false; 
+						
 					}
 //					}
 				}catch(Exception ex){validStatus = false;}
-				
 				return validStatus;
 			}
 			
@@ -348,7 +351,8 @@ public class PDLServiceActivity extends
 			*/
 			
 			/**
-			 * It processes the inputs from the taverna activity and returns a hashMap with the paris <name, value>
+			 * It processes the inputs from the taverna activity and returns a hashMap with the pairs <name, value>
+			 * It only takes the inputs that are not null. It doesn't check if the inputs are or aren't mandatory
 			 * @param inputs
 			 * @param context
 			 * @param referenceService
@@ -359,18 +363,20 @@ public class PDLServiceActivity extends
 				if(pdlcontroller!=null){
 					
 					HashMap<String, SingleParameter> inputSingleParameterMap = pdlcontroller.getHashInputParameters();
-				
+					
 					for(Map.Entry<String, SingleParameter> entry: inputSingleParameterMap.entrySet()){
-						int dimension = PDLServiceController.getDimension(entry.getValue());
-						if(dimension==1){
-							String value = (String) referenceService.renderIdentifier(inputs.get(entry.getValue().getName()), 
-									String.class, context);
-							resultMap.put(entry.getValue().getName(), value);
-						}else{
-							List<String> values = (List<String>) referenceService.renderIdentifier(inputs.get(entry.getValue().getName()), 
-									String.class, context);
-							resultMap.put(entry.getValue().getName(), values);
-						}					
+						if(inputs.get(entry.getValue().getName()) != null){
+							int dimension = PDLServiceController.getDimension(entry.getValue());
+							if(dimension==1){
+								String value = (String) referenceService.renderIdentifier(inputs.get(entry.getValue().getName()), 
+										String.class, context);
+								resultMap.put(entry.getValue().getName(), value);
+							}else{
+								List<String> values = (List<String>) referenceService.renderIdentifier(inputs.get(entry.getValue().getName()), 
+										String.class, context);
+								resultMap.put(entry.getValue().getName(), values);
+							}
+						}
 					}
 				}
 				return resultMap;
@@ -457,37 +463,45 @@ public class PDLServiceActivity extends
 								HashMap<String, SingleParameter> inputSingleParams = pdlcontroller.getHashInputParameters();
 								
 								//create a job
-								
-								serviceResult = caller.callService(inputSingleParams);
-								
-								jobsList = new JobsList();
-								jobsList.parseXML(serviceResult);
-								if(!jobsList.getJobs().isEmpty()){
-									jobId = jobsList.getJobs().get(0).getJobId();
-									userId = jobsList.getJobs().get(0).getUserId();
+								if(config.getServiceType().compareTo(config.PDLSERVICE)==0){
 									
-									//http://pdl-calc.obspm.fr:8081/montage/TavernaJobInfo?mail=tetrarquis@gmail.com&jobId=3&userId=7
-									jobInfo = caller.getJobInfo(jobId, userId);
-	
-									jobResult = new JobResult();
+									serviceResult = caller.callService(inputSingleParams);
 									
-									jobResult.parseXML(jobInfo);
-									//System.out.println("JobOutputs: "+jobResult.getOutputParams());
-									
-									//if there is an error or it is aborted, the activity fails
-									if(jobResult.getJobPhase()!=null)
-										if(jobResult.getJobPhase().toLowerCase().compareTo(PDLServiceController.getErrorStatus())==0
-												|| jobResult.getJobPhase().toLowerCase().compareTo(PDLServiceController.getAbortedStatus())==0){
-											callbackfails = true;
-											logger.error("The service returned "+jobResult.getJobPhase()+": "+caller.latestInvokedURL());
-											callback.fail("The service returned "+jobResult.getJobPhase()+": "+caller.latestInvokedURL());
-										}
-									
-									// TODO Update outputs in mapper and validate
-	
+									jobsList = new JobsList();
+									jobsList.parseXML(serviceResult);
+									if(!jobsList.getJobs().isEmpty()){
+										jobId = jobsList.getJobs().get(0).getJobId();
+										userId = jobsList.getJobs().get(0).getUserId();
+										
+										//http://pdl-calc.obspm.fr:8081/montage/TavernaJobInfo?mail=tetrarquis@gmail.com&jobId=3&userId=7
+										jobInfo = caller.getJobInfo(jobId, userId);
+		
+										jobResult = new JobResult();
+										
+										jobResult.parseXML(jobInfo);
+										//System.out.println("JobOutputs: "+jobResult.getOutputParams());
+										
+										//if there is an error or it is aborted, the activity fails
+										if(jobResult.getJobPhase()!=null)
+											if(jobResult.getJobPhase().toLowerCase().compareTo(PDLServiceController.getErrorStatus())==0
+													|| jobResult.getJobPhase().toLowerCase().compareTo(PDLServiceController.getAbortedStatus())==0){
+												callbackfails = true;
+												logger.error("The service returned "+jobResult.getJobPhase()+": "+caller.latestInvokedURL());
+												callback.fail("The service returned "+jobResult.getJobPhase()+": "+caller.latestInvokedURL());
+											}
+										
+										// TODO Update outputs in mapper and validate
+		
+									}else{
+										callbackfails = true;
+										callback.fail("Job info couldn't be parsed.");
+									}
 								}else{
-									callbackfails = true;
-									callback.fail("Job info couldn't be parsed.");
+									if(config.getServiceType().compareTo(config.RESTSERVICE)==0){
+										callbackfails = true;
+										logger.error("REST type of service is not yet implement for PDL descriptions");
+										callback.fail("REST option is not yet implemented for PDL descriptions");
+									}
 								}
 							}else{
 								callbackfails = true;

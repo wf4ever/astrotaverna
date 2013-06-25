@@ -69,6 +69,15 @@ public class PDLServiceHealthChecker implements
 						Status.SEVERE));
 			}
 		}
+		
+		if( !(config.getServiceType().compareTo(config.PDLSERVICE) == 0 
+				|| config.getServiceType().compareTo(config.RESTSERVICE) == 0)){
+			
+			subReports.add(new VisitReport(HealthCheck.getInstance(), activity,
+					"Invalid service type.", HealthCheck.INVALID_CONFIGURATION,
+					Status.SEVERE));
+		}
+
 		// The default explanation here will be used if the subreports list is
 		// empty
 		return new VisitReport(HealthCheck.getInstance(), activity,

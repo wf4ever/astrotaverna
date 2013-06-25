@@ -8,7 +8,7 @@ import net.ivoa.pdl.interpreter.conditionalStatement.StatementHelperContainer;
 
 /**
 * @author Carlo Maria Zwolf
-* Observatoire de Paris
+* Observatoire de Paris --
 * LERMA
 */
 

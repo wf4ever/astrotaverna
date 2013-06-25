@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -29,20 +30,26 @@ public class PDLServiceConfigurationPanel
 	
 	private PDLServiceActivity activity;
 	private PDLServiceActivityConfigurationBean configBean;
+	private PDLServiceActivityConfigurationBean aux;
 	
 	//String[] inputTypesStrings = {"File", "URL", "String"};
 	//String[] filterTypesStrings = {"Column names", "UCDs"};
 	
 	private JTextField  urlField;
-	//private JComboBox typeOfFilter;
+	private JComboBox typeOfService;
+	
 
 
 	public PDLServiceConfigurationPanel(PDLServiceActivity activity) {
 		this.activity = activity;
+		aux = new PDLServiceActivityConfigurationBean();
 		initGui();
 	}
 
 	protected void initGui() {
+		
+		String[] serviceTypesStrings = {aux.PDLSERVICE, aux.RESTSERVICE};
+		
 		removeAll();
 		setLayout(new GridLayout(0, 2));
 
@@ -53,6 +60,13 @@ public class PDLServiceConfigurationPanel
 		add(urlField);
 		labelString.setLabelFor(urlField);
 			
+		labelString = new JLabel("Type of service:");
+		add(labelString);
+		typeOfService = new JComboBox(serviceTypesStrings);
+		add(typeOfService);
+		labelString.setLabelFor(typeOfService);
+		typeOfService.setSelectedIndex(1);
+		
 		// Populate fields from activity configuration bean
 		refreshConfiguration();
 	}
@@ -71,7 +85,13 @@ public class PDLServiceConfigurationPanel
 			URI uri = new URI(urlInput);
 		} catch (Exception e) {
 			errorMessage = "Invalid URI for the PDL description file";
-		} 
+		}
+		
+		String  type = (String)typeOfService.getSelectedItem();
+		if(!(      type.compareTo(aux.PDLSERVICE)==0
+				|| type.compareTo(aux.RESTSERVICE)==0)){
+			errorMessage = "Valid type of services: " + aux.PDLSERVICE + " and " + aux.RESTSERVICE;
+		}
 		
 		if (errorMessage!=null){
 			JOptionPane.showMessageDialog(this, errorMessage,
@@ -99,11 +119,11 @@ public class PDLServiceConfigurationPanel
 	@Override
 	public boolean isConfigurationChanged() {
 		String originalURL = configBean.getPdlDescriptionFile();
-		//String originalTypeOfFilter = configBean.getTypeOfFilter();
+		String originalTypeOfService = configBean.getServiceType();
 		// true (changed) unless all fields match the originals
 		
-		return ! (originalURL.compareTo(urlField.getText())==0);
-				/*&& originalTypeOfFilter.equals((String)typeOfFilter.getSelectedItem())*/ 
+		return ! (originalURL.compareTo(urlField.getText())==0
+				&& originalTypeOfService.compareTo((String)typeOfService.getSelectedItem())==0 ); 
 	}
 
 	/**
@@ -116,6 +136,7 @@ public class PDLServiceConfigurationPanel
 		
 		// FIXME: Update bean fields from your UI elements
 		configBean.setPdlDescriptionFile(urlField.getText());
+		configBean.setServiceType((String)typeOfService.getSelectedItem());
 	}
 
 	/**
@@ -128,6 +149,9 @@ public class PDLServiceConfigurationPanel
 		
 		// FIXME: Update UI elements from your bean fields
 		urlField.setText(configBean.getPdlDescriptionFile());
+		if(configBean.getServiceType()==null || configBean.getServiceType().isEmpty())
+			configBean.setServiceType(configBean.PDLSERVICE);
+		typeOfService.setSelectedItem(configBean.getServiceType());
 
 	}
 }

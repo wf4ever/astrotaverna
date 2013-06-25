@@ -186,10 +186,11 @@ public class AladinScriptActivity extends
 					
 					if(!callbackfails){
 
-						AladinInvoker invoker = new AladinInvoker();
+						AladinInvoker invoker = null;
 						ArrayList<String> results = new ArrayList<String>();
 						String table="";
 						try{
+							invoker = new AladinInvoker();
 							AladinScriptParser parser = new AladinScriptParser();
 							if(isScriptURL){
 								invoker.runScriptURL(input, configBean.getTypeOfMode());
@@ -203,7 +204,7 @@ public class AladinScriptActivity extends
 								results = parser.parseScript(input);
 							}
 							
-							table = parser.getVOTable(results);
+							table = parser.getOneColumnVOTable(results);
 							
 						}catch(MalformedURLException ex){
 							callback.fail("There was a problem running Aladin", ex);

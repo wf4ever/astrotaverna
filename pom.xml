@@ -19,6 +19,8 @@
 		<t2.ui.components.version>1.4</t2.ui.components.version>
 		<t2.ui.activities.version>1.4</t2.ui.activities.version>
 		<t2.workbench.version>2.4.0</t2.workbench.version>
+		<!-- JGS: this is to be able to use the class ClassLocation to know where are the jars -->
+		<t2.infrastructure.version>2.4</t2.infrastructure.version> 
 	</properties>
 
 	<build>
@@ -142,10 +144,10 @@
     <module>astrotaverna-utils</module>
     <module>file-reference-builder</module>
     <!-- Comment for removing PDL from astrotaverna -->
-  <!--   
+     
     <module>PDL-activity</module>
     <module>PDL-activity-ui</module>
-  -->
+  
     <module>Image-activity</module>
     <module>Image-activity-ui</module>
     <module>query-activity-ui</module>

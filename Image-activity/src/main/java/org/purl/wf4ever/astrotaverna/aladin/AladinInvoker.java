@@ -1,18 +1,29 @@
 package org.purl.wf4ever.astrotaverna.aladin;
 
-import java.io.BufferedReader;
+//import static org.junit.Assert.assertTrue;
+
+//import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Map;
+//import java.io.InputStreamReader;
+//import java.util.Map;
+
+import net.sf.taverna.raven.prelauncher.ClassLocation;
+import net.sf.taverna.t2.annotation.AnnotationAssertion;
 
 import org.apache.log4j.Logger;
 import org.purl.wf4ever.astrotaverna.utils.NoExitSecurityManager_;
 import org.purl.wf4ever.astrotaverna.utils.StreamReaderAsync;
 
+//import cds.aladin.Aladin;
+
+
 /**
- * It runs Aladin scripts and macros. By the time being, Aladin.jar has to be 
- * in an specific folder: This issue should be resolved. 
+ * It runs Aladin scripts and macros. 
+ * The version of Aladin is hard coded. At the time of this class the version is Aladin 7.5. 
+ * So, if a new Aladin.jar version is deployed then the way the paths are built has to 
+ * be changed.  
  * @author Julian Garrido
  * @date 10/04/2013
  *
@@ -33,12 +44,13 @@ public class AladinInvoker {
 	
 	private static Logger logger = Logger.getLogger(AladinInvoker.class);
 	
-	public AladinInvoker(){
-	
+	public AladinInvoker() throws IOException{
+		initAladinJar();
 	}
 	
-	public AladinInvoker(int opt ){
+	public AladinInvoker(int opt ) throws IOException{
 		option = opt;
+		initAladinJar();
 	}
 		
 	public void runScript(String script, String gui) throws InterruptedException, IOException{
@@ -149,6 +161,24 @@ public class AladinInvoker {
 		    		
 	}
 	
+	/**
+	 * Find the folder where Aladin.jar is and initialize ALADINJAR with the full path. 
+	 * This is suppouse to be the version 7.5. If a new version is deployed, the way the path is built 
+	 * has to be changed.
+	 * @throws IOException 
+	 */
+	public void initAladinJar() throws IOException{
+		File file = ClassLocation.getClassLocationFile(AnnotationAssertion.class);	
+		String path = file.getAbsolutePath();
+		int position = path.indexOf("repository");
+		position = path.indexOf("net"+File.separator+"sf"+File.separator+"taverna"+File.separator+"t2"+File.separator+"core");
+		ALADINJAR = path.substring(0, position);
+		ALADINJAR += "cds"+File.separator+"aladin"+File.separator+"Aladin"+File.separator+"7.5"+File.separator+"Aladin-7.5.jar";
+        //System.out.println(ALADINJAR);	
+        logger.info("Aladin to be used at: "+ ALADINJAR);
+	}
+	
+	
 	public void runMacro(String scriptURL, String parametersURL, String gui) throws InterruptedException, IOException{
 		
 		String macroScript = "macro "+ scriptURL + " " + parametersURL; 
@@ -158,7 +188,7 @@ public class AladinInvoker {
 	}
 	
 
-	public void run() throws IOException{
+	protected void run() throws IOException{
 		try {		
 			if(option == 1){
 				String example2 = "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit";

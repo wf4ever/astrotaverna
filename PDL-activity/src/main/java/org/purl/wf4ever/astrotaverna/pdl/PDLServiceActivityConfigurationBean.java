@@ -36,6 +36,10 @@ public class PDLServiceActivityConfigurationBean implements Serializable {
 	// TODO: Remove the example fields and getters/setters and add your own	
 	
 	private String pdlDescriptionFile;
+	private String serviceType = "PDLserver";
+	
+	final public String PDLSERVICE = "PDLserver";
+	final public String RESTSERVICE = "Rest";
 	
 	// only need to store the configuration of inputs and outputs, as all of them are dynamic;
 	// only inputs that constitute components of URL signature are to be stored
@@ -59,6 +63,14 @@ public class PDLServiceActivityConfigurationBean implements Serializable {
 		return activityOutputs;
 	}
 	*/
+
+	public String getServiceType() {
+		return serviceType;
+	}
+
+	public void setServiceType(String serviceType) {
+		this.serviceType = serviceType;
+	}
 
 	public String getPdlDescriptionFile() {
 		return pdlDescriptionFile;

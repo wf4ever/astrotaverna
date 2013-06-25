@@ -3,6 +3,7 @@ package org.purl.wf4ever.astrotaverna.aladin;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import cds.aladin.Aladin;
 
 /** 
  * 
@@ -105,7 +108,7 @@ public class AladinScriptActivityTest {
 
 	}
 
-	//It is based in local files
+	//It is based in temp local files
 	@Ignore
 	@Test
 	public void executeAsynchWithStrings() throws Exception {
@@ -113,8 +116,13 @@ public class AladinScriptActivityTest {
 		configBean.setTypeOfMode("nogui");
 		activity.configure(configBean);
 
+		String property = "java.io.tmpdir";
+		String tempDir = System.getProperty(property);
+		String path = tempDir + File.separator + "m1.jpg";
+		
 		Map<String, Object> inputs = new HashMap<String, Object>();
-		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit");
+		//inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit");
+		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save " + path + "; quit");
 		
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
@@ -132,7 +140,37 @@ public class AladinScriptActivityTest {
 		
 	}
 	
-	//It is based in local files (ubuntu)
+	@Test
+	public void executeAsynchWithStringsWithoutResult() throws Exception {
+		configBean.setTypeOfInput("String");
+		configBean.setTypeOfMode("nogui");
+		activity.configure(configBean);
+
+		String property = "java.io.tmpdir";
+		String tempDir = System.getProperty(property);
+		String path = tempDir + File.separator + "m1.jpg";
+		
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		//inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit");
+		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n quit");
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put("simpleOutput", String.class);
+		//expectedOutputTypes.put("moreOutputs", String.class);
+		expectedOutputTypes.put(OUT_STD_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_ERROR, String.class);
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		assertEquals("Unexpected outputs", 2, outputs.size());
+		assertEquals("", outputs.get(OUT_STD_OUTPUT));
+		assertEquals("", outputs.get(OUT_ERROR));
+		
+	}
+	
+	//It is based in temp local files
 	@Ignore
 	@Test
 	public void executeAsynchWithStringsInUbuntu() throws Exception {
@@ -140,8 +178,12 @@ public class AladinScriptActivityTest {
 		configBean.setTypeOfMode("nogui");
 		activity.configure(configBean);
 
+		String property = "java.io.tmpdir";
+		String tempDir = System.getProperty(property);
+		String path = tempDir + File.separator + "m1_.jpg";
+		
 		Map<String, Object> inputs = new HashMap<String, Object>();
-		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save /home/julian/Documentos/wf4ever/aladin/m1_.jpg; quit");
+		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save " + path + "; quit");
 		
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
@@ -161,15 +203,18 @@ public class AladinScriptActivityTest {
 	
 	
 	//It is based in local files
-	@Ignore
 	@Test
 	public void executeAsynchWithStringsAndNonExistingGalaxy() throws Exception {
 		configBean.setTypeOfInput("String");
 		configBean.setTypeOfMode("nogui");
 		activity.configure(configBean);
 
+		String property = "java.io.tmpdir";
+		String tempDir = System.getProperty(property);
+		String path = tempDir + File.separator + "m1.jpg";
+		
 		Map<String, Object> inputs = new HashMap<String, Object>();
-		inputs.put(FIRST_INPUT, "get aladin(J,FITS) thisgalaxaydoesnotexist ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit");
+		inputs.put(FIRST_INPUT, "get aladin(J,FITS) thisgalaxaydoesnotexist ;\n save " + path + "; quit");
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		//expectedOutputTypes.put("simpleOutput", String.class);
@@ -212,5 +257,11 @@ public class AladinScriptActivityTest {
 		assertEquals("Unexpected outputs", 3, activity.getOutputPorts().size());
 	}
 
+	@Test
+	public void instantiateAladinClass(){
+		Aladin aladin_object;
+		aladin_object = new Aladin();
+		aladin_object.stop();
+	}
 	
 }
