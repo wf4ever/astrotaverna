@@ -109,6 +109,7 @@ public class AladinScriptActivityTest {
 	}
 
 	//It is based in temp local files
+	@Ignore
 	@Test
 	public void executeAsynchWithStrings() throws Exception {
 		configBean.setTypeOfInput("String");
@@ -139,7 +140,38 @@ public class AladinScriptActivityTest {
 		
 	}
 	
-	//It is based in temp local files (ubuntu)
+	@Test
+	public void executeAsynchWithStringsWithoutResult() throws Exception {
+		configBean.setTypeOfInput("String");
+		configBean.setTypeOfMode("nogui");
+		activity.configure(configBean);
+
+		String property = "java.io.tmpdir";
+		String tempDir = System.getProperty(property);
+		String path = tempDir + File.separator + "m1.jpg";
+		
+		Map<String, Object> inputs = new HashMap<String, Object>();
+		//inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n save /Users/julian/Documents/wf4ever/aladin/exampleTests/m1.jpg; quit");
+		inputs.put(FIRST_INPUT, "get aladin(J,FITS) m1 ;\n quit");
+		
+
+		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
+		//expectedOutputTypes.put("simpleOutput", String.class);
+		//expectedOutputTypes.put("moreOutputs", String.class);
+		expectedOutputTypes.put(OUT_STD_OUTPUT, String.class);
+		expectedOutputTypes.put(OUT_ERROR, String.class);
+
+		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
+				activity, inputs, expectedOutputTypes);
+
+		assertEquals("Unexpected outputs", 2, outputs.size());
+		assertEquals("", outputs.get(OUT_STD_OUTPUT));
+		assertEquals("", outputs.get(OUT_ERROR));
+		
+	}
+	
+	//It is based in temp local files
+	@Ignore
 	@Test
 	public void executeAsynchWithStringsInUbuntu() throws Exception {
 		configBean.setTypeOfInput("String");
