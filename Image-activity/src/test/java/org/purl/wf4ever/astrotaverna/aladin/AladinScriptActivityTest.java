@@ -278,8 +278,8 @@ public class AladinScriptActivityTest {
 		assertTrue(file.getAbsolutePath().endsWith("Aladin-7.5.jar"));
 		
 		
-		Aladin aladin_object;
-		aladin_object = new Aladin();
+		//Aladin aladin_object;
+		//aladin_object = new Aladin();
 		
 	}
 	
