@@ -31,13 +31,13 @@
 			<version>${project.version}</version>
 		</dependency>
 		<!-- comment for removing PDL from astrotaverna -->
-     
+<!--     
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>PDL-activity-ui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+-->		
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>Image-activity-ui</artifactId>
