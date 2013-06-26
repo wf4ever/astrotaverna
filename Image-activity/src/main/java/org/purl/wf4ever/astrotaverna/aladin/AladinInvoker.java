@@ -55,6 +55,10 @@ public class AladinInvoker {
 		
 	public void runScript(String script, String gui) throws InterruptedException, IOException{
 		ProcessBuilder builder;
+		
+		System.out.println("Calling Aladin script: "+ ALADINJAR);
+		logger.warn("ALADIN. --------- Calling Aladin script: "+ ALADINJAR);
+		
 		if(AladinInvoker.GUI.compareTo(gui)!=0){
 		    //System.out.println("java -jar " + ALADINJAR + " -nogui script="+script);
 			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "script="+script);
@@ -182,7 +186,6 @@ public class AladinInvoker {
 	public void runMacro(String scriptURL, String parametersURL, String gui) throws InterruptedException, IOException{
 		
 		String macroScript = "macro "+ scriptURL + " " + parametersURL; 
-		System.out.println("Calling Aladin script: "+ macroScript);
 		runScript(macroScript, gui);
 		
 	}
