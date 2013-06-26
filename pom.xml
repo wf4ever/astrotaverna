@@ -144,10 +144,10 @@
     <module>astrotaverna-utils</module>
     <module>file-reference-builder</module>
     <!-- Comment for removing PDL from astrotaverna -->
-     
+<!--      
     <module>PDL-activity</module>
     <module>PDL-activity-ui</module>
-  
+-->  
     <module>Image-activity</module>
     <module>Image-activity-ui</module>
     <module>query-activity-ui</module>

@@ -34,6 +34,7 @@
 		        </exclusion>
 	      </exclusions> 
 		</dependency>
+		<!-- JGS: this is to be able to use the class ClassLocation to know where are the jars -->
         <dependency>
             <groupId>net.sf.taverna.t2.infrastructure</groupId>
             <artifactId>prelauncher</artifactId>
