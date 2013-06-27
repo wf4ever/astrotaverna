@@ -155,7 +155,7 @@ public class MyClassLocation {
 		
 		System.out.println("code source: " + codeSource);
 		
-		//me devuelve el path a la clase que se est‡ ejecutando.
+		//it returns the path to the class that is running
 		System.out.println("Class loader 1: " + ClassLoader.getSystemClassLoader().getResource(".").getPath());
 		System.out.println("Class loader 2: " + ClassLoader.getSystemClassLoader().getResource(classResourceName).getPath());
 		resource = Aladin.class.getClassLoader().getResource("/"+classResourceName);

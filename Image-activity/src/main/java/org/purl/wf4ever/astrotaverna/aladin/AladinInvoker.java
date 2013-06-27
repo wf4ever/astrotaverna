@@ -59,18 +59,20 @@ public class AladinInvoker {
 	public void runScript(String script, String gui) throws InterruptedException, IOException{
 		ProcessBuilder builder;
 		
-		//System.out.println("Calling Aladin script: "+ ALADINJAR);
+		System.out.println("Calling Aladin script: "+ ALADINJAR);
 		logger.info("ALADIN. --------- Calling Aladin script: "+ ALADINJAR);
 		
 		if(AladinInvoker.GUI.compareTo(gui)!=0){
 		    //System.out.println("java -jar " + ALADINJAR + " -nogui script="+script);
 			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "script="+script);
 			builder = new ProcessBuilder("java", "-jar", ALADINJAR, "-nogui", "script="+script);
+			System.out.println("ALADIN. --------- Calling Aladin script: "+ "java -jar "+ ALADINJAR + " -nogui script="+script);
 			logger.info("ALADIN. --------- Calling Aladin script: "+ "java -jar "+ ALADINJAR + " -nogui script="+script);
 		}else{
 			///Users/julian/Documents/wf4ever/aladin/
 			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "script="+script);
 			builder = new ProcessBuilder("java", "-jar", ALADINJAR, "script="+script);
+			System.out.println("ALADIN. --------- Calling Aladin script: "+ "java -jar " + ALADINJAR + " script="+script);
 			logger.info("ALADIN. --------- Calling Aladin script: "+ "java -jar " + ALADINJAR + " script="+script);
 		}
 		
@@ -208,34 +210,60 @@ public class AladinInvoker {
 	 */
 	public void testWhereIsThejar() throws IOException{
 		MyClassLocation myLocation = new MyClassLocation();
+		File file;
+		URL resource;
+		String classResourceName = "/cds/aladin/Aladin.class";
 		
-		File file = ClassLocation.getClassLocationFile(AnnotationAssertion.class);
+		file = ClassLocation.getClassLocationFile(AnnotationAssertion.class);
+		System.out.println("Result for AnnotationAssertion with ClassLocation: "+file + ", exists? " + file.isFile());
+		logger.info("Result for AnnotationAssertion with ClassLocation: "+file + ", exists? " + file.isFile());
+		
+		file = ClassLocation.getClassLocationFile(Aladin.class);
 		System.out.println("Result form ClassLocation: "+file + ", exists? " + file.isFile());
 		logger.info("Result form ClassLocation: "+file + ", exists? " + file.isFile());
+		
 		file = myLocation.getClassLocationFile(Aladin.class);
 		System.out.println("Result form MyClassLocationocation: "+file + ", exists? " + file.isFile());
 		logger.info("Result form MyClassLocationocation: "+file + ", exists? " + file.isFile());
 		
 		
 		Class theClass = Aladin.class;
-		String classResourceName = theClass.getName().replace('.', '/')	+ ".class";
-		URL resource = theClass.getResource("/" + classResourceName);
-		System.out.println("resource: "+ resource);
-		logger.info("resource: "+ resource);
+		try{
+			classResourceName = theClass.getName().replace('.', '/')	+ ".class";
+			resource = theClass.getResource("/" + classResourceName);
+			System.out.println("resource: "+ resource);
+			logger.info("resource: "+ resource);
+		}catch(NullPointerException ex){
+			System.out.println("A null pointer exception was capture in AladinInvoker");
+		}
+		try{
+			URL codeSource = theClass.getProtectionDomain().getCodeSource().getLocation();
+			System.out.println("code source: " + codeSource);
+			logger.info("code source: " + codeSource);
+		}catch(NullPointerException ex){
+			System.out.println("A null pointer exception was capture in AladinInvoker");
+		}
+		try{
+			//it returns the path to the class that is running
+			System.out.println("Class loader 1: " + ClassLoader.getSystemClassLoader().getResource(".").getPath());
+			logger.info("Class loader 1: " + ClassLoader.getSystemClassLoader().getResource(".").getPath());
+		}catch(NullPointerException ex){
+			System.out.println("A null pointer exception was capture in AladinInvoker");
+		}
 		
-		URL codeSource = theClass.getProtectionDomain().getCodeSource().getLocation();
-		
-		System.out.println("code source: " + codeSource);
-		logger.info("code source: " + codeSource);
-		
-		//me devuelve el path a la clase que se est‡ ejecutando.
-		System.out.println("Class loader 1: " + ClassLoader.getSystemClassLoader().getResource(".").getPath());
-		logger.info("Class loader 1: " + ClassLoader.getSystemClassLoader().getResource(".").getPath());
-		System.out.println("Class loader 2: " + ClassLoader.getSystemClassLoader().getResource(classResourceName).getPath());
-		logger.info("Class loader 2: " + ClassLoader.getSystemClassLoader().getResource(classResourceName).getPath());
-		resource = Aladin.class.getClassLoader().getResource("/"+classResourceName);
-		System.out.println("Class loader 3: "+ resource);
-		logger.info("Class loader 3: "+ resource);
+		try{
+			System.out.println("Class loader 2: " + ClassLoader.getSystemClassLoader().getResource(classResourceName).getPath());
+			logger.info("Class loader 2: " + ClassLoader.getSystemClassLoader().getResource(classResourceName).getPath());
+		}catch(NullPointerException ex){
+			System.out.println("A null pointer exception was capture in AladinInvoker");
+		}
+		try{
+			resource = Aladin.class.getClassLoader().getResource("/"+classResourceName);
+			System.out.println("Class loader 3: "+ resource);
+			logger.info("Class loader 3: "+ resource);
+		}catch(NullPointerException ex){
+			System.out.println("A null pointer exception was capture in AladinInvoker");
+		}
 	}
 
 	protected void run() throws IOException{

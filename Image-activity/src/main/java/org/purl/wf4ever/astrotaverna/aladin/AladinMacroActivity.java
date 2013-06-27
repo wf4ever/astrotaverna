@@ -253,7 +253,7 @@ public class AladinMacroActivity extends
 								System.out.println("ERRORs from Aladin: "+ invoker.getError_out());
 								System.out.println("OUTPUT from Aladin: "+ invoker.getStd_out());
 								System.out.println("EXCEPTION: ");
-								logger.error("Nullpointer exception from aladin");
+								logger.error("Null pointer exception from aladin trying to run it");
 								callbackfails = true;
 								callback.fail("Error invoking Aladin");
 								ex.printStackTrace();
