@@ -59,6 +59,8 @@ public class AladinInvoker {
 	public void runScript(String script, String gui) throws InterruptedException, IOException{
 		ProcessBuilder builder;
 		
+		initAladinJar();
+		
 		System.out.println("Calling Aladin script: "+ ALADINJAR);
 		logger.info("ALADIN. --------- Calling Aladin script: "+ ALADINJAR);
 		
@@ -66,17 +68,17 @@ public class AladinInvoker {
 		    //System.out.println("java -jar " + ALADINJAR + " -nogui script="+script);
 			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "script="+script);
 			builder = new ProcessBuilder("java", "-jar", ALADINJAR, "-nogui", "script="+script);
-			System.out.println("ALADIN. --------- Calling Aladin script: "+ "java -jar "+ ALADINJAR + " -nogui script="+script);
-			logger.info("ALADIN. --------- Calling Aladin script: "+ "java -jar "+ ALADINJAR + " -nogui script="+script);
+			System.out.println("ALADIN. Calling Aladin script: "+ "java -jar "+ ALADINJAR + " -nogui script="+script);
+			logger.info("ALADIN. Calling Aladin script: "+ "java -jar "+ ALADINJAR + " -nogui script="+script);
 		}else{
 			///Users/julian/Documents/wf4ever/aladin/
 			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "script="+script);
 			builder = new ProcessBuilder("java", "-jar", ALADINJAR, "script="+script);
-			System.out.println("ALADIN. --------- Calling Aladin script: "+ "java -jar " + ALADINJAR + " script="+script);
-			logger.info("ALADIN. --------- Calling Aladin script: "+ "java -jar " + ALADINJAR + " script="+script);
+			System.out.println("ALADIN. Calling Aladin script: "+ "java -jar " + ALADINJAR + " script="+script);
+			logger.info("ALADIN. Calling Aladin script: "+ "java -jar " + ALADINJAR + " script="+script);
 		}
 		
-		testWhereIsThejar();
+		
 		
 		//Map<String, String> environ = builder.environment();
 
@@ -138,17 +140,20 @@ public class AladinInvoker {
 		ProcessBuilder builder;
 		
 		logger.info("ALADIN. --------- Calling Aladin script: "+ ALADINJAR);
+		initAladinJar();
 		
 		if(AladinInvoker.GUI.compareTo(gui)!=0){
 		
 			//ProcessBuilder builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "-scriptfile="+url); 
 			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-nogui", "-scriptfile="+url);
 			logger.info("ALADIN. --------- Calling Aladin script: java -jar" + ALADINJAR + " -nogui -scriptfile="+url);
+			System.out.println("ALADIN. --------- Calling Aladin script: java -jar" + ALADINJAR + " -nogui -scriptfile="+url);
 			builder = new ProcessBuilder("java", "-jar", ALADINJAR, "-nogui", "-scriptfile="+url);
 		}else{
 			///Users/julian/Documents/wf4ever/aladin/
 			//builder = new ProcessBuilder("java", "-jar", "/Users/julian/Documents/wf4ever/aladin/Aladin.jar", "-scriptfile="+url);
 			logger.info("ALADIN. --------- Calling Aladin script: java -jar" + ALADINJAR + " -scriptfile="+url);
+			System.out.println("ALADIN. --------- Calling Aladin script: java -jar" + ALADINJAR + " -scriptfile="+url);
 			builder = new ProcessBuilder("java", "-jar", ALADINJAR, "-scriptfile="+url);
 		}
 		
@@ -186,14 +191,36 @@ public class AladinInvoker {
 	 * @throws IOException 
 	 */
 	public void initAladinJar() throws IOException{
-		File file = ClassLocation.getClassLocationFile(AnnotationAssertion.class);	
+		File file = ClassLocation.getClassLocationFile(AnnotationAssertion.class);
+		
+		file = ClassLocation.getClassLocationFile(Aladin.class);
+		if(file.exists()){
+			ALADINJAR = file.getAbsolutePath();
+			System.out.println();
+			logger.info("Aladin to be used at: "+ ALADINJAR);
+			System.out.println("Aladin to be used at: "+ ALADINJAR);
+		}else{
+			file = ClassLocation.getClassLocationFile(Aladin.class);
+			if(file.exists()){
+				ALADINJAR = file.getAbsolutePath();
+				System.out.println();
+				logger.info("Aladin to be used at: "+ ALADINJAR);
+				System.out.println("Aladin to be used at: "+ ALADINJAR);
+			}else{
+				System.out.println("ALADIN: trying to init ALADINJAR. the result was a non existing path");
+				logger.info("ALADIN: trying to init ALADINJAR. the result was a non existing jar file");
+			}
+		}
+		
+		file = ClassLocation.getClassLocationFile(AnnotationAssertion.class);
+		
+		
+		
 		String path = file.getAbsolutePath();
-		int position = path.indexOf("repository");
-		position = path.indexOf("net"+File.separator+"sf"+File.separator+"taverna"+File.separator+"t2"+File.separator+"core");
-		ALADINJAR = path.substring(0, position);
-		ALADINJAR += "cds"+File.separator+"aladin"+File.separator+"Aladin"+File.separator+"7.5"+File.separator+"Aladin-7.5.jar";
-        //System.out.println(ALADINJAR);	
-        logger.info("Aladin to be used at: "+ ALADINJAR);
+		//int position = path.indexOf("repository");
+		//position = path.indexOf("net"+File.separator+"sf"+File.separator+"taverna"+File.separator+"t2"+File.separator+"core");
+		//ALADINJAR = path.substring(0, position);
+		//ALADINJAR += "cds"+File.separator+"aladin"+File.separator+"Aladin"+File.separator+"7.5"+File.separator+"Aladin-7.5.jar";
 	}
 	
 	
@@ -213,6 +240,10 @@ public class AladinInvoker {
 		File file;
 		URL resource;
 		String classResourceName = "/cds/aladin/Aladin.class";
+		
+		
+		//the error that taverna provide with the err-outpu:
+		//Unable to access jarfile /Applications/Taverna 2.4.0.app/Contents/Resources/Java/repository/cds/aladin/Aladin/7.5/Aladin-7.5.jar
 		
 		file = ClassLocation.getClassLocationFile(AnnotationAssertion.class);
 		System.out.println("Result for AnnotationAssertion with ClassLocation: "+file + ", exists? " + file.isFile());

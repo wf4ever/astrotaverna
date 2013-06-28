@@ -42,6 +42,9 @@ public class FindAladinJarTest {
 	public void findAladin() throws IOException{
 		File file = ClassLocation.getClassLocationFile(Aladin.class);
 		System.out.println(file);
+		System.out.println(file.getAbsolutePath());
+		System.out.println(file.getCanonicalPath());
+		System.out.println(file.toString());
 		assertTrue(!file.getAbsolutePath().isEmpty());
 		assertTrue(file.getAbsolutePath().endsWith("Aladin-7.5.jar"));
         
