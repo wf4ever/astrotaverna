@@ -52,7 +52,7 @@ public class FormatConversionServiceDesc extends ServiceDescription<FormatConver
 	 */
 	@Override
 	public String getName() {
-		return "Format conversion for tables";//exampleString;
+		return "Format conversion";//exampleString;
 	}
 	
 	public String getIdName() {

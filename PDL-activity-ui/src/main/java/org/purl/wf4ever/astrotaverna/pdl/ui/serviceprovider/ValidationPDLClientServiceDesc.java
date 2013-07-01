@@ -53,6 +53,10 @@ public class ValidationPDLClientServiceDesc extends ServiceDescription<Validatio
 	public String getName() {
 		return "PDL validation";//exampleString;
 	}
+	
+	public String getIdName() {
+		return "PDL validation";//exampleString;
+	}
 
 	/**
 	 * The path to this service description in the service palette. Folders
@@ -64,7 +68,7 @@ public class ValidationPDLClientServiceDesc extends ServiceDescription<Validatio
 		//return Arrays.asList("Stilts -" + exampleUri);
 		//return Arrays.asList("Stilts" + this.getName());
 		//return Arrays.asList("Astro local services", "Stilts");
-		return Arrays.asList("Astro tools");
+		return Arrays.asList("Astro tools", "Services");
 	}
 
 	/**
@@ -76,7 +80,7 @@ public class ValidationPDLClientServiceDesc extends ServiceDescription<Validatio
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("PDL", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("PDL", "astro-iaa", this.getIdName());
 	}
 
 	

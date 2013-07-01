@@ -53,6 +53,10 @@ public class AladinMacroServiceDesc extends ServiceDescription<AladinMacroActivi
 	 */
 	@Override
 	public String getName() {
+		return "Aladin macro";//exampleString;
+	}
+	
+	public String getIdName() {
 		return "Use Aladin macro";//exampleString;
 	}
 
@@ -78,7 +82,7 @@ public class AladinMacroServiceDesc extends ServiceDescription<AladinMacroActivi
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("aladin", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("aladin", "astro-iaa", this.getIdName());
 	}
 
 	

@@ -51,7 +51,7 @@ public class TcatListServiceDesc extends ServiceDescription<TcatListActivityConf
 	 */
 	@Override
 	public String getName() {
-		return "Add n concat tables";//exampleString;
+		return "Cat VOTable list";//exampleString;
 	}
 	
 	public String getIdName() {

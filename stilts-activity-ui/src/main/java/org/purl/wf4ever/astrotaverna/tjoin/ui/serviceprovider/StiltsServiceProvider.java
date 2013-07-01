@@ -57,7 +57,7 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		
 		StiltsServiceDesc service = new StiltsServiceDesc();
 		service.setTypeOFInput("String");
-		service.setDescription("Joins two VOTables with the same number of rows");
+		service.setDescription("Join two VOTables");
 		
 		results.add(service);
 		
@@ -65,84 +65,82 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		SelectColumnsServiceDesc service2 = new SelectColumnsServiceDesc();
 		service2.setTypeOfInput("String");
 		service2.setTypeOfFilter("Column names");
-		//service2.setDescription("Columns selection in a table");
+		service2.setDescription("Select columns from a VOTable");
 		
 		results.add(service2);
 		
 		SelectRowsServiceDesc service3 = new SelectRowsServiceDesc();
 		service3.setTypeOfInput("String");
 		//service3.setTypeOfFilter("Column names");
-		//service3.setDescription("Rows selection in a table");
+		service3.setDescription("Select rows from a VOTable");
 		
 		results.add(service3);
 		
 		CoordTransformationServiceDesc service4 = new CoordTransformationServiceDesc();
 		service4.setTypeOfInput("String");
-		//service4.setDescription("Coordenates transformation in a table");
+		service4.setDescription("Add Coordinate units conversion");
 		
 		results.add(service4);
 		
 		FormatConversionServiceDesc service5 = new FormatConversionServiceDesc();
 		service5.setTypeOfInput("String");
 		//service3.setTypeOfFilter("Column names");
-		//service5.setDescription("Table format conversion");
+		service5.setDescription("VOTable format conversion");
 		
 		results.add(service5);
 		
 		AddColumnByExpressionServiceDesc service6 = new AddColumnByExpressionServiceDesc();
 		service6.setTypeOfInput("String");
 		//service3.setTypeOfFilter("Column names");
-		service6.setDescription("Adds column to VOTable using a expression");
+		service6.setDescription("Add a column to VOTable");
 		
 		results.add(service6);
 		
 		AddSkyCoordsServiceDesc service7 = new AddSkyCoordsServiceDesc();
 		service7.setTypeOfInput("String");
-		//service7.setDescription("Add sky coordinates");
+		service7.setDescription("Coordenates reference system transformation");
 		
 		results.add(service7);
 		
 		ResolveCoordsServiceDesc service8 = new ResolveCoordsServiceDesc();
 		service8.setTypeOfInput("String");
-		service8.setDescription("Resolve coordinates from name in VOTable");
+		service8.setDescription("Name resolver");
 		results.add(service8);
 		
 		TcatServiceDesc service9 = new TcatServiceDesc();
 		service9.setTypeOfInput("String");
-		service9.setDescription("Concats two VOTables with same number of cols");
+		service9.setDescription("Concatenate two VOTables");
 		results.add(service9);
 		
 		TcatListServiceDesc service10 = new TcatListServiceDesc();
 		service10.setTypeOfInput("String");
-		service10.setDescription("Concats n VOTables with same number of cols");
+		service10.setDescription("Concatenate a list of VOTables");
 		results.add(service10);
 		
 		GetListFromColumnServiceDesc service11 = new GetListFromColumnServiceDesc();
 		service11.setTypeOfInput("String");
-		//service11.setDescription("Get list from column in a votable");
+		service11.setDescription("Extract column from a VOTable as a list");
 		results.add(service11);
 		
 		TemplateFillerServiceDesc service12 = new TemplateFillerServiceDesc();
 		service12.setTypeOfInput("String");
-		//service12.setDescription("Template filler from a votable");
+		service12.setDescription("fill template file from VOTable");
 		results.add(service12);
 		
 		CheckTemplateFillerServiceDesc service13 = new CheckTemplateFillerServiceDesc();
 		service13.setTypeOfInput("String");
-		//service13.setDescription("Check Template filler");
+		service13.setDescription("Validate template file against VOTable");
 		results.add(service13);
 		
 		AddCommonRowToVOTableServiceDesc service14 = new AddCommonRowToVOTableServiceDesc();
 		service14.setTypeOfInput("String");
 		service14.setCommonRowPosition("Left");
-		service14.setDescription("Add a row to each row of another table");
-		//service13.setDescription("Check Template filler");
+		service14.setDescription("Add common fields to a VOTable");
 		results.add(service14);
 		
 		CrossMatch2ServiceDesc service15 = new CrossMatch2ServiceDesc();
 		service15.setTypeOfInput("String");
-		service15.setDescription("Crossmatching");
-		//service13.setDescription("Check Template filler");
+		service15.setDescription("Crossmatche two VOTables");
 		results.add(service15);
 		
 		//change done in wf4ever

@@ -50,7 +50,7 @@ public class ResolveCoordsServiceDesc extends ServiceDescription<ResolveCoordsAc
 	 */
 	@Override
 	public String getName() {
-		return "Coordinates resolver";//exampleString;
+		return "Name resolver";//exampleString;
 	}
 	
 	public String getIdName() {

@@ -51,7 +51,7 @@ public class StiltsServiceDesc extends ServiceDescription<TjoinActivityConfigura
 	 */
 	@Override
 	public String getName() {
-		return "Add joined table";//exampleString;
+		return "Join VOTables";//exampleString;
 	}
 	
 	public String getIdName() {

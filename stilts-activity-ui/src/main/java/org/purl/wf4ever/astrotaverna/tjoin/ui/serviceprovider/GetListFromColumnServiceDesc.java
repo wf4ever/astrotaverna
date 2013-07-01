@@ -50,7 +50,7 @@ public class GetListFromColumnServiceDesc extends ServiceDescription<GetListFrom
 	 */
 	@Override
 	public String getName() {
-		return "Select columns from VOTable into a list";//exampleString;
+		return "List from column";//exampleString;
 	}
 	
 	public String getIdName() {

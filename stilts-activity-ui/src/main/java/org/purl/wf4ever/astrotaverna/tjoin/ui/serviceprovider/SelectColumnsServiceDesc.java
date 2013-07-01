@@ -51,7 +51,7 @@ public class SelectColumnsServiceDesc extends ServiceDescription<SelectColumnsAc
 	 */
 	@Override
 	public String getName() {
-		return "Select columns from VOTable";//exampleString;
+		return "Select columns";//exampleString;
 	}
 	
 	public String getIdName() {

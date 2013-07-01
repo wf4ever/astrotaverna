@@ -51,7 +51,7 @@ public class SelectRowsServiceDesc extends ServiceDescription<SelectRowsActivity
 	 */
 	@Override
 	public String getName() {
-		return "Select rows from VOTable";//exampleString;
+		return "Select rows";//exampleString;
 	}
 	
 	public String getIdName() {

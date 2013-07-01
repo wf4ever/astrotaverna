@@ -53,6 +53,10 @@ public class AladinScriptServiceDesc extends ServiceDescription<AladinScriptActi
 	 */
 	@Override
 	public String getName() {
+		return "Aladin script";//exampleString;
+	}
+	
+	public String getIdName() {
 		return "Use Aladin scripts";//exampleString;
 	}
 
@@ -78,7 +82,7 @@ public class AladinScriptServiceDesc extends ServiceDescription<AladinScriptActi
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("aladin", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("aladin", "astro-iaa", this.getIdName());
 	}
 
 	

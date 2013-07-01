@@ -52,7 +52,7 @@ public class ImageServiceProvider implements ServiceDescriptionProvider {
 		AladinMacroServiceDesc service2 = new AladinMacroServiceDesc();
 		service2.setTypeOfInput("String");
 		service2.setTypeOfMode("nogui");
-		//service.setDescription("Aladin script");
+		//service.setDescription("Aladin macro");
 		
 		results.add(service2);
 

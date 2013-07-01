@@ -50,7 +50,7 @@ public class CheckTemplateFillerServiceDesc extends ServiceDescription<CheckTemp
 	 */
 	@Override
 	public String getName() {
-		return "Fill template validation";//exampleString;
+		return "Template validation";//exampleString;
 	}
 	
 	public String getIdName() {

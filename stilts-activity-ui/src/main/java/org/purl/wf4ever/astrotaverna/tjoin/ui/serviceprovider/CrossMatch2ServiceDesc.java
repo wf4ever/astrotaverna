@@ -52,7 +52,7 @@ public class CrossMatch2ServiceDesc extends ServiceDescription<CrossMatch2Activi
 	 */
 	@Override
 	public String getName() {
-		return "Add Cross match tables";//exampleString;
+		return "Crossmatch";//exampleString;
 	}
 
 	public String getIdName() {

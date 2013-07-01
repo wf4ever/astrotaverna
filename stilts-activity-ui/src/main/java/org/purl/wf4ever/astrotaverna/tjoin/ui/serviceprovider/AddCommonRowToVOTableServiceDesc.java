@@ -56,7 +56,7 @@ public class AddCommonRowToVOTableServiceDesc extends ServiceDescription<AddComm
 	 */
 	@Override
 	public String getName() {
-		return "Add common row to VOTable";//exampleString;
+		return "Add common fields";//exampleString;
 	}
 
 	public String getIdName() {

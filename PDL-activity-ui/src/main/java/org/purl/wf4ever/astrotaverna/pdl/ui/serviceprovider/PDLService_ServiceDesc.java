@@ -55,6 +55,10 @@ public class PDLService_ServiceDesc extends ServiceDescription<PDLServiceActivit
 	public String getName() {
 		return "PDL service";//exampleString;
 	}
+	
+	public String getIdName() {
+		return "PDL service";//exampleString;
+	}
 
 	/**
 	 * The path to this service description in the service palette. Folders
@@ -66,7 +70,7 @@ public class PDLService_ServiceDesc extends ServiceDescription<PDLServiceActivit
 		//return Arrays.asList("Stilts -" + exampleUri);
 		//return Arrays.asList("Stilts" + this.getName());
 		//return Arrays.asList("Astro local services", "Stilts");
-		return Arrays.asList("Astro tools");
+		return Arrays.asList("Astro tools", "Services");
 	}
 
 	/**
@@ -78,7 +82,7 @@ public class PDLService_ServiceDesc extends ServiceDescription<PDLServiceActivit
 	protected List<? extends Object> getIdentifyingData() {
 		// FIXME: Use your fields instead of example fields
 		//return Arrays.<Object>asList(exampleString, exampleUri);
-		return Arrays.<Object>asList("PDL", "astro-iaa", this.getName());
+		return Arrays.<Object>asList("PDL", "astro-iaa", this.getIdName());
 	}
 	
 	/**

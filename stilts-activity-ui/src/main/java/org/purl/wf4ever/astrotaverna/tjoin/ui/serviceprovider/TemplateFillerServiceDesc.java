@@ -50,7 +50,7 @@ public class TemplateFillerServiceDesc extends ServiceDescription<TemplateFiller
 	 */
 	@Override
 	public String getName() {
-		return "Fill template from VOTable";//exampleString;
+		return "Template filler";//exampleString;
 	}
 	
 	public String getIdName() {

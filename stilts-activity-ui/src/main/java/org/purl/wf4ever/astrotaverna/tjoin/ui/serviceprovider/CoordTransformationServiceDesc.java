@@ -51,7 +51,7 @@ public class CoordTransformationServiceDesc extends ServiceDescription<CoordTran
 	 */
 	@Override
 	public String getName() {
-		return "Coordinates units conversion in VOTable";//exampleString;
+		return "Coord. units conversion";//exampleString;
 	}
 	
 	public String getIdName() {
