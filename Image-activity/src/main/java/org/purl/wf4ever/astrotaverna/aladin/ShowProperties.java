@@ -1,5 +1,5 @@
 package org.purl.wf4ever.astrotaverna.aladin;
-
+ 
 public class ShowProperties {
 
     public static void main(String[] args) {
@@ -17,4 +17,6 @@ public class ShowProperties {
             System.out.println(key + ": " + System.getProperty(key));
         }
     }
-}
+} 
+
+
