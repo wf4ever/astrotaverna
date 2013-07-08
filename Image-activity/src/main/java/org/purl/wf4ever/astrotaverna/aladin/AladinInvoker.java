@@ -24,9 +24,7 @@ import cds.aladin.Aladin;
 
 /**
  * It runs Aladin scripts and macros. 
- * The version of Aladin is hard coded. At the time of this class the version is Aladin 7.5. 
- * So, if a new Aladin.jar version is deployed then the way the paths are built has to 
- * be changed.  
+ * At the time of this class the version is Aladin 7.5. 
  * @author Julian Garrido
  * @date 10/04/2013
  *
