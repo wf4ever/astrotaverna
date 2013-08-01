@@ -40,6 +40,7 @@ public class PDLServiceActivityConfigurationBean implements Serializable {
 	
 	final public String PDLSERVICE = "PDLserver";
 	final public String RESTSERVICE = "Rest";
+	final public String VOTABLERESTSERVICE = "VOTableRest";
 	
 	// only need to store the configuration of inputs and outputs, as all of them are dynamic;
 	// only inputs that constitute components of URL signature are to be stored

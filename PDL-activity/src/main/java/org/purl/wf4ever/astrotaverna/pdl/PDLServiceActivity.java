@@ -100,6 +100,21 @@ public class PDLServiceActivity extends
 		configurePorts();
 	}
 
+	/**
+	 * A service in a PDL server will have the following outputs:
+	 *  - OUTPUT_REPORT = "status"
+	 *  - RESPONSE_BODY = "reponse_body"
+	 *  - if there is no defined output it will have a default output port because the
+	 *  server always returns something. [DEFAULT_OUTPUT = "file_result"]
+	 *  - Additional outputs may be defiend in the pdl description file.
+	 *  A rest service will have only the response body output port"
+	 *  A rest service that process the votable will have the following outputs:
+	 *   - RESPONSE_BODY = "reponse_body"
+	 *   - All additional outputs defined in the pdl description will correspond
+	 *   to columns in the VOTable. These output ports will return lists. No need to 
+	 *   consider all the columns in the table.
+	 * @throws ActivityConfigurationException
+	 */
 	protected void configurePorts() throws ActivityConfigurationException {
 		//GroupProcessor gp;
 //		Service service;
@@ -145,15 +160,29 @@ public class PDLServiceActivity extends
 			}
 			
 			//Output ports
-			HashMap<String, SingleParameter> outputSingleParams = pdlcontroller.getHashOutputParameters();
-			for(String paramName : outputSingleParams.keySet()){
-				addOutput(paramName, 0);
-			}
-			if(outputSingleParams==null || outputSingleParams.isEmpty())
-				addOutput(DEFAULT_OUTPUT,0);
-			addOutput(OUT_REPORT, 0);
-			addOutput(RESPONSE_BODY, 0); 
+					
 			
+			if(this.configBean.getServiceType().compareTo(this.configBean.PDLSERVICE)==0){
+				HashMap<String, SingleParameter> outputSingleParams = pdlcontroller.getHashOutputParameters();
+				for(String paramName : outputSingleParams.keySet()){
+					addOutput(paramName, 0);
+				}
+				
+				addOutput(OUT_REPORT, 0);
+				addOutput(RESPONSE_BODY, 0);
+				if(outputSingleParams==null || outputSingleParams.isEmpty())
+					addOutput(DEFAULT_OUTPUT,0);
+			}else{
+				if(this.configBean.getServiceType().compareTo(this.configBean.RESTSERVICE)==0){
+					addOutput(RESPONSE_BODY, 0);
+				}else if(this.configBean.getServiceType().compareTo(this.configBean.VOTABLERESTSERVICE)==0){
+					HashMap<String, SingleParameter> outputSingleParams = pdlcontroller.getHashOutputParameters();
+					for(String paramName : outputSingleParams.keySet()){
+						addOutput(paramName, 1);
+					}
+					addOutput(RESPONSE_BODY, 0);
+				}
+			}
 			/*
 //			for(SingleParameter param: inputParameters){
 //				addInput(param.getName(), 0, true, null, String.class);
@@ -385,7 +414,7 @@ public class PDLServiceActivity extends
 			public void run() {
 				boolean callbackfails=false;
 				String serviceResult; 
-				String jobInfo = "";
+				//String jobInfo = "";
 				String jobId;
 				String userId;
 				boolean inputsAreValid = false;
@@ -432,7 +461,6 @@ public class PDLServiceActivity extends
 					if(!callbackfails && areMandatoryInputsNotNull()){
 						HashMap inputValuesMap;
 						PDLServiceValidation pdlServiceValidation;
-						MyDefaultServiceCaller caller;
 						JobsList jobsList;
 						JobResult jobResult = null;
 						HashMap<String, SingleParameter> outputPDLParamMap;
@@ -451,7 +479,7 @@ public class PDLServiceActivity extends
 						pdlServiceValidation = new PDLServiceValidation(gp);
 										
 						// CALL THE SERVICE
-						caller = new MyDefaultServiceCaller();				
+									
 						//if the input parameters are valid
 						inputsAreValid = pdlServiceValidation.isValid();
 						if(inputsAreValid){
@@ -464,8 +492,9 @@ public class PDLServiceActivity extends
 								
 								//create a job
 								if(config.getServiceType().compareTo(config.PDLSERVICE)==0){
-									
-									serviceResult = caller.callService(inputSingleParams);
+									MyDefaultServiceCaller pdlCaller;
+									pdlCaller = new MyDefaultServiceCaller();	
+									serviceResult = pdlCaller.callService(inputSingleParams);
 									
 									jobsList = new JobsList();
 									jobsList.parseXML(serviceResult);
@@ -474,11 +503,11 @@ public class PDLServiceActivity extends
 										userId = jobsList.getJobs().get(0).getUserId();
 										
 										//http://pdl-calc.obspm.fr:8081/montage/TavernaJobInfo?mail=tetrarquis@gmail.com&jobId=3&userId=7
-										jobInfo = caller.getJobInfo(jobId, userId);
+										serviceResult = pdlCaller.getJobInfo(jobId, userId);
 		
 										jobResult = new JobResult();
 										
-										jobResult.parseXML(jobInfo);
+										jobResult.parseXML(serviceResult);
 										//System.out.println("JobOutputs: "+jobResult.getOutputParams());
 										
 										//if there is an error or it is aborted, the activity fails
@@ -486,8 +515,8 @@ public class PDLServiceActivity extends
 											if(jobResult.getJobPhase().toLowerCase().compareTo(PDLServiceController.getErrorStatus())==0
 													|| jobResult.getJobPhase().toLowerCase().compareTo(PDLServiceController.getAbortedStatus())==0){
 												callbackfails = true;
-												logger.error("The service returned "+jobResult.getJobPhase()+": "+caller.latestInvokedURL());
-												callback.fail("The service returned "+jobResult.getJobPhase()+": "+caller.latestInvokedURL());
+												logger.error("The service returned "+jobResult.getJobPhase()+": "+pdlCaller.latestInvokedURL());
+												callback.fail("The service returned "+jobResult.getJobPhase()+": "+pdlCaller.latestInvokedURL());
 											}
 										
 										// TODO Update outputs in mapper and validate
@@ -497,10 +526,20 @@ public class PDLServiceActivity extends
 										callback.fail("Job info couldn't be parsed.");
 									}
 								}else{
-									if(config.getServiceType().compareTo(config.RESTSERVICE)==0){
+									if(config.getServiceType().compareTo(config.RESTSERVICE)==0
+											|| config.getServiceType().compareTo(config.VOTABLERESTSERVICE)==0){
+										
+										RestServiceCaller restCaller;
+										restCaller = new RestServiceCaller();
+										
+										serviceResult = restCaller.callService(inputSingleParams);
+										//callbackfails = true;
+										//logger.error("REST type of service is not yet implement for PDL descriptions");
+										//callback.fail("REST option is not yet implemented for PDL descriptions");
+									}else{
 										callbackfails = true;
-										logger.error("REST type of service is not yet implement for PDL descriptions");
-										callback.fail("REST option is not yet implemented for PDL descriptions");
+										logger.error("There is not service caller for " + config.getServiceType());
+										callback.fail("There is not service caller for " + config.getServiceType());
 									}
 								}
 							}else{
@@ -528,74 +567,104 @@ public class PDLServiceActivity extends
 							//if(pdlServiceValidation.isValid()){
 							if(inputsAreValid){
 								Map<String, T2Reference> outputs = new HashMap<String, T2Reference>();
-								//phase for the service:
-								T2Reference simpleRef2 = referenceService.register(jobResult.getJobPhase(),0, true, context); 
-								outputs.put(OUT_REPORT, simpleRef2);
 								//response body
-								simpleRef2 = referenceService.register(jobInfo,0, true, context); 
+								T2Reference simpleRef2 = referenceService.register(serviceResult,0, true, context); 
 								outputs.put(RESPONSE_BODY, simpleRef2);
 								
-								
-								//TODO include outputs from the service
-								outputPDLParamMap = pdlcontroller.getHashOutputParameters();
-								jobResultsMap = jobResult.getOutputParams();
-								//if there is sth to compare
-								if(outputPDLParamMap!=null && jobResultsMap!=null){
-									for(Entry<String, SingleParameter> entry : outputPDLParamMap.entrySet()){
-									//for(Entry<String, String> entry : jobResultsMap.entrySet()){
-										String name = entry.getValue().getName();
-										String value = jobResultsMap.get(name);
-										if(value==null)
-											value ="";
-										simpleRef2 = referenceService.register(value,0, true, context); 
-										outputs.put(name, simpleRef2);
-										if(outputPDLParamMap.get(entry.getKey())==null){
-											logger.warn(entry.getKey() + " is not in the PDL description file");
-										}
-									}
-									
-									//if there is not output in the description file I assume that there will be one
-									if(outputPDLParamMap == null || outputPDLParamMap.isEmpty()){
-										boolean sthInOutput = false;
-										if(jobResultsMap != null && !jobResultsMap.isEmpty()){
-											//if there is only one I use the default port
-											if(jobResultsMap.size()==1){
-												for(Entry<String, String> entry : jobResultsMap.entrySet()){
-													
-													simpleRef2 = referenceService.register(entry.getValue(),0, true, context);
-													//System.out.println("result from xml: "+entry.getValue());
-													//simpleRef2 = referenceService.register("salida",0, true, context);
-													outputs.put(DEFAULT_OUTPUT, simpleRef2);
-													sthInOutput = true;
-												}
-											}else{  //if there is more than one I use the default port for the first one and the real name for the rest
-												int count = 0;
-												for(Entry<String, String> entry : jobResultsMap.entrySet()){
-													simpleRef2 = referenceService.register(entry.getValue(),0, true, context); 
-													if(count == 0){
-														outputs.put(DEFAULT_OUTPUT, simpleRef2);
-														count ++;
-														sthInOutput = true;
-													}else{
-														outputs.put(entry.getKey(), simpleRef2);
-													}	
-												}
-											}
-										}
-										if(!sthInOutput){
-											simpleRef2 = referenceService.register("",0, true, context);
-											outputs.put(DEFAULT_OUTPUT, simpleRef2);
-										}
-									}
-									
-									
-								}else{
-									//logger.warn("Number of output in pdl description file doesn't match with the results provided by the user");
-									logger.warn("outputPDLParamMap or jobResultsMap were null");
-									callback.fail("outputPDLParamMap or jobResultsMap were null");
-									callbackfails = true;
+								if(config.getServiceType().compareTo(config.PDLSERVICE)==0){
+									//phase for the service:
+									simpleRef2 = referenceService.register(jobResult.getJobPhase(),0, true, context); 
+									outputs.put(OUT_REPORT, simpleRef2);
 								}
 								
+
+								//additional columns in case of pdl service
+								if(config.getServiceType().compareTo(config.PDLSERVICE)==0){
+									outputPDLParamMap = pdlcontroller.getHashOutputParameters();
+									jobResultsMap = jobResult.getOutputParams();
+									//if there is sth to compare
+									if(outputPDLParamMap!=null && jobResultsMap!=null){
+										for(Entry<String, SingleParameter> entry : outputPDLParamMap.entrySet()){
+										//for(Entry<String, String> entry : jobResultsMap.entrySet()){
+											String name = entry.getValue().getName();
+											String value = jobResultsMap.get(name);
+											if(value==null)
+												value ="";
+											simpleRef2 = referenceService.register(value,0, true, context); 
+											outputs.put(name, simpleRef2);
+											if(outputPDLParamMap.get(entry.getKey())==null){
+												logger.warn(entry.getKey() + " is not in the PDL description file");
+											}
+										}
+										
+										//if there is not output in the description file I assume that there will be one
+										if(outputPDLParamMap == null || outputPDLParamMap.isEmpty()){
+											boolean sthInOutput = false;
+											if(jobResultsMap != null && !jobResultsMap.isEmpty()){
+												//if there is only one I use the default port
+												if(jobResultsMap.size()==1){
+													for(Entry<String, String> entry : jobResultsMap.entrySet()){
+														
+														simpleRef2 = referenceService.register(entry.getValue(),0, true, context);
+														//System.out.println("result from xml: "+entry.getValue());
+														//simpleRef2 = referenceService.register("salida",0, true, context);
+														outputs.put(DEFAULT_OUTPUT, simpleRef2);
+														sthInOutput = true;
+													}
+												}else{  //if there is more than one I use the default port for the first one and the real name for the rest
+													int count = 0;
+													for(Entry<String, String> entry : jobResultsMap.entrySet()){
+														simpleRef2 = referenceService.register(entry.getValue(),0, true, context); 
+														if(count == 0){
+															outputs.put(DEFAULT_OUTPUT, simpleRef2);
+															count ++;
+															sthInOutput = true;
+														}else{
+															outputs.put(entry.getKey(), simpleRef2);
+														}	
+													}
+												}
+											}
+											if(!sthInOutput){
+												simpleRef2 = referenceService.register("",0, true, context);
+												outputs.put(DEFAULT_OUTPUT, simpleRef2);
+											}
+										}
+										
+										
+									}else{
+										//logger.warn("Number of output in pdl description file doesn't match with the results provided by the user");
+										logger.warn("outputPDLParamMap or jobResultsMap were null");
+										callback.fail("outputPDLParamMap or jobResultsMap were null");
+										callbackfails = true;
+									}
+								}else{
+									if(config.getServiceType().compareTo(config.VOTABLERESTSERVICE)==0){
+										//TODO process a votable and get a list of values for each column
+										outputPDLParamMap = pdlcontroller.getHashOutputParameters();
+										//process votable
+										
+										//if there is sth to compare
+										if(outputPDLParamMap!=null){
+											for(Entry<String, SingleParameter> entry : outputPDLParamMap.entrySet()){
+												ArrayList voColumn=null;
+												String name = entry.getValue().getName();
+												
+												if(voColumn==null)
+													voColumn = new ArrayList<String>();
+													
+												simpleRef2 = referenceService.register(voColumn,1, true, context); 
+												outputs.put(name, simpleRef2);
+												
+											}
+										}else{
+											//logger.warn("Number of output in pdl description file doesn't match with the results provided by the user");
+											logger.warn("outputPDLParamMap or ---------------- were null");
+											callback.fail("outputPDLParamMap or ----------------- were null");
+											callbackfails = true;
+										}
+									}
+								}
 								if(!callbackfails)
 									callback.receiveResult(outputs, new int[0]);
 							}else{
