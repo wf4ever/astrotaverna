@@ -24,7 +24,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.purl.wf4ever.astrotaverna.utils.MyUtils;
+//import org.purl.wf4ever.astrotaverna.utils.MyUtils;
 
 //http://pdl-calc.obspm.fr:8081/broadening/pdlDescription/PDL-Description.xml
 
@@ -102,6 +102,7 @@ public class ValidationPDLClientActivityTest {
 
 	}
 
+	/*
 	@Ignore
 	@Test
 	public void executeAsynchValid() throws Exception {
@@ -226,5 +227,6 @@ public class ValidationPDLClientActivityTest {
 		
 	}
 	
+	*/
 	
 }

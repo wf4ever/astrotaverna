@@ -47,6 +47,8 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationE
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivity;
 import net.sf.taverna.t2.workflowmodel.processor.activity.AsynchronousActivityCallback;
 
+import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivityConfigurationBean;
+
 public class PDLServiceActivity extends
 		AbstractAsynchronousActivity<PDLServiceActivityConfigurationBean>
 		implements AsynchronousActivity<PDLServiceActivityConfigurationBean> {

@@ -25,7 +25,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.purl.wf4ever.astrotaverna.utils.MyUtils;
+import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivityConfigurationBean;
+//import org.purl.wf4ever.astrotaverna.utils.MyUtils;
 
 //http://pdl-calc.obspm.fr:8081/broadening/pdlDescription/PDL-Description.xml
 
@@ -109,9 +110,10 @@ public class PDLServiceActivityTest {
 
 
 
+	
+	/*
 	//test with not valid input: the float is 1/12.0 instead of 1/15.0
 	//¿PQ LANZA ESTE UNA EXCEPCION?
-	
 	@Test(expected = java.lang.RuntimeException.class)
 	public void executeAsynchNotValid() throws Exception {
 		InputStream is = this.getClass().getResourceAsStream("/org/purl/wf4ever/astrotaverna/pdl/PDL-DescriptionTest.xml");
@@ -203,6 +205,7 @@ public class PDLServiceActivityTest {
 		//		.get("moreOutputs"));
 
 	}
+	*/
 
 	@Ignore
 	@Test

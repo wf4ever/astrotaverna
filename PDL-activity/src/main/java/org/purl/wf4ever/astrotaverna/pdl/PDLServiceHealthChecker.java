@@ -13,6 +13,8 @@ import net.sf.taverna.t2.workflowmodel.health.HealthCheck;
 import net.sf.taverna.t2.workflowmodel.health.HealthChecker;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
 
+import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivityConfigurationBean;
+
 /**
  * Stilts health checker
  * @author Julian Garrido

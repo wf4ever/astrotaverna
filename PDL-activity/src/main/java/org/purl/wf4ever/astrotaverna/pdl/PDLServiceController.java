@@ -37,6 +37,8 @@ import org.apache.log4j.Logger;
 import visitors.GeneralParameterVisitor;
 import CommonsObjects.GeneralParameter;
 
+import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivityConfigurationBean;
+
 public class PDLServiceController {
 	
 	/*
