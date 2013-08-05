@@ -185,7 +185,8 @@ public class PDLServiceActivity extends
 				}else if(this.configBean.getServiceType().compareTo(this.configBean.VOTABLERESTSERVICE)==0){
 					HashMap<String, SingleParameter> outputSingleParams = pdlcontroller.getHashOutputParameters();
 					for(String paramName : outputSingleParams.keySet()){
-						addOutput(paramName, 1);
+						if(RESPONSE_BODY.compareTo(paramName) != 0 )
+							addOutput(paramName, 1);
 					}
 					addOutput(RESPONSE_BODY, 0);
 				}
