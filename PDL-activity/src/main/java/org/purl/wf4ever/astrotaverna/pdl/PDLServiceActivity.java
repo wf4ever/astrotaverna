@@ -1,6 +1,7 @@
 package org.purl.wf4ever.astrotaverna.pdl;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -25,6 +26,10 @@ import org.xml.sax.SAXException;
 
 import CommonsObjects.GeneralParameter;
 
+import uk.ac.starlink.table.ColumnInfo;
+import uk.ac.starlink.table.RowSequence;
+import uk.ac.starlink.table.StarTable;
+import uk.ac.starlink.table.StarTableFactory;
 //import uk.ac.starlink.ttools.Stilts;
 import visitors.GeneralParameterVisitor;
 
@@ -413,9 +418,20 @@ public class PDLServiceActivity extends
 				return resultMap;
 			}
 			
+			File writeStringAsTmpFile(String content) throws java.io.IOException{
+			    
+			    File file = File.createTempFile("astro", null);
+			    FileWriter writer = new FileWriter(file);
+			    writer.write(content);
+			    writer.close();
+			    
+			    return file;
+			}
+			
 			public void run() {
 				boolean callbackfails=false;
 				String serviceResult; 
+				StarTable table = null;
 				//String jobInfo = "";
 				String jobId;
 				String userId;
@@ -528,13 +544,34 @@ public class PDLServiceActivity extends
 										callback.fail("Job info couldn't be parsed.");
 									}
 								}else{
-									if(config.getServiceType().compareTo(config.RESTSERVICE)==0
-											|| config.getServiceType().compareTo(config.VOTABLERESTSERVICE)==0){
+									if(config.getServiceType().compareTo(config.RESTSERVICE)==0){
 										
 										RestServiceCaller restCaller;
 										restCaller = new RestServiceCaller();
+										try{
+											serviceResult = restCaller.callService(inputSingleParams);
+										}catch (IOException ex) {
+											callbackfails = true;
+											logger.error("The response couldn't be loaded and processed. ", ex);
+											callback.fail("The response couldn't be loaded and processed. ", ex);
+										}
+										//callbackfails = true;
+										//logger.error("REST type of service is not yet implement for PDL descriptions");
+										//callback.fail("REST option is not yet implemented for PDL descriptions");
+									}if(config.getServiceType().compareTo(config.VOTABLERESTSERVICE)==0){
 										
-										serviceResult = restCaller.callService(inputSingleParams);
+										RestServiceCaller restCaller;
+										restCaller = new RestServiceCaller();
+										try{
+											//table = restCaller.callServiceReturningVOTable(inputSingleParams);
+											serviceResult = restCaller.callService(inputSingleParams);
+											File tmpInFile = writeStringAsTmpFile(serviceResult);
+											table = loadVOTable(tmpInFile);
+										}catch (IOException ex) {
+											callbackfails = true;
+											logger.error("The votable couldn't be loaded and processed. ", ex);
+											callback.fail("The votable couldn't be loaded and processed. ", ex);
+										}	
 										//callbackfails = true;
 										//logger.error("REST type of service is not yet implement for PDL descriptions");
 										//callback.fail("REST option is not yet implemented for PDL descriptions");
@@ -641,28 +678,44 @@ public class PDLServiceActivity extends
 										callbackfails = true;
 									}
 								}else{
+									//additional columns in case of rest service with votable processing
 									if(config.getServiceType().compareTo(config.VOTABLERESTSERVICE)==0){
 										//TODO process a votable and get a list of values for each column
 										outputPDLParamMap = pdlcontroller.getHashOutputParameters();
+										
 										//process votable
 										
-										//if there is sth to compare
-										if(outputPDLParamMap!=null){
-											for(Entry<String, SingleParameter> entry : outputPDLParamMap.entrySet()){
-												ArrayList voColumn=null;
-												String name = entry.getValue().getName();
-												
-												if(voColumn==null)
-													voColumn = new ArrayList<String>();
+										//hacer que coja las columnas de turno de la votable. . 
+										//por ejemplo, con una funci—n que que reciba una lista de nombres de columna y devuelva un 
+										//hashmap de arrayList (par, nombre-columna y lista de valores"
+										try{
+											HashMap<String, ArrayList> columnsMap = getColumns(table);
+											//if there is sth to compare
+											if(outputPDLParamMap != null && columnsMap != null){				
+												for(Entry<String, SingleParameter> entry : outputPDLParamMap.entrySet()){
+													ArrayList voColumn=null;
+													String name = entry.getValue().getName();
 													
-												simpleRef2 = referenceService.register(voColumn,1, true, context); 
-												outputs.put(name, simpleRef2);
-												
+													if(columnsMap.containsKey(name)){
+														voColumn = columnsMap.get(name);
+															
+														simpleRef2 = referenceService.register(voColumn,1, true, context); 
+														outputs.put(name, simpleRef2);
+													}else{
+														logger.warn("The table doesn't contain the column " + name + " that is described in the PDL file.");
+														callback.fail("The table doesn't contain the column " + name + " that is described in the PDL file.");
+														callbackfails = true;
+													}
+												}
+											}else{
+												//logger.warn("Number of output in pdl description file doesn't match with the results provided by the user");
+												logger.warn("outputPDLParamMap or columnsMap were null");
+												callback.fail("outputPDLParamMap or columnsMap were null");
+												callbackfails = true;
 											}
-										}else{
-											//logger.warn("Number of output in pdl description file doesn't match with the results provided by the user");
-											logger.warn("outputPDLParamMap or ---------------- were null");
-											callback.fail("outputPDLParamMap or ----------------- were null");
+										}catch(IOException ex){
+											logger.warn("Fail when trying to process StarTable");
+											callback.fail("Fail when trying to process StarTable");
 											callbackfails = true;
 										}
 									}
@@ -729,5 +782,45 @@ public class PDLServiceActivity extends
 		return this.restrictionsOnGroups;
 	}
 
+	public StarTable loadVOTable( File source ) throws IOException {
+	    return new StarTableFactory().makeStarTable( source.toString(), "votable" );
+	}
+	
+	public HashMap<String, Integer> getColumnInfo(StarTable table){
+		HashMap<String, Integer> hash = new HashMap<String, Integer>();
+		
+		int nCol = table.getColumnCount();
+	    int columnId;
+	    
+	    for(int i =0; i< nCol; i++){
+		   ColumnInfo colInfo = table.getColumnInfo(i);
+		   hash.put(colInfo.getName(), i);
+	    }
+		   
+		return hash;
+	}
+	
+	public HashMap<String, ArrayList> getColumns(StarTable table) throws IOException{
+		HashMap<String, ArrayList> columnMap = new HashMap<String, ArrayList>();
+		HashMap<String, Integer> columnIdMap;
+		columnIdMap = getColumnInfo(table);
+		
+		//initialize arraylists
+		for(Entry<String, Integer> entry : columnIdMap.entrySet())
+			columnMap.put(entry.getKey(), new ArrayList());
+		
+		RowSequence rseq;
+		
+		rseq = table.getRowSequence();
+		do{
+			if(table.getRowCount() > 0)
+				for(Entry<String, Integer> entry : columnIdMap.entrySet())
+					columnMap.get(entry.getKey()).add(rseq.getCell(entry.getValue()));
+		}while ( rseq.next() );
+		rseq.close();
+		
+		return columnMap;
+	}
+	
 	
 }
