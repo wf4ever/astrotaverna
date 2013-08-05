@@ -68,7 +68,7 @@ public class PDLServiceActivity extends
 	
 	//private static final String OUT_SIMPLE_OUTPUT = "outputFileOut";
 	private static final String OUT_REPORT = "status";
-	private static final String RESPONSE_BODY = "response_body";
+	private static final String RESPONSE_BODY = "responseBody";
 	private static final String DEFAULT_OUTPUT = "fileResult";
 	
 	private PDLServiceActivityConfigurationBean configBean;
@@ -558,27 +558,29 @@ public class PDLServiceActivity extends
 										//callbackfails = true;
 										//logger.error("REST type of service is not yet implement for PDL descriptions");
 										//callback.fail("REST option is not yet implemented for PDL descriptions");
-									}if(config.getServiceType().compareTo(config.VOTABLERESTSERVICE)==0){
-										
-										RestServiceCaller restCaller;
-										restCaller = new RestServiceCaller();
-										try{
-											//table = restCaller.callServiceReturningVOTable(inputSingleParams);
-											serviceResult = restCaller.callService(inputSingleParams);
-											File tmpInFile = writeStringAsTmpFile(serviceResult);
-											table = loadVOTable(tmpInFile);
-										}catch (IOException ex) {
-											callbackfails = true;
-											logger.error("The votable couldn't be loaded and processed. ", ex);
-											callback.fail("The votable couldn't be loaded and processed. ", ex);
-										}	
-										//callbackfails = true;
-										//logger.error("REST type of service is not yet implement for PDL descriptions");
-										//callback.fail("REST option is not yet implemented for PDL descriptions");
 									}else{
-										callbackfails = true;
-										logger.error("There is not service caller for " + config.getServiceType());
-										callback.fail("There is not service caller for " + config.getServiceType());
+										if(config.getServiceType().compareTo(config.VOTABLERESTSERVICE)==0){
+										
+											RestServiceCaller restCaller;
+											restCaller = new RestServiceCaller();
+											try{
+												//table = restCaller.callServiceReturningVOTable(inputSingleParams);
+												serviceResult = restCaller.callService(inputSingleParams);
+												File tmpInFile = writeStringAsTmpFile(serviceResult);
+												table = loadVOTable(tmpInFile);
+											}catch (IOException ex) {
+												callbackfails = true;
+												logger.error("The votable couldn't be loaded and processed. ", ex);
+												callback.fail("The votable couldn't be loaded and processed. ", ex);
+											}	
+											//callbackfails = true;
+											//logger.error("REST type of service is not yet implement for PDL descriptions");
+											//callback.fail("REST option is not yet implemented for PDL descriptions");
+										}else{
+											callbackfails = true;
+											logger.error("There is not service caller for " + config.getServiceType());
+											callback.fail("There is not service caller for " + config.getServiceType());
+										}
 									}
 								}
 							}else{
@@ -680,7 +682,7 @@ public class PDLServiceActivity extends
 								}else{
 									//additional columns in case of rest service with votable processing
 									if(config.getServiceType().compareTo(config.VOTABLERESTSERVICE)==0){
-										//TODO process a votable and get a list of values for each column
+										//process a votable and get a list of values for each column
 										outputPDLParamMap = pdlcontroller.getHashOutputParameters();
 										
 										//process votable
@@ -693,18 +695,20 @@ public class PDLServiceActivity extends
 											//if there is sth to compare
 											if(outputPDLParamMap != null && columnsMap != null){				
 												for(Entry<String, SingleParameter> entry : outputPDLParamMap.entrySet()){
-													ArrayList voColumn=null;
-													String name = entry.getValue().getName();
-													
-													if(columnsMap.containsKey(name)){
-														voColumn = columnsMap.get(name);
-															
-														simpleRef2 = referenceService.register(voColumn,1, true, context); 
-														outputs.put(name, simpleRef2);
-													}else{
-														logger.warn("The table doesn't contain the column " + name + " that is described in the PDL file.");
-														callback.fail("The table doesn't contain the column " + name + " that is described in the PDL file.");
-														callbackfails = true;
+													if(entry.getKey().compareTo(PDLServiceActivity.RESPONSE_BODY)!=0){
+														ArrayList voColumn=null;
+														String name = entry.getValue().getName();
+														
+														if(columnsMap.containsKey(name)){
+															voColumn = columnsMap.get(name);
+																
+															simpleRef2 = referenceService.register(voColumn,1, true, context); 
+															outputs.put(name, simpleRef2);
+														}else{
+															logger.warn("The table doesn't contain the column " + name + " that is described in the PDL file.");
+															callback.fail("The table doesn't contain the column " + name + " that is described in the PDL file.");
+															callbackfails = true;
+														}
 													}
 												}
 											}else{
@@ -812,11 +816,10 @@ public class PDLServiceActivity extends
 		RowSequence rseq;
 		
 		rseq = table.getRowSequence();
-		do{
-			if(table.getRowCount() > 0)
+		while ( rseq.next() ) {
 				for(Entry<String, Integer> entry : columnIdMap.entrySet())
 					columnMap.get(entry.getKey()).add(rseq.getCell(entry.getValue()));
-		}while ( rseq.next() );
+		}
 		rseq.close();
 		
 		return columnMap;
