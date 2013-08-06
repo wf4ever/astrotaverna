@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.purl.wf4ever.astrotaverna.voutils.GetListFromColumnActivityConfigurationBean;
 import org.purl.wf4ever.astrotaverna.utils.MyUtils;
@@ -280,9 +281,9 @@ public class GetListFromColumnActivity extends
 							try {
 								rseq = table.getRowSequence();
 								while ( rseq.next() ) {
-									Object cell = rseq.getCell(columnId);
-									list.add(cell);
-								}
+										Object cell = rseq.getCell(columnId);
+										list.add(cell);
+								}								
 								rseq.close();
 							} catch (IOException e) {
 								callbackfails = true;
