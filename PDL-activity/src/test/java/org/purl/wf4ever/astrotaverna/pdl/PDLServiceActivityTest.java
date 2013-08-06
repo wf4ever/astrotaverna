@@ -10,9 +10,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,6 +22,7 @@ import net.sf.taverna.t2.activities.testutils.ActivityInvoker;
 import net.sf.taverna.t2.workflowmodel.OutputPort;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationException;
 import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityInputPort;
+
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -624,6 +627,11 @@ public class PDLServiceActivityTest {
 
 		Map<String, Class<?>> expectedOutputTypes = new HashMap<String, Class<?>>();
 		expectedOutputTypes.put(RESPONSE_BODY, String.class);
+
+		expectedOutputTypes.put("LB", String.class);
+		expectedOutputTypes.put("V3K", String.class);
+		expectedOutputTypes.put("RA J2000", String.class);
+		expectedOutputTypes.put("DEC J2000", String.class);
 		
 
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
@@ -699,8 +707,11 @@ public class PDLServiceActivityTest {
 		configBean.setServiceType(configBean.VOTABLERESTSERVICE);
 		activity.configure(configBean);
 		
+
+		System.out.println(activity.getOutputPorts());
 		assertEquals("Unexpected inputs", 3, activity.getInputPorts().size());
-		assertEquals("Unexpected outputs", 6, activity.getOutputPorts().size());
+		assertEquals("Unexpected outputs", 5, activity.getOutputPorts().size());
+
 		
 	}
 	

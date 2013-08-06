@@ -185,7 +185,8 @@ public class PDLServiceActivity extends
 				}else if(this.configBean.getServiceType().compareTo(this.configBean.VOTABLERESTSERVICE)==0){
 					HashMap<String, SingleParameter> outputSingleParams = pdlcontroller.getHashOutputParameters();
 					for(String paramName : outputSingleParams.keySet()){
-						addOutput(paramName, 1);
+						if(RESPONSE_BODY.compareTo(paramName) != 0 )
+							addOutput(paramName, 1);
 					}
 					addOutput(RESPONSE_BODY, 0);
 				}
@@ -688,7 +689,7 @@ public class PDLServiceActivity extends
 										//process votable
 										
 										//hacer que coja las columnas de turno de la votable. . 
-										//por ejemplo, con una funci—n que que reciba una lista de nombres de columna y devuelva un 
+										//por ejemplo, con una funciï¿½n que que reciba una lista de nombres de columna y devuelva un 
 										//hashmap de arrayList (par, nombre-columna y lista de valores"
 										try{
 											HashMap<String, ArrayList> columnsMap = getColumns(table);
@@ -701,6 +702,13 @@ public class PDLServiceActivity extends
 														
 														if(columnsMap.containsKey(name)){
 															voColumn = columnsMap.get(name);
+															
+															//make sure there is no null elements (these are not compatible with taverna
+															int index = voColumn.indexOf(null);
+															while(index != -1){
+																voColumn.set(index, "");
+																index = voColumn.indexOf(null);
+															}
 																
 															simpleRef2 = referenceService.register(voColumn,1, true, context); 
 															outputs.put(name, simpleRef2);
