@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StreamTokenizer;
@@ -30,7 +31,8 @@ public class AladinScriptParser {
 	}
 	
 	public ArrayList<String> parseFile(String file) throws IOException{
-		script = readFileAsString(file);
+		//script = readFileAsString(file);
+		script = readTextFile(file,null);
 		parseScript(script);
 		return files;
 	}
@@ -236,8 +238,8 @@ public class AladinScriptParser {
 	}
 	
 	public ArrayList<ArrayList<String>> parseFileMacro(String file, String file_params) throws IOException{
-		script = readFileAsString(file);
-		params = readFileAsString(file_params);
+		script = readTextFile(file,"utf8");
+		params = readTextFile(file_params,"utf8");
 		ArrayList<ArrayList<String>> result = parseMacro(script, params);
 		return result;
 	}
@@ -288,7 +290,8 @@ public class AladinScriptParser {
 					for(String file: files){
 						for(int i = 0; i<dolars.length; i++){
 							String dolar = dolars[i];
-							//if(file.indexOf(dolar)>-1)
+							//Next line is the one reponsible for loosing the 
+							//TODO fix this. ------------------------------------------------------------
 							file = file.replaceAll(dolar, list.get(i));
 						}
 						extendedFiles.add(file);
@@ -350,6 +353,44 @@ public class AladinScriptParser {
 		this.script = script;		
 	}
 
+	BufferedReader getReader (String fileUrl, String encoding) throws IOException {
+		InputStreamReader reader;
+		try {
+			if (encoding == null) {
+				reader = new FileReader(fileUrl);
+			} else {
+				reader = new InputStreamReader(new FileInputStream(fileUrl),encoding); 
+			}
+		}
+		catch (FileNotFoundException e) {
+			// try a real URL instead
+			URL url = new URL(fileUrl);
+			if (encoding == null) {
+				reader = new InputStreamReader (url.openStream());
+			} else {
+				reader = new InputStreamReader (url.openStream(), encoding);
+			}
+		}
+		return new BufferedReader(reader);
+	}
+	
+	private String readTextFile(String fileUrl, String encoding) throws IOException{
+
+		StringBuffer sb = new StringBuffer(4000);
+		
+		BufferedReader in = getReader(fileUrl, encoding);
+		String str;
+		String lineEnding = System.getProperty("line.separator");
+
+		while ((str = in.readLine()) != null) {
+			sb.append(str);
+			sb.append(lineEnding);
+		}
+		in.close();
+		String filecontents = sb.toString();
+		
+		return filecontents;
+	}
 	
 	private String readFileAsString(String filePath) throws java.io.IOException{
 	    byte[] buffer = new byte[(int) new File(filePath).length()];

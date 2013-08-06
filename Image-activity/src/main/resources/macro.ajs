@@ -1,0 +1,12 @@
+rm all;
+sync;
+mview 1;
+sync;
+cafos=get File(http://caha.sdc.cab.inta-csic.es:80/calto/jsp/descargaSci.jsp?id=$1&tipe=red&t=siap);
+sync;
+cm cafos log;
+sync;
+sources_cafos=get sextractor(cafos,"thresh=1.6","FWHM=1.2");
+sync;
+export -votable sources_cafos $2
+sync;

@@ -166,4 +166,37 @@ public class AladinScriptParserTest {
 		//delete files with votables
 	}
 	*/
+	
+	
+	@Test
+	public void parseFileMacro() throws Exception {
+		String lsp = System.getProperty("line.separator");
+		//System.out.println("----"+lsp+"---");
+		
+		ArrayList<ArrayList<String>> list = parser.parseFileMacro("/home/julian/src/astrotaverna/Image-activity/src/main/resources/macro.ajs", "/home/julian/src/astrotaverna/Image-activity/src/main/resources/parameterFile.dat");
+		
+		assertEquals("Unexpected number of elemens", 20,  list.size());
+		
+		String path = "D:\\Escritorio\\SVOWf96413_2005WC48.xml";
+		String readPath = list.get(0).get(0);
+		
+		System.out.println(path);
+		System.out.println(readPath);
+		
+		if(list.size()>0){
+			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96413_2005WC48.xml", list.get(0).get(0));
+			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96413_2006XC43.xml", list.get(0).get(1));
+			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96413_2001XQ72.xml", list.get(1).get(0));
+			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96413_2008GX69.xml", list.get(1).get(1));
+			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96426_2005TF111.xml", list.get(2).get(0));
+			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96426_2005SD289.xml", list.get(2).get(1));
+		}		
+	}
+	
+	//inputs.put(FIRST_INPUT, "/home/julian/src/astrotaverna/Image-activity/src/main/resources/macro.ajs");
+	//inputs.put(SECOND_INPUT, "/home/julian/src/astrotaverna/Image-activity/src/main/resources/parameterFile.dat");
+	
+
+	
+	
 }

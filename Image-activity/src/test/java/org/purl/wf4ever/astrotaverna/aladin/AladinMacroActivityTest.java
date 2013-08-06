@@ -116,6 +116,8 @@ public class AladinMacroActivityTest {
 		//		.get("moreOutputs"));
 
 	}
+	
+	
 
 	//The process returns internaly 1 in a System.exit(), but it doesn't fail
 	@Ignore
@@ -306,5 +308,7 @@ public class AladinMacroActivityTest {
 			+ "</RESOURCE>"
 			+ "</VOTABLE>";
 
+	
+	
 	
 }
