@@ -290,10 +290,10 @@ public class AladinScriptParser {
 					for(String file: files){
 						for(int i = 0; i<dolars.length; i++){
 							String dolar = dolars[i];
-							//Next line is the one reponsible for loosing the 
-							//TODO fix this. ------------------------------------------------------------
-							String aux = file.replaceAll(dolar, Pattern.quote(list.get(i)));
-							file = file.replaceAll(dolar, list.get(i));
+							//Next commented line was the one reponsible for loosing the 
+							//file = file.replaceAll(dolar, list.get(i));
+							//Solution:
+							file = file.replaceAll(dolar, Matcher.quoteReplacement(list.get(i)));
 						}
 						extendedFiles.add(file);
 					}

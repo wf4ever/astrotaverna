@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -167,7 +168,7 @@ public class AladinScriptParserTest {
 	}
 	*/
 	
-	
+	@Ignore
 	@Test
 	public void parseFileMacro() throws Exception {
 		String lsp = System.getProperty("line.separator");
@@ -199,17 +200,35 @@ public class AladinScriptParserTest {
 	@Test
 	public void replaceDolarsWithWindowsPaths(){
 		String result = "__$2";
-		String path = "D:\\\\Escritorio\\SVOWf96413_2005WC48.xml";
+		String path = "D:\\Escritorio\\SVOWf96413_2005WC48.xml";
 		String dolar = Pattern.quote("$") + 2;
 		String aux1 = result.replaceAll(dolar, path);
 		System.out.println(aux1);
 		String aux2 = result.replaceAll("$2", path);
 		System.out.println(aux2);
-		String aux3 = result.replaceAll("$2", path);
+		String aux3 = result.replaceAll("$2", Pattern.quote(path));
 		System.out.println(aux3);
-		String aux4 = result.replaceAll(dolar, path);
+		String aux4 = result.replaceAll(dolar, Pattern.quote(path));
 		System.out.println(aux4);
-	}
+		
+	    String aux5 = Pattern.compile("$2").matcher(result).replaceAll(path);
+	    System.out.println(aux5);
+
+	    String aux6 = Pattern.compile(dolar).matcher(result).replaceAll(path);
+	    System.out.println(aux6);
+	    
+	    Pattern.compile("$2").matcher(result);
+		String aux7 = Matcher.quoteReplacement(path);
+	    System.out.println(aux7);
+
+	    String aux8 = Pattern.compile(dolar).matcher(result).quoteReplacement(path);
+	    System.out.println(aux8);
+	    
+	    String aux9 = result.replaceAll(dolar, Matcher.quoteReplacement(path));
+		System.out.println(aux9);
+		
+		assertEquals("We have lost slashes", "__"+path, aux9);
+	}	
 
 	
 	
