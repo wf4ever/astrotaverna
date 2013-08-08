@@ -196,6 +196,20 @@ public class AladinScriptParserTest {
 	//inputs.put(FIRST_INPUT, "/home/julian/src/astrotaverna/Image-activity/src/main/resources/macro.ajs");
 	//inputs.put(SECOND_INPUT, "/home/julian/src/astrotaverna/Image-activity/src/main/resources/parameterFile.dat");
 	
+	@Test
+	public void replaceDolarsWithWindowsPaths(){
+		String result = "__$2";
+		String path = "D:\\\\Escritorio\\SVOWf96413_2005WC48.xml";
+		String dolar = Pattern.quote("$") + 2;
+		String aux1 = result.replaceAll(dolar, path);
+		System.out.println(aux1);
+		String aux2 = result.replaceAll("$2", path);
+		System.out.println(aux2);
+		String aux3 = result.replaceAll("$2", path);
+		System.out.println(aux3);
+		String aux4 = result.replaceAll(dolar, path);
+		System.out.println(aux4);
+	}
 
 	
 	

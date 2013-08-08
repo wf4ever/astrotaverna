@@ -292,6 +292,7 @@ public class AladinScriptParser {
 							String dolar = dolars[i];
 							//Next line is the one reponsible for loosing the 
 							//TODO fix this. ------------------------------------------------------------
+							String aux = file.replaceAll(dolar, Pattern.quote(list.get(i)));
 							file = file.replaceAll(dolar, list.get(i));
 						}
 						extendedFiles.add(file);
