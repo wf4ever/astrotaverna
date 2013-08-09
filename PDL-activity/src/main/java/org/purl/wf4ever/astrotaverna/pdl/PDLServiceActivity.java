@@ -631,7 +631,7 @@ public class PDLServiceActivity extends
 										//for(Entry<String, String> entry : jobResultsMap.entrySet()){
 											String name = entry.getValue().getName();
 											String value = jobResultsMap.get(name);
-											if(value==null)
+											if(value==null) //------------------------------------------------------------
 												value ="";
 											simpleRef2 = referenceService.register(value,0, true, context); 
 											outputs.put(name, simpleRef2);
@@ -706,7 +706,7 @@ public class PDLServiceActivity extends
 															voColumn = columnsMap.get(name);
 															
 															//make sure there is no null elements (these are not compatible with taverna
-															int index = voColumn.indexOf(null);
+															int index = voColumn.indexOf(null); //------------------------------------ OJO
 															while(index != -1){
 																voColumn.set(index, "");
 																index = voColumn.indexOf(null);
