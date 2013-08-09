@@ -53,11 +53,11 @@ public class AddCommonRowToVOTableController {
 					if(commonRowTable.getRowCount() == mainVOTable.getRowCount()){
 						StarTable [] tables = new StarTable[2];
 						if(leftPosition){
-							tables[0] = mainVOTable;
-							tables[1] = commonRowTable;
-						}else{
 							tables[1] = mainVOTable;
 							tables[0] = commonRowTable;
+						}else{
+							tables[0] = mainVOTable;
+							tables[1] = commonRowTable;
 						}
 						joinTable = new JoinStarTable(tables);
 						if(joinTable !=null)
@@ -103,11 +103,11 @@ public class AddCommonRowToVOTableController {
 					if(commonRowTable.getRowCount() == mainVOTable.getRowCount()){
 						StarTable [] tables = new StarTable[2];
 						if(leftPosition){
-							tables[0] = mainVOTable;
-							tables[1] = commonRowTable;
-						}else{
 							tables[1] = mainVOTable;
 							tables[0] = commonRowTable;
+						}else{
+							tables[0] = mainVOTable;
+							tables[1] = commonRowTable;
 						}
 						
 						joinTable = new JoinStarTable(tables);
