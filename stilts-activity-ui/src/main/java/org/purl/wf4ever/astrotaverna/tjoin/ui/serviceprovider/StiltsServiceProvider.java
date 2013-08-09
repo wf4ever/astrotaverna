@@ -140,7 +140,7 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		
 		CrossMatch2ServiceDesc service15 = new CrossMatch2ServiceDesc();
 		service15.setTypeOfInput("String");
-		service15.setDescription("Crossmatche two VOTables");
+		service15.setDescription("Crossmatch two VOTables");
 		results.add(service15);
 		
 		//change done in wf4ever
