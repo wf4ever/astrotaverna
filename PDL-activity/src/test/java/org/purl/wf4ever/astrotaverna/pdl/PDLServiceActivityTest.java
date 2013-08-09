@@ -630,8 +630,8 @@ public class PDLServiceActivityTest {
 
 		expectedOutputTypes.put("LB", String.class);
 		expectedOutputTypes.put("V3K", String.class);
-		expectedOutputTypes.put("RA J2000", String.class);
-		expectedOutputTypes.put("DEC J2000", String.class);
+		expectedOutputTypes.put("RA_J2000", String.class);
+		expectedOutputTypes.put("DEC_J2000", String.class);
 		
 
 		Map<String, Object> outputs = ActivityInvoker.invokeAsyncActivity(
@@ -646,9 +646,12 @@ public class PDLServiceActivityTest {
 		assertTrue("LB output error", ((ArrayList)outputs.get("LB"))!=null
 				&& ((ArrayList)outputs.get("LB")).size() > 1000);
 		
-		assertTrue("V3K output error", ((ArrayList)outputs.get("V3K"))!=null);
-		assertTrue("RA output error", ((ArrayList)outputs.get("RA J2000"))!=null);
-		assertTrue("DEC output error", ((ArrayList)outputs.get("DEC J2000"))!=null);
+		assertTrue("V3K output error", ((ArrayList)outputs.get("V3K"))!=null 
+				&& ((ArrayList)outputs.get("V3K")).size()>0);
+		assertTrue("RA output error", ((ArrayList)outputs.get("RA_J2000"))!=null 
+				&& ((ArrayList)outputs.get("RA_J2000")).size()>0);
+		assertTrue("DEC output error", ((ArrayList)outputs.get("DEC_J2000"))!=null 
+				&& ((ArrayList)outputs.get("DEC_J2000")).size()>0);
 		
 
 	}

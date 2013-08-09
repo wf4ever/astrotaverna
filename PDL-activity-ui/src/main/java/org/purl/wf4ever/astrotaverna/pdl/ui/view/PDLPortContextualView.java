@@ -1,7 +1,11 @@
 package org.purl.wf4ever.astrotaverna.pdl.ui.view;
 
 import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -68,7 +72,19 @@ public class PDLPortContextualView extends ContextualView {
 		//this.inputPort = inputPort;	
 		//this.activity = activity;
 		
-		SingleParameter param = activity.getHashAllParameters().get(outputPort.getName());
+		HashMap map = activity.getHashAllParameters();
+		//this is needed in case some output port has spaces
+		HashMap transformedMap = new HashMap<String, String>();
+		
+		for(Entry<String, SingleParameter> entry : (Set<Entry>)map.entrySet()){
+			transformedMap.put(entry.getValue().getName().replaceAll(" ", "_"), entry.getKey());
+		}
+		
+		SingleParameter param = activity.getHashAllParameters().get(transformedMap.get(outputPort.getName()));
+		
+		
+	
+		
 		
 		
 		paramDesc ="";

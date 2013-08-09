@@ -185,8 +185,9 @@ public class PDLServiceActivity extends
 				}else if(this.configBean.getServiceType().compareTo(this.configBean.VOTABLERESTSERVICE)==0){
 					HashMap<String, SingleParameter> outputSingleParams = pdlcontroller.getHashOutputParameters();
 					for(String paramName : outputSingleParams.keySet()){
-						if(RESPONSE_BODY.compareTo(paramName) != 0 )
-							addOutput(paramName, 1);
+						String name = paramName.replaceAll(" ", "_");
+						if(RESPONSE_BODY.compareTo(name) != 0 )
+							addOutput(name, 1);
 					}
 					addOutput(RESPONSE_BODY, 0);
 				}
@@ -692,13 +693,14 @@ public class PDLServiceActivity extends
 										//por ejemplo, con una funci�n que que reciba una lista de nombres de columna y devuelva un 
 										//hashmap de arrayList (par, nombre-columna y lista de valores"
 										try{
-											HashMap<String, ArrayList> columnsMap = getColumns(table);
+											HashMap<String, ArrayList> columnsMap = getSelectedColumns(table, outputPDLParamMap);
 											//if there is sth to compare
 											if(outputPDLParamMap != null && columnsMap != null){				
 												for(Entry<String, SingleParameter> entry : outputPDLParamMap.entrySet()){
 													if(entry.getKey().compareTo(PDLServiceActivity.RESPONSE_BODY)!=0){
 														ArrayList voColumn=null;
 														String name = entry.getValue().getName();
+														
 														
 														if(columnsMap.containsKey(name)){
 															voColumn = columnsMap.get(name);
@@ -709,7 +711,8 @@ public class PDLServiceActivity extends
 																voColumn.set(index, "");
 																index = voColumn.indexOf(null);
 															}
-																
+															
+															name = name.replaceAll(" ", "_");
 															simpleRef2 = referenceService.register(voColumn,1, true, context); 
 															outputs.put(name, simpleRef2);
 														}else{
@@ -798,6 +801,11 @@ public class PDLServiceActivity extends
 	    return new StarTableFactory().makeStarTable( source.toString(), "votable" );
 	}
 	
+	/**
+	 * It returns a map with the column name and its position in the StarTable
+	 * @param table
+	 * @return
+	 */
 	public HashMap<String, Integer> getColumnInfo(StarTable table){
 		HashMap<String, Integer> hash = new HashMap<String, Integer>();
 		
@@ -812,6 +820,12 @@ public class PDLServiceActivity extends
 		return hash;
 	}
 	
+	/**
+	 * Retrieve a hashmap with all the columns in the votable
+	 * @param table
+	 * @return
+	 * @throws IOException
+	 */
 	public HashMap<String, ArrayList> getColumns(StarTable table) throws IOException{
 		HashMap<String, ArrayList> columnMap = new HashMap<String, ArrayList>();
 		HashMap<String, Integer> columnIdMap;
@@ -833,5 +847,27 @@ public class PDLServiceActivity extends
 		return columnMap;
 	}
 	
+	public HashMap<String, ArrayList> getSelectedColumns(StarTable table, HashMap<String, SingleParameter> outputPDLParamMap) throws IOException{
+		HashMap<String, ArrayList> columnMap = new HashMap<String, ArrayList>();
+		HashMap<String, Integer> columnIdMap;
+		columnIdMap = getColumnInfo(table);
+		
+		//initialize arraylists
+		for(Entry<String, Integer> entry : columnIdMap.entrySet())
+			if(outputPDLParamMap.containsKey(entry.getKey()))
+				columnMap.put(entry.getKey(), new ArrayList());
+		
+		RowSequence rseq;
+		
+		rseq = table.getRowSequence();
+		while ( rseq.next() ) {
+				for(Entry<String, Integer> entry : columnIdMap.entrySet())
+					if(outputPDLParamMap.containsKey(entry.getKey()))
+						columnMap.get(entry.getKey()).add(rseq.getCell(entry.getValue()));
+		}
+		rseq.close();
+		
+		return columnMap;
+	}
 	
 }

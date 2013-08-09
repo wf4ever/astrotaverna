@@ -73,7 +73,8 @@ public class PDLServiceHealthChecker implements
 		}
 		
 		if( !(config.getServiceType().compareTo(config.PDLSERVICE) == 0 
-				|| config.getServiceType().compareTo(config.RESTSERVICE) == 0)){
+				|| config.getServiceType().compareTo(config.RESTSERVICE) == 0
+				|| config.getServiceType().compareTo(config.VOTABLERESTSERVICE) == 0)){
 			
 			subReports.add(new VisitReport(HealthCheck.getInstance(), activity,
 					"Invalid service type.", HealthCheck.INVALID_CONFIGURATION,

@@ -48,7 +48,7 @@ public class PDLServiceConfigurationPanel
 
 	protected void initGui() {
 		
-		String[] serviceTypesStrings = {aux.PDLSERVICE, aux.RESTSERVICE};
+		String[] serviceTypesStrings = {aux.PDLSERVICE, aux.RESTSERVICE, aux.VOTABLERESTSERVICE};
 		
 		removeAll();
 		setLayout(new GridLayout(0, 2));
@@ -89,8 +89,9 @@ public class PDLServiceConfigurationPanel
 		
 		String  type = (String)typeOfService.getSelectedItem();
 		if(!(      type.compareTo(aux.PDLSERVICE)==0
-				|| type.compareTo(aux.RESTSERVICE)==0)){
-			errorMessage = "Valid type of services: " + aux.PDLSERVICE + " and " + aux.RESTSERVICE;
+				|| type.compareTo(aux.RESTSERVICE)==0
+				|| type.compareTo(aux.VOTABLERESTSERVICE)==0)){
+			errorMessage = "Valid type of services: " + aux.PDLSERVICE + " and " + aux.RESTSERVICE + " and " + aux.VOTABLERESTSERVICE;
 		}
 		
 		if (errorMessage!=null){
