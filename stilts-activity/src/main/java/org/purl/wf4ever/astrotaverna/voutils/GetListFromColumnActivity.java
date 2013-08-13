@@ -282,6 +282,8 @@ public class GetListFromColumnActivity extends
 								rseq = table.getRowSequence();
 								while ( rseq.next() ) {
 										Object cell = rseq.getCell(columnId);
+										if(cell == null)
+											cell = "";
 										list.add(cell);
 								}								
 								rseq.close();
