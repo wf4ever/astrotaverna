@@ -56,7 +56,8 @@ import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivityConfigurationBean;
 
 public class PDLServiceActivity extends
 		AbstractAsynchronousActivity<PDLServiceActivityConfigurationBean>
-		implements AsynchronousActivity<PDLServiceActivityConfigurationBean> {
+		implements AsynchronousActivity<PDLServiceActivityConfigurationBean>, 
+					InputPortSingleParameterActivity, OutputPortSingleParameterActivity {
 
 	/*
 	 * Best practice: Keep port names as constants to avoid misspelling. This
@@ -74,7 +75,9 @@ public class PDLServiceActivity extends
 	private PDLServiceActivityConfigurationBean configBean;
 	
 	
-	private HashMap<String, SingleParameter> hashAllParameters;
+	private HashMap<String, SingleParameter> hashAllParameters = null;
+	private HashMap<String, SingleParameter> hashInputParameters = null;
+	private HashMap<String, SingleParameter> hashOutputParameters = null;
 	private HashMap<String, String> restrictionsOnGroups;
 	private String serviceDescription;
 	
@@ -137,6 +140,8 @@ public class PDLServiceActivity extends
 			pdlcontroller = new PDLServiceController (this.configBean);
 			pdlcontroller.prepareHashParametersInputs();
 			hashAllParameters = pdlcontroller.getHashAllParameters();
+			hashInputParameters = pdlcontroller.getHashInputParameters();
+			hashOutputParameters = pdlcontroller.getHashOutputParameters();
 			pdlcontroller.prepareRestrictions();
 			restrictionsOnGroups = pdlcontroller.getRestrictionsOnGroups();
 			serviceDescription = pdlcontroller.getServiceDescription();
@@ -797,6 +802,7 @@ public class PDLServiceActivity extends
 		return this.restrictionsOnGroups;
 	}
 
+//<<<<<<< HEAD
 	public StarTable loadVOTable( File source ) throws IOException {
 	    return new StarTableFactory().makeStarTable( source.toString(), "votable" );
 	}
@@ -869,5 +875,103 @@ public class PDLServiceActivity extends
 		
 		return columnMap;
 	}
+//=======
+	@Override
+	public SingleParameter getSingleParameterForOutputPort(String portName)
+			throws IOException {
+
+		PDLServiceController pdlcontroller;
+		
+		if(hashAllParameters == null){
+			try {
+				pdlcontroller = new PDLServiceController (this.configBean);
+				pdlcontroller.prepareHashParametersInputs();
+				hashAllParameters = pdlcontroller.getHashAllParameters();
+				hashInputParameters = pdlcontroller.getHashInputParameters();
+				hashOutputParameters = pdlcontroller.getHashOutputParameters();
+			} catch (ActivityConfigurationException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		SingleParameter param = hashOutputParameters.get(portName);
+		
+		return param;
+		
+	}
+
+	@Override
+	public Map<String, SingleParameter> getSingleParametersForOutputPorts()
+			throws IOException {
+
+		PDLServiceController pdlcontroller;
+		
+		if(hashAllParameters == null){
+			try {
+				pdlcontroller = new PDLServiceController (this.configBean);
+				pdlcontroller.prepareHashParametersInputs();
+				hashAllParameters = pdlcontroller.getHashAllParameters();
+				hashInputParameters = pdlcontroller.getHashInputParameters();
+				hashOutputParameters = pdlcontroller.getHashOutputParameters();
+			} catch (ActivityConfigurationException e) {
+				e.printStackTrace();
+				return null;
+			}
+			
+		}
+		
+		return hashOutputParameters;
+		
+	}
+
+	@Override
+	public SingleParameter getSingleParameterForInputPort(String portName)
+			throws IOException {
+		
+		PDLServiceController pdlcontroller;
+		
+		if(hashAllParameters == null){
+			try {
+				pdlcontroller = new PDLServiceController (this.configBean);
+				pdlcontroller.prepareHashParametersInputs();
+				hashAllParameters = pdlcontroller.getHashAllParameters();
+				hashInputParameters = pdlcontroller.getHashInputParameters();
+				hashOutputParameters = pdlcontroller.getHashOutputParameters();
+			} catch (ActivityConfigurationException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		SingleParameter param = hashInputParameters.get(portName);
+		
+		return param;
+	}
+
+	@Override
+	public Map<String, SingleParameter> getSingleParametersForInputPorts()
+			throws IOException {
+
+		PDLServiceController pdlcontroller;
+		
+		if(hashAllParameters == null){
+			try {
+				pdlcontroller = new PDLServiceController (this.configBean);
+				pdlcontroller.prepareHashParametersInputs();
+				hashAllParameters = pdlcontroller.getHashAllParameters();
+				hashInputParameters = pdlcontroller.getHashInputParameters();
+				hashOutputParameters = pdlcontroller.getHashOutputParameters();
+			} catch (ActivityConfigurationException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		return hashInputParameters;
+		
+	}
+
+//>>>>>>> interoperability
 	
 }

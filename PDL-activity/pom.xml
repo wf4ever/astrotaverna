@@ -56,5 +56,23 @@
         	<artifactId>commons-io</artifactId>
         	<version>2.4</version>
       </dependency>
+		<dependency>
+			<groupId>net.sf.taverna.t2.ui-api</groupId>
+			<artifactId>report-api</artifactId>
+			<version>${t2.ui.api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.taverna.t2.ui-components</groupId>
+			<artifactId>report-view</artifactId>
+			<version>${t2.ui.components.version}</version>
+		</dependency>
+		<!-- 
+		<dependency>
+			<groupId>net.sf.taverna.t2.lang</groupId>
+			<artifactId>ui</artifactId>
+			<version>${t2.lang.version}</version>
+		</dependency>
+		-->
+
 	</dependencies>
 </project>

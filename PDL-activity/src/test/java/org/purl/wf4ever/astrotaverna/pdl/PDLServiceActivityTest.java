@@ -41,6 +41,9 @@ import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivityConfigurationBean;
 //https://github.com/cmzwolf/OnlineCodeDaemon/blob/master/src/net/ivoa/oc/daemon/jobProcessor/JobProcessor.java
 
 
+//http://vo-param.googlecode.com/svn/trunk/model/documentation/PDL-Description_example01.xml
+//http://vo-param.googlecode.com/svn/trunk/model/documentation/PDL-Description_Example02.xml
+
 public class PDLServiceActivityTest {
 
 	private PDLServiceActivityConfigurationBean configBean;

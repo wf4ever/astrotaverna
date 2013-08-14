@@ -84,7 +84,7 @@ public class PDLServiceHealthChecker implements
 		// The default explanation here will be used if the subreports list is
 		// empty
 		return new VisitReport(HealthCheck.getInstance(), activity,
-				"Validation service OK", HealthCheck.NO_PROBLEM, subReports);
+				"PDL service OK", HealthCheck.NO_PROBLEM, subReports);
 	}
 
 }
