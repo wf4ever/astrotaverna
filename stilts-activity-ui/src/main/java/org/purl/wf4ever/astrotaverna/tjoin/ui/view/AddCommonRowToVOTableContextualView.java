@@ -56,7 +56,7 @@ public class AddCommonRowToVOTableContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Add common row to VOTable";
+		return "Add common fields";
 	}
 
 	/**

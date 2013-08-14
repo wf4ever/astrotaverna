@@ -58,7 +58,7 @@ public class CoordTransformationContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Coordenates transformation";
+		return "Coord. units conversion";
 	}
 
 	/**

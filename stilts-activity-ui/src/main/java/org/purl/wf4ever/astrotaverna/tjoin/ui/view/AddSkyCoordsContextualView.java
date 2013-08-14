@@ -59,7 +59,7 @@ public class AddSkyCoordsContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Add sky coordinates";
+		return "Coord. transformation";
 	}
 
 	/**

@@ -56,7 +56,7 @@ public class TcatContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Cat two tables";
+		return "Cat two VOTables";
 	}
 
 	/**

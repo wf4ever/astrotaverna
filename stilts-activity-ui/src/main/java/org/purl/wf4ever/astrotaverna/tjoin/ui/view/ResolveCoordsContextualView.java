@@ -57,7 +57,7 @@ public class ResolveCoordsContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Resolve coordinates";
+		return "Name resolver";
 	}
 
 	/**

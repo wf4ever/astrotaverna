@@ -55,7 +55,7 @@ public class GetListFromColumnContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Get list from column";
+		return "List from colum";
 	}
 
 	/**

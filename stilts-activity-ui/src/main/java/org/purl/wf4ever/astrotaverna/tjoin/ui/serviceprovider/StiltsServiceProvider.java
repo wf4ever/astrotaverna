@@ -78,7 +78,7 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		
 		CoordTransformationServiceDesc service4 = new CoordTransformationServiceDesc();
 		service4.setTypeOfInput("String");
-		service4.setDescription("Add Coordinate units conversion");
+		service4.setDescription("Add Coordinates units conversion");
 		
 		results.add(service4);
 		
@@ -98,13 +98,13 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		
 		AddSkyCoordsServiceDesc service7 = new AddSkyCoordsServiceDesc();
 		service7.setTypeOfInput("String");
-		service7.setDescription("Coordenates reference system transformation");
+		service7.setDescription("Coordinates reference system transformation");
 		
 		results.add(service7);
 		
 		ResolveCoordsServiceDesc service8 = new ResolveCoordsServiceDesc();
 		service8.setTypeOfInput("String");
-		service8.setDescription("Name resolver");
+		service8.setDescription("Resolve object name into coordinates");
 		results.add(service8);
 		
 		TcatServiceDesc service9 = new TcatServiceDesc();

@@ -60,7 +60,7 @@ public class SelectColumnsContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Columns selection";
+		return "Select columns";
 	}
 
 	/**

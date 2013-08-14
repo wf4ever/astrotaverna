@@ -56,7 +56,7 @@ public class CheckTemplateFillerContextualView extends ContextualView {
 		//StiltsActivityConfigurationBean configuration = activity
 		//		.getConfiguration();
 		//return "Stilts service " + configuration.getExampleString();
-		return "Check template filler";
+		return "Template validationr";
 	}
 
 	/**

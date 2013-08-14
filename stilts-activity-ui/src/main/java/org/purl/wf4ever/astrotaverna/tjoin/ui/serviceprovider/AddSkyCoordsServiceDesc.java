@@ -53,7 +53,7 @@ public class AddSkyCoordsServiceDesc extends ServiceDescription<AddSkyCoordsActi
 	@Override
 	public String getName() {
 		//return "Coordinates reference system trasnformation in VOTable";//exampleString;
-		return "Coord. trasnformation";
+		return "Coord. transformation";
 	}
 	
 	public String getIdName() {
