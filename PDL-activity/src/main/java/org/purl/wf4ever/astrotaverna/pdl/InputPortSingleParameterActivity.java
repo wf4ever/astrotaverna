@@ -9,7 +9,7 @@ import net.ivoa.parameter.model.SingleParameter;
  * Interface for an activity such as {@link PDLActivity} that can provide {@link SingleParameter}s 
  * descriptions for its inputs.
  * 
- * @author Juli‡n Garrido
+ * @author Julian Garrido
  * 
  * @param <ActivityBeanType> The configuration bean type of the activity
  */

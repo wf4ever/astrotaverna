@@ -164,7 +164,7 @@ public class PDLServiceParameterHealthChecker implements
 
 				System.err.println("----An inputportsingleParameter, Source processor: "+ sourceProcessor.getLocalName()+", sourcename: "+ source.getName()+ ", sinkname: "+ aip.getName());
 				VisitReport newReport;
-				//System.err.println("\t La actividad de origen SI es también una PDLServiceActivity");
+				//System.err.println("\t La actividad de origen SI es tambien una PDLServiceActivity");
 				Map<String, SingleParameter> paramSourceActivity;
 				try {
 					paramSourceActivity = ((OutputPortSingleParameterActivity) sourceActivity).getSingleParametersForOutputPorts();

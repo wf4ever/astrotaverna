@@ -8,7 +8,7 @@ import net.sf.taverna.t2.visit.Visitor;
 * A <code>PDLServiceParameterHealthCheck</code> is a kind of visit that determines
 * if the corresponding PDLService activity in a workflow will work during a workflow run.
 * 
-* @author Juli‡n Garrido
+* @author Julian Garrido
 */
 public class PDLServiceParameterHealthCheck extends VisitKind {
 
