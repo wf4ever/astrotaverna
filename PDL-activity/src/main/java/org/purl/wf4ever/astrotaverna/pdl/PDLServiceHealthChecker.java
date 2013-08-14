@@ -16,9 +16,9 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityConfigurationE
 import org.purl.wf4ever.astrotaverna.pdl.PDLServiceActivityConfigurationBean;
 
 /**
- * Stilts health checker
+ * PDL health checker
  * @author Julian Garrido
- * @since    19 May 2011
+ * @since    19 May 2012
  */
 public class PDLServiceHealthChecker implements
 		HealthChecker<PDLServiceActivity> {

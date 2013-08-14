@@ -35,7 +35,7 @@ import net.sf.taverna.t2.workflowmodel.processor.activity.ActivityInputPort;
 import net.sf.taverna.t2.workflowmodel.utils.Tools;
 
 /**
- * Stilts health checker
+ * PDLServicePArameter health checker
  * @author Julian Garrido
  * @since    19 May 2011
  */
