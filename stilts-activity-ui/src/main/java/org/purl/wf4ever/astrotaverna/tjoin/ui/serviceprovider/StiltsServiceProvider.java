@@ -92,7 +92,7 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		AddColumnByExpressionServiceDesc service6 = new AddColumnByExpressionServiceDesc();
 		service6.setTypeOfInput("String");
 		//service3.setTypeOfFilter("Column names");
-		service6.setDescription("Add a column to VOTable");
+		service6.setDescription("Add column to VOTable");
 		
 		results.add(service6);
 		
@@ -124,7 +124,7 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		
 		TemplateFillerServiceDesc service12 = new TemplateFillerServiceDesc();
 		service12.setTypeOfInput("String");
-		service12.setDescription("fill template file from VOTable");
+		service12.setDescription("Fill template file from VOTable");
 		results.add(service12);
 		
 		CheckTemplateFillerServiceDesc service13 = new CheckTemplateFillerServiceDesc();
