@@ -174,7 +174,7 @@ public class AladinScriptParserTest {
 		String lsp = System.getProperty("line.separator");
 		//System.out.println("----"+lsp+"---");
 		
-		ArrayList<ArrayList<String>> list = parser.parseFileMacro("/home/julian/src/astrotaverna/Image-activity/src/main/resources/macro.ajs", "/home/julian/src/astrotaverna/Image-activity/src/main/resources/parameterFile.dat");
+		ArrayList<ArrayList<String>> list = parser.parseFileMacro("/Users/julian/src/astrotaverna/Image-activity/src/main/resources/macro.ajs", "/Users/julian/src/astrotaverna/Image-activity/src/main/resources/parameterFile.dat");
 		
 		assertEquals("Unexpected number of elemens", 20,  list.size());
 		
@@ -186,11 +186,33 @@ public class AladinScriptParserTest {
 		
 		if(list.size()>0){
 			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96413_2005WC48.xml", list.get(0).get(0));
-			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96413_2006XC43.xml", list.get(0).get(1));
-			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96413_2001XQ72.xml", list.get(1).get(0));
-			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96413_2008GX69.xml", list.get(1).get(1));
-			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96426_2005TF111.xml", list.get(2).get(0));
-			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96426_2005SD289.xml", list.get(2).get(1));
+			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96413_2006XC43.xml", list.get(1).get(0));
+			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96413_2001XQ72.xml", list.get(2).get(0));
+			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96413_2008GX69.xml", list.get(3).get(0));
+			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96426_2005TF111.xml", list.get(4).get(0));
+			assertEquals("Unexpected filename", "D:\\Escritorio\\SVOWf96426_2005SD289.xml", list.get(5).get(0));
+		}
+	}
+	
+	@Ignore
+	@Test
+	public void parseFileMacro2() throws Exception {
+		String lsp = System.getProperty("line.separator");
+		//System.out.println("----"+lsp+"---");
+		
+		ArrayList<ArrayList<String>> list = parser.parseFileMacro("/Users/julian/src/astrotaverna/Image-activity/src/test/resources/macro_windows.txt", "/Users/julian/src/astrotaverna/Image-activity/src/test/resources/params_windows.txt");
+		
+		assertEquals("Unexpected number of elemens", 2,  list.size());
+		
+		String path = "D:\\Escritorio\\SVOWf96413_2005WC48.xml";
+		String readPath = list.get(0).get(0);
+		
+		System.out.println(path);
+		System.out.println(readPath);
+		
+		if(list.size()>0){
+			assertEquals("Unexpected filename", "D:\\Escritorio\\SVO\\M51.jpg", list.get(0).get(0));
+			assertEquals("Unexpected filename", "D:\\Escritorio\\SVO\\M101.jpg", list.get(1).get(0));
 		}		
 	}
 	

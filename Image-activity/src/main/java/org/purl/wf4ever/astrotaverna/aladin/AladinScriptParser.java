@@ -39,7 +39,9 @@ public class AladinScriptParser {
 	
 	public ArrayList<String> parseScript (String script){
 		this.script = script;
-		String lines[] = script.split("\\r?\\n");
+		String newline = System.getProperty("line.separator");
+		//String lines[] = script.split("\\r?\\n");
+		String lines[] = script.split(newline);
 		files = new ArrayList<String>();
 		if(lines!=null)
 			for(String line : lines){
@@ -133,7 +135,9 @@ public class AladinScriptParser {
 
 	public ArrayList<ArrayList<String>> parseMacro (String script, String params){
 		this.script = script;
-		String lines[] = script.split("\\r?\\n");
+		String newline = System.getProperty("line.separator");
+		//String lines[] = script.split("\\r?\\n");
+		String lines[] = script.split(newline);
 		files = new ArrayList<String>();
 		ArrayList<ArrayList<String>> result;
 		if(lines!=null)

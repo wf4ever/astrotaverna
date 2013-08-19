@@ -1,0 +1,2 @@
+M51	D:\Escritorio\SVO\M51.jpg	1
+M101	D:\Escritorio\SVO\M101.jpg	2
