@@ -51,7 +51,7 @@ public class AddColumnByExpressionServiceDesc extends ServiceDescription<AddColu
 	 */
 	@Override
 	public String getName() {
-		return "Add Column";//exampleString;
+		return "Add column";//exampleString;
 	}
 	
 	public String getIdName() {

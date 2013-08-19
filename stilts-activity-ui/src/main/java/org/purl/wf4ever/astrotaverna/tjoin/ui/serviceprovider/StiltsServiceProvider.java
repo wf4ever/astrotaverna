@@ -78,7 +78,7 @@ public class StiltsServiceProvider implements ServiceDescriptionProvider {
 		
 		CoordTransformationServiceDesc service4 = new CoordTransformationServiceDesc();
 		service4.setTypeOfInput("String");
-		service4.setDescription("Add Coordinate units conversion");
+		service4.setDescription("Add coordinate units conversion");
 		
 		results.add(service4);
 		
