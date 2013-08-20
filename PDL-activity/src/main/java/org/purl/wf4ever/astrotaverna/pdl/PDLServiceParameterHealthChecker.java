@@ -73,8 +73,9 @@ public class PDLServiceParameterHealthChecker implements
 			Map<String, SingleParameter> paramMap = activity.getSingleParametersForInputPorts();
 			Processor p = (Processor) VisitReport.findAncestor(ancestry, Processor.class);
 			Dataflow d = (Dataflow) VisitReport.findAncestor(ancestry, Dataflow.class);
-				System.err.println("----------------------------");
-				System.err.println("SINK ACTIVITY: "+ activity.getClass().getName());
+				System.out.println("----------------------------");
+				System.out.println("SINK ACTIVITY: "+ activity.getClass().getName());
+				logger.info("SINK ACTIVITY: "+ activity.getClass().getName());
 				//System.err.println("processor: "+ p.getLocalName());
 				//System.err.println("Dataflow: "+ d.getLocalName());
 			
@@ -87,7 +88,7 @@ public class PDLServiceParameterHealthChecker implements
 				name = entry.getKey();
 				param = entry.getValue();
 				
-				aip = Tools.getActivityInputPort((Activity<?>) activity, entry.getKey());
+				aip = Tools.getActivityInputPort((Activity<?>) activity, entry.getKey().replaceAll(" ", "_"));
 				
 				if (aip == null) {
 					continue;
@@ -140,9 +141,10 @@ public class PDLServiceParameterHealthChecker implements
 			ProcessorPort processorPort = (ProcessorPort) source;
 			Processor sourceProcessor = processorPort.getProcessor();
 			Activity sourceActivity = sourceProcessor.getActivityList().get(0);
-			System.err.println("++++++++++++++++++++++++++++++");
-			System.err.println("SOURCE ACTIVITY:  "+ sourceActivity.getClass().getName());
-			//if it is a PDLService
+			System.out.println("++++++++++++++++++++++++++++++");
+			System.out.println("(PDLParamChecker) SOURCE ACTIVITY:  "+ sourceActivity.getClass().getName());
+			logger.info("SOURCE ACTIVITY:  "+ sourceActivity.getClass().getName());
+			//if it is a PDLService (PDLServiceActivity implements InputPortSingleParameterActivity)
 			//if (sourceActivity instanceof OutputPortSingleParameterActivity) {
 			if (!(sourceActivity instanceof InputPortSingleParameterActivity)) {	
 				VisitReport newReport = new VisitReport(HealthCheck.getInstance(), o, "Source of " + aip.getName(), HealthCheck.INVALID_CONFIGURATION, Status.WARNING);
@@ -151,7 +153,8 @@ public class PDLServiceParameterHealthChecker implements
 				newReport.setProperty("isProcessorSource", "false");
 				reports.add(newReport);
 				
-				System.err.println("----not an inputportsingleParameter");
+				System.out.println("(PDLParamChecker)----not an inputportsingleParameter");
+				logger.info("(PDLParamChecker)----not an inputportsingleParameter");
 			}else{
 			//	//System.err.println("\t La actividad de origen NO es una PDLServiceActivity");
 			//	//VisitReport newReport = new VisitReport(HealthCheck.getInstance(), o, "Source of " + aip.getName(), HealthCheck.DATATYPE_SOURCE, Status.WARNING);
@@ -162,7 +165,8 @@ public class PDLServiceParameterHealthChecker implements
 			//	newReport.setProperty("isProcessorSource", "true");
 			//	reports.add(newReport);		
 
-				System.err.println("----An inputportsingleParameter, Source processor: "+ sourceProcessor.getLocalName()+", sourcename: "+ source.getName()+ ", sinkname: "+ aip.getName());
+				System.out.println("(PDLParamChecker)----An inputportsingleParameter, Source processor: "+ sourceProcessor.getLocalName()+", sourcename: "+ source.getName()+ ", sinkname: "+ aip.getName());
+				logger.info("(PDLParamChecker)----An inputportsingleParameter, Source processor: "+ sourceProcessor.getLocalName()+", sourcename: "+ source.getName()+ ", sinkname: "+ aip.getName());
 				VisitReport newReport;
 				//System.err.println("\t La actividad de origen SI es tambien una PDLServiceActivity");
 				Map<String, SingleParameter> paramSourceActivity;

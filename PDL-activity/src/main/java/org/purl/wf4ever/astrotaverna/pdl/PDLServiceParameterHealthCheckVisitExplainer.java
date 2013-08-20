@@ -76,7 +76,7 @@ public class PDLServiceParameterHealthCheckVisitExplainer implements VisitExplai
 	public JComponent getSolution(VisitReport vr) {
 		// TODO Auto-generated method stub
 		int resultId = vr.getResultId();
-	    String explanation = null;
+	    String explanation = "";
 	    boolean includeConfigButton = false;
 	    //explanation = "puedo solucinarlo";
 	    
@@ -96,7 +96,7 @@ public class PDLServiceParameterHealthCheckVisitExplainer implements VisitExplai
 				explanation = explanation + "Check if source and sink ports correspond to equivalent concepts (UCDs).\n";
 			
 			if((resultId & UNIT_ERROR) == UNIT_ERROR)
-				explanation = explanation + "Chekc if you need a conversion factor between source and sink or if they are not compatible.\n";
+				explanation = explanation + "Check if you need a conversion factor between source and sink or if they are not compatible.\n";
 			
 			if((resultId & SKOS_ERROR) == SKOS_ERROR)
 				explanation = explanation + "Check if source and sink ports are represented by equivalent concepts.\n";
