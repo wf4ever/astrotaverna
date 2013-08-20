@@ -98,7 +98,7 @@ public class PDLServiceParameterHealthChecker implements
 				}
 				pip = Tools.getProcessorInputPort(p, (Activity<?>) activity, aip);
 				
-				if (pip == null) {
+				if (pip == null) { //if there is nothing connected to the port
 					continue;
 				}
 				
@@ -222,7 +222,7 @@ public class PDLServiceParameterHealthChecker implements
 							error = error | PDLServiceParameterHealthCheck.SKOS_ERROR;
 						}
 						
-						if(areUCDsequals(sourceParam.getUCD(), sinkParam.getUCD())){
+						if(!areUCDsequals(sourceParam.getUCD(), sinkParam.getUCD())){
 							error = error | PDLServiceParameterHealthCheck.UCD_ERROR;
 						}
 
