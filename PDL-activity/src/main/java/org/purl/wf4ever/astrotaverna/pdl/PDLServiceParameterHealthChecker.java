@@ -88,10 +88,13 @@ public class PDLServiceParameterHealthChecker implements
 				name = entry.getKey();
 				param = entry.getValue();
 				
-				aip = Tools.getActivityInputPort((Activity<?>) activity, entry.getKey().replaceAll(" ", "_"));
+				aip = Tools.getActivityInputPort((Activity<?>) activity, entry.getKey());
 				
 				if (aip == null) {
-					continue;
+					//this is only in case some port names contain spaces in the pdl description.
+					aip = Tools.getActivityInputPort((Activity<?>) activity, entry.getKey().replaceAll(" ", "_"));
+					if (aip == null)
+						continue;
 				}
 				pip = Tools.getProcessorInputPort(p, (Activity<?>) activity, aip);
 				
@@ -99,6 +102,7 @@ public class PDLServiceParameterHealthChecker implements
 					continue;
 				}
 				
+				int count_valid_links = 0;
 				for (Datalink dl : d.getLinks()) {					
 					if (dl.getSink().equals(pip)) {
 							//System.err.println("param: " + name + ". Link:" + dl.getSink().getName() + ". Source: "+ dl.getSource().getName() + " Source class: "+dl.getSource().getClass());
@@ -109,7 +113,12 @@ public class PDLServiceParameterHealthChecker implements
 						    vr.setProperty("sinkPort", pip);
 						}
 						reports.addAll(subReports);
+						count_valid_links ++;
 					}
+				}
+				if(count_valid_links > 1){
+					System.err.println("It was expected only one link connecting to the sink input port. Activity: " + activity.getClass().getName() + "param: " + name);
+					logger.error("It was expected only one link connecting to the sink input port. Activity: " + activity.getClass().getName() + "param: " + name);
 				}
 			}
 		} catch (IOException e) {
@@ -173,8 +182,16 @@ public class PDLServiceParameterHealthChecker implements
 				try {
 					paramSourceActivity = ((OutputPortSingleParameterActivity) sourceActivity).getSingleParametersForOutputPorts();
 				
-					String sourcePortName = source.getName();
+					String sourcePortName = source.getName(); //this name has no white spaces because they are replaced.
 					SingleParameter sourceParam = paramSourceActivity.get(sourcePortName);
+					if(sourceParam==null){
+						//paramSourceActivity may have names with white spaces.
+						for(Entry<String, SingleParameter> entryParams : paramSourceActivity.entrySet()){
+							if(entryParams.getKey().replaceAll(" ", "_").compareTo(sourcePortName)==0)
+							sourceParam = paramSourceActivity.get(entryParams.getKey());
+						}
+						
+					}
 					String description = "";
 					//compare with the SingleParameter from the inputPort
 					if(sourceParam != null){
