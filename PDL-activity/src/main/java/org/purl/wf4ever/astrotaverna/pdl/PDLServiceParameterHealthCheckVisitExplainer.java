@@ -65,7 +65,10 @@ public class PDLServiceParameterHealthCheckVisitExplainer implements VisitExplai
 		}
 		if(resultId == UNKNOWN){
 			explanation = explanation + "Unknown issue - no expalanation available.\n";
-		}  		        
+		}
+		if(resultId == NON_METADATA_ERROR){
+			explanation = explanation + "There is no metadata to verify the interoperability.\n";
+		}
 		
 		return new ReadOnlyTextArea(explanation);
 	}
@@ -106,6 +109,9 @@ public class PDLServiceParameterHealthCheckVisitExplainer implements VisitExplai
 	    }
 		if(resultId == UNKNOWN)
 			explanation = explanation + "Unknown issue - no solution available\n";
+		
+		if(resultId == NON_METADATA_ERROR)
+			explanation = explanation + "Ask the service provider for a more detailed PDL description.\n";
 		
 	    
 		return new ReadOnlyTextArea(explanation);

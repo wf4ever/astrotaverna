@@ -199,39 +199,66 @@ public class PDLServiceParameterHealthChecker implements
 					//compare with the SingleParameter from the inputPort
 					if(sourceParam != null){
 						int error = PDLServiceParameterHealthCheck.NO_ERROR;
-						if(sourceParam.getParameterType() != sinkParam.getParameterType()){
+						int countNonMetadataError = 0;
+						int passedTests = 0;
+						final int NUMBEROFERRORSTOCHECK = 5;
+						if(sourceParam.getParameterType() == null && sinkParam.getParameterType() == null){
+							error = error | PDLServiceParameterHealthCheck.NON_METADATA_ERROR;
+							countNonMetadataError++;
+						}else if(sourceParam.getParameterType() != sinkParam.getParameterType()){
 							error = error | PDLServiceParameterHealthCheck.TYPE_ERROR;
+						}else{
+							passedTests ++;
 						}
 						//Expression exp = sourceParam.getPrecision(); //how to evaluate expressions???
 						//error = error | PDLServiceParameterHealthCheck.PRECISION_ERROR;
-						if((sourceParam.getUType() == null || sinkParam.getUType() == null ) && !(sourceParam.getUType() == null && sinkParam.getUType() == null ))
+						if(sourceParam.getUType() == null && sinkParam.getUType() == null ){
+							error = error | PDLServiceParameterHealthCheck.NON_METADATA_ERROR;
+							countNonMetadataError++;
+						}else if((sourceParam.getUType() == null || sinkParam.getUType() == null ))
 							error = error | PDLServiceParameterHealthCheck.UTYPE_ERROR;
-						else if((sourceParam.getUType() != null && sinkParam.getUType() != null ) 
-								&& 	(sourceParam.getUType().compareTo(sinkParam.getUType())!=0)){
+						else if((sourceParam.getUType().compareTo(sinkParam.getUType())!=0)){
 							error = error | PDLServiceParameterHealthCheck.UTYPE_ERROR;
-						}
+						}else
+							passedTests ++;
 						
 						//if((sourceParam.getSkossConcept() == null && sinkParam.getSkossConcept() != null) 
 						//		|| (sourceParam.getSkossConcept() != null &&sourceParam.getSkossConcept().compareTo(sinkParam.getSkossConcept())!=0)){
 						//	error = error | PDLServiceParameterHealthCheck.SKOS_ERROR;
 						//}
-						if((sourceParam.getSkossConcept() == null || sinkParam.getSkossConcept() == null ) && !(sourceParam.getSkossConcept() == null && sinkParam.getSkossConcept() == null ))
+						if (sourceParam.getSkossConcept() == null && sinkParam.getSkossConcept() == null ){
+							error = error | PDLServiceParameterHealthCheck.NON_METADATA_ERROR;
+							countNonMetadataError++;
+						}else if((sourceParam.getSkossConcept() == null || sinkParam.getSkossConcept() == null ))
 							error = error | PDLServiceParameterHealthCheck.SKOS_ERROR;
-						else if((sourceParam.getSkossConcept() != null && sinkParam.getSkossConcept() != null ) 
-								&& 	(sourceParam.getSkossConcept().compareTo(sinkParam.getSkossConcept())!=0)){
+						else if((sourceParam.getSkossConcept().compareTo(sinkParam.getSkossConcept())!=0)){
 							error = error | PDLServiceParameterHealthCheck.SKOS_ERROR;
-						}
+						}else 
+							passedTests ++;
 						
-						if(!areUCDsequals(sourceParam.getUCD(), sinkParam.getUCD())){
+						if(sourceParam.getUCD() == null &&  sinkParam.getUCD() == null){
+							error = error | PDLServiceParameterHealthCheck.NON_METADATA_ERROR;
+							countNonMetadataError++;
+						}else if(!areUCDsequals(sourceParam.getUCD(), sinkParam.getUCD())){
 							error = error | PDLServiceParameterHealthCheck.UCD_ERROR;
-						}
+						}else 
+							passedTests ++;
 
-						if((sourceParam.getUnit() == null || sinkParam.getUnit() == null ) && !(sourceParam.getUnit() == null && sinkParam.getUnit() == null ))
+						if(sourceParam.getUnit() == null && sinkParam.getUnit() == null ){
+							error = error | PDLServiceParameterHealthCheck.NON_METADATA_ERROR;
+							countNonMetadataError++;
+						}else if((sourceParam.getUnit() == null || sinkParam.getUnit() == null ))
 							error = error | PDLServiceParameterHealthCheck.UNIT_ERROR;
 						else if((sourceParam.getUnit() != null && sinkParam.getUnit() != null ) 
 								&& 	(sourceParam.getUnit().compareTo(sinkParam.getUnit())!=0)){
 							error = error | PDLServiceParameterHealthCheck.UNIT_ERROR;
-						}
+						} else
+							passedTests ++;
+						
+						//Non metadata error i
+						//if((countNonMetadataError + passedTests) == NUMBEROFERRORSTOCHECK)
+						if(passedTests > 0 && error == PDLServiceParameterHealthCheck.NON_METADATA_ERROR)
+							error = PDLServiceParameterHealthCheck.NO_ERROR;
 						
 						//VisitReport newReport = new VisitReport(HealthCheck.getInstance(), o, "Source of " + aip.getName()+ ". Metadata doesn't match", HealthCheck.NO_PROBLEM, Status.OK);
 						if(error > 0 )
