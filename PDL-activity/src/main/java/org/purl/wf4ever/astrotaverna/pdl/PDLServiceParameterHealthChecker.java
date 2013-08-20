@@ -112,7 +112,8 @@ public class PDLServiceParameterHealthChecker implements
 						    vr.setProperty("activity", activity);
 						    vr.setProperty("sinkPort", pip);
 						}
-						reports.addAll(subReports);
+						if(subReports!=null)
+							reports.addAll(subReports);
 						count_valid_links ++;
 					}
 				}
@@ -156,14 +157,16 @@ public class PDLServiceParameterHealthChecker implements
 			//if it is a PDLService (PDLServiceActivity implements InputPortSingleParameterActivity)
 			//if (sourceActivity instanceof OutputPortSingleParameterActivity) {
 			if (!(sourceActivity instanceof InputPortSingleParameterActivity)) {	
-				VisitReport newReport = new VisitReport(HealthCheck.getInstance(), o, "Source of " + aip.getName(), HealthCheck.INVALID_CONFIGURATION, Status.WARNING);
+				
+				VisitReport newReport = new VisitReport(PDLServiceParameterHealthCheck.getInstance(), o, "Source of " + aip.getName()+" Connected to a non PDL service", PDLServiceParameterHealthCheck.CONNECTED_TO_NON_PDL, Status.WARNING);
 				newReport.setProperty("sinkPortName", aip.getName());
-				newReport.setProperty("sourceName", source.getName());
-				newReport.setProperty("isProcessorSource", "false");
+				newReport.setProperty("sourceName", sourceProcessor.getLocalName());
+				newReport.setProperty("isProcessorSource", "true");
 				reports.add(newReport);
 				
 				System.out.println("(PDLParamChecker)----not an inputportsingleParameter");
 				logger.info("(PDLParamChecker)----not an inputportsingleParameter");
+				
 			}else{
 			//	//System.err.println("\t La actividad de origen NO es una PDLServiceActivity");
 			//	//VisitReport newReport = new VisitReport(HealthCheck.getInstance(), o, "Source of " + aip.getName(), HealthCheck.DATATYPE_SOURCE, Status.WARNING);
@@ -188,7 +191,7 @@ public class PDLServiceParameterHealthChecker implements
 						//paramSourceActivity may have names with white spaces.
 						for(Entry<String, SingleParameter> entryParams : paramSourceActivity.entrySet()){
 							if(entryParams.getKey().replaceAll(" ", "_").compareTo(sourcePortName)==0)
-							sourceParam = paramSourceActivity.get(entryParams.getKey());
+								sourceParam = paramSourceActivity.get(entryParams.getKey());
 						}
 						
 					}

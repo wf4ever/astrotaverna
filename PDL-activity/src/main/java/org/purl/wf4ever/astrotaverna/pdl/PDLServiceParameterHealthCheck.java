@@ -21,7 +21,8 @@ public class PDLServiceParameterHealthCheck extends VisitKind {
 	public static final int UNIT_ERROR = 16;
 	public static final int SKOS_ERROR = 32;
 	public static final int UNKNOWN = 64;
-	
+	public static final int CONNECTED_TO_NON_PDL = 128;
+		
 	
 	@Override
 	public Class<? extends Visitor> getVisitorClass() {

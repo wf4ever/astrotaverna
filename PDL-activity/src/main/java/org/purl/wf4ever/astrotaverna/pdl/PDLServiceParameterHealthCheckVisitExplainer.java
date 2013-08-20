@@ -60,6 +60,9 @@ public class PDLServiceParameterHealthCheckVisitExplainer implements VisitExplai
 		if((resultId & SKOS_ERROR) == SKOS_ERROR){
 			explanation = explanation + "SKOS concepts don't match in the sink and source ports.\n";
 		}
+		if((resultId & CONNECTED_TO_NON_PDL) == CONNECTED_TO_NON_PDL){
+			explanation = explanation + "If output-input pairs don't have PDL descriptions for both services, the interoperability cannot be guaranteed.\n";
+		}
 		if(resultId == UNKNOWN){
 			explanation = explanation + "Unknown issue - no expalanation available.\n";
 		}  		        
