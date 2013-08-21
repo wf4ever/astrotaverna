@@ -145,6 +145,16 @@ public class PDLServiceParameterHealthChecker implements
 	
 
 	//InputPortTypeDescriptorActivity
+	/**
+	 * It checks if the metadata of source and sink ports are equal. During this comparation, string values
+	 * are converted to lower case. 
+	 * @param source
+	 * @param d
+	 * @param o
+	 * @param aip
+	 * @param sinkParam
+	 * @return
+	 */
 	private Set<VisitReport> checkSource(Port source, Dataflow d, Activity o, ActivityInputPort aip, SingleParameter sinkParam) {
 		Set<VisitReport> reports = new HashSet<VisitReport>();
 		if (source instanceof ProcessorPort) {
@@ -205,7 +215,9 @@ public class PDLServiceParameterHealthChecker implements
 						if(sourceParam.getParameterType() == null && sinkParam.getParameterType() == null){
 							error = error | PDLServiceParameterHealthCheck.NON_METADATA_ERROR;
 							countNonMetadataError++;
-						}else if(sourceParam.getParameterType() != sinkParam.getParameterType()){
+						}else if(sourceParam.getParameterType() == null || sinkParam.getParameterType() == null)
+							error = error | PDLServiceParameterHealthCheck.TYPE_ERROR;
+						if(sourceParam.getParameterType().value().toLowerCase().compareTo(sinkParam.getParameterType().value().toLowerCase())!=0){
 							error = error | PDLServiceParameterHealthCheck.TYPE_ERROR;
 						}else{
 							passedTests ++;
@@ -217,7 +229,7 @@ public class PDLServiceParameterHealthChecker implements
 							countNonMetadataError++;
 						}else if((sourceParam.getUType() == null || sinkParam.getUType() == null ))
 							error = error | PDLServiceParameterHealthCheck.UTYPE_ERROR;
-						else if((sourceParam.getUType().compareTo(sinkParam.getUType())!=0)){
+						else if((sourceParam.getUType().toLowerCase().compareTo(sinkParam.getUType().toLowerCase())!=0)){
 							error = error | PDLServiceParameterHealthCheck.UTYPE_ERROR;
 						}else
 							passedTests ++;
@@ -231,7 +243,7 @@ public class PDLServiceParameterHealthChecker implements
 							countNonMetadataError++;
 						}else if((sourceParam.getSkossConcept() == null || sinkParam.getSkossConcept() == null ))
 							error = error | PDLServiceParameterHealthCheck.SKOS_ERROR;
-						else if((sourceParam.getSkossConcept().compareTo(sinkParam.getSkossConcept())!=0)){
+						else if((sourceParam.getSkossConcept().toLowerCase().compareTo(sinkParam.getSkossConcept().toLowerCase())!=0)){
 							error = error | PDLServiceParameterHealthCheck.SKOS_ERROR;
 						}else 
 							passedTests ++;
@@ -239,7 +251,9 @@ public class PDLServiceParameterHealthChecker implements
 						if(sourceParam.getUCD() == null &&  sinkParam.getUCD() == null){
 							error = error | PDLServiceParameterHealthCheck.NON_METADATA_ERROR;
 							countNonMetadataError++;
-						}else if(!areUCDsequals(sourceParam.getUCD(), sinkParam.getUCD())){
+						}else if(sourceParam.getUCD() == null ||  sinkParam.getUCD() == null)
+							error = error | PDLServiceParameterHealthCheck.UCD_ERROR;
+						else if(!areUCDsequals(sourceParam.getUCD().toLowerCase(), sinkParam.getUCD().toLowerCase())){
 							error = error | PDLServiceParameterHealthCheck.UCD_ERROR;
 						}else 
 							passedTests ++;
@@ -250,7 +264,7 @@ public class PDLServiceParameterHealthChecker implements
 						}else if((sourceParam.getUnit() == null || sinkParam.getUnit() == null ))
 							error = error | PDLServiceParameterHealthCheck.UNIT_ERROR;
 						else if((sourceParam.getUnit() != null && sinkParam.getUnit() != null ) 
-								&& 	(sourceParam.getUnit().compareTo(sinkParam.getUnit())!=0)){
+								&& 	(sourceParam.getUnit().toLowerCase().compareTo(sinkParam.getUnit().toLowerCase())!=0)){
 							error = error | PDLServiceParameterHealthCheck.UNIT_ERROR;
 						} else
 							passedTests ++;
