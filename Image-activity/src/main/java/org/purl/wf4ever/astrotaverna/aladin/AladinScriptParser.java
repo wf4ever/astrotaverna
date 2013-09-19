@@ -138,6 +138,18 @@ public class AladinScriptParser {
 		String newline = System.getProperty("line.separator");
 		//String lines[] = script.split("\\r?\\n");
 		String lines[] = script.split(newline);
+		
+		if(lines.length == 1){  
+			String[] lines2 = params.split("\n");
+			if(lines.length < lines2.length){
+				lines = params.split("\n");
+			}else{
+				String [] lines3 = params.split("\r\n");
+				if(lines.length < lines3.length)
+					lines = params.split("\r\n");
+			}
+		}
+		
 		files = new ArrayList<String>();
 		ArrayList<ArrayList<String>> result;
 		if(lines!=null)
@@ -255,8 +267,19 @@ public class AladinScriptParser {
 	 */
 	ArrayList<ArrayList<String>> parseParams(String params){
 		ArrayList<ArrayList<String>> paramsLists = new ArrayList<ArrayList<String>>();
-				
-		String[] lines = params.split(System.getProperty("line.separator"));
+		String newline = System.getProperty("line.separator"); 
+		String[] lines = params.split(newline);
+		
+		if(lines.length == 1){  
+			String[] lines2 = params.split("\n");
+			if(lines.length < lines2.length){
+				lines = params.split("\n");
+			}else{
+				String [] lines3 = params.split("\r\n");
+				if(lines.length < lines3.length)
+					lines = params.split("\r\n");
+			}
+		}
 		
 		for(String line: lines){
 			ArrayList<String> list = new ArrayList<String>();
