@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.purl.wf4ever.astrotaverna</groupId>
+		<artifactId>astrotaverna</artifactId>
+		<version>1.09</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>Image-activity</artifactId>
+	<name>Aladin utilities suite activity</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.sf.taverna.t2.core</groupId>
+			<artifactId>workflowmodel-api</artifactId>
+			<version>${t2.core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.taverna.t2.activities</groupId>
+			<artifactId>activity-test-utils</artifactId>
+			<version>${t2.activities.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>cds.aladin</groupId>
+			<artifactId>Aladin</artifactId>
+			<version>7.5</version>
+			<!-- This exclusion is for testing if solve the signer information exception -->
+			<exclusions>
+		        <exclusion>  <!-- declare the exclusion here -->
+		          <groupId>uk.ac.starlink</groupId>
+		          <artifactId>stiltsAPI</artifactId>
+		        </exclusion>
+	      </exclusions> 
+		</dependency>
+		<!-- JGS: this is to be able to use the class ClassLocation to know where are the jars -->
+        <dependency>
+            <groupId>net.sf.taverna.t2.infrastructure</groupId>
+            <artifactId>prelauncher</artifactId>
+            <version>${t2.infrastructure.version}</version>
+        </dependency>
+	</dependencies>
+</project>
