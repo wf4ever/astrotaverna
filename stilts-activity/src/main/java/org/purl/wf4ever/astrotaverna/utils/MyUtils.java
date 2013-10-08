@@ -167,7 +167,7 @@ public class MyUtils {
 	 */
 	public static String checkAndRepairUCDlist(String ucdlist){
 		
-		ucdlist = ucdlist.replaceAll(".", "_");
+		ucdlist = ucdlist.replaceAll("\\.", "_");
 		ucdlist = ucdlist.replaceAll(";", "_");
 		
 		String [] splitfilter = ucdlist.split(" ");
@@ -203,26 +203,26 @@ public class MyUtils {
 				+ "      <FIELD ID=\"RA\" datatype=\"double\" ucd=\"POS_EQ_RA_MAIN\" /> "
 				+ "      <FIELD ID=\"DEC\" datatype=\"double\" ucd=\"POS_EQ_DEC_MAIN\" /> "
 				+ "      <FIELD ID=\"TYPE\" datatype=\"char\" ucd=\"CLASS_OBJECT\" /> "
-				+ "      <FIELD ID=\"U\" datatype=\"float\" ucd=\"PHOT_SDSS_U FIT_PARAM\" /> "
-				+ "      <FIELD ID=\"G\" datatype=\"float\" ucd=\"PHOT_SDSS_G FIT_PARAM\" /> "
-				+ "      <FIELD ID=\"R\" datatype=\"float\" ucd=\"PHOT_SDSS_R FIT_PARAM\" /> "
-				+ "      <FIELD ID=\"I\" datatype=\"float\" ucd=\"PHOT_SDSS_I FIT_PARAM\" /> "
-				+ "      <FIELD ID=\"Z\" datatype=\"float\" ucd=\"PHOT_SDSS_Z FIT_PARAM\" /> "
-				+ "      <FIELD ID=\"ERR_U\" datatype=\"float\" ucd=\"PHOT_SDSS_U ERROR\" /> "
-				+ "      <FIELD ID=\"ERR_G\" datatype=\"float\" ucd=\"PHOT_SDSS_G ERROR\" /> "
-				+ "      <FIELD ID=\"ERR_R\" datatype=\"float\" ucd=\"PHOT_SDSS_R ERROR\" /> "
-				+ "      <FIELD ID=\"ERR_I\" datatype=\"float\" ucd=\"PHOT_SDSS_I ERROR\" /> "
-				+ "      <FIELD ID=\"ERR_Z\" datatype=\"float\" ucd=\"PHOT_SDSS_Z ERROR\" /> "
+				+ "      <FIELD ID=\"U\" datatype=\"float\" ucd=\"PHOT_SDSS_U;FIT_PARAM\" /> "
+				+ "      <FIELD ID=\"G\" datatype=\"float\" ucd=\"PHOT_SDSS_G;FIT_PARAM\" /> "
+				+ "      <FIELD ID=\"R\" datatype=\"float\" ucd=\"PHOT_SDSS_R;FIT_PARAM\" /> "
+				+ "      <FIELD ID=\"I\" datatype=\"float\" ucd=\"PHOT_SDSS_I;FIT_PARAM\" /> "
+				+ "      <FIELD ID=\"Z\" datatype=\"float\" ucd=\"PHOT_SDSS_Z;FIT_PARAM\" /> "
+				+ "      <FIELD ID=\"ERR_U\" datatype=\"float\" ucd=\"PHOT_SDSS_U;ERROR\" /> "
+				+ "      <FIELD ID=\"ERR_G\" datatype=\"float\" ucd=\"PHOT_SDSS_G;ERROR\" /> "
+				+ "      <FIELD ID=\"ERR_R\" datatype=\"float\" ucd=\"PHOT_SDSS_R;ERROR\" /> "
+				+ "      <FIELD ID=\"ERR_I\" datatype=\"float\" ucd=\"PHOT_SDSS_I;ERROR\" /> "
+				+ "      <FIELD ID=\"ERR_Z\" datatype=\"float\" ucd=\"PHOT_SDSS_Z;ERROR\" /> "
 				+ "      <FIELD ID=\"PSFMAG_U\" datatype=\"float\" ucd=\"PHOT_SDSS_U\" /> "
-				+ "      <FIELD ID=\"PSFMAGERR_U\" datatype=\"float\" ucd=\"PHOT_SDSS_U ERROR\" /> "
+				+ "      <FIELD ID=\"PSFMAGERR_U\" datatype=\"float\" ucd=\"PHOT_SDSS_U;ERROR\" /> "
 				+ "      <FIELD ID=\"PSFMAG_G\" datatype=\"float\" ucd=\"PHOT_SDSS_G\" /> "
-				+ "      <FIELD ID=\"PSFMAGERR_G\" datatype=\"float\" ucd=\"PHOT_SDSS_G ERROR\" /> "
+				+ "      <FIELD ID=\"PSFMAGERR_G\" datatype=\"float\" ucd=\"PHOT_SDSS_G;ERROR\" /> "
 				+ "      <FIELD ID=\"PSFMAG_R\" datatype=\"float\" ucd=\"PHOT_SDSS_R\" /> "
-				+ "      <FIELD ID=\"PSFMAGERR_R\" datatype=\"float\" ucd=\"PHOT_SDSS_R ERROR\" /> "
+				+ "      <FIELD ID=\"PSFMAGERR_R\" datatype=\"float\" ucd=\"PHOT_SDSS_R;ERROR\" /> "
 				+ "      <FIELD ID=\"PSFMAG_I\" datatype=\"float\" ucd=\"PHOT_SDSS_I\" /> "
-				+ "      <FIELD ID=\"PSFMAGERR_I\" datatype=\"float\" ucd=\"PHOT_SDSS_I ERROR\" /> "
+				+ "      <FIELD ID=\"PSFMAGERR_I\" datatype=\"float\" ucd=\"PHOT_SDSS_I;ERROR\" /> "
 				+ "      <FIELD ID=\"PSFMAG_Z\" datatype=\"float\" ucd=\"PHOT_SDSS_Z\" /> "
-				+ "      <FIELD ID=\"PSFMAGERR_Z\" datatype=\"float\" ucd=\"PHOT_SDSS_Z ERROR\" /> "
+				+ "      <FIELD ID=\"PSFMAGERR_Z\" datatype=\"float\" ucd=\"PHOT_SDSS_Z;ERROR\" /> "
 				+ "      <DATA> "
 				+ "        <TABLEDATA> "
 				+ "          <TR> "
