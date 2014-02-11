@@ -1,0 +1,215 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>net.ivoa.parameter</groupId>
+   <artifactId>param-model</artifactId>
+	<version>0.0.5-utilities-thread-safeRFC</version>
+   <name>param</name>
+   <description>Parameter Model</description>
+   <properties>
+     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+   </properties>
+   <repositories>
+      <repository>
+         <id>googlecode.jaxb-visitor.repo</id>
+         <url>https://jaxb-visitor.googlecode.com/svn/maven-repository/</url>
+      </repository>
+		<repository>
+			<releases />
+			<snapshots />
+			<id>astrotaverna</id>
+			<name>AstroTaverna repository</name>
+			<url>http://wf4ever.github.com/astrotaverna/</url>
+		</repository>
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<name>Java.net Repository for Maven</name>
+			<url>http://download.java.net/maven/2/</url>
+		</repository>
+   </repositories>
+   <dependencies>
+      <dependency>
+         <groupId>joda-time</groupId>
+         <artifactId>joda-time</artifactId>
+         <version>1.5.2</version>
+         <type>jar</type>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>com.massfords</groupId>
+         <artifactId>jaxb-visitor</artifactId>
+         <version>1.9</version>
+      </dependency>
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-api</artifactId>
+         <version>1.6.1</version>
+      </dependency>
+      <dependency>
+         <groupId>ch.qos.logback</groupId>
+         <artifactId>logback-classic</artifactId>
+         <version>0.9.29</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jvnet.jaxb2_commons</groupId>
+         <artifactId>jaxb2-basics-runtime</artifactId>
+         <version>0.6.0</version>
+      </dependency>
+   </dependencies>
+   <build>
+
+
+		<extensions>
+			<extension>
+				<groupId>org.jvnet.wagon-svn</groupId>
+				<artifactId>wagon-svn</artifactId>
+				<version>1.8</version>
+			</extension>
+		</extensions>
+
+      <plugins>
+         <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+               <source>1.6</source>
+					<target>1.6</target>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.jvnet.jaxb2.maven2</groupId>
+            <artifactId>maven-jaxb2-plugin</artifactId>
+            <version>0.7.4</version>
+            <executions>
+                <execution>
+                <id>gg</id>
+                  <goals>
+                     <goal>generate</goal>
+                  </goals>
+               </execution>
+            </executions>
+            <configuration>
+               <strict>false</strict>
+               <extension>true</extension>
+               <schemaDirectory> ${basedir}/src/schema </schemaDirectory>
+               <schemaIncludes>
+                  <value>PDL-V1.0.xsd</value>
+                  <value>PDLServer.xsd</value>
+               </schemaIncludes>
+               <generateDirectory>target/generated-sources/jaxb</generateDirectory>
+               <bindingDirectory>src/build</bindingDirectory>
+               <bindingIncludes>
+                  <include>*.xml</include>
+               </bindingIncludes>
+               <args>
+                  <!-- visitor args -->
+                  <arg>-Xvisitor</arg>
+                  <arg>-Xvisitor-package:net.ivoa.parameter.visitor</arg>
+                  <!-- basics args 
+                  <arg>-XtoString</arg>
+                  <arg>-Xequals</arg>
+                  <arg>-XhashCode</arg>
+                  <arg>-Xcopyable</arg>
+                  <arg>-Xmergeable</arg>-->
+                  <arg>-Xfluent-api</arg>
+                  <arg>-Xvalue-constructor</arg>
+               </args>
+               <forceRegenerate>true</forceRegenerate>
+               <verbose>true</verbose>
+               <plugins>
+                  <plugin> <!-- visitor plugin -->
+                     <groupId>com.massfords</groupId>
+                     <artifactId>jaxb-visitor</artifactId>
+                     <version>1.9</version>
+                  </plugin>
+                  <plugin> <!-- basics plugin -->
+                     <groupId>org.jvnet.jaxb2_commons</groupId>
+                     <artifactId>jaxb2-basics</artifactId>
+                     <version>0.6.2</version>
+                  </plugin>
+                  <plugin>
+                     <groupId>org.jvnet.jaxb2_commons</groupId>
+                     <artifactId>jaxb2-fluent-api</artifactId>
+                     <version>3.0</version>
+                  </plugin>
+                  <plugin>
+                     <groupId>org.jvnet.jaxb2_commons</groupId>
+                     <artifactId>jaxb2-value-constructor</artifactId>
+                     <version>3.0</version>
+                  </plugin>
+ 
+               </plugins>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+   <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <configuration>
+           <targetJdk>1.5</targetJdk>
+           
+         
+            <rulesets>
+               <ruleset>/rulesets/braces.xml</ruleset>
+               <ruleset>/rulesets/coupling.xml</ruleset>
+               <ruleset>/rulesets/codesize.xml</ruleset>
+               <ruleset>/rulesets/design.xml</ruleset>
+           <!--      <ruleset>/rulesets/optimizations.xml</ruleset>-->
+            </rulesets>
+        </configuration>
+      </plugin>     
+    </plugins>
+  </reporting>
+ <!-- 
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>googlecode</id>
+			<url>svn:https://vo-param.googlecode.com/svn/m2/release</url>
+		</repository>
+	</distributionManagement>
+-->
+
+  <developers>
+		<developer>
+			<id>cmzwolf</id>
+			<name>Carlo Maria Zwölf</name>
+		</developer>
+		<developer>
+			<id>harripa</id>
+			<name>Paul Harrison</name>
+		</developer>
+  </developers>
+   <scm>
+  	<url>https://github.com/wf4ever/vo-param</url>
+  	<connection>scm:git:git://github.com/wf4ever/vo-param.git</connection>
+  	<developerConnection>scm:git:git@github.com:wf4ever/vo-param.git</developerConnection>
+  </scm> 
+<distributionManagement>
+		<repository>
+			<id>astrotaverna</id>
+			<name>AstroTaverna repository</name>
+            <url>file:///${user.home}/src/astrotaverna-gh/</url>
+            <!--<url>file:///${user.home}/git/repository/astrotaverna-gh/</url>-->
+		</repository>
+		<snapshotRepository>
+			<id>astrotaverna</id>
+			<name>AstroTaverna repository</name>
+            <url>file:///${user.home}/src/astrotaverna-gh/</url>
+            <!--<url>file:///${user.home}/git/repository/astrotaverna-gh/</url>-->
+		</snapshotRepository>
+	</distributionManagement>
+
+
+</project>
