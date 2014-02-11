@@ -88,7 +88,7 @@ public class TestVORepository {
 	public void sdssDeserialization() throws Exception {
 		VORepository repo = new VORepository();
 		List<Service> resources = repo
-				.resourceSearch(ConeSearch.class, "SDSS", "DR8");
+				.resourceSearch(ConeSearch.class, "SDSS", "DR7");
 		assertFalse(resources.isEmpty());
 		Service s = resources.get(0);
 		boolean foundCapability = false;
