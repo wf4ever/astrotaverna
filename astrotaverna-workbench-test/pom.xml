@@ -50,6 +50,14 @@
 			<version>${project.version}</version>
 		</dependency>
 		
+		<!--  MyExperiment -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>perspective-myexperiment</artifactId>
+			<version>${project.version}</version>
+		</dependency> 
+		
+		
 		<!-- Workbench runtime for testing from IDE, remove if not using TavernaWorkbenchWithExamplePlugin.main() -->
 		<dependency>
 			<groupId>net.sf.taverna.t2.taverna-workbench</groupId>
@@ -138,10 +146,11 @@
 					<groupId>net.sf.taverna.t2.ui-exts</groupId>
 					<artifactId>perspective-biocatalogue</artifactId>
 				</exclusion>
-				<exclusion>
+			<!-- 	<exclusion>
 					<groupId>net.sf.taverna.t2.ui-exts</groupId>
 					<artifactId>perspective-myexperiment</artifactId>
 				</exclusion>
+			-->
 				<!-- Taverna use a different version than pdl-param, exclusion in test workbench to avoid conflict -->
 				<!-- Comment slf4j-api for removing PDL.  Uncomment if PDL is again in astrotaverna to avoid conflicts-->
 				
