@@ -22,6 +22,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.purl.wf4ever.astrotaverna.utils.MyUtils;
+import org.purl.wf4ever.astrotaverna.voutils.TestUtils;
 
 /**
  * 
@@ -150,11 +151,7 @@ public class CoordTransformationActivityTest {
 		String a = new String(resultCoordTransformation.toCharArray());
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
 				
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
-				
-		assertTrue("Wrong output: ", (a.length()>b.length()-6) && (a.length()<b.length()+6));
-		
+		TestUtils.compareStringLengthsIgnoreWhiteSpace(a, b, 6);
 		}catch(Exception ex){System.out.println(ex.toString());}
 		
 		assertEquals("simple-report", outputs.get(OUT_REPORT));

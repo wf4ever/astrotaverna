@@ -105,7 +105,8 @@ public class TestVORepository {
 	public void defaultConeSearch() throws Exception {
 		VORepository repo = new VORepository();
 		List<Service> resources = repo.resourceSearch(ConeSearch.class);
-		assertTrue(resources.size() > 20);
+                System.out.println(resources);
+                assertTrue(resources.size() > 10);
 	}
 
 	@Test

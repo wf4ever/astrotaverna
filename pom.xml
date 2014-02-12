@@ -133,7 +133,6 @@
 
   <modules>    
     <module>astrotaverna-voservices</module>
-    <module>astrotaverna-plugin</module>
     <module>astrotaverna-vo-repository</module>
     <!-- <module>coordinatestool-activity</module>
     <module>coordinatestool-activity-ui</module>-->
@@ -151,6 +150,7 @@
     <module>Image-activity</module>
     <module>Image-activity-ui</module>
     <module>query-activity-ui</module>
+    <module>astrotaverna-plugin</module>
     
     
     <!--  Module myexperiment-->

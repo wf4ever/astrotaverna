@@ -22,6 +22,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.purl.wf4ever.astrotaverna.utils.MyUtils;
+import org.purl.wf4ever.astrotaverna.voutils.TestUtils;
 /**
  * 
  * @author julian Garrido 
@@ -145,10 +146,7 @@ public class SelectColumnsActivityTest {
 
 		String a = new String(resultSelectColumns.toCharArray());
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
-		
-				
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
+						
 		/*
 		System.out.println(a.length());
 		System.out.println(b.length());
@@ -162,7 +160,7 @@ public class SelectColumnsActivityTest {
 		System.out.println(a.substring(i-10, i+10));
 		System.out.println(b.substring(i-10, i+10));
 		*/
-		assertTrue("Wrong output : ", (a.length()>b.length()-6) && (a.length()<b.length()+6));
+                TestUtils.compareStringLengthsIgnoreWhiteSpace(a, b, 6);
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
 		
 		
@@ -198,12 +196,7 @@ public class SelectColumnsActivityTest {
 		
 		System.out.println("*****************************************************************");
 		System.out.println(b);
-				
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
-		
-		
-		
+						
 		/*
 		System.out.println(a.length());
 		System.out.println(b.length());
@@ -218,7 +211,7 @@ public class SelectColumnsActivityTest {
 		System.out.println(b.substring(i-10, i+10));
 		*/
 		
-		assertTrue("Wrong output : ", (a.length()>b.length()-6) && (a.length()<b.length()+6));
+                TestUtils.compareStringLengthsIgnoreWhiteSpace(a, b, 6);
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
 		
 		
@@ -253,10 +246,7 @@ public class SelectColumnsActivityTest {
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
 		
 				
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
-
-		assertTrue("Wrong output : ", (a.length()>b.length()-6) && (a.length()<b.length()+6));
+                TestUtils.compareStringLengthsIgnoreWhiteSpace(a, b, 6);
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
 		
 		
@@ -288,10 +278,7 @@ public class SelectColumnsActivityTest {
 		String b = new String(((String)outputs.get(OUT_SIMPLE_OUTPUT)).toCharArray());
 		
 				
-		a = a.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
-		b = b.replace("\n", "").replace("\t", "").replace(" ", "").replace(System.getProperty("line.separator"), "");
-
-		assertTrue("Wrong output : ", (a.length()>b.length()-6) && (a.length()<b.length()+6));
+                TestUtils.compareStringLengthsIgnoreWhiteSpace(a, b, 6);
 		assertEquals("simple-report", outputs.get(OUT_REPORT));
 		
 		
