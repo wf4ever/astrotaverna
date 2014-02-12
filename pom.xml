@@ -154,7 +154,7 @@
     
     
     <!--  Module myexperiment-->
-    <module>perspective-myexperiment</module>
+    <!-- <module>perspective-myexperiment</module> -->
   </modules>
   <scm>
   	<url>https://github.com/wf4ever/astrotaverna</url>
