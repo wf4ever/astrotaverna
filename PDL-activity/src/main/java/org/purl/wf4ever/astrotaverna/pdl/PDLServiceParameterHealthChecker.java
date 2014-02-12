@@ -238,12 +238,12 @@ public class PDLServiceParameterHealthChecker implements
 						//		|| (sourceParam.getSkossConcept() != null &&sourceParam.getSkossConcept().compareTo(sinkParam.getSkossConcept())!=0)){
 						//	error = error | PDLServiceParameterHealthCheck.SKOS_ERROR;
 						//}
-						if (sourceParam.getSkossConcept() == null && sinkParam.getSkossConcept() == null ){
+						if (sourceParam.getSkosConcept() == null && sinkParam.getSkosConcept() == null ){
 							error = error | PDLServiceParameterHealthCheck.NON_METADATA_ERROR;
 							countNonMetadataError++;
-						}else if((sourceParam.getSkossConcept() == null || sinkParam.getSkossConcept() == null ))
+						}else if((sourceParam.getSkosConcept() == null || sinkParam.getSkosConcept() == null ))
 							error = error | PDLServiceParameterHealthCheck.SKOS_ERROR;
-						else if((sourceParam.getSkossConcept().toLowerCase().compareTo(sinkParam.getSkossConcept().toLowerCase())!=0)){
+						else if((sourceParam.getSkosConcept().toLowerCase().compareTo(sinkParam.getSkosConcept().toLowerCase())!=0)){
 							error = error | PDLServiceParameterHealthCheck.SKOS_ERROR;
 						}else 
 							passedTests ++;

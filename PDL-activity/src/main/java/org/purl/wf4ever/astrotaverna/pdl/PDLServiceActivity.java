@@ -35,6 +35,7 @@ import visitors.GeneralParameterVisitor;
 
 import net.ivoa.parameter.model.ConditionalStatement;
 import net.ivoa.parameter.model.ConstraintOnGroup;
+import net.ivoa.parameter.model.ParameterDependency;
 import net.ivoa.parameter.model.ParameterGroup;
 import net.ivoa.parameter.model.ParameterReference;
 import net.ivoa.parameter.model.Service;
@@ -311,22 +312,24 @@ public class PDLServiceActivity extends
 			 */
 			public boolean areMandatoryInputsNotNull(){                  
 				boolean validStatus = true;
-            
+				List<SingleParameter> paramsList;
 				try{
 //					List<GroupHandlerHelper> groupsHandler = gp.getGroupsHandler();
 //					for(GroupHandlerHelper ghh : groupsHandler){
 //						List<SingleParameter> paramsList = ghh.getSingleParamIntoThisGroup();
-					List<SingleParameter> paramsList = pdlcontroller.getSingleParametersOnGroups();
+					paramsList = pdlcontroller.getSingleParametersOnGroups();
 					for(SingleParameter param: paramsList){
 						if(inputs.get(param.getName())==null)
-							//if no dependency defined --> false
+							//if no dependency defined --> true
 							//if no optional --> false
-							if(!(param.getDependency()!=null && param.getDependency().compareTo("optional")==0))
+							if(param.getDependency()!=null && param.getDependency().value().compareTo(ParameterDependency.REQUIRED.toString())==0)
 								validStatus = false; 
 						
 					}
 //					}
-				}catch(Exception ex){validStatus = false;}
+				}catch(Exception ex){
+					validStatus = false;
+				}
 				return validStatus;
 			}
 			

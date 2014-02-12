@@ -32,7 +32,8 @@
 		<dependency>
 			<groupId>net.ivoa.parameter</groupId>
 			<artifactId>param-model</artifactId>
-			<version>0.0.2-utillities-thread-safe</version>		
+			<!-- <version>0.0.2-utillities-thread-safe</version>  -->
+			<version>0.0.5-utilities-thread-safeRFC</version>		
 		</dependency>
 		<!-- 
 		<dependency>

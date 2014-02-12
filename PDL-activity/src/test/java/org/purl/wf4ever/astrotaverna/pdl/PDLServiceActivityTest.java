@@ -555,7 +555,7 @@ public class PDLServiceActivityTest {
 	
 	@Test
 	public void executeAMIGAConeSearchService() throws Exception {
-		String serviceURL = "http://www.myexperiment.org/files/999/versions/4/download/AMIGA-PDL-Description.xml";
+		String serviceURL = "http://www.myexperiment.org/files/999/versions/6/download/AMIGA-PDL-Description.xml";
 		
 		configBean.setPdlDescriptionFile(serviceURL);
 		configBean.setServiceType(configBean.RESTSERVICE);
@@ -586,7 +586,7 @@ public class PDLServiceActivityTest {
 	
 	@Test(expected = java.lang.RuntimeException.class)
 	public void executeAMIGAConeSearchWithInvalidValueService() throws Exception {
-		String serviceURL = "http://www.myexperiment.org/files/999/versions/4/download/AMIGA-PDL-Description.xml";
+		String serviceURL = "http://www.myexperiment.org/files/999/versions/6/download/AMIGA-PDL-Description.xml";
 		
 		configBean.setPdlDescriptionFile(serviceURL);
 		configBean.setServiceType(configBean.RESTSERVICE);
@@ -594,8 +594,8 @@ public class PDLServiceActivityTest {
 
 		Map<String, Object> inputs = new HashMap<String, Object>();
 		
-		inputs.put("RA", "90");
-		inputs.put("DEC", "360");
+		inputs.put("RA", "93");
+		inputs.put("DEC", "361");
 		inputs.put("SR", "180");
 		
 
@@ -615,7 +615,7 @@ public class PDLServiceActivityTest {
 	
 	@Test
 	public void executeAMIGAConeSearchWithExtendedResultService() throws Exception {
-		String serviceURL = "http://www.myexperiment.org/files/1002/versions/4/download/AMIGA-PDL-DescriptionExtended.xml";
+		String serviceURL = "http://www.myexperiment.org/files/1002/versions/7/download/PDL-Description.xml";
 		
 		configBean.setPdlDescriptionFile(serviceURL);
 		configBean.setServiceType(configBean.VOTABLERESTSERVICE);
@@ -694,14 +694,14 @@ public class PDLServiceActivityTest {
 		assertEquals("Unexpected outputs", 3, activity.getOutputPorts().size());
 		Iterator<ActivityInputPort> it = activity.getInputPorts().iterator();
 		
-		configBean.setPdlDescriptionFile("http://www.myexperiment.org/files/999/versions/4/download/AMIGA-PDL-Description.xml");
+		configBean.setPdlDescriptionFile("http://www.myexperiment.org/files/999/versions/6/download/AMIGA-PDL-Description.xml");
 		configBean.setServiceType(configBean.RESTSERVICE);
 		activity.configure(configBean);
 		
 		assertEquals("Unexpected inputs", 3, activity.getInputPorts().size());
 		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
 		
-		configBean.setPdlDescriptionFile("http://www.myexperiment.org/files/1002/versions/4/download/AMIGA-PDL-DescriptionExtended.xml");
+		configBean.setPdlDescriptionFile("http://www.myexperiment.org/files/1002/versions/7/download/PDL-Description.xml");
 		configBean.setServiceType(configBean.RESTSERVICE);
 		activity.configure(configBean);
 		
@@ -709,7 +709,7 @@ public class PDLServiceActivityTest {
 		assertEquals("Unexpected outputs", 1, activity.getOutputPorts().size());
 		
 
-		configBean.setPdlDescriptionFile("http://www.myexperiment.org/files/1002/versions/4/download/AMIGA-PDL-DescriptionExtended.xml");
+		configBean.setPdlDescriptionFile("http://www.myexperiment.org/files/1002/versions/7/download/PDL-Description.xml");
 		configBean.setServiceType(configBean.VOTABLERESTSERVICE);
 		activity.configure(configBean);
 		
