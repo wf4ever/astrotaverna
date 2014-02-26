@@ -98,6 +98,16 @@
 			<url>http://www.mygrid.org.uk/maven/repository</url>
 		</repository>
 		<repository>
+			<!-- The myGrid snapshot repository for Taverna dependencies -->
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots/>
+			<id>mygrid-snapshot-repository</id>
+			<name>myGrid Snapshot Repository</name>
+			<url>http://www.mygrid.org.uk/maven/snapshot-repository</url>
+		</repository>
+		<repository>
 			<!-- The repository that your snapshot jars are deployed to -->
 			<releases />
 			<snapshots />
