@@ -56,7 +56,7 @@ public class FindAladinJarTest {
 		File file = ClassLocation.getClassLocationFile(AnnotationAssertion.class);
 		System.out.println(file);
 		assertTrue(!file.getAbsolutePath().isEmpty());
-		assertTrue(file.getAbsolutePath().endsWith("workflowmodel-api-1.4.jar"));
+		assertTrue(file.getAbsolutePath().contains("workflowmodel-api"));
 		String path = file.getAbsolutePath();
 		int position = path.indexOf("repository");
 //		System.out.println("net"+File.separator+"sf"+File.separator+"taverna"+File.separator+"core");
