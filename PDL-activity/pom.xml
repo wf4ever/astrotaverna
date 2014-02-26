@@ -5,7 +5,7 @@
 		<groupId>org.purl.wf4ever.astrotaverna</groupId>
 		<artifactId>astrotaverna</artifactId>
 		<version>1.11-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>PDL-activity</artifactId>
 	<name>PDL Taverna activity</name>

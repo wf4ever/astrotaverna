@@ -4,8 +4,8 @@
 	<parent>
 		<groupId>org.purl.wf4ever.astrotaverna</groupId>
 		<artifactId>astrotaverna</artifactId>
-		<version>1.03-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+		<version>1.11-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>coordinatestool-activity</artifactId>
 	<name>Coordinates Taverna activity</name>

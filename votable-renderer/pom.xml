@@ -4,7 +4,7 @@
 		<artifactId>astrotaverna</artifactId>
 		<groupId>org.purl.wf4ever.astrotaverna</groupId>
 		<version>1.11-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>votable-renderer</artifactId>
 	<name>Astro Taverna VOTable renderer</name>
