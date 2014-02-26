@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.purl.wf4ever.astrotaverna</groupId>
 		<artifactId>astrotaverna</artifactId>
-		<version>1.11-SNAPSHOT</version>
+		<version>1.11.tav25-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>Image-activity-ui</artifactId>
