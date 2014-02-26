@@ -12,15 +12,15 @@
 		<!--  Update according to latest Taverna version in 
 		http://www.mygrid.org.uk/dev/wiki/display/developer/Maven+module+version+numbers
 		 -->
-		<t2.core.version>1.4</t2.core.version>
-		<t2.activities.version>1.4</t2.activities.version>
-		<t2.ui.api.version>1.4</t2.ui.api.version>
-		<t2.ui.impl.version>1.4</t2.ui.impl.version>
-		<t2.ui.components.version>1.4</t2.ui.components.version>
-		<t2.ui.activities.version>1.4</t2.ui.activities.version>
-		<t2.workbench.version>2.4.0</t2.workbench.version>
+		<t2.core.version>1.5-SNAPSHOT</t2.core.version>
+		<t2.activities.version>1.5-SNAPSHOT</t2.activities.version>
+		<t2.ui.api.version>1.5-SNAPSHOT</t2.ui.api.version>
+		<t2.ui.impl.version>1.5-SNAPSHOT</t2.ui.impl.version>
+		<t2.ui.components.version>1.5-SNAPSHOT</t2.ui.components.version>
+		<t2.ui.activities.version>1.5-SNAPSHOT</t2.ui.activities.version>
+		<t2.workbench.version>2.5-SNAPSHOT</t2.workbench.version>
 		<!-- JGS: this is to be able to use the class ClassLocation to know where are the jars -->
-		<t2.infrastructure.version>2.4</t2.infrastructure.version> 
+		<t2.infrastructure.version>2.5-SNAPSHOT</t2.infrastructure.version> 
 	</properties>
 
 	<build>
