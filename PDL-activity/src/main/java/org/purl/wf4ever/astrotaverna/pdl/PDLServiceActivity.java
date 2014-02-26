@@ -698,7 +698,7 @@ public class PDLServiceActivity extends
 										//process votable
 										
 										//hacer que coja las columnas de turno de la votable. . 
-										//por ejemplo, con una funci�n que que reciba una lista de nombres de columna y devuelva un 
+										//por ejemplo, con una funcion que que reciba una lista de nombres de columna y devuelva un 
 										//hashmap de arrayList (par, nombre-columna y lista de valores"
 										try{
 											HashMap<String, ArrayList> columnsMap = getSelectedColumns(table, outputPDLParamMap);
