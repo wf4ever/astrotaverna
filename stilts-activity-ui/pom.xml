@@ -8,7 +8,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>stilts-activity-ui</artifactId>
-	<name>stilts utilities suite UI bindings</name>
+	<name>Stilts utilities suite UI bindings</name>
 
 	<dependencies>
 		<dependency>
