@@ -8,7 +8,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>query-activity-ui</artifactId>
-	<name>aladin utilities suite UI bindings</name>
+	<name>Aladin utilities suite UI bindings</name>
 
 	<dependencies>
 		<dependency>
