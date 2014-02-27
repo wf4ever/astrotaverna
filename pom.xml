@@ -9,6 +9,9 @@
 	<name>Astro Taverna</name>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
 		<!--  Update according to latest Taverna version in 
 		http://www.mygrid.org.uk/dev/wiki/display/developer/Maven+module+version+numbers
 		 -->
