@@ -3,7 +3,7 @@
   <parent>
     <artifactId>astrotaverna</artifactId>
     <groupId>org.purl.wf4ever.astrotaverna</groupId>
-    <version>1.20-SNAPSHOT</version>
+    <version>1.20</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>astrotaverna-utils</artifactId>
