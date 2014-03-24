@@ -4,7 +4,7 @@
 
 	<groupId>org.purl.wf4ever.astrotaverna</groupId>
 	<artifactId>astrotaverna</artifactId>
-	<version>1.11.tav25-SNAPSHOT</version>
+	<version>1.21-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Astro Taverna</name>
 
@@ -114,7 +114,7 @@
 			<releases>
 				<enabled>false</enabled>
 			</releases>
-			<snapshots/>
+			<snapshots />
 			<id>mygrid-snapshot-repository</id>
 			<name>myGrid Snapshot Repository</name>
 			<url>http://www.mygrid.org.uk/maven/snapshot-repository</url>
@@ -182,6 +182,7 @@
   	<url>https://github.com/wf4ever/astrotaverna</url>
   	<connection>scm:git:git://github.com/wf4ever/astrotaverna.git</connection>
   	<developerConnection>scm:git:git@github.com:wf4ever/astrotaverna.git</developerConnection>
+    <tag>HEAD</tag>
   </scm>
   <issueManagement>
   	<system>github</system>
