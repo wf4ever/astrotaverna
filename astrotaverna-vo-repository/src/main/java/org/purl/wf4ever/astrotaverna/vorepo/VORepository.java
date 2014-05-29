@@ -58,8 +58,9 @@ public class VORepository {
 			"RegistrySearchService");
 
 	public static final URI DEFAULT_ENDPOINT = URI
-			.create("http://nvo.stsci.edu/vor10/ristandardservice.asmx");
+			//.create("http://nvo.stsci.edu/vor10/ristandardservice.asmx");
 			//.create("http://registry.euro-vo.org/services/RegistrySearch");
+			.create("http://registry.astrogrid.org/astrogrid-registry/services/RegistryQueryv1_0");
 
 	public static final URI WSDL = URI
 			.create("http://www.ivoa.net/wsdl/RegistrySearch/v1.0");

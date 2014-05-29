@@ -113,7 +113,8 @@ public class TestVORepository {
 	public void defaultRepo() throws Exception {
 		VORepository repo = new VORepository();
 		//assertEquals("http://registry.euro-vo.org/services/RegistrySearch",
-		assertEquals("http://nvo.stsci.edu/vor10/ristandardservice.asmx",
+		//assertEquals("http://nvo.stsci.edu/vor10/ristandardservice.asmx",
+		assertEquals("http://registry.astrogrid.org/astrogrid-registry/services/RegistryQueryv1_0",
 				repo.getEndpoint().toASCIIString());
 	}
 
@@ -148,7 +149,8 @@ public class TestVORepository {
 		RegistrySearchPortType firstPort = voRepository.getPort();
 		assertEquals(
 				//"http://registry.euro-vo.org/services/RegistrySearch",
-				"http://nvo.stsci.edu/vor10/ristandardservice.asmx",
+				//"http://nvo.stsci.edu/vor10/ristandardservice.asmx",
+				"http://registry.astrogrid.org/astrogrid-registry/services/RegistryQueryv1_0",
 				((BindingProvider) firstPort).getRequestContext().get(
 						BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
 		voRepository.setEndpoint(URI.create("http://example.com/404"));
